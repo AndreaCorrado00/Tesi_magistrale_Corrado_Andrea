@@ -1,4 +1,14 @@
-function MAP_out=maps_refactoring(MAP)
+function MAP_out=maps_refactoring(MAP,path)
+
+% Impostazione dei valori di default per gli argomenti
+if nargin < 2 || isempty(path)
+    save = false;  
+    path = '';
+else
+    save=true;
+end
+
+
 % Finding signals into maps
 signals=MAP{:,1};
 rov_idx = find(strcmp(signals, 'rov trace:'));
@@ -34,5 +44,13 @@ MAP_out.ref_trace=MAP(ref_idx+1:spare1_idx-1,2:end);
 MAP_out.spare1_trace=MAP(spare1_idx+1:spare2_idx-1,2:end);
 MAP_out.spare2_trace=MAP(spare2_idx+1:spare3_idx-1,2:end);
 MAP_out.spare3_trace=MAP(spare3_idx+1:end_idx-1,2:end);
+
+% Extraction of data tables
+MAP_out_csv=MAP(rov_idx:end_idx-1,1:end);
+% saving
+
+if save
+    writetable(MAP_out_csv,path)
+end
 
 end

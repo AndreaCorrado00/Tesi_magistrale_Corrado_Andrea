@@ -2,51 +2,21 @@ clc
 clear
 close 
 %% Data and functions paths
-data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data";
+original_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Original";
+processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed";
 src_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src";
-addpath(data_path)
+addpath(original_data_path)
 addpath(src_path)
+addpath(processed_data_path)
 
 %% LOADING DATA
 %% Subject 1
-MAP_A1=readtable("Data\MAP_A\MAP_A1.csv",'ReadVariableNames', true); % indifferent
+MAP_A1=readtable("Data\MAP_A\MAP_A1.csv"); % indifferent
 MAP_B1=readtable("Data\MAP_B\MAP_B1.csv"); % effective
 MAP_C1=readtable("Data\MAP_C\MAP_C1.csv"); % dangerous
 
-%%
-% Finding signals into maps
-signals=MAP_A1{:,1};
-rov_idx = find(strcmp(signals, 'rov trace:'));
-if length(rov_idx)>1
-    rov_idx=rov_idx(end,end);
-end
-
-ref_idx = find(strcmp(signals, 'ref trace:'));
-if length(ref_idx)>1
-    ref_idx=ref_idx(end,end);
-end
-
-spare1_idx = find(strcmp(signals, 'spare1 trace:'));
-if length(spare1_idx)>1
-    spare1_idx=spare_idx(end,end);
-end
-
-spare2_idx = find(strcmp(signals, 'spare2 trace:'));
-if length(spare2_idx)>1
-    spare2_idx=spare2_idx(end,end);
-end
-
-spare3_idx = find(strcmp(signals, 'spare3 trace:'));
-if length(spare3_idx)>1
-    spare3_idx=spare3_idx(end,end);
-end
-
-%%
-% Extraction of data tables
-MAP_A1_rov_trace=MAP_A1(rov_idx+1:ref_idx-1,2:end);
-MAP_A1_ref_trace=MAP_A1(ref_idx+1:spare1_idx-1,2:end);
-MAP_A1_spare1_trace=MAP_A1(rov_idx+1:ref_idx-1,2:end);
-MAP_A1_spare2_trace=MAP_A1(rov_idx+1:ref_idx-1,2:end);
-
- 
+%% 
+MAP_A1=maps_refactoring(MAP_A1);
+MAP_B1new=maps_refactoring(MAP_B1);
+MAP_C1new=maps_refactoring(MAP_C1);
 
