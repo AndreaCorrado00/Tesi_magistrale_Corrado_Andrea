@@ -10,13 +10,26 @@ addpath(src_path)
 
 %%                                      DATA PREPROCESSING
 %% 1. Data refactoring 
-%% Loading Subject 1
-MAP_A1=readtable(original_data_path+"\MAP_A\MAP_A1.csv"); % indifferent
-MAP_B1=readtable(original_data_path+"\MAP_B\MAP_B1.csv"); % effective
-MAP_C1=readtable(original_data_path+"\MAP_C\MAP_C1.csv"); % dangerous
+refactoring=false;
+if refactoring==true
+    n_el=numel(dir(original_data_path+"\MAP_A"))-2;
+    for i = 1:n_el
+        for map_name=["A","B","C"] %indifferent, effective, dangerous
+            % Loading Subject
+            MAP=readtable(original_data_path+"\MAP_"+map_name+"\MAP_"+map_name+num2str(i)+".csv");
 
-%% Refactoring Subject 1
-MAP_A1=maps_refactoring(MAP_A1,processed_data_path+'\MAP_A\MAP_A1_refactored.csv');
-MAP_B1=maps_refactoring(MAP_B1,processed_data_path+'\MAP_B\MAP_B1_refactored.csv');
-MAP_C1=maps_refactoring(MAP_C1,processed_data_path+'\MAP_C\MAP_C1_refactored.csv');
+            % Refactoring Subject
+            MAP=maps_refactoring(MAP,processed_data_path+'\MAP_'+map_name+'\MAP_'+map_name+'_refactored.csv');
 
+            % Adding data to a struct
+            main_field='MAP_'+map_name;
+            sub_field='MAP_'+map_name+num2str(i);
+            data.(main_field).(sub_field)=MAP;
+        end
+    end
+    save("D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed\dataset.mat",'data')
+
+elseif refactoring==false
+    load(processed_data_path+'\dataset.mat')
+end
+%% 
