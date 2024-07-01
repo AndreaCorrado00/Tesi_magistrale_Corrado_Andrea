@@ -10,8 +10,8 @@ addpath(src_path)
 
 %%                                      DATA PREPROCESSING
 %% 1. Data refactoring 
-refactoring=true;
-if refactoring
+refactoring=false;
+if refactoring==true
     n_el=numel(dir(original_data_path+"\MAP_A"))-2;
     for i = 1:n_el
         for map_name=["A","B","C"] %indifferent, effective, dangerous
@@ -29,7 +29,8 @@ if refactoring
     end
     save("D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed\dataset.mat",'data')
 
-else
-    load(processed_data_path+'dataset.mat')
+elseif refactoring==false
+    load(processed_data_path+'\dataset.mat')
 end
-
+%% 2. Data proprieties
+% Prima di partire in quarta bisogna sistemare la funzione che 
