@@ -1,4 +1,4 @@
-function plotting_signals(signals_table,title_plot)
+function plotting_signals(signals_table,title)
 mean_sig=table2array(mean(signals_table,2));
 [M,N]=size(signals_table);
 t=[0:M-1]';
@@ -14,7 +14,7 @@ xlim([0,M-1])
 min_y_lim=table2array(min(min(signals_table),[],2));
 max_y_lim=table2array(max(max(signals_table),[],2));
 ylim([min_y_lim-0.05*min_y_lim,max_y_lim+0.05*max_y_lim])
-title(title_plot)
+title(title)
 
 
 end
