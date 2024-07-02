@@ -45,6 +45,31 @@ MAP_out.spare1_trace=MAP(spare1_idx+1:spare2_idx-1,2:end);
 MAP_out.spare2_trace=MAP(spare2_idx+1:spare3_idx-1,2:end);
 MAP_out.spare3_trace=MAP(spare3_idx+1:end_idx-1,2:end);
 
+%% Conversion of char into double
+% To use properly the data in matlab these are converted into double from
+% char. On the other hand, other lenguages recognize autonomously doubles
+% from csv files, so it's not required such conversion before saving the
+% struct. 
+
+% fields name
+names_struct = fieldnames(MAP_out);
+for j = 1:numel(names_struct)
+    tab = MAP_out.(names_struct{j});
+    variable_names = tab.Properties.VariableNames;
+    % variables iteration
+    for i = 1:numel(variable_names)
+
+        char_col = tab.(variable_names{i});
+        if iscell(char_col)
+            double_col = str2double(char_col);
+            tab.(variable_names{i}) = double_col;
+        end
+
+    end
+    % converted table assigment
+    MAP_out.(names_struct{j}) = tab;
+end
+
 % Extraction of data tables
 MAP_out_csv=MAP(rov_idx:end_idx-1,1:end);
 % saving

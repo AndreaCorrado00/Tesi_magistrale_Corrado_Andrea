@@ -10,7 +10,7 @@ addpath(src_path)
 
 %%                                      DATA PREPROCESSING
 %% 1. Data refactoring 
-refactoring=false;
+refactoring=true;
 if refactoring==true
     n_el=numel(dir(original_data_path+"\MAP_A"))-2;
     for i = 1:n_el
@@ -33,4 +33,9 @@ elseif refactoring==false
     load(processed_data_path+'\dataset.mat')
 end
 %% 2. Data proprieties
-% Prima di partire in quarta bisogna sistemare la funzione che 
+% Prima di partire in quarta bisogna sistemare la funzione che calcola
+% estrae la tabella. In altre parole, devono essere double e non stringhe i
+% valori.
+
+
+load(processed_data_path+'\dataset.mat')

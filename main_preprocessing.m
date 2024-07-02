@@ -36,5 +36,4 @@ end
 % Prima di partire in quarta bisogna sistemare la funzione che calcola
 % estrae la tabella. In altre parole, devono essere double e non stringhe i
 % valori.
-
-
+load(processed_data_path+'\dataset.mat')
