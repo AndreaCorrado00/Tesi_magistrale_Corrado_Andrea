@@ -8,7 +8,7 @@ src_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI
 
 addpath(src_path)
 
-%%                                      DATA PREPROCESSING
+%%                                                       DATA PREPROCESSING
 %% 1. Data refactoring 
 refactoring=false;
 if refactoring==true
@@ -33,7 +33,11 @@ elseif refactoring==false
     load(processed_data_path+'\dataset.mat')
 end
 %% 2. Data proprieties
-% Prima di partire in quarta bisogna sistemare la funzione che calcola
-% estrae la tabella. In altre parole, devono essere double e non stringhe i
-% valori.
-load(processed_data_path+'\dataset.mat')
+mean_rov=mean(data.MAP_A.MAP_A1.rov_trace,2);
+mean_ref=mean(data.MAP_A.MAP_A1.ref_trace,2);
+mean_spare1=mean(data.MAP_A.MAP_A1.spare1_trace,2);
+mean_spare2=mean(data.MAP_A.MAP_A1.spare2_trace,2);
+mean_spare3=mean(data.MAP_A.MAP_A1.spare3_trace,2);
+
+
+
