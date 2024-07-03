@@ -5,6 +5,7 @@ close
 original_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Original";
 processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed";
 src_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src";
+figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\Preprocessing_phase";
 
 addpath(src_path)
 
@@ -33,13 +34,25 @@ elseif refactoring==false
     load(processed_data_path+'\dataset.mat')
 end
 %% 2. Data proprieties
-plotting_signals(data.MAP_A.MAP_A1.rov_trace,'Mean rov trace')
+fc=2035;
+maps_field=fieldnames(data);
+for i="A" %["A","B","C"]
+    map='MAP_'+i;
+    subjects=fieldnames(data.(map));
+    for j=1 %1:length(subjects)
+        sub=map+num2str(j);
+        traces=fieldnames(data.(string(map)).(string(sub)));
+        for k="rov" %["rov","ref","spare1","spare2","spare3"]
+            trace=k+'_trace';
+            title_plot='MAP:'+i+', sub:'+num2str(j)+', trace: '+k;
+            fig_to_save=figure;
+            plotting_signals(data.(map).(sub).(trace),title_plot,fc,false,true)
+        end
+    end
 
-% mean_rov=mean(data.MAP_A.MAP_A1.rov_trace,2);
-% mean_ref=mean(data.MAP_A.MAP_A1.ref_trace,2);
-% mean_spare1=mean(data.MAP_A.MAP_A1.spare1_trace,2);
-% mean_spare2=mean(data.MAP_A.MAP_A1.spare2_trace,2);
-% mean_spare3=mean(data.MAP_A.MAP_A1.spare3_trace,2);
+end
 
 
+% neew to procede with the saving procedure, then copy and paste and
+% proceed with imaging saving
 
