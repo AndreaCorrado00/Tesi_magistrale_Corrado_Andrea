@@ -26,6 +26,10 @@ elseif variability_plot %mean and bands 95%
     % costruzione delle bande
     up_lim=round(0.95*length(table2array(signals_table(1,:))));
     down_lim=round(0.05*length(table2array(signals_table(1,:))));
+    if down_lim==0
+        down_lim=1;
+    end
+
     VAR_LIMS=[];
     % costruzione bande
     for i=1:M
