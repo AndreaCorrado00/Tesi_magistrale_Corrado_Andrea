@@ -34,52 +34,41 @@ elseif refactoring==false
     load(processed_data_path+'\dataset.mat')
 end
 %% 2. Data proprieties
+% mean and spaghetti plot
 fc=2035;
-maps_field=fieldnames(data);
-for i="A" %["A","B","C"]
+for i=["A","B","C"]
     map='MAP_'+i;
     subjects=fieldnames(data.(map));
-    for j=1 %1:length(subjects)
+    for j=1:length(subjects)
         sub=map+num2str(j);
         traces=fieldnames(data.(string(map)).(string(sub)));
-        for k="rov" %["rov","ref","spare1","spare2","spare3"]
+        for k=["rov","ref","spare1","spare2","spare3"]
             trace=k+'_trace';
-            title_plot='MAP:'+i+', sub:'+num2str(j)+', trace: '+k;
+            title_plot='MAP:'+i+' ('+get_name_of_map(i)+')'+', sub:'+num2str(j)+', trace: '+k;
+            figure;
+            plotting_signals(data.(map).(sub).(trace),title_plot,fc,false,false)
+            fig=gcf;
+            save_plot(i,j,k,'spaghetti',figure_path,fig);
+        end
+    end
+end
+% mean and confidence intervals
+for i=["A","B","C"]
+    map='MAP_'+i;
+    subjects=fieldnames(data.(map));
+    for j=1:length(subjects)
+        sub=map+num2str(j);
+        traces=fieldnames(data.(string(map)).(string(sub)));
+        for k=["rov","ref","spare1","spare2","spare3"]
+            trace=k+'_trace';
+            title_plot='MAP:'+i+' ('+get_name_of_map(i)+')'+', sub:'+num2str(j)+', trace: '+k;
             figure;
             plotting_signals(data.(map).(sub).(trace),title_plot,fc,false,true)
             fig=gcf;
-            file_name='MAP_'+i+'_sub_'+num2str(j)+'_trace_'+k+'.png';
-            full_file_path = fullfile(figure_path, file_name);
-            saveas(fig, full_file_path);
-            close(fig);
-
+            save_plot(i,j,k,'confidence',figure_path,fig);
         end
     end
-
 end
-
-%%
-% neew to procede with the saving procedure, then copy and paste and
-% proceed with imaging saving
+%% 3. Spectral analysis
 
 
-% Crea una nuova figura vuota
-figure;
-
-% Chiama la tua funzione di plotting
-plotting_signals;
-
-% Cattura l'handle della figura corrente
-fig = gcf;  % gcf ottiene l'handle della figura corrente
-
-% Genera il nome del file per la figura (puoi personalizzarlo come preferisci)
-file_name = 'plot_figura1.png';  % Ad esempio, 'plot_figura1.png' o un nome dinamico
-
-% Costruisci il percorso completo del file
-full_file_path = fullfile(figure_path, file_name);
-
-% Salva la figura nella cartella specificata
-saveas(fig, full_file_path);
-
-% Opzionalmente, puoi chiudere la figura dopo averla salvata
-close(fig);
