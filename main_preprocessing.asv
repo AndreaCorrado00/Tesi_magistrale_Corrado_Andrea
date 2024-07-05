@@ -34,41 +34,39 @@ elseif refactoring==false
     load(processed_data_path+'\dataset.mat')
 end
 %% 2. Data proprieties
-% mean and spaghetti plot
+table_pox=[false,false,;
+            false,true ;
+            true, false;
+            true, true];
+type_plots=["spaghetti";"confidence"; "spaghetti_freq"; "confidence_freq"];
+% spaghetti time domain
+% confidence time domain
+% spaghetti spectral
+% confidence spectral
 fc=2035;
-for i=["A","B","C"]
-    map='MAP_'+i;
-    subjects=fieldnames(data.(map));
-    for j=1:length(subjects)
-        sub=map+num2str(j);
-        traces=fieldnames(data.(string(map)).(string(sub)));
-        for k=["rov","ref","spare1","spare2","spare3"]
-            trace=k+'_trace';
-            title_plot='MAP:'+i+' ('+get_name_of_map(i)+')'+', sub:'+num2str(j)+', trace: '+k;
-            figure;
-            plotting_signals(data.(map).(sub).(trace),title_plot,fc,false,false)
-            fig=gcf;
-            save_plot(i,j,k,'spaghetti',figure_path,fig);
+for l=1:4
+    for i=["A","B","C"]
+        map='MAP_'+i;
+        subjects=fieldnames(data.(map));
+        for j=1:length(subjects)
+            sub=map+num2str(j);
+            traces=fieldnames(data.(string(map)).(string(sub)));
+            for k=["rov","ref","spare1","spare2","spare3"]
+                trace=k+'_trace';
+                title_plot='MAP:'+i+' ('+get_name_of_map(i)+')'+', sub:'+num2str(j)+', trace: '+k;
+                figure;
+                plotting_signals(data.(map).(sub).(trace),title_plot,fc,table_pox(l,1),table_pox(l,2))
+                fig=gcf;
+                save_plot(i,j,k,type_plots(l),figure_path,fig);
+            end
         end
     end
 end
-% mean and confidence intervals
-for i=["A","B","C"]
-    map='MAP_'+i;
-    subjects=fieldnames(data.(map));
-    for j=1:length(subjects)
-        sub=map+num2str(j);
-        traces=fieldnames(data.(string(map)).(string(sub)));
-        for k=["rov","ref","spare1","spare2","spare3"]
-            trace=k+'_trace';
-            title_plot='MAP:'+i+' ('+get_name_of_map(i)+')'+', sub:'+num2str(j)+', trace: '+k;
-            figure;
-            plotting_signals(data.(map).(sub).(trace),title_plot,fc,false,true)
-            fig=gcf;
-            save_plot(i,j,k,'confidence',figure_path,fig);
-        end
-    end
-end
-%% 3. Spectral analysis
 
+%% 2.1 First observations
+% Not all maps have the same numerosity
+% there are some signals not in the correct map
 
+% it could be interesting to check the inter-subject mean of signals and
+% psd to see if there are some similarities. Just plotting means on means
+% and, why not, building the same plots for the maps within subjects.

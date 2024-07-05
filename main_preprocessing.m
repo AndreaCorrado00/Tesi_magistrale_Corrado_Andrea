@@ -62,3 +62,11 @@ for l=1:4
         end
     end
 end
+
+%% 2.1 First observations
+% Not all maps have the same numerosity
+% there are some signals not in the correct map
+
+% it could be interesting to check the inter-subject mean of signals and
+% psd to see if there are some similarities. Just plotting means on means
+% and, why not, building the same plots for the maps within subjects.
