@@ -11,7 +11,7 @@ addpath(src_path)
 
 %%                                                       DATA PREPROCESSING
 %% 1. Data refactoring 
-refactoring=false;
+refactoring=true;
 if refactoring==true
     n_el=numel(dir(original_data_path+"\MAP_A"))-2;
     for i = 1:n_el
@@ -58,7 +58,7 @@ for l=1:4
                 fig.WindowState="maximized";
                 plotting_signals(data.(map).(sub).(trace),title_plot,fc,table_pox(l,1),table_pox(l,2))
                 fig=gcf;
-                save_plot(i,j,k,type_plots(l),figure_path,fig,true);
+                save_plot(i,j,k,type_plots(l),figure_path+"\data_visual",fig,true);
             end
         end
     end
@@ -71,7 +71,8 @@ end
 % it could be interesting to check the inter-subject mean of signals and
 % psd to see if there are some similarities. Just plotting means on means
 % and, why not, building the same plots for the maps within subjects.
-%% 2.2 Signals comparisons
+
+%% 2.2 Signals direct comparisons
 % Comparison between different signals mean/periodogram traces for the same case
 table_pox=[false,true;
             true,true];
@@ -94,7 +95,7 @@ for l=1:2
             end
             legend('ROV','REF','SPARE 1','SPARE 2', 'SPARE 3')
             hold off
-            save_plot(i,j,'',type_plots(l),figure_path,fig,true);
+            save_plot(i,j,'',type_plots(l),figure_path+"\cases_comp",fig,true);
         end
     end
 end
@@ -122,12 +123,11 @@ for l = 1:2
             end  
             legend(legend_entries);
             hold off
-            save_plot(i, j, '', type_plots(l), figure_path, fig, true);
+            save_plot(i, j, '', type_plots(l), figure_path+"\traces_comp", fig, true);
         end
     end
 end
 
-%%
 % comparison between maps within subjects and traces
 legend_entries=[];
 table_pox=[false,true;
@@ -153,7 +153,7 @@ for l = 1:2
             end  
             legend(legend_entries);
             hold off
-            save_plot("", j, k, type_plots(l), figure_path, fig, true);
+            save_plot("", j, k, type_plots(l), figure_path+"\map_comp", fig, true);
         end
     end
 end
