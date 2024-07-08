@@ -54,10 +54,11 @@ for l=1:4
             for k=["rov","ref","spare1","spare2","spare3"]
                 trace=k+'_trace';
                 title_plot='MAP:'+i+' ('+get_name_of_map(i)+')'+', sub:'+num2str(j)+', trace: '+k;
-                figure;
+                fig=figure(1);
+                fig.WindowState="maximized";
                 plotting_signals(data.(map).(sub).(trace),title_plot,fc,table_pox(l,1),table_pox(l,2))
                 fig=gcf;
-                save_plot(i,j,k,type_plots(l),figure_path,fig);
+                save_plot(i,j,k,type_plots(l),figure_path,fig,true);
             end
         end
     end
@@ -70,3 +71,89 @@ end
 % it could be interesting to check the inter-subject mean of signals and
 % psd to see if there are some similarities. Just plotting means on means
 % and, why not, building the same plots for the maps within subjects.
+%% 2.2 Signals comparisons
+% Comparison between different signals mean/periodogram traces for the same case
+table_pox=[false,true;
+            true,true];
+
+type_plots=["comp_sig_mean_by_case"; "comp_sig_spectrum_by_case"];
+for l=1:2
+    for i=["A","B","C"]
+        map='MAP_'+i;
+        subjects=fieldnames(data.(map));
+        for j=1:length(subjects)
+            sub=map+num2str(j);
+            traces=fieldnames(data.(string(map)).(string(sub)));
+            for k=["rov","ref","spare1","spare2","spare3"]
+                trace=k+'_trace';
+                title_plot='MAP:'+i+' ('+get_name_of_map(i)+')'+', sub:'+num2str(j)+', traces comparison';
+                fig=figure(1);
+                fig.WindowState="maximized";
+                hold on
+                compare_by_plotting_signals(data.(map).(sub).(trace),title_plot,fc,table_pox(1,l),table_pox(2,l))
+            end
+            legend('ROV','REF','SPARE 1','SPARE 2', 'SPARE 3')
+            hold off
+            save_plot(i,j,'',type_plots(l),figure_path,fig,true);
+        end
+    end
+end
+
+% Comparison within traces between subjects
+table_pox=[false,true;
+            true,true];
+
+type_plots=["comp_case_by_sign"; "comp_case_spectrum_by_sign"];
+for l = 1:2
+    for i = ["A","B","C"]
+        map = 'MAP_' + i;
+        subjects = fieldnames(data.(map));
+        for k = ["rov","ref","spare1","spare2","spare3"]
+            for j = 1:length(subjects)
+                sub = map + num2str(j);
+                trace = k + '_trace';
+                title_plot = 'MAP:' + i + ' (' + get_name_of_map(i) + '), trace:' + k + ', subjects comparison';
+                fig = figure(1);
+                fig.WindowState = "maximized";
+                hold on
+                compare_by_plotting_signals(data.(map).(sub).(trace), title_plot, fc, table_pox(1, l), table_pox(2, l));
+                
+                legend_entries{j} = ['Subject ' num2str(j)];
+            end  
+            legend(legend_entries);
+            hold off
+            save_plot(i, j, '', type_plots(l), figure_path, fig, true);
+        end
+    end
+end
+
+%%
+% comparison 
+table_pox=[false,true;
+            true,true];
+
+type_plots=["comp_sign_by_map"; "comp_sign_spec_by_map"];
+for l = 1:2
+    for i = ["A","B","C"]k = ["rov","ref","spare1","spare2","spare3"]
+        map = 'MAP_' + i;
+        subjects = fieldnames(data.(map));
+        for 
+            for j = 1:length(subjects)
+                
+                sub = map + num2str(j);
+                trace = k + '_trace';
+                
+                title_plot = 'MAP:' + i + ' (' + get_name_of_map(i) + '), sub:' + num2str(j) + ', subjects comparison';
+                fig = figure(1);
+                fig.WindowState = "maximized";
+                hold on
+                compare_by_plotting_signals(data.(map).(sub).(trace), title_plot, fc, table_pox(1, l), table_pox(2, l));
+                legend_entries{j} = ['MAP ' num2str(j)];
+            end  
+            legend(legend_entries);
+            hold off
+            save_plot(i, j, '', type_plots(l), figure_path, fig, true);
+        end
+    end
+end
+    

@@ -1,5 +1,4 @@
-function plotting_signals(signals_table,title_plot,Fc,freq_plot,variability_plot)
-
+function compare_by_plotting_signals(signals_table,title_plot,Fc,freq_plot,variability_plot)
 [M,N]=size(signals_table);
 if freq_plot
     x=[0:Fc/M:Fc-Fc/M;]; 
@@ -7,7 +6,7 @@ if freq_plot
     for i=1:N
         signals_table(:,i)=array2table(abs(fft(table2array(signals_table(:,i)),M)).^2/M);
     end
-    x_lim=[0,Fc/2]; %x_lim=[0,250]
+    x_lim=[0,200]; %x_lim=[0,250]
     x_label='f [Hz]';
     y_label='Spectrum';
 
@@ -19,19 +18,18 @@ else
 end
 mean_sig=table2array(mean(signals_table,2));
 
-plot(x,mean_sig,'k-',"LineWidth",3)
+plot(x,mean_sig,"LineWidth",1)
 hold on
 if  ~variability_plot % mean VS all signals
     for i=1:N
         plot(x,table2array(signals_table(:,i)),':',"LineWidth",0.4)
 
     end
-    hold off
     xlim(x_lim)
     min_y_lim=table2array(min(min(signals_table),[],2));
     max_y_lim=table2array(max(max(signals_table),[],2));
     ylim([min_y_lim-0.05*min_y_lim,max_y_lim+0.05*max_y_lim])
-    title('Mean and single records: '+title_plot+' (n:'+num2str(N)+')')
+    title('Mean and single records: '+title_plot)
     xlabel(x_label)
     ylabel(y_label)
 
@@ -49,14 +47,13 @@ elseif variability_plot %mean and bands 95%
         VAR_LIMS(i,1)=signals_i(down_lim);
         VAR_LIMS(i,2)=signals_i(up_lim);
     end
-    hold off
-    plot(x,VAR_LIMS(:,1),'k:',"LineWidth",0.8)
-    plot(x,VAR_LIMS(:,2),'k:',"LineWidth",0.8)
+    plot(x,VAR_LIMS(:,1),'k:',"LineWidth",0.8,"HandleVisibility","off")
+    plot(x,VAR_LIMS(:,2),'k:',"LineWidth",0.8,"HandleVisibility","off")
     xlim([0,x(end)])
     min_y_lim=min(VAR_LIMS(:,1));
     max_y_lim=max(VAR_LIMS(:,2));
     ylim([min_y_lim-0.05*min_y_lim,max_y_lim+0.05*max_y_lim])
-    title('Mean and confidence intervals at 95%: ' +title_plot+' (n:'+num2str(N)+')')
+    title('Mean and confidence intervals at 95%: ' +title_plot)
     xlabel(x_label)
     ylabel(y_label)
     xlim(x_lim)
