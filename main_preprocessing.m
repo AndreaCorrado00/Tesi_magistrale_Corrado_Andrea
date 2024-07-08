@@ -11,7 +11,7 @@ addpath(src_path)
 
 %%                                                       DATA PREPROCESSING
 %% 1. Data refactoring 
-refactoring=true;
+refactoring=false;
 if refactoring==true
     n_el=numel(dir(original_data_path+"\MAP_A"))-2;
     for i = 1:n_el
@@ -20,7 +20,7 @@ if refactoring==true
             MAP=readtable(original_data_path+"\MAP_"+map_name+"\MAP_"+map_name+num2str(i)+".csv");
 
             % Refactoring Subject
-            MAP=maps_refactoring(MAP,processed_data_path+'\MAP_'+map_name+'\MAP_'+map_name+'_refactored.csv');
+            MAP=maps_refactoring(MAP,processed_data_path+'\MAP_'+map_name+'\MAP_'+map_name+num2str(i)+'_refactored.csv');
 
             % Adding data to a struct
             main_field='MAP_'+map_name;
@@ -90,7 +90,7 @@ for l=1:2
                 title_plot='MAP:'+i+' ('+get_name_of_map(i)+')'+', sub:'+num2str(j)+', traces comparison';
                 fig=figure(1);
                 fig.WindowState="maximized";
-                hold on
+                hold on 
                 compare_by_plotting_signals(data.(map).(sub).(trace),title_plot,fc,table_pox(1,l),table_pox(2,l))
             end
             legend('ROV','REF','SPARE 1','SPARE 2', 'SPARE 3')
@@ -123,7 +123,7 @@ for l = 1:2
             end  
             legend(legend_entries);
             hold off
-            save_plot(i, j, '', type_plots(l), figure_path+"\traces_comp", fig, true);
+            save_plot(i, '', k, type_plots(l), figure_path+"\traces_comp", fig, true);
         end
     end
 end

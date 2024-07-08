@@ -52,7 +52,7 @@ elseif variability_plot %mean and bands 95%
     xlim([0,x(end)])
     min_y_lim=min(VAR_LIMS(:,1));
     max_y_lim=max(VAR_LIMS(:,2));
-    ylim([min_y_lim-0.05*min_y_lim,max_y_lim+0.05*max_y_lim])
+    %ylim([min_y_lim-0.05*min_y_lim,max_y_lim+0.05*max_y_lim])
     title('Mean and confidence intervals at 95%: ' +title_plot)
     xlabel(x_label)
     ylabel(y_label)
