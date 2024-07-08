@@ -136,11 +136,10 @@ table_pox=[false,true;
 type_plots=["comp_sign_by_map"; "comp_sign_spec_by_map"];
 maps=["A","B","C"];
 for l = 1:2
-    for k = "rov" %["rov","ref","spare1","spare2","spare3"]
+    for k = ["rov","ref","spare1","spare2","spare3"]
         subjects = fieldnames(data.MAP_A);
-        for j= 1 %1:length(subjects)
+        for j= 1:length(subjects)
             for i = 1:3
-
                 map = 'MAP_' +maps(i);
                 sub = map + num2str(j);
                 trace = k + '_trace';
