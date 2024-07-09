@@ -44,6 +44,7 @@ compare_maps_between_signals(data,fc,figure_path)
 
 %% 2.3  ApEn Evaluation
 % Are signals more or less regular?
+% TOO MUCH TIME
 apen_builder=true;
 if apen_builder
     apen_data=apen_dataset_builder(data);
@@ -52,5 +53,6 @@ else
     load(apen_dataset.mat);
 end
 
+%% 
 
 
