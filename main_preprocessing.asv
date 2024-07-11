@@ -1,0 +1,201 @@
+clc
+clear
+close 
+%% Data and functions paths
+original_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Original";
+processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed";
+src_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src";
+figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\Preprocessing_phase";
+
+addpath(src_path)
+
+%%                                                       DATA PREPROCESSING
+%% 1. Data refactoring 
+<<<<<<< Updated upstream
+refactoring=true;
+if refactoring==true
+    n_el=numel(dir(original_data_path+"\MAP_A"))-2;
+    for i = 6:n_el
+        for map_name=["A","B","C"] %indifferent, effective, dangerous
+            % Loading Subject
+            MAP=readtable(original_data_path+"\MAP_"+map_name+"\MAP_"+map_name+num2str(i)+".csv");
+
+            % Refactoring Subject
+            MAP=maps_refactoring(MAP,processed_data_path+'\MAP_'+map_name+'\MAP_'+map_name+num2str(i)+'_refactored.csv');
+
+            % Adding data to a struct
+            main_field='MAP_'+map_name;
+            sub_field='MAP_'+map_name+num2str(i);
+            data.(main_field).(sub_field)=MAP;
+        end
+    end
+    save("D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed\dataset.mat",'data')
+
+elseif refactoring==false
+    load(processed_data_path+'\dataset.mat')
+end
+%% 2. Data proprieties
+table_pox=[false,false,;
+            false,true ;
+            true, false;
+            true, true];
+type_plots=["spaghetti";"confidence"; "spaghetti_freq"; "confidence_freq"];
+% spaghetti time domain
+% confidence time domain
+% spaghetti spectral
+% confidence spectral
+fc=2035;
+for l=1:4
+    for i=["A","B","C"]
+        map='MAP_'+i;
+        subjects=fieldnames(data.(map));
+        for j=1:length(subjects)
+            sub=map+num2str(j);
+            traces=fieldnames(data.(string(map)).(string(sub)));
+            for k=["rov","ref","spare1","spare2","spare3"]
+                trace=k+'_trace';
+                title_plot='MAP:'+i+' ('+get_name_of_map(i)+')'+', sub:'+num2str(j)+', trace: '+k;
+                fig=figure(1);
+                fig.WindowState="maximized";
+                plotting_signals(data.(map).(sub).(trace),title_plot,fc,table_pox(l,1),table_pox(l,2))
+                fig=gcf;
+                save_plot(i,j,k,type_plots(l),figure_path+"\data_visual",fig,true);
+            end
+        end
+    end
+end
+=======
+refactoring=false;
+if refactoring==true
+    refactor_and_save_data(original_data_path)
+elseif refactoring==false
+    load(processed_data_path+'\dataset.mat')
+end
+
+%%                                                               DATA EDA
+
+%% 2. Data proprieties
+fc=2035;
+spaghetti_confidence_signals(data,fc,figure_path)
+>>>>>>> Stashed changes
+
+%% 2.1 First observations
+% Not all maps have the same numerosity
+% there are some signals not in the correct map
+
+% it could be interesting to check the inter-subject mean of signals and
+% psd to see if there are some similarities. Just plotting means on means
+% and, why not, building the same plots for the maps within subjects.
+
+%% 2.2 Signals direct comparisons
+% Comparison between different signals mean/periodogram traces for the same case
+<<<<<<< Updated upstream
+table_pox=[false,true;
+            true,true];
+
+type_plots=["comp_sig_mean_by_case"; "comp_sig_spectrum_by_case"];
+for l=1:2
+    for i=["A","B","C"]
+        map='MAP_'+i;
+        subjects=fieldnames(data.(map));
+        for j=1:length(subjects)
+            sub=map+num2str(j);
+            traces=fieldnames(data.(string(map)).(string(sub)));
+            for k=["rov","ref","spare1","spare2","spare3"]
+                trace=k+'_trace';
+                title_plot='MAP:'+i+' ('+get_name_of_map(i)+')'+', sub:'+num2str(j)+', traces comparison';
+                fig=figure(1);
+                fig.WindowState="maximized";
+                hold on
+                compare_by_plotting_signals(data.(map).(sub).(trace),title_plot,fc,table_pox(1,l),table_pox(2,l))
+            end
+            legend('ROV','REF','SPARE 1','SPARE 2', 'SPARE 3')
+            hold off
+            save_plot(i,j,'',type_plots(l),figure_path+"\cases_comp",fig,true);
+        end
+    end
+end
+
+% Comparison within traces between subjects
+table_pox=[false,true;
+            true,true];
+
+type_plots=["comp_case_by_sign"; "comp_case_spectrum_by_sign"];
+for l = 1:2
+    for i = ["A","B","C"]
+        map = 'MAP_' + i;
+        subjects = fieldnames(data.(map));
+        for k = ["rov","ref","spare1","spare2","spare3"]
+            for j = 1:length(subjects)
+                sub = map + num2str(j);
+                trace = k + '_trace';
+                title_plot = 'MAP:' + i + ' (' + get_name_of_map(i) + '), trace:' + k + ', subjects comparison';
+                fig = figure(1);
+                fig.WindowState = "maximized";
+                hold on
+                compare_by_plotting_signals(data.(map).(sub).(trace), title_plot, fc, table_pox(1, l), table_pox(2, l));
+                
+                legend_entries{j} = ['Subject ' num2str(j)];
+            end  
+            legend(legend_entries);
+            hold off
+            save_plot(i, j, '', type_plots(l), figure_path+"\traces_comp", fig, true);
+        end
+    end
+end
+
+% comparison between maps within subjects and traces
+legend_entries=[];
+table_pox=[false,true;
+            true,true];
+
+type_plots=["comp_sign_by_map"; "comp_sign_spec_by_map"];
+maps=["A","B","C"];
+for l = 1:2
+    for k = ["rov","ref","spare1","spare2","spare3"]
+        subjects = fieldnames(data.MAP_A);
+        for j= 1:length(subjects)
+            for i = 1:3
+                map = 'MAP_' +maps(i);
+                sub = map + num2str(j);
+                trace = k + '_trace';
+                
+                title_plot = 'Trace:'+k'+', sub:' + num2str(j) + ', MAP comparison';
+                fig = figure(1);
+                fig.WindowState = "maximized";
+                hold on
+                compare_by_plotting_signals(data.(map).(sub).(trace), title_plot, fc, table_pox(1, l), table_pox(2, l));
+                legend_entries{i} = ['MAP '+maps(i)];
+            end  
+            legend(legend_entries);
+            hold off
+            save_plot("", j, k, type_plots(l), figure_path+"\map_comp", fig, true);
+        end
+    end
+end
+    
+=======
+compare_case_signals(data,fc,figure_path)
+
+% Comparison within traces between subjects
+compare_traces_between_sub(data,fc,figure_path)
+
+% comparison between maps within subjects and traces
+compare_maps_between_signals(data,fc,figure_path)
+
+%% 2.3  ApEn Evaluation
+% Are signals more or less regular?
+% TOO MUCH TIME
+apen_builder=true;
+if apen_builder
+    apen_data=apen_dataset_builder(data);
+    save("D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed\apen_dataset.mat",'apen_data')
+else
+    load(apen_dataset.mat);
+end
+
+%% 2.4 Similarity between signals 
+
+
+
+>>>>>>> Stashed changes
