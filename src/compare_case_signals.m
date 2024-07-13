@@ -48,7 +48,7 @@ function compare_case_signals(data, fc, figure_path)
                 hold off
                 
                 % Save the plot
-                file_name='MAP_'+i+'_sub_'+num2str(j)+'_';
+                file_name="MAP_"+i+"_sub_"+num2str(j)+"_";
                 save_plot(file_name, type_plots(l), figure_path + "\cases_comp", fig, true);
             end
         end

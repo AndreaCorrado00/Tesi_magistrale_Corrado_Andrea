@@ -7,7 +7,7 @@ if freq_plot
     for i=1:N
         signals_table(:,i)=array2table(abs(fft(table2array(signals_table(:,i)),M)).^2/M);
     end
-    x_lim=[0,Fc/2]; %x_lim=[0,250]
+    x_lim=[0,200]; 
     x_label='f [Hz]';
     y_label='Spectrum';
 

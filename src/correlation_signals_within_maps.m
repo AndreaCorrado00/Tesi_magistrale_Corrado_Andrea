@@ -1,4 +1,4 @@
-function table_corr=correlation_signals_within_maps(data,trace,display)
+function table_corr=correlation_signals_within_maps(data,trace)
 
 
 

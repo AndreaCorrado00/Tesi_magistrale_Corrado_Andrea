@@ -47,7 +47,7 @@ function spaghetti_confidence_signals(data, fc, figure_path)
                     fig = gcf;
                     
                     % Save the plot
-                    file_name='MAP_'+i+'_sub_'+num2str(j)+'_trace_'+k+'_';
+                    file_name="MAP_"+i+"_sub_"+num2str(j)+"_trace_"+k+"_";
                     save_plot(file_name, type_plots(l), figure_path + "\data_visual", fig, true);
                 end
             end
