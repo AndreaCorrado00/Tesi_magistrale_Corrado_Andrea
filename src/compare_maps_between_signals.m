@@ -59,7 +59,8 @@ function compare_maps_between_signals(data, fc, figure_path)
                 hold off
                 
                 % Save the plot
-                save_plot("", j, k, type_plots(l), figure_path + "\map_comp", fig, true);
+                file_name='sub_'+num2str(j)+'_trace_'+k+'_';
+                save_plot(file_name, type_plots(l), figure_path + "\map_comp", fig, true);
             end
         end
     end

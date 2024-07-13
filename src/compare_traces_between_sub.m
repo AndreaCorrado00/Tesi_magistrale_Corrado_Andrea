@@ -53,7 +53,8 @@ function compare_traces_between_sub(data, fc, figure_path)
                 hold off
                 
                 % Save the plot
-                save_plot(i, '', k, type_plots(l), figure_path + "\traces_comp", fig, true);
+                file_name='MAP_'+i+'_trace_'+k+'_';
+                save_plot(file_name, type_plots(l), figure_path + "\traces_comp", fig, true);
             end
         end
     end

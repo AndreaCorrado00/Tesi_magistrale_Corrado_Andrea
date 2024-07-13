@@ -55,7 +55,15 @@ end
 
 %% 2.4 Similarity between signals 
 table_corr=correlation_signals_within_maps(data,'rov_trace',true);
-% It could be interesting looking at the correlation values within
-% subjects. IE a sort of distribution
+% Table corr is made of fields related to subjects into which it's possible
+% to find the correlation matrix between the mean 'rov' trace (in this
+% case) within maps.
+
+plot_R2_distribution_maps(table_corr,'rov trace')
+% ttest optional
+% save plot more general
+% same colors of lines within maps
+
+
 
 
