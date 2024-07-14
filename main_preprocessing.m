@@ -25,7 +25,7 @@ fc=2035;
 spaghetti_confidence_signals(data,fc,figure_path)
 
 %% 2.1 First observations
-% Not all maps have the same numerosity
+% Not all maps have the same numerousness
 % there are some signals not in the correct map
 
 % it could be interesting to check the inter-subject mean of signals and
