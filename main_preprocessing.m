@@ -42,18 +42,7 @@ compare_traces_between_sub(data,fc,figure_path)
 % comparison between maps within subjects and traces
 compare_maps_between_signals(data,fc,figure_path)
 
-%% 2.3  ApEn Evaluation
-% Are signals more or less regular?
-% TOO MUCH TIME
-% apen_builder=true;
-% if apen_builder
-%     apen_data=apen_dataset_builder(data);
-%     save("D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed\apen_dataset.mat",'apen_data')
-% else
-%     load(apen_dataset.mat);
-% end
-
-%% 2.4 Similarity between signals 
+%% 2.3 Similarity between signals 
 table_corr=correlation_signals_within_maps(data,'rov_trace');
 % Table corr is made of fields related to subjects into which it's possible
 % to find the correlation matrix between the mean 'rov' trace (in this
