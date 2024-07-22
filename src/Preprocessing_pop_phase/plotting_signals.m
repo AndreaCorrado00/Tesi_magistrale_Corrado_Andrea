@@ -12,16 +12,19 @@ function plotting_signals(signals_table, title_plot, Fc, freq_plot, variability_
 % Get the size of the signals table
 [M, N] = size(signals_table);
 
-if freq_plot
-    % If plotting in frequency domain
-    x = [0:Fc/M:Fc-Fc/M]; 
-    % Convert the signal table to frequency domain
-    for i = 1:N
-        signals_table(:,i) = array2table(abs(fft(table2array(signals_table(:,i)), M)).^2 / M);
-    end
-    x_lim = [0, 200]; 
-    x_label = 'f [Hz]';
-    y_label = 'Spectrum';
+ if freq_plot
+        % If plotting in frequency domain
+        x = [0:Fc/M:Fc-Fc/M]; 
+        % Convert signals to power spectrum
+        for i = 1:N
+            th=ar(table2array(signals_table(:,i))-table2array(mean(signals_table(:,i))),20,'yw'); 
+            [H,~]=freqz(1,th.a,M,Fc); 
+            DSP=(abs(H).^2)*th.NoiseVariance;
+            signals_table(:, i) = array2table(DSP);
+        end
+        x_lim = [0, 200]; % Define x-axis limits
+        x_label = 'f [Hz]'; % Label for x-axis
+        y_label = 'Spectrum'; % Label for y-axis
 else
     % If plotting in time domain
     x = [0:1/Fc:1-1/Fc]';
