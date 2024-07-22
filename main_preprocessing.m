@@ -62,7 +62,7 @@ compare_traces_between_sub(data,fc,figure_path)
 compare_maps_between_signals(data,fc,figure_path)
 
 %% 2.3 Similarity between signals 
-table_corr=correlation_signals_within_maps(data,'rov_trace');
+%table_corr=correlation_signals_within_maps(data,'rov_trace');
 % Table corr is made of fields related to subjects into which it's possible
 % to find the correlation matrix between the mean 'rov' trace (in this
 % case) within maps.
