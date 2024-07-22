@@ -6,7 +6,7 @@ original_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023
 processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed";
 
 
-pop=true;
+pop=false;
 if pop
     src_pop_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\Preprocessing_pop_phase";
     figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\Preprocessing_pop_phase";
@@ -49,7 +49,7 @@ spaghetti_confidence_signals(data,fc,figure_path)
 
 % it could be interesting to check the inter-subject mean of signals and
 % psd to see if there are some similarities. Just plotting means on means
-% and, why not, building the same plots for the maps within subjects.
+% and, why not, building the same plots for the maps within subjects.   
 
 %% 2.2 Signals direct comparisons
 % Comparison between different signals mean/periodogram traces for the same case
