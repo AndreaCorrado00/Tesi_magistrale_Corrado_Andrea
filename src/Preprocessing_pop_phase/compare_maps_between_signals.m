@@ -40,7 +40,7 @@ function compare_maps_between_signals(data, fc, figure_path)
                     sub = map + num2str(j);
                     trace = k + '_trace';
                     
-                    title_plot = 'Trace:' + k + ', sub:' + num2str(j) + ', MAP comparison';
+                    title_plot = 'Trace:' + k + 'population' +', MAP comparison';
                     
                     % Create a new figure
                     fig = figure(1);

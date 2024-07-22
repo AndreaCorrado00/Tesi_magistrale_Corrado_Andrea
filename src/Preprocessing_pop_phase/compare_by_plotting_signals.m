@@ -15,7 +15,10 @@ function compare_by_plotting_signals(signals_table, title_plot, Fc, freq_plot, v
         x = [0:Fc/M:Fc-Fc/M]; 
         % Convert signals to power spectrum
         for i = 1:N
-            signals_table(:, i) = array2table(abs(fft(table2array(signals_table(:, i)), M)).^2 / M);
+            th=ar(x,30,'yw'); 
+            [H,~]=freqz(1,th.a,M,Fc); 
+            DSP=(abs(H).^2)*th.NoiseVariance;
+            signals_table(:, i) = DSP;
         end
         x_lim = [0, 200]; % Define x-axis limits
         x_label = 'f [Hz]'; % Label for x-axis

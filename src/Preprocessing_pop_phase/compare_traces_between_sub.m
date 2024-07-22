@@ -34,7 +34,7 @@ function compare_traces_between_sub(data, fc, figure_path)
                 for j = 1:length(subjects)
                     sub = map + num2str(j);
                     trace = k + '_trace';
-                    title_plot = 'MAP:' + i + ' (' + get_name_of_map(i) + '), trace:' + k + ', subjects comparison';
+                    title_plot = 'MAP:' + i + ' (' + get_name_of_map(i) + '), trace:' + k ;
                     
                     % Create a new figure
                     fig = figure(1);
@@ -45,11 +45,11 @@ function compare_traces_between_sub(data, fc, figure_path)
                     compare_by_plotting_signals(data.(map).(sub).(trace), title_plot, fc, table_pox(1, l), table_pox(2, l));
                     
                     % Add current subject to legend entries
-                    legend_entries{j} = ['Subject ' num2str(j)];
+                    %legend_entries{j} = ['Subject ' num2str(j)];
                 end
                 
                 % Add legend to the plot
-                legend(legend_entries);
+                %legend(legend_entries);
                 hold off
                 
                 % Save the plot

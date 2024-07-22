@@ -33,22 +33,23 @@ function compare_case_signals(data, fc, figure_path)
                 fig = figure(1);
                 fig.WindowState = "maximized";
                 hold on
-                
+                traces_names=["rov", "ref", "spare2"];
                 % Loop through each trace type and plot comparisons
-                for k = ["rov", "ref", "spare1", "spare2", "spare3"]
-                    trace = k + '_trace';
-                    title_plot = 'MAP:' + i + ' (' + get_name_of_map(i) + '), sub:' + num2str(j) + ', traces comparison';
+                for k = 1:3
+                    subplot(3,1,k)
+                    trace = traces_names(k) + "_trace";
+                    title_plot = 'MAP:' + i + ' (' + get_name_of_map(i) + '), sub:' + num2str(j) +', '+ traces_names(k)+' trace';
                     
                     % Plot the signal comparisons
                     compare_by_plotting_signals(data.(map).(sub).(trace), title_plot, fc, table_pox(1, l), table_pox(2, l));
                 end
                 
                 % Add legend to the plot
-                legend('ROV', 'REF', 'SPARE 1', 'SPARE 2', 'SPARE 3');
+                %legend('ROV', 'REF', 'SPARE 2', 'SPARE 3');
                 hold off
                 
                 % Save the plot
-                file_name="MAP_"+i+"_sub_"+num2str(j)+"_";
+                file_name="MAP_"+i+"_sub_"+num2str(j)+'_';
                 save_plot(file_name, type_plots(l), figure_path + "\cases_comp", fig, true);
             end
         end

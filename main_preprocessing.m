@@ -38,9 +38,9 @@ elseif refactoring==false
 end
 
 %%                                                               DATA EDA
+fc=2035;
 
 %% 2. Data proprieties
-fc=2035;
 spaghetti_confidence_signals(data,fc,figure_path)
 
 %% 2.1 First observations
@@ -67,7 +67,7 @@ table_corr=correlation_signals_within_maps(data,'rov_trace');
 % to find the correlation matrix between the mean 'rov' trace (in this
 % case) within maps.
 
-plot_R2_distribution_maps(table_corr,'rov trace',figure_path,true)
+% plot_R2_distribution_maps(table_corr,'rov trace',figure_path,true)
 
 
 
