@@ -4,22 +4,37 @@ close
 %% Data and functions paths
 original_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Original";
 processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed";
-src_pre_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\Preprocessing_phase";
-src_pop_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\Preprocessing_pop_phase";
 
-%figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\Preprocessing_phase";
-figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\Preprocessing_pop_phase";
 
-addpath(src_pre_path)
-addpath(src_pop_path)
+pop=true;
+if pop
+    src_pop_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\Preprocessing_pop_phase";
+    figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\Preprocessing_pop_phase";
+    addpath(src_pop_path)
+else
+    src_pre_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\Preprocessing_phase";
+    figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\Preprocessing_phase";
+    addpath(src_pre_path)
+end
+
+
 
 %%                                                       DATA PREPROCESSING
 %% 1. Data refactoring 
 refactoring=false;
 if refactoring==true
-    refactor_and_save_data(original_data_path)
+    if pop==true
+        refactor_and_save_pop_data(original_data_path,processed_data_path);
+    else
+        refactor_and_save_data(original_data_path,processed_data_path);
+    end
+
 elseif refactoring==false
-    load(processed_data_path+'\dataset.mat')
+    if pop
+        load(processed_data_path+'\dataset_pop.mat');
+    else
+        load(processed_data_path+'\dataset.mat');
+    end
 end
 
 %%                                                               DATA EDA

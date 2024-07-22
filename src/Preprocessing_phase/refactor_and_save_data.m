@@ -1,4 +1,4 @@
-function data = refactor_and_save_data(original_data_path)
+function data = refactor_and_save_data(original_data_path,processed_data_path)
     % REFACTOR_AND_SAVE_DATA Refactors map data from multiple files and saves it into a structured dataset.
     %
     %   DATA = REFACTOR_AND_SAVE_DATA(ORIGINAL_DATA_PATH) reads map data from the specified
