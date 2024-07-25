@@ -15,7 +15,8 @@ function compare_by_plotting_signals(signals_table, title_plot, Fc, freq_plot, v
         x = [0:Fc/M:Fc-Fc/M]; 
         % Convert signals to power spectrum
         for i = 1:N
-            th=ar(table2array(signals_table(:,i))-table2array(mean(signals_table(:,i))),20,'yw'); 
+            p=evaluate_order(signals_table(:,i),5,50,2,0.05);
+            th=ar(table2array(signals_table(:,i))-table2array(mean(signals_table(:,i))),p,'ls'); 
             [H,~]=freqz(1,th.a,M,Fc); 
             DSP=(abs(H).^2)*th.NoiseVariance;
             signals_table(:, i) = array2table(DSP);
