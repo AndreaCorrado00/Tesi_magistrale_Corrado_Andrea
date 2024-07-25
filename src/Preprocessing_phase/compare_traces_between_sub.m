@@ -44,6 +44,7 @@ function compare_traces_between_sub(data, fc, figure_path)
                     % Plot the signal comparisons for the current trace type
                     compare_by_plotting_signals(data.(map).(sub).(trace), title_plot, fc, table_pox(1, l), table_pox(2, l));
                     
+                    
                     % Add current subject to legend entries
                     legend_entries{j} = ['Subject ' num2str(j)];
                 end

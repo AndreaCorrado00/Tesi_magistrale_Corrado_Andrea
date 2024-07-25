@@ -1,0 +1,64 @@
+function compare_traces_between_sub_3D_figure(data, fc, figure_path)
+    
+    % Define combinations for plotting mean and spectrum comparisons
+    table_pox = [false, true;
+                 true, true];
+    
+    % Define plot types
+    type_plots = ["comp_case_by_sign"; "comp_case_spectrum_by_sign"];
+    
+    % Loop through each plot type combination
+    for l = 1:2
+        % Loop through each map type: A, B, C
+        for i = ["A", "B", "C"]
+            map = 'MAP_' + i;
+            subjects = fieldnames(data.(map));
+            
+            % Loop through each trace type
+            for k = ["rov", "ref", "spare1", "spare2", "spare3"]
+                
+                % Create a new figure for the 3D plot
+                fig = figure;
+                fig.WindowState = "maximized";
+                hold on
+
+                % Set axis labels and title
+                xlabel('Subject');
+                ylabel('Time/Frequency');
+                zlabel('Amplitude');
+                title('3D Plot of Signals');
+                
+                % Loop through each subject
+                for j = 1:length(subjects)
+                    sub = map + num2str(j);
+                    trace = k + '_trace';
+                    title_plot = 'MAP:' + i + ' (' + get_name_of_map(i) + '), trace:' + k + ', subjects comparison';
+                    
+                    % Get the data to plot
+                    signal_data = data.(map).(sub).(trace);
+                    
+                    % Call the function to get the signals data
+                    [y, z_data, y_label] = plot_3D_signal_comparisons(signal_data, title_plot, fc, table_pox(1, l), table_pox(2, l));
+                    
+                    % Define the x position for the current subject
+                    x_pos = j;
+
+                    % Plot the data for the current subject
+                    % Since z_data includes the mean signal and potentially individual signals, 
+                    % plot them accordingly
+                    for col = 1:size(z_data, 2)
+                        plot3(x_pos * ones(size(y)), y, z_data(:, col), 'LineWidth', 1);
+                    end
+                end
+                
+                % Adjust view
+                view(3); % Set the default 3D view
+                grid on;
+                hold off;
+                
+                % Remove the save plot part for now as requested
+            end
+        end
+    end
+end
+
