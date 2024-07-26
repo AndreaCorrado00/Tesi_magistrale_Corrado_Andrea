@@ -70,7 +70,7 @@ compare_maps_between_signals(data,fc,figure_path)
 % plot_R2_distribution_maps(table_corr,'rov trace',figure_path,true)
 
 %% 2.4 3D plot of signals between subjects
-compare_traces_between_sub_3D_figure(data, fc)
+compare_traces_between_sub_3D_figure(data, fc,figure_path)  
 
 
 
