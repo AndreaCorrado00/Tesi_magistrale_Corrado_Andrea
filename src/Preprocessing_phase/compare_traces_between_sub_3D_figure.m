@@ -20,7 +20,7 @@ function compare_traces_between_sub_3D_figure(data, fc, figure_path)
             subjects = fieldnames(data.(map));
             
             % Loop through each trace type (currently only 'rov')
-            for k = "rov"  %["rov", "ref", "spare1", "spare2", "spare3"]
+            for k = ["rov", "ref", "spare1", "spare2", "spare3"]
                 
                 % Create a new figure for the 3D plot
                 fig = figure;
@@ -72,7 +72,7 @@ function compare_traces_between_sub_3D_figure(data, fc, figure_path)
                 hold off;
 
                 % Save the plot
-                file_name = "MAP_" + i + "trace_";
+                file_name = "MAP_" + i + "_trace_"+k+'_';
                 save_3D_plot(file_name, type_plots(l), figure_path + "\3D_figures", fig, true);
             end
         end
