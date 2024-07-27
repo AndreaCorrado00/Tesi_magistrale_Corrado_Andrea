@@ -28,15 +28,15 @@ function compare_traces_between_sub_3D_figure(data, fc, figure_path)
                 hold on
 
                 % Set axis labels and title
-                xlabel('Subject');
+                ylabel('Subject');
                 zlabel('Amplitude');
 
                 % Set the y-axis label and limits based on plot type
                 if l == 1
-                    ylabel('Time [s]');
+                    xlabel('Time [s]');
                 else
-                    ylabel('Frequency [Hz]');
-                    ylim([0, 200]);
+                    xlabel('Frequency [Hz]');
+                    xlim([0, 200]);
                 end
 
                 % Build the title for the plot
@@ -61,7 +61,7 @@ function compare_traces_between_sub_3D_figure(data, fc, figure_path)
                     % Since z_data includes the mean signal and potentially individual signals,
                     % plot them accordingly
                     for col = 1:size(z_data, 2)
-                        plot3(x_pos * ones(size(y)), y, z_data(:, col), 'LineWidth', 1);
+                        plot3( y, x_pos * ones(size(y)),z_data(:, col), 'LineWidth', 1);
                     end
                 end
                 
