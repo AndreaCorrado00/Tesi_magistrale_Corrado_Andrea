@@ -1,4 +1,4 @@
-function compare_by_plotting_signals(signals_table, title_plot, Fc, freq_plot, variability_plot)
+function compare_by_plotting_signals(signals_table, title_plot, Fc, freq_plot, variability_plot,sd_plot)
     % Function to compare signals by plotting them.
     % Inputs:
     % - signals_table: Table containing the signals to be plotted
@@ -42,7 +42,7 @@ function compare_by_plotting_signals(signals_table, title_plot, Fc, freq_plot, v
     % Get the color of the mean line
     mean_color = get(h_mean, 'Color');
     
-    if ~variability_plot
+    if ~variability_plot && ~sd_plot
         % Plot each individual signal as dotted lines with the same color as the mean
         for i = 1:N
             plot(x, table2array(signals_table(:, i)), ':', "LineWidth", 0.4, 'Color', mean_color);
@@ -56,7 +56,7 @@ function compare_by_plotting_signals(signals_table, title_plot, Fc, freq_plot, v
         xlabel(x_label); % Set x-axis label
         ylabel(y_label); % Set y-axis label
 
-    elseif variability_plot
+    elseif variability_plot && ~sd_plot
         % Plot mean and 95% confidence intervals
         up_lim = round(0.95 * length(table2array(signals_table(1, :))));
         down_lim = round(0.05 * length(table2array(signals_table(1, :))));
@@ -79,8 +79,30 @@ function compare_by_plotting_signals(signals_table, title_plot, Fc, freq_plot, v
         % Calculate y-axis limits based on the variability limits
         min_y_lim = min(VAR_LIMS(:, 1));
         max_y_lim = max(VAR_LIMS(:, 2));
-        % ylim([min_y_lim - 0.05 * min_y_lim, max_y_lim + 0.05 * max_y_lim]); % Set y-axis limits
+        ylim([min_y_lim - 0.05 * min_y_lim, max_y_lim + 0.05 * max_y_lim]); % Set y-axis limits
         title(['Mean and confidence intervals at 95%: ', title_plot]); % Set plot title
+        xlabel(x_label); % Set x-axis label
+        ylabel(y_label); % Set y-axis label
+        xlim(x_lim); % Set x-axis limits
+
+     elseif sd_plot && ~variability_plot
+        % Plot mean +/- sd
+        % Calculate variability limits (95% intervals)
+        sd_vec= [];
+        for i = 1:M
+            signals_i =table2array(signals_table(i, :));
+            sd_vec(i)=std(signals_i);
+        end
+
+        % Plot the 95% confidence intervals with the same color as the mean
+        plot(x, mean_sig+sd_vec', ':', "LineWidth", 0.8, 'HandleVisibility', 'off', 'Color', mean_color);
+        plot(x, mean_sig-sd_vec', ':', "LineWidth", 0.8, 'HandleVisibility', 'off', 'Color', mean_color);
+        xlim([0, x(end)]); % Set x-axis limits
+        % Calculate y-axis limits based on the variability limits
+        min_y_lim = min(mean_sig-sd_vec');
+        max_y_lim = max(mean_sig+sd_vec');
+        ylim([min_y_lim - 0.05 * min_y_lim, max_y_lim + 0.05 * max_y_lim]); % Set y-axis limits
+        title(['Mean +/- SD : ', title_plot]); % Set plot title
         xlabel(x_label); % Set x-axis label
         ylabel(y_label); % Set y-axis label
         xlim(x_lim); % Set x-axis limits

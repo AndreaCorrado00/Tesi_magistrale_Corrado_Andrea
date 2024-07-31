@@ -11,16 +11,18 @@ function spaghetti_confidence_signals(data, fc, figure_path)
     %       FIGURE_PATH - String, the directory path where the plots will be saved.
     
     % Define combinations of plot types
-    table_pox = [false, false;
-                 false, true;
-                 true, false;
-                 true, true];
+    table_pox = [false, false,false;
+                 false, true,false;
+                 false, false, true;
+                 true, false, false;
+                 true, true, false;
+                 true, false, true];
     
     % Define plot types
-    type_plots = ["spaghetti"; "confidence"; "spaghetti_freq"; "confidence_freq"];
+    type_plots = ["spaghetti"; "confidence";"mean_sd"; "spaghetti_freq"; "confidence_freq";"mean_sd_freq"];
     
     % Loop through each plot type combination
-    for l = 1:4
+    for l = 1:6
         % Loop through each map type: A, B, C
         for i = ["A", "B", "C"]
             map = 'MAP_' + i;
@@ -41,7 +43,7 @@ function spaghetti_confidence_signals(data, fc, figure_path)
                     fig.WindowState = "maximized";
                     
                     % Plot the signals
-                    plotting_signals(data.(map).(sub).(trace), title_plot, fc, table_pox(l, 1), table_pox(l, 2));
+                    plotting_signals(data.(map).(sub).(trace), title_plot, fc, table_pox(l, 1), table_pox(l, 2), table_pox(l,3));
                     
                     % Get the current figure
                     fig = gcf;
@@ -54,3 +56,5 @@ function spaghetti_confidence_signals(data, fc, figure_path)
         end
     end
 end
+
+

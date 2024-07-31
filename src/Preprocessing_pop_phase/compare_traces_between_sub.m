@@ -11,14 +11,17 @@ function compare_traces_between_sub(data, fc, figure_path)
     %       FIGURE_PATH - String, the directory path where the plots will be saved.
     
     % Define combinations for plotting mean and spectrum comparisons
-    table_pox = [false, true;
-                 true, true];
+
+    table_pox = [false, false, true, true;
+                 true,  false, true, false;
+                 false, true,  false,true;];
+   
     
     % Define plot types
-    type_plots = ["comp_case_by_sign"; "comp_case_spectrum_by_sign"];
-    
+    type_plots = ["comp_case_mean_confidence_by_sub"; "comp_case_mean_sd_by_sub";"comp_case_mean_confidence_spectrum_by_sub"; "comp_case_mean_sd_spectrum_by_sub"];
+
     % Loop through each plot type combination
-    for l = 1:2
+    for l = 1:4
         % Loop through each map type: A, B, C
         for i = ["A", "B", "C"]
             map = 'MAP_' + i;
@@ -42,7 +45,8 @@ function compare_traces_between_sub(data, fc, figure_path)
                     hold on
                     
                     % Plot the signal comparisons for the current trace type
-                    compare_by_plotting_signals(data.(map).(sub).(trace), title_plot, fc, table_pox(1, l), table_pox(2, l));
+                    compare_by_plotting_signals(data.(map).(sub).(trace), title_plot, fc, table_pox(1, l), table_pox(2, l), table_pox(3, l));
+                    
                     
                     % Add current subject to legend entries
                     %legend_entries{j} = ['Subject ' num2str(j)];

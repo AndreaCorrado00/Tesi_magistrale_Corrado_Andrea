@@ -11,17 +11,18 @@ function compare_maps_between_signals(data, fc, figure_path)
     %       FIGURE_PATH - String, the directory path where the plots will be saved.
 
     % Define combinations for plotting mean and spectrum comparisons
-    table_pox = [false, true;
-                 true, true];
+    table_pox = [false, false, true, true;
+        true,  false, true, false;
+        false, true,  false,true;];
     
     % Define plot types
-    type_plots = ["comp_sign_by_map"; "comp_sign_spec_by_map"];
+    type_plots = ["comp_mean_confidence_by_map"; "comp_mean_sd_by_map";"comp_mean_conf_spectrum_by_map";"comp_mean_sd_spectrum_by_map"];
     
     % Define map types
     maps = ["A", "B", "C"];
     
     % Loop through each plot type combination
-    for l = 1:2
+    for l = 1:4
         % Loop through each trace type
         for k = ["rov", "ref", "spare1", "spare2", "spare3"]
             
@@ -48,7 +49,7 @@ function compare_maps_between_signals(data, fc, figure_path)
                     hold on
                     
                     % Plot the signal comparisons for the current map
-                    compare_by_plotting_signals(data.(map).(sub).(trace), title_plot, fc, table_pox(1, l), table_pox(2, l));
+                    compare_by_plotting_signals(data.(map).(sub).(trace), title_plot, fc, table_pox(1, l), table_pox(2, l), table_pox(3, l));
                     
                     % Add current map to legend entries
                     legend_entries{i} = ['MAP ' + maps(i)];

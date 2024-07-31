@@ -1,4 +1,4 @@
-function plotting_signals(signals_table, title_plot, Fc, freq_plot, variability_plot)
+function plotting_signals(signals_table, title_plot, Fc, freq_plot, variability_plot, sd_plot)
 % plotting_signals plots the signals in either time or frequency domain with options for variability bands.
 %
 % Inputs:
@@ -18,7 +18,7 @@ function plotting_signals(signals_table, title_plot, Fc, freq_plot, variability_
         % Convert signals to power spectrum
         for i = 1:N
             p=evaluate_order(signals_table(:,i),5,50,2,0.05);
-            th=ar(table2array(signals_table(:,i))-table2array(mean(signals_table(:,i))),p,'ls');  
+            th=ar(table2array(signals_table(:,i))-table2array(mean(signals_table(:,i))),p,'ls'); 
             [H,~]=freqz(1,th.a,M,Fc); 
             DSP=(abs(H).^2)*th.NoiseVariance;
             signals_table(:, i) = array2table(DSP);
@@ -41,7 +41,7 @@ mean_sig = table2array(mean(signals_table, 2));
 plot(x, mean_sig, 'k-', "LineWidth", 3)
 hold on
 
-if ~variability_plot
+if ~variability_plot && ~sd_plot
     % If not plotting variability bands, plot individual signals
     for i = 1:N
         plot(x, table2array(signals_table(:,i)), ':', "LineWidth", 0.4)
@@ -54,7 +54,7 @@ if ~variability_plot
     title('Mean and single records: ' + title_plot + ' (n:' + num2str(N) + ')')
     xlabel(x_label)
     ylabel(y_label)
-else
+elseif variability_plot && ~sd_plot
     % If plotting variability bands (95% confidence intervals)
     up_lim = round(0.95 * length(table2array(signals_table(1,:))));
     down_lim = round(0.05 * length(table2array(signals_table(1,:))));
@@ -81,6 +81,28 @@ else
     ylabel(y_label)
     xlim(x_lim)
     hold off
+
+elseif sd_plot && ~variability_plot
+    % Plot mean +/- sd
+        % Calculate variability limits (95% intervals)
+        sd_vec= [];
+        for i = 1:M
+            signals_i =table2array(signals_table(i, :));
+            sd_vec(i)=std(signals_i);
+        end
+
+        % Plot the 95% confidence intervals with the same color as the mean
+        plot(x, mean_sig+sd_vec', 'k:', "LineWidth", 0.8);
+        plot(x, mean_sig-sd_vec', 'k:', "LineWidth", 0.8);
+        xlim([0, x(end)]); % Set x-axis limits
+        % Calculate y-axis limits based on the variability limits
+        min_y_lim = min(mean_sig-sd_vec');
+        max_y_lim = max(mean_sig+sd_vec');
+        ylim([min_y_lim - 0.05 * min_y_lim, max_y_lim + 0.05 * max_y_lim]); % Set y-axis limits
+        title(['Mean +/- SD : ', title_plot]); % Set plot title
+        xlabel(x_label); % Set x-axis label
+        ylabel(y_label); % Set y-axis label
+        xlim(x_lim); % Set x-axis limits
 end
 
 end
