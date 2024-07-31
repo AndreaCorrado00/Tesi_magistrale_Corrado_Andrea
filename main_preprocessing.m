@@ -5,7 +5,7 @@ close
 original_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Original";
 processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed";
 
-pop=false;
+pop=true;
 if pop
     src_pop_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\Preprocessing_pop_phase";
     figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\Preprocessing_pop_phase";
@@ -69,7 +69,7 @@ compare_maps_between_signals(data,fc,figure_path)
 % plot_R2_distribution_maps(table_corr,'rov trace',figure_path,true)
 
 
-%%                                                      SUBJECT SPECIFIC INVESTIGATIONS
+%%                                                   SUBJECT SPECIFIC INVESTIGATIONS
 %% 2.4 3D plot of signals between subjects 
 compare_traces_between_sub_3D_figure(data, fc,figure_path) 
 
