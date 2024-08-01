@@ -5,7 +5,7 @@ close
 original_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Original";
 processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed";
 
-pop=false;
+pop=true;
 if pop
     src_pop_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\Preprocessing_pop_phase";
     figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\Preprocessing_pop_phase";
@@ -52,10 +52,10 @@ spaghetti_confidence_signals(data,fc,figure_path)
 
 %% 2.2 Signals direct comparisons (both for population and subject analysis)
 % Comparison between different signals mean/periodogram traces for the same case
-compare_case_signals(data,fc,figure_path)
+compare_case_signals(data,fc,figure_path)   
 
 % Comparison within traces between subjects
-compare_traces_between_sub(data,fc,figure_path)
+compare_traces_between_sub(data,fc,figure_path) 
 
 % comparison between maps within subjects and traces
 compare_maps_between_signals(data,fc,figure_path)
@@ -67,13 +67,13 @@ compare_maps_between_signals(data,fc,figure_path)
 % case) within maps.
 
 % plot_R2_distribution_maps(table_corr,'rov trace',figure_path,true)
+  
 
-
-%%                                                      SUBJECT SPECIFIC INVESTIGATIONS
+%%                                                   SUBJECT SPECIFIC INVESTIGATIONS
 %% 2.4 3D plot of signals between subjects 
 compare_traces_between_sub_3D_figure(data, fc,figure_path) 
 
-%% 2.5 Subplots o
+%% 2.5 Subplots of traces record comprison for each subject 
 traces_subplots_by_sub(data, fc, figure_path)
 
 

@@ -51,7 +51,7 @@ function compare_by_plotting_signals(signals_table, title_plot, Fc, freq_plot, v
         % Calculate y-axis limits based on the min and max of the signals
         min_y_lim = table2array(min(min(signals_table), [], 2));
         max_y_lim = table2array(max(max(signals_table), [], 2));
-        ylim([min_y_lim - 0.05 * min_y_lim, max_y_lim + 0.05 * max_y_lim]); % Set y-axis limits
+        %ylim([min_y_lim - 0.05 * min_y_lim, max_y_lim + 0.05 * max_y_lim]); % Set y-axis limits
         title(['Mean and single records: ', title_plot]); % Set plot title
         xlabel(x_label); % Set x-axis label
         ylabel(y_label); % Set y-axis label
@@ -79,7 +79,7 @@ function compare_by_plotting_signals(signals_table, title_plot, Fc, freq_plot, v
         % Calculate y-axis limits based on the variability limits
         min_y_lim = min(VAR_LIMS(:, 1));
         max_y_lim = max(VAR_LIMS(:, 2));
-        ylim([min_y_lim - 0.05 * min_y_lim, max_y_lim + 0.05 * max_y_lim]); % Set y-axis limits
+        %ylim([min_y_lim - 0.05 * min_y_lim, max_y_lim + 0.05 * max_y_lim]); % Set y-axis limits
         title(['Mean and confidence intervals at 95%: ', title_plot]); % Set plot title
         xlabel(x_label); % Set x-axis label
         ylabel(y_label); % Set y-axis label
@@ -101,7 +101,7 @@ function compare_by_plotting_signals(signals_table, title_plot, Fc, freq_plot, v
         % Calculate y-axis limits based on the variability limits
         min_y_lim = min(mean_sig-sd_vec');
         max_y_lim = max(mean_sig+sd_vec');
-        ylim([min_y_lim - 0.05 * min_y_lim, max_y_lim + 0.05 * max_y_lim]); % Set y-axis limits
+        %ylim([min_y_lim - 0.05 * min_y_lim, max_y_lim + 0.05 * max_y_lim]); % Set y-axis limits
         title(['Mean +/- SD : ', title_plot]); % Set plot title
         xlabel(x_label); % Set x-axis label
         ylabel(y_label); % Set y-axis label

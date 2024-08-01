@@ -36,7 +36,7 @@ function spaghetti_confidence_signals(data, fc, figure_path)
                 % Loop through each trace type
                 for k = ["rov", "ref", "spare1", "spare2", "spare3"]
                     trace = k + '_trace';
-                    title_plot = 'MAP:' + i + ' (' + get_name_of_map(i) + '), sub:' + num2str(j) + ', trace: ' + k;
+                    title_plot = 'MAP:' + i + ' (' + get_name_of_map(i) + ') sub:'+num2str(j)+ ', trace: ' + k;
                     
                     % Create a new figure
                     fig = figure(1);

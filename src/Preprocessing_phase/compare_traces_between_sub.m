@@ -37,7 +37,7 @@ function compare_traces_between_sub(data, fc, figure_path)
                 for j = 1:length(subjects)
                     sub = map + num2str(j);
                     trace = k + '_trace';
-                    title_plot = 'MAP:' + i + ' (' + get_name_of_map(i) + '), trace:' + k + ', subjects comparison';
+                    title_plot = 'MAP:' + i + ' (' + get_name_of_map(i) + '), trace:' + k;
                     
                     % Create a new figure
                     fig = figure(1);

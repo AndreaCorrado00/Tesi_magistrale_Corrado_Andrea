@@ -40,7 +40,7 @@ function compare_case_signals(data, fc, figure_path)
                 for k = 1:3
                     subplot(3,1,k)
                     trace = traces_names(k) + "_trace";
-                    title_plot = 'MAP:' + i + ' (' + get_name_of_map(i) + '), sub:' + num2str(j) +', '+ traces_names(k)+' trace';
+                    title_plot = 'MAP:' + i + ' (' + get_name_of_map(i) + '), sub:'+num2str(j) +', '+ traces_names(k)+' trace';
                     
                     % Plot the signal comparisons
                     compare_by_plotting_signals(data.(map).(sub).(trace), title_plot, fc, table_pox(1, l), table_pox(2, l), table_pox(3, l));

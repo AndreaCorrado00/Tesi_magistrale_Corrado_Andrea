@@ -52,10 +52,10 @@ spaghetti_confidence_signals(data,fc,figure_path)
 
 %% 2.2 Signals direct comparisons (both for population and subject analysis)
 % Comparison between different signals mean/periodogram traces for the same case
-compare_case_signals(data,fc,figure_path)
+compare_case_signals(data,fc,figure_path)   
 
 % Comparison within traces between subjects
-compare_traces_between_sub(data,fc,figure_path)
+compare_traces_between_sub(data,fc,figure_path) 
 
 % comparison between maps within subjects and traces
 compare_maps_between_signals(data,fc,figure_path)
@@ -67,7 +67,7 @@ compare_maps_between_signals(data,fc,figure_path)
 % case) within maps.
 
 % plot_R2_distribution_maps(table_corr,'rov trace',figure_path,true)
-
+  
 
 %%                                                   SUBJECT SPECIFIC INVESTIGATIONS
 %% 2.4 3D plot of signals between subjects 
