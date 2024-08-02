@@ -21,13 +21,14 @@ function traces_subplots_by_sub(data, fc, figure_path)
                 sub = map + num2str(j);
                 traces = fieldnames(data.(string(map)).(string(sub)));
                 
-                % Create a new figure
-                fig = figure(1);
-                fig.WindowState = "maximized";
-                traces_names=["rov", "ref", "spare2"];
-                % Loop through each trace type and plot comparisons
+                
                 [M, N] = size(data.(map).(sub).rov_trace);
                 for h=1:N
+                    % Create a new figure
+                    fig = figure(1);
+                    fig.WindowState = "maximized";
+                    traces_names=["rov", "ref", "spare2"];
+                    % Loop through each trace type and plot comparisons
                     for k = 1:3
                         subplot(3,1,k)
                         trace = traces_names(k) + "_trace";

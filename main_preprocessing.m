@@ -74,7 +74,7 @@ compare_maps_between_signals(data,fc,figure_path)
 compare_traces_between_sub_3D_figure(data, fc,figure_path) 
 
 %% 2.5 Subplots of traces record comprison for each subject 
-traces_subplots_by_sub(data, fc, figure_path)
+traces_subplots_by_sub(data, fc, figure_path) 
 
 
 
