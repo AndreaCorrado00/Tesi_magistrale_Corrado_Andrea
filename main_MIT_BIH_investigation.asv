@@ -1,0 +1,36 @@
+clc
+clear
+close
+
+%% PUBLIC DATABESE FOR SPECTRUM EVALUATION
+% The aim of this code is investigating if the behavior found into the
+% reference trace is acceptable and in case if it's related to some
+% patologies. To do it, it's used (part of) the database MIT-BIH arrythmia
+% database. 
+
+% Specifica la cartella contenente i dati del MIT-BIH Arrhythmia Database
+dataFolder = "D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Other\mit-bih-arrhythmia-database-1.0.0";
+src_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\Spectrum_comparison_phase";
+addpath(src_path)
+
+
+%% Handling the dataset
+% To make the dataset more handable, it is converted into a struct
+MIT_dataset_builder(dataFolder);
+
+
+%% Example of data
+%load (now done manually)
+fc=MIT_data.sub_100.fc;
+N=length(MIT_data.sub_100.lead_1_data);
+t = linspace(0,MIT_data.sub_100.duration,N);
+
+figure(1)
+plot(t,MIT_data.sub_100.lead_1_data)
+xlim([0,2)
+
+
+
+
+
+
