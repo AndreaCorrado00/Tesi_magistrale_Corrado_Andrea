@@ -54,7 +54,7 @@ spaghetti_confidence_signals(data,fc,figure_path)
 % Comparison between different signals mean/periodogram traces for the same case
 compare_case_signals(data,fc,figure_path)   
 
-% Comparison within traces between subjects
+% Comparison within traces between subjects 
 compare_traces_between_sub(data,fc,figure_path) 
 
 % comparison between maps within subjects and traces
