@@ -11,6 +11,7 @@ close
 % Specifica la cartella contenente i dati del MIT-BIH Arrhythmia Database
 dataFolder = "D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Other\mit-bih-arrhythmia-database-1.0.0";
 src_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\Spectrum_comparison_phase";
+figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\Spectrum_investigation_phase";
 addpath(src_path)
 
 
@@ -18,22 +19,38 @@ addpath(src_path)
 % To make the dataset more handable, it is converted into a struct
 MIT_dataset_builder(dataFolder);
 
-
+%% Loading data
+load("D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Other\MIT_dataset.mat")
 %% Example of data
-%load (now done manually)
-fc=MIT_data.sub_100.fc;
-N=length(MIT_data.sub_100.lead_1_data);
-t = linspace(0,MIT_data.sub_100.duration,N);
-
-figure(1)
-plot(t,MIT_data.sub_100.lead_1_data)
-xlim([0,2])
-% there is clear noise into the signals, the must bbe processed before
+plot_example(MIT_data)
+% there is clear noise into the signals, the must be processed before
 % proceeding
 
+%% Dataset rebuilding
+% Instead of considering 30 min of acquisition, for each subject are
+% extracted random records with a length of some seconds. In this way I'll
+% reach a good number if examples
+record_duration= 20; %sec
+num_records=10; % for each sub
+min_overlap_ratio=0.1; % 10% of overlap allowed 
 
+MIT_data_divided = extract_random_segments_struct(MIT_data, record_duration, num_records, min_overlap_ratio);
 
+% Showing the number of records reached
+disp(['There are: ',num2str(length(fieldnames(MIT_data_divided))*num_records), ' records'])
 
+%% RAW data visualization
+plotting_signals(MIT_data_divided,figure_path,"time_mean_spaghetti",true) % unclear traces
+%% Spectral analysis 1
+% Now sopectrums are evaluated to see if and hoe proceed to denoising the
+% data.
+
+plotting_signals(MIT_data_divided,figure_path,"freq_mean_sd",true,false) 
+
+%plotting_signals(MIT_data_divided,figure_path,"freq_mean_spaghetti",false)  
+%% Checking the presence of noise
+% basically a zoomed version of the spectrum outside the range 0-40Hz 
+plotting_signals(MIT_data_divided,figure_path,"freq_mean_sd",true,true) 
 
 
 
