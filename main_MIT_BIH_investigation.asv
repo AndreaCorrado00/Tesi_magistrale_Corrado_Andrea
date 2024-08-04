@@ -42,15 +42,15 @@ disp(['There are: ',num2str(length(fieldnames(MIT_data_divided))*num_records), '
 %% RAW data visualization
 plotting_signals(MIT_data_divided,figure_path,"time_mean_spaghetti",true) % unclear traces
 %% Spectral analysis 1
-% Now sopectrums are evaluated to see if and hoe proceed to denoising the
+% Now speectrums are evaluated to see if and how proceed to denoising the
 % data.
 
 plotting_signals(MIT_data_divided,figure_path,"freq_mean_sd",true,false) 
 
-%plotting_signals(MIT_data_divided,figure_path,"freq_mean_spaghetti",true)  
+%plotting_signals(MIT_data_divided,figure_path,"freq_mean_spaghetti",false)  
 %% Checking the presence of noise
-% basically a zoomed version of the spectrum outside the known 
-plotting_signals(MIT_data_divided,figure_path,"freq_mean_sd",true,false) 
+% basically a zoomed version of the spectrum outside the range 0-40Hz 
+plotting_signals(MIT_data_divided,figure_path,"freq_mean_sd",true,true) 
 
 
 

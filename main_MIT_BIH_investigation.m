@@ -23,13 +23,13 @@ MIT_dataset_builder(dataFolder);
 load("D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Other\MIT_dataset.mat")
 %% Example of data
 plot_example(MIT_data)
-% there is clear noise into the signals, the must be processed before
+% there is clear noise into the signals, they must be processed before
 % proceeding
 
 %% Dataset rebuilding
 % Instead of considering 30 min of acquisition, for each subject are
 % extracted random records with a length of some seconds. In this way I'll
-% reach a good number if examples
+% reach a good number of examples
 record_duration= 20; %sec
 num_records=10; % for each sub
 min_overlap_ratio=0.1; % 10% of overlap allowed 
@@ -42,7 +42,7 @@ disp(['There are: ',num2str(length(fieldnames(MIT_data_divided))*num_records), '
 %% RAW data visualization
 plotting_signals(MIT_data_divided,figure_path,"time_mean_spaghetti",true) % unclear traces
 %% Spectral analysis 1
-% Now sopectrums are evaluated to see if and hoe proceed to denoising the
+% Now speectrums are evaluated to see if and how proceed to denoising the
 % data.
 
 plotting_signals(MIT_data_divided,figure_path,"freq_mean_sd",true,false) 
