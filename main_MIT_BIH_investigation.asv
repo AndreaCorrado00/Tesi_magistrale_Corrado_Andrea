@@ -33,8 +33,8 @@ plot_example(MIT_data)
 % Instead of considering 30 min of acquisition, for each subject are
 % extracted random records with a length of some seconds. In this way I'll
 % reach a good number of examples
-record_duration= 20; %sec
-num_records=10; % for each sub
+record_duration= 5; %sec
+num_records=0; % for each sub
 min_overlap_ratio=0.1; % 10% of overlap allowed 
 
 MIT_data_divided = extract_random_segments_struct(MIT_data, record_duration, num_records, min_overlap_ratio);
@@ -55,11 +55,14 @@ plotting_signals(MIT_data_divided,figure_path,"freq_mean_sd",true,false)
 % basically a zoomed version of the spectrum outside the range 0-40Hz 
 plotting_signals(MIT_data_divided,figure_path,"freq_mean_sd",true,true) 
 
-%% Cleaning signals one-by-one
+
+
+
+%%                                                         CLEANING DATA
 MIT_cleaned_data=filter_signals(MIT_data_divided);
 
-%% Plotting a 
-
+%% Plotting cleaned signals
+plotting_signals(MIT_cleaned_data,figure_path,"time_mean_spaghetti",false,false) 
 %% Spectral analysis 2
 plotting_signals(MIT_cleaned_data,figure_path,"freq_mean_sd",false,false) 
 

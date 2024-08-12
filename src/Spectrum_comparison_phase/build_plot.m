@@ -28,7 +28,7 @@ signals_table=signals_table';
         y_label = 'Spectrum'; % Label for y-axis
 else
     % If plotting in time domain
-    duration=Fc*M;
+    duration=1/Fc*M;
     x= linspace(0,duration,M);
     x_lim = [0, x(end)];
     x_label = 'time [s]';
