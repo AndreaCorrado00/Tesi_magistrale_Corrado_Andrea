@@ -41,6 +41,9 @@ for i=1:length(subjects)
     if saving
         file_name=plot_types(ind_plot)+"Sub_"+num2str(i)+"MIT_dataset_eval";
         save_plot(file_name, plot_type, figure_path + "\data_visual", fig, true);
+    else
+        pause(3)
+        close(fig)
     end
 
 end

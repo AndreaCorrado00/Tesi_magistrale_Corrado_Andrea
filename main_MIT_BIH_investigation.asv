@@ -55,19 +55,11 @@ plotting_signals(MIT_data_divided,figure_path,"freq_mean_sd",true,false)
 % basically a zoomed version of the spectrum outside the range 0-40Hz 
 plotting_signals(MIT_data_divided,figure_path,"freq_mean_sd",true,true) 
 
-
-%%                                                       DATASET FILTERING
-MIT_data_cleaned=filter_signals(MIT_data_divided);
-
-%% Data visualization
-
-
-
-%%                                                         CLEANING DATA
+%% Cleaning signals one-by-one
 MIT_cleaned_data=filter_signals(MIT_data_divided);
 
-%% Plotting cleaned signals
-plotting_signals(MIT_cleaned_data,figure_path,"time_mean_spaghetti",false,false) 
+%% Plotting a 
+
 %% Spectral analysis 2
 plotting_signals(MIT_cleaned_data,figure_path,"freq_mean_sd",false,false) 
 
