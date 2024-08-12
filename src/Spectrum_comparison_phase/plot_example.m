@@ -1,9 +1,15 @@
-function plot_example(MIT_data)
+function plot_example(MIT_data,bigger)
 N=length(MIT_data.sub_100.lead_1_data);
-t = linspace(0,MIT_data.sub_100.duration,N);
+duration=N/MIT_data.sub_100.fc;
+t = linspace(0,duration,N);
 
 %figure(1)
-plot(t,MIT_data.sub_100.lead_1_data)
+if bigger
+    plot(t,MIT_data.sub_100.lead_1_data-mean(MIT_data.sub_100.lead_1_data),"LineWidth",1)
+else
+    plot(t,MIT_data.sub_100.lead_1_data-mean(MIT_data.sub_100.lead_1_data))
+end
+
 xlim([0,2])
 title('Example of signal')
 xlabel('Time [s]')

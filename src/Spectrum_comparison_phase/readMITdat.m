@@ -1,8 +1,9 @@
-function [signals, Fs] = readMITdat(datFilePath)
-    % Funzione per leggere i dati dal file .dat nel formato 212
+function signals = readMITdat(datFilePath, gain, baseline, numLeads)
+    % Funzione per leggere e convertire i dati dal file .dat nel formato 212 in millivolt
     fid = fopen(datFilePath, 'r');
-    signals = fread(fid, inf, 'uint16');
+    rawData = fread(fid, [numLeads, inf], 'uint16')'; % Legge tutti i leads
     fclose(fid);
-
-    Fs = 360; % Frequenza di campionamento per il formato 212 (o 360, a seconda del caso)
+    
+    % Converti i dati grezzi in millivolt
+    signals = ((rawData - baseline)/gain)*0.1; % Conversione in mV (gain è in uV per digit)
 end

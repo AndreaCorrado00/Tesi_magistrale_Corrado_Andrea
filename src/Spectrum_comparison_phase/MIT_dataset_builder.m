@@ -12,11 +12,11 @@ function MIT_dataset_builder(dataFolder)
 
         % Leggi il file di intestazione
         heaFilePath = fullfile(dataFolder, [fileName, '.hea']);
-        [recordName, fs, duration, lead_1_data] = readHeader(heaFilePath, dataFolder);
+        [recordName, fs, duration, gain, baseline, numLeads] = readHeader(heaFilePath);
 
-        % Leggi i dati dal file .dat (nel formato 212)
+        % Leggi i dati dal file .dat (nel formato 212) e convertili in millivolt
         datFilePath = fullfile(dataFolder, [fileName, '.dat']);
-        [signals, Fs] = readMITdat(datFilePath);  % Funzione da implementare per il formato 212
+        signals = readMITdat(datFilePath, gain, baseline, numLeads);  % Funzione aggiornata
         
         % Leggi le annotazioni per ottenere la patologia
         atrFilePath = fullfile(dataFolder, [fileName, '.atr']);
@@ -24,13 +24,19 @@ function MIT_dataset_builder(dataFolder)
 
         % Aggiungi i dati alla struct
         subFieldName = ['sub_', fileName];
-        MIT_data.(subFieldName).lead_1_data = lead_1_data;
-        MIT_data.(subFieldName).signals = signals; % Aggiungi i segnali letti dal .dat
-        MIT_data.(subFieldName).fc = Fs; % Frequenza di campionamento dal .dat
+        MIT_data.(subFieldName).lead_1_data = signals(:,1); % Salva la derivazione 1 (lead 1)
+        MIT_data.(subFieldName).signals = signals; % Salva tutti i segnali
+        MIT_data.(subFieldName).fc = fs; % Frequenza di campionamento
         MIT_data.(subFieldName).duration = duration;
         MIT_data.(subFieldName).pathology = pathology;
     end
+    
+    % Salva la struct in un file .mat
     save("D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Other\MIT_dataset.mat", 'MIT_data');
 end
+
+
+
+
 
 

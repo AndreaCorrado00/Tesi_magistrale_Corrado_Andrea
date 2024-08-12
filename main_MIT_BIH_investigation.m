@@ -22,7 +22,7 @@ MIT_dataset_builder(dataFolder);
 %% Loading data
 load("D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Other\MIT_dataset.mat")
 %% Example of data
-plot_example(MIT_data)
+plot_example(MIT_data,false)
 % there is clear noise into the signals, they must be processed before
 % proceeding.
 % To do it,a low pass filter between [0-50] Hz is used and the mean is elimaneted 
@@ -30,12 +30,12 @@ plot_example(MIT_data)
 
 %% Cleaning the whole dataset 
 MIT_data_cleaned=filter_signals(MIT_data);
-plot_example(MIT_data_cleaned)
 
-figure(1)
-plot_example(MIT_data)
+% Example of data cleaned
+figure
+plot_example(MIT_data,false)
 hold on
-plot_example(MIT_data_cleaned)
+plot_example(MIT_data_cleaned,true)
 title('RAW vs Cleaned example')
 hold off
 

@@ -1,0 +1,11 @@
+function plot_example(MIT_data,bigger)
+N=length(MIT_data.sub_100.lead_1_data);
+duration=N/MIT_data.sub_100.fc;
+t = linspace(0,duration,N);
+
+%figure(1)
+plot(t,MIT_data.sub_100.lead_1_data-mean(MIT_data.sub_100.lead_1_data))
+xlim([0,2])
+title('Example of signal')
+xlabel('Time [s]')
+ylabel('Amplitude [mV]')
