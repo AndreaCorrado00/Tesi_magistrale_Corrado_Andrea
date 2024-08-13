@@ -10,5 +10,28 @@ addpath(src_path)
 % Loading previusly made data
 load(processed_data_path+'\dataset.mat');
 
-%% QRS detection and signal alignment
+%%                                               QRS DETECTION AND SIGNAL ALIGNMENT
+%% QRS detecton
+% for each signal
+fc=2035;
+QRS_detected_data=analyzeQRS(data,fc,true);
+
+%% QRS position analysis
+% Now for each single signal there is the position of the QRS, it's
+% reasonable to see if, for a single ref trace (thus for a sigle subject)
+% the distribution of QRS positions is very close to the mean position. If
+% yes, one can proceed by considering the position of the QRS as the mean
+% of the QRS position for that reference trace for the specified subject. 
+
+QRSStatsTable = computeQRSStatistics(QRS_detected_data);
+
+% Looking at the table, it's not possible to directly conclude that the QRS
+% position can be approximated with the mean, at least not for each
+% subject. Further investigations are necessary in this case. So for
+% subjects with huge variability, there will visualized QRS position and
+% signals. 
+
+%% QRS position:going deeper
+subjectIndices=[12,8,1]; 
+plotQRSForSubjects(QRS_detected_data, subjectIndices,fc)
 
