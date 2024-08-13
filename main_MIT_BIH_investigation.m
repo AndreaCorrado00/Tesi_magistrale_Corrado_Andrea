@@ -8,7 +8,6 @@ close
 % patologies. To do it, it's used (part of) the database MIT-BIH arrythmia
 % database. 
 
-% Specifica la cartella contenente i dati del MIT-BIH Arrhythmia Database
 dataFolder = "D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Other\mit-bih-arrhythmia-database-1.0.0";
 src_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\Spectrum_comparison_phase";
 figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\Spectrum_investigation_phase";
@@ -23,9 +22,7 @@ MIT_dataset_builder(dataFolder);
 load("D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Other\MIT_dataset.mat")
 %% Example of data
 plot_example(MIT_data,false)
-% there is clear noise into the signals, they must be processed before
-% proceeding.
-% To do it,a low pass filter between [0-50] Hz is used and the mean is elimaneted 
+% there is clear noise into the signals
 
 
 %% Cleaning the whole dataset 
