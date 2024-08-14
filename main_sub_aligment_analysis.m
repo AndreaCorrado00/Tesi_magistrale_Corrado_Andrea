@@ -63,7 +63,7 @@ plotQRSForSubjects(QRS_detected_data, subjectIndices,fc,figure_path)
 % common point to align signals. Such common point will be the same for ALL
 % rov signals and for ALL subjects
 
-
+    
 
 
 

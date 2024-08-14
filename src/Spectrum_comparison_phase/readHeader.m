@@ -1,20 +1,39 @@
 function [recordName, fs, duration, gain, baseline, numLeads] = readHeader(heaFilePath)
-    % Funzione per leggere il file .hea e ottenere i parametri necessari
+    % This function reads an MIT-BIH .hea file to extract necessary parameters.
+    % The parameters include the record name, sampling frequency, duration,
+    % gain, baseline, and the number of leads.
+    %
+    % Inputs:
+    %   heaFilePath - The full path to the .hea file containing header information.
+    %
+    % Outputs:
+    %   recordName  - The name of the record.
+    %   fs          - The sampling frequency (Hz).
+    %   duration    - The duration of the signal (seconds).
+    %   gain        - The gain of the signal (microvolts per digit).
+    %   baseline    - The baseline of the signal.
+    %   numLeads    - The number of leads in the signal.
+
+    % Open the header file for reading
     fid = fopen(heaFilePath, 'r');
+    
+    % Read the entire file content into a cell array, one line per cell
     headerInfo = textscan(fid, '%s', 'Delimiter', '\n');
+    
+    % Close the file
     fclose(fid);
     
-    % Estrai informazioni importanti dalla prima riga
+    % Extract important information from the first line
     firstLine = strsplit(headerInfo{1}{1});
-    recordName = firstLine{1};
-    fs = str2double(firstLine{3}); % Frequenza di campionamento
-    duration = str2double(firstLine{4}); % Durata del segnale
+    recordName = firstLine{1}; % Record name
+    fs = str2double(firstLine{3}); % Sampling frequency (Hz)
+    duration = str2double(firstLine{4}); % Duration of the signal (seconds)
     
-    % Estrai il numero di derivazioni (leads)
+    % Extract the number of leads from the first line
     numLeads = str2double(firstLine{2});
     
-    % Estrai il gain e il baseline dalla seconda riga (esempio per la derivazione 1)
+    % Extract the gain and baseline from the second line (example for lead 1)
     secondLine = strsplit(headerInfo{1}{2});
-    gain = str2double(secondLine{3}); % Gain del segnale (uV per digit)
-    baseline = str2double(secondLine{5}); % Baseline del segnale
+    gain = str2double(secondLine{3}); % Gain of the signal (microvolts per digit)
+    baseline = str2double(secondLine{5}); % Baseline of the signal
 end
