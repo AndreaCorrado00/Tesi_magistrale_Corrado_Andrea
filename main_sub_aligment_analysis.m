@@ -63,7 +63,13 @@ window=0.1; %time window into whitch finding the maximum in seconds
 Data_sub_aligned=single_sub_alignment(QRS_detected_data,fc,window);
 
 %% Remaking analysis
-
+% Whole analysis previously done are made again to check the results of
+% alignment
+spaghetti_confidence_signals(data,fc,figure_path)
+compare_case_signals(data,fc,figure_path)  
+compare_traces_between_sub(data,fc,figure_path) 
+compare_maps_between_signals(data,fc,figure_path)
+traces_subplots_by_sub(data, fc, figure_path) 
 
 
 %%                                              WHOLE DATASET COMMON POINT ALIGNMENT
