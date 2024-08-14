@@ -19,15 +19,17 @@ function newData=single_sub_alignment(data,Fc,window)
             % Extract the rov signals (assumed to be a table)
             rovSignals = newData.(mapName).(subjectName).rov_trace;
             QRSpositions=newData.(mapName).(subjectName).QRS_position;
+
+            % Handling the possibility of empty QRS
+            QRSpositions=impute_QRS_pos((QRSpositions));
            
             
             % Loop through each signal in the reference table
             for k = 1:width(rovSignals)
                 signal = rovSignals{:, k};
                 QRS_pos=QRSpositions{:,k};
-
                 % Single signal alignment
-                half_width=round((Fc*window)/2;
+                half_width=round((Fc*window)/2);
                 rovSignals{:, k}=align_respect_to_QRS(signal,QRS_pos,half_width);
 
 
@@ -35,6 +37,8 @@ function newData=single_sub_alignment(data,Fc,window)
 
             % Save QRS positions in the new field
             newData.(mapName).(subjectName).rov_trace = rovSignals;
+            newData.(mapName).(subjectName).QRS_position = QRS_position;
+
         end
     end
 end

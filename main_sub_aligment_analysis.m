@@ -56,10 +56,15 @@ plotQRSForSubjects(QRS_detected_data, subjectIndices,fc,figure_path)
 % Then the analysis done previously will be made again to see if there are
 % changes.
 
+% NB: during the processing, the function substitute possible unavailable
+% QRS with the median of the ref trace QRS.
+
 window=0.1; %time window into whitch finding the maximum in seconds
 Data_sub_aligned=single_sub_alignment(QRS_detected_data,fc,window);
 
 %% Remaking analysis
+
+
 
 %%                                              WHOLE DATASET COMMON POINT ALIGNMENT
 % The scope of this part of code is find out if it's possible to define a
