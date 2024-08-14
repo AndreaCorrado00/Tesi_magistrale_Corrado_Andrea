@@ -10,7 +10,7 @@ addpath(src_path)
 % Loading previusly made data
 load(processed_data_path+'\dataset.mat');
 
-%%                                               QRS DETECTION AND SIGNAL ALIGNMENT
+%%                                         QRS DETECTION AND SINGLE SUBJECT SIGNAL ALIGNMENT
 %% QRS detecton
 % for each signal
 fc=2035;
@@ -48,7 +48,25 @@ plotQRSForSubjects(QRS_detected_data, subjectIndices,fc,figure_path)
 % trace with the QRS position. The strategy is:
     % For each subject
         % For each rov SIGNAL
-    % Find the maximum around the posistion of the QRS_ref, then evaluate
-    % the distance between such maximum and the QRS point. 
-    % Shift the signal by adding NaNs on top or bottom and adjust the
-    % length of the signal to be the same as the original one.
+            % Find the maximum around the posistion of the QRS_ref, then evaluate
+                % the distance between such maximum and the QRS point. 
+            % Shift the signal by adding NaNs on top or bottom and adjust the
+                % length of the signal to be the same as the original one.
+
+% Then the analysis done previously will be made again to see if there are
+% changes.
+
+window=0.1; %time window into whitch finding the maximum in seconds
+Data_aligned_=single_sub_alignment(QRS_detected_data,Fc,window);
+
+%% Remaking analysis
+
+%%                                              WHOLE DATASET COMMON POINT ALIGNMENT
+% The scope of this part of code is find out if it's possible to define a
+% common point to align signals. Such common point will be the same for ALL
+% rov signals and for ALL subjects
+
+    
+
+
+

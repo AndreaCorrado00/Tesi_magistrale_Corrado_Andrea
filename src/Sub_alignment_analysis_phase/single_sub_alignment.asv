@@ -1,0 +1,40 @@
+function newData=single_sub_alignment(data,Fc,window)
+ % Initialize newData as a copy of the input data
+    newData = data;
+
+    % Define MAP names (MAP_A, MAP_B, MAP_C)
+    mapNames = {'A', 'B', 'C'};
+    
+    % Number of subjects
+    numSubjects = 12;
+    
+    % Loop through each map
+    for i = 1:length(mapNames)
+        mapName = 'MAP_' + string(mapNames{i});
+        
+        % Loop through each subject (MAP_A1, MAP_A2, ..., MAP_C12)
+        for j = 1:numSubjects
+            subjectName = sprintf('%s%d', mapName, j);
+            
+            % Extract the rov signals (assumed to be a table)
+            rovSignals = newData.(mapName).(subjectName).rov_trace;
+            QRSpositions=newData.(mapName).(subjectName).QRS_position;
+           
+            
+            % Loop through each signal in the reference table
+            for k = 1:width(rovSignals)
+                signal = rovSignals{:, k};
+                QRS_pos=QRSpositions{:,k};
+
+                % Single signal alignment
+                half_width=round((Fc*window)/2;
+                rovSignals{:, k}=align_respect_to_QRS(signal,QRS_pos,half_width);
+
+
+            end
+
+            % Save QRS positions in the new field
+            newData.(mapName).(subjectName).rov_trace = rovSignals;
+        end
+    end
+end

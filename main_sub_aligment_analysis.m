@@ -56,6 +56,9 @@ plotQRSForSubjects(QRS_detected_data, subjectIndices,fc,figure_path)
 % Then the analysis done previously will be made again to see if there are
 % changes.
 
+window=0.1; %time window into whitch finding the maximum in seconds
+Data_sub_aligned=single_sub_alignment(QRS_detected_data,fc,window);
+
 %% Remaking analysis
 
 %%                                              WHOLE DATASET COMMON POINT ALIGNMENT
