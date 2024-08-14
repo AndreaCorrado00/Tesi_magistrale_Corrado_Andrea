@@ -1,4 +1,4 @@
-function plotQRSForSubjects(data, subjectIndices, Fc,figure_path)
+function plotQRSForSubjects(data, subjectIndices, Fc)
 % plotQRSForSubjects - Plots the ref_trace signals and corresponding QRS points for specified subjects.
 % Each signal and its QRS points are plotted with the same color.
 %
@@ -70,11 +70,6 @@ function plotQRSForSubjects(data, subjectIndices, Fc,figure_path)
         
         % Adjust figure layout
         sgtitle(sprintf('Subject %d', subjectNum)); % Title for the whole figure
-
-        % saving
-        file_name='MAP_'+string(mapNames{i})+'_sub_'+num2str(subjectNum);
-        type_of_plot='_QRS_position';
-        save_plot(file_name, type_of_plot, figure_path+'\QRS_detection', fig,true)
     end
 end
 

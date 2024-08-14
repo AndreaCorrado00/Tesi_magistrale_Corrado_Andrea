@@ -44,9 +44,9 @@ function newData = analyzeQRS(data, Fc,plotFlag)
                 % Plot the first signal with QRS positions if plotFlag is true
                 if plotFlag && j == 1 && k == 1
                     figure;
-                    plot((1:length(signal))/fc, signal);
+                    plot((1:length(signal))/Fc, signal);
                     hold on;
-                    plot(QRS_positions{k}/fc, signal(QRS_positions{k}), 'ro');
+                    plot(QRS_positions{k}/Fc, signal(QRS_positions{k}), 'ro');
                     xlabel('Time (s)');
                     ylabel('Amplitude');
                     title_plot='First ref Signal with Detected QRS Positions for MAP: '+ string(mapNames{i})+', sub: '+num2str(j);
