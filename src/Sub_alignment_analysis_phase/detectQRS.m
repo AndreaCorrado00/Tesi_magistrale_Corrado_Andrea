@@ -31,7 +31,22 @@ function QRS_positions = detectQRS(signal, Fc)
         threshold = 0; % Avoid invalid threshold when max is 0
     end
     
-    % Thresholding and peak detection
-    [~, QRS_positions] = findpeaks(integratedSignal, 'MinPeakHeight', threshold, 'MinPeakDistance', round(0.6 * Fc));
+    % Thresholding and peak detection in the integrated signal
+    [~, peakLocations] = findpeaks(integratedSignal, 'MinPeakHeight', threshold, 'MinPeakDistance', round(0.6 * Fc));
     
+    % Initialize QRS_positions
+    QRS_positions = zeros(1, length(peakLocations));
+    
+    % Find the exact position of the QRS complex in the original filtered signal
+    for i = 1:length(peakLocations)
+        % Define a window around the detected peak location
+        searchWindow = max(1, peakLocations(i) - round(0.1 * Fc)) : min(length(filteredSignal), peakLocations(i) + round(0.1 * Fc));
+        
+        % Find the peak in the original filtered signal within this window
+        [~, maxIdx] = max(filteredSignal(searchWindow));
+        
+        % Adjust index relative to the original signal
+        QRS_positions(i) = searchWindow(1) + maxIdx - 1;
+    end
 end
+

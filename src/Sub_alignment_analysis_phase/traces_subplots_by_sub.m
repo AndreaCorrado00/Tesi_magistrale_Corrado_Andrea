@@ -49,7 +49,7 @@ function traces_subplots_by_sub(data, fc, figure_path)
                     end
                     % Save the plot
                     file_name="MAP_"+i+"_sub_"+num2str(j)+'_record_'+num2str(h)+'_';
-                    save_plot(file_name, type_plots(l), figure_path + "\single_records", fig, true);
+                    save_plot(file_name, type_plots(l), figure_path, fig, true);
                 end
 
              

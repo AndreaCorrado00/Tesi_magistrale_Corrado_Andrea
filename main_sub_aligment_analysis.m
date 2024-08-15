@@ -14,7 +14,7 @@ load(processed_data_path+'\dataset.mat');
 %% QRS detecton
 % for each signal
 fc=2035;
-QRS_detected_data=analyzeQRS(data,fc,true);
+QRS_detected_data=analyzeQRS(data,fc,true,'ref_trace');
 
 %% QRS position analysis
 % Now for each single signal there is the position of the QRS, it's
@@ -59,17 +59,48 @@ plotQRSForSubjects(QRS_detected_data, subjectIndices,fc,figure_path)
 % NB: during the processing, the function substitute possible unavailable
 % QRS with the median of the ref trace QRS.
 
-window=0.1; %time window into whitch finding the maximum in seconds
-Data_sub_aligned=single_sub_alignment(QRS_detected_data,fc,window);
+window=0.01; %time window into whitch finding the maximum in seconds
+plot_alignment=true;
+Data_sub_aligned=single_sub_alignment(QRS_detected_data,fc,window,'only_ref',[],plot_alignment);
+
+%% Checking the result
+traces_subplots_by_sub(Data_sub_aligned, fc, figure_path + "\single_records_v1") 
+% Looking at these results looks clear that not all traces are correctly
+% aligned respect to the QRS. What happens is that sometimes some traces
+% seems to have aligned the atrial response with the QRS of the
+% reference,while the spare2 trace (used to plot these data) seems to be
+% aligned with th atrail contribution of the rov trace. So what if we
+% change the stategy of alignment?
+
+%% Rebuilding the dataset, part 2
+% Now the strategy is: 
+% step zero: find the QRS into the spare 2 trace
+QRS_detected_data=analyzeQRS(QRS_detected_data,fc,true,'spare2_trace');
+% For each rov signal
+    % check if the QRS_ref is next to QRS_spare2
+    % if yes, define the the neighborhood like done so far
+    % if no, define the neighborhood around the QRS_spare2
+% than proceed as done before
+
+%%
+window=0.01; %time window into whitch finding the maximum in seconds
+plot_alignment=false;
+tollerance=0.1; %tollerance in [sec] of distance between QRS points in ref and spare2 traces
+Data_sub_aligned=single_sub_alignment(QRS_detected_data,fc,window,'ref_and_spare2',tollerance,plot_alignment);
+
+%% Checking the result
+traces_subplots_by_sub(Data_sub_aligned, fc, figure_path + "\single_records_v2")  
 
 %% Remaking analysis
 % Whole analysis previously done are made again to check the results of
 % alignment
+
+
 spaghetti_confidence_signals(Data_sub_aligned,fc,figure_path)
 compare_case_signals(Data_sub_aligned,fc,figure_path)  
 compare_traces_between_sub(Data_sub_aligned,fc,figure_path) 
 compare_maps_between_signals(Data_sub_aligned,fc,figure_path)
-traces_subplots_by_sub(Data_sub_aligned, fc, figure_path) 
+
 
 
 %%                                              WHOLE DATASET COMMON POINT ALIGNMENT

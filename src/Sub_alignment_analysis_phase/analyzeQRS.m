@@ -1,4 +1,4 @@
-function newData = analyzeQRS(data, Fc,plotFlag)
+function newData = analyzeQRS(data, Fc,plotFlag,signal_name)
 % analyzeQRS - Analyzes all signals in the ref fields of the data structure using the
 % Pan-Tompkins algorithm to detect QRS complexes and stores their positions.
 %
@@ -29,7 +29,7 @@ function newData = analyzeQRS(data, Fc,plotFlag)
             subjectName = sprintf('%s%d', mapName, j);
             
             % Extract the reference signals (assumed to be a table)
-            refSignals = newData.(mapName).(subjectName).ref_trace;
+            refSignals = newData.(mapName).(subjectName).(signal_name);
             
             % Initialize cell array to store QRS positions for each signal
             QRS_positions = cell(1, width(refSignals));
@@ -56,8 +56,10 @@ function newData = analyzeQRS(data, Fc,plotFlag)
                 end
             end
 
+            name_of_field="QRS_position_"+signal_name;
+
             % Save QRS positions in the new field
-            newData.(mapName).(subjectName).QRS_position = QRS_positions;
+            newData.(mapName).(subjectName).(name_of_field) = QRS_positions;
         end
     end
 end
