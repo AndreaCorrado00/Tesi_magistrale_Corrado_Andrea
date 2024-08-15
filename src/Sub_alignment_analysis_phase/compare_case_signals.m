@@ -29,7 +29,6 @@ function compare_case_signals(data, fc, figure_path)
             % Loop through each subject
             for j = 1:length(subjects)
                 sub = map + num2str(j);
-                traces = fieldnames(data.(string(map)).(string(sub)));
                 
                 % Create a new figure
                 fig = figure(1);

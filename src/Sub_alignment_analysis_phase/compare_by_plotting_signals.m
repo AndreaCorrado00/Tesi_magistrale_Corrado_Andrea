@@ -15,8 +15,9 @@ function compare_by_plotting_signals(signals_table, title_plot, Fc, freq_plot, v
         x = [0:Fc/M:Fc-Fc/M]; 
         % Convert signals to power spectrum
         for i = 1:N
-            p=evaluate_order(signals_table(:,i),5,50,2,0.05);
-            th=ar(table2array(signals_table(:,i))-table2array(mean(signals_table(:,i))),p,'ls'); 
+            signal=rmmissing(signals_table(:,i));
+            p=evaluate_order(signal,5,50,2,0.05);
+            th=ar(table2array(signal)-table2array(mean(signal)),p,'ls'); 
             [H,~]=freqz(1,th.a,M,Fc); 
             DSP=(abs(H).^2)*th.NoiseVariance;
             signals_table(:, i) = array2table(DSP);
@@ -33,7 +34,7 @@ function compare_by_plotting_signals(signals_table, title_plot, Fc, freq_plot, v
     end
 
     % Calculate the mean of the signals
-    mean_sig = table2array(mean(signals_table, 2));
+    mean_sig = table2array(mean(signals_table, 2,"omitnan"));
 
     % Plot the mean signal and save its handle
     h_mean = plot(x, mean_sig, "LineWidth", 1);
@@ -49,8 +50,8 @@ function compare_by_plotting_signals(signals_table, title_plot, Fc, freq_plot, v
         end
         xlim(x_lim); % Set x-axis limits
         % Calculate y-axis limits based on the min and max of the signals
-        min_y_lim = table2array(min(min(signals_table), [], 2));
-        max_y_lim = table2array(max(max(signals_table), [], 2));
+        min_y_lim = min(min(table2array(signals_table),[], "omitnan"), [], 2);
+        max_y_lim = max(max(table2array(signals_table),[], "omitnan"), [], 2);
         %ylim([min_y_lim - 0.05 * min_y_lim, max_y_lim + 0.05 * max_y_lim]); % Set y-axis limits
         title(['Mean and single records: ', title_plot]); % Set plot title
         xlabel(x_label); % Set x-axis label
@@ -58,18 +59,29 @@ function compare_by_plotting_signals(signals_table, title_plot, Fc, freq_plot, v
 
     elseif variability_plot && ~sd_plot
         % Plot mean and 95% confidence intervals
-        up_lim = round(0.95 * length(table2array(signals_table(1, :))));
-        down_lim = round(0.05 * length(table2array(signals_table(1, :))));
-        if down_lim == 0
-            down_lim = 1;
-        end
 
-        % Calculate variability limits (95% intervals)
         VAR_LIMS = [];
         for i = 1:M
-            signals_i = sort(table2array(signals_table(i, :)));
-            VAR_LIMS(i, 1) = signals_i(down_lim);
-            VAR_LIMS(i, 2) = signals_i(up_lim);
+            % If plotting variability bands (95% confidence intervals)
+            up_lim = round(0.95 * length(table2array(rmmissing(signals_table(i,:),2))));
+            down_lim = round(0.05 * length(table2array(rmmissing(signals_table(i,:),2))));
+            if down_lim == 0
+                down_lim = 1;
+            end
+
+            if up_lim ==0
+                up_lim=1;
+            end
+
+            signals_i = sort(table2array(rmmissing(signals_table(i,:),2)));
+            if isempty(signals_i)
+                VAR_LIMS(i, 1) = NaN;
+                VAR_LIMS(i, 2) = NaN;
+            else
+                VAR_LIMS(i, 1) = signals_i(down_lim);
+                VAR_LIMS(i, 2) = signals_i(up_lim);
+            end
+
         end
 
         % Plot the 95% confidence intervals with the same color as the mean
@@ -90,7 +102,7 @@ function compare_by_plotting_signals(signals_table, title_plot, Fc, freq_plot, v
         % Calculate variability limits (95% intervals)
         sd_vec= [];
         for i = 1:M
-            signals_i =table2array(signals_table(i, :));
+            signals_i =table2array(rmmissing(signals_table(i, :),2));
             sd_vec(i)=std(signals_i);
         end
 

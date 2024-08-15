@@ -65,11 +65,11 @@ Data_sub_aligned=single_sub_alignment(QRS_detected_data,fc,window);
 %% Remaking analysis
 % Whole analysis previously done are made again to check the results of
 % alignment
-spaghetti_confidence_signals(data,fc,figure_path)
-compare_case_signals(data,fc,figure_path)  
-compare_traces_between_sub(data,fc,figure_path) 
-compare_maps_between_signals(data,fc,figure_path)
-traces_subplots_by_sub(data, fc, figure_path) 
+spaghetti_confidence_signals(Data_sub_aligned,fc,figure_path)
+compare_case_signals(Data_sub_aligned,fc,figure_path)  
+compare_traces_between_sub(Data_sub_aligned,fc,figure_path) 
+compare_maps_between_signals(Data_sub_aligned,fc,figure_path)
+traces_subplots_by_sub(Data_sub_aligned, fc, figure_path) 
 
 
 %%                                              WHOLE DATASET COMMON POINT ALIGNMENT

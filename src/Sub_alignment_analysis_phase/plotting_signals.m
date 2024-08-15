@@ -49,8 +49,8 @@ if ~variability_plot && ~sd_plot
     end
     hold off
     xlim(x_lim)
-    min_y_lim = table2array(min(min(signals_table, "omitnan"), [], 2));
-    max_y_lim = table2array(max(max(signals_table, "omitnan"), [], 2));
+    min_y_lim = min(min(table2array(signals_table),[], "omitnan"), [], 2);
+    max_y_lim = max(max(table2array(signals_table),[], "omitnan"), [], 2);
     ylim([min_y_lim - 0.05 * min_y_lim, max_y_lim + 0.05 * max_y_lim])
     title('Mean and single records: ' + title_plot + ' (n:' + num2str(N) + ')')
     xlabel(x_label)
@@ -61,14 +61,25 @@ elseif variability_plot && ~sd_plot
     VAR_LIMS = [];
     for i = 1:M
         % If plotting variability bands (95% confidence intervals)
-        up_lim = round(0.95 * length(table2array(rmmissing(signals_table(i,:)))));
-        down_lim = round(0.05 * length(table2array(rmmissing(signals_table(i,:)))));
+        up_lim = round(0.95 * length(table2array(rmmissing(signals_table(i,:),2))));
+        down_lim = round(0.05 * length(table2array(rmmissing(signals_table(i,:),2))));
         if down_lim == 0
             down_lim = 1;
         end
-        signals_i = sort(table2array(rmmissing(signals_table(i,:))));
-        VAR_LIMS(i, 1) = signals_i(down_lim);
-        VAR_LIMS(i, 2) = signals_i(up_lim);
+
+        if up_lim ==0
+            up_lim=1;
+        end
+
+        signals_i = sort(table2array(rmmissing(signals_table(i,:),2)));
+        if isempty(signals_i)
+            VAR_LIMS(i, 1) = NaN;
+            VAR_LIMS(i, 2) = NaN;
+        else
+            VAR_LIMS(i, 1) = signals_i(down_lim);
+            VAR_LIMS(i, 2) = signals_i(up_lim);
+        end
+
     end
     
     % Plot the confidence intervals
@@ -77,7 +88,7 @@ elseif variability_plot && ~sd_plot
     xlim([0, x(end)])
     min_y_lim = min(VAR_LIMS(:,1));
     max_y_lim = max(VAR_LIMS(:,2));
-    ylim([min_y_lim - 0.05 * min_y_lim, max_y_lim + 0.05 * max_y_lim])
+    %ylim([min_y_lim - 0.05 * min_y_lim, max_y_lim + 0.05 * max_y_lim])
     title('Mean and confidence intervals at 95%: ' + title_plot + ' (n:' + num2str(N) + ')')
     xlabel(x_label)
     ylabel(y_label)
@@ -89,7 +100,7 @@ elseif sd_plot && ~variability_plot
         % Calculate variability limits (95% intervals)
         sd_vec= [];
         for i = 1:M
-            signals_i =table2array(rmmissing(signals_table(i, :)));
+            signals_i =table2array(rmmissing(signals_table(i, :),2));
             sd_vec(i)=std(signals_i);
         end
 
@@ -100,7 +111,7 @@ elseif sd_plot && ~variability_plot
         % Calculate y-axis limits based on the variability limits
         min_y_lim = min(mean_sig-sd_vec');
         max_y_lim = max(mean_sig+sd_vec');
-        ylim([min_y_lim - 0.05 * min_y_lim, max_y_lim + 0.05 * max_y_lim]); % Set y-axis limits
+        %ylim([min_y_lim - 0.05 * min_y_lim, max_y_lim + 0.05 * max_y_lim]); % Set y-axis limits
         title(['Mean +/- SD : ', title_plot]); % Set plot title
         xlabel(x_label); % Set x-axis label
         ylabel(y_label); % Set y-axis label
