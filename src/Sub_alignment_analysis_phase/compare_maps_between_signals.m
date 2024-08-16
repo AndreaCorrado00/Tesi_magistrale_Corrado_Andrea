@@ -11,9 +11,12 @@ function compare_maps_between_signals(data, fc, figure_path)
     %       FIGURE_PATH - String, the directory path where the plots will be saved.
 
     % Define combinations for plotting mean and spectrum comparisons
-    table_pox = [false, false, true, true;
-        true,  false, true, false;
-        false, true,  false,true;];
+    % table_pox = [false, false, true, true;
+    %     true,  false, true, false;
+    %     false, true,  false,true;];
+    table_pox = [false, false;
+                 true,  false;
+                 false, true;]; % for the moment, only time domain
     
     % Define plot types
     type_plots = ["comp_mean_confidence_by_map"; "comp_mean_sd_by_map";"comp_mean_conf_spectrum_by_map";"comp_mean_sd_spectrum_by_map"];

@@ -62,6 +62,7 @@ plotQRSForSubjects(QRS_detected_data, subjectIndices,fc,figure_path)
 window=0.01; %time window into whitch finding the maximum in seconds
 plot_alignment=true;
 Data_sub_aligned=single_sub_alignment(QRS_detected_data,fc,window,'only_ref',[],plot_alignment);
+% Note, the function imputes the position of the QRS if necessary
 
 %% Checking the result
 traces_subplots_by_sub(Data_sub_aligned, fc, figure_path + "\single_records_v1") 
@@ -82,20 +83,21 @@ QRS_detected_data=analyzeQRS(QRS_detected_data,fc,true,'spare2_trace');
     % if no, define the neighborhood around the QRS_spare2
 % than proceed as done before
 
-%%
 window=0.01; %time window into whitch finding the maximum in seconds
 plot_alignment=false;
 tollerance=0.05; %tollerance in [sec] of distance between QRS points in ref and spare2 traces
 Data_sub_aligned=single_sub_alignment(QRS_detected_data,fc,window,'ref_and_spare2',tollerance,plot_alignment);
 
 %% Checking the result
+% Note, the function imputes the position of the QRS if necessary
 traces_subplots_by_sub(Data_sub_aligned, fc, figure_path + "\single_records_v2")  
+
+%% Checking the lost in terms of informations
+nan_table = computeNaNPercentages(Data_sub_aligned);
 
 %% Remaking analysis
 % Whole analysis previously done are made again to check the results of
-% alignment
-
-
+% alignment (for the moment, only in the time domain)
 spaghetti_confidence_signals(Data_sub_aligned,fc,figure_path)
 compare_case_signals(Data_sub_aligned,fc,figure_path)  
 compare_traces_between_sub(Data_sub_aligned,fc,figure_path) 

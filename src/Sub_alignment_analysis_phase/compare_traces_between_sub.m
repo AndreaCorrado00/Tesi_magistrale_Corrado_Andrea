@@ -12,9 +12,12 @@ function compare_traces_between_sub(data, fc, figure_path)
     
     % Define combinations for plotting mean and spectrum comparisons
 
-    table_pox = [false, false, true, true;
-                 true,  false, true, false;
-                 false, true,  false,true;];
+    % table_pox = [false, false, true, true;
+    %              true,  false, true, false;
+    %              false, true,  false,true;];
+    table_pox = [false, false;
+                 true,  false;
+                 false, true;]; % for the moment, only time domain
    
     
     % Define plot types

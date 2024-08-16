@@ -11,12 +11,16 @@ function spaghetti_confidence_signals(data, fc, figure_path)
     %       FIGURE_PATH - String, the directory path where the plots will be saved.
     
     % Define combinations of plot types
+    % table_pox = [false, false,false;
+    %              false, true,false;
+    %              false, false, true;
+    %              true, false, false;
+    %              true, true, false;
+    %              true, false, true];
     table_pox = [false, false,false;
                  false, true,false;
                  false, false, true;
-                 true, false, false;
-                 true, true, false;
-                 true, false, true];
+                ]; % for the moment, only time domain
     
     % Define plot types
     type_plots = ["spaghetti"; "confidence";"mean_sd"; "spaghetti_freq"; "confidence_freq";"mean_sd_freq"];
