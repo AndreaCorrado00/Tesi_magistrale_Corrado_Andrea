@@ -1,7 +1,7 @@
 function [neighborhood,neighbor_idx]=evaluate_neighbors_from_Ref_spare2(signal,QRS_ref,QRS_spare2,half_width,tollerance)
 
 % the value of 400 correspond to 0.2s of acquisition
-if abs(QRS_ref-QRS_spare2)<tollerance % defining the neighborhood arounde the QRS of the references trace
+if abs(QRS_ref-QRS_spare2)>tollerance % defining the neighborhood arounde the QRS of the references trace
     if QRS_ref+half_width>length(signal) %[-half_width ... QRS ... end]
         neighborhood=signal(QRS_ref-half_width:end);
         neighbor_idx=QRS_ref-half_width:length(signal);

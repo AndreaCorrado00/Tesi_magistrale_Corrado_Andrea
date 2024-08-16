@@ -85,7 +85,7 @@ QRS_detected_data=analyzeQRS(QRS_detected_data,fc,true,'spare2_trace');
 %%
 window=0.01; %time window into whitch finding the maximum in seconds
 plot_alignment=false;
-tollerance=0.1; %tollerance in [sec] of distance between QRS points in ref and spare2 traces
+tollerance=0.05; %tollerance in [sec] of distance between QRS points in ref and spare2 traces
 Data_sub_aligned=single_sub_alignment(QRS_detected_data,fc,window,'ref_and_spare2',tollerance,plot_alignment);
 
 %% Checking the result
