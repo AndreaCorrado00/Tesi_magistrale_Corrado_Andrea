@@ -24,7 +24,7 @@ function compare_traces_between_sub(data, fc, figure_path)
     type_plots = ["comp_case_mean_confidence_by_sub"; "comp_case_mean_sd_by_sub";"comp_case_mean_confidence_spectrum_by_sub"; "comp_case_mean_sd_spectrum_by_sub"];
 
     % Loop through each plot type combination
-    for l = 1:4
+    for l = 1:2
         % Loop through each map type: A, B, C
         for i = ["A", "B", "C"]
             map = 'MAP_' + i;

@@ -23,7 +23,7 @@ function compare_case_signals(data, fc, figure_path)
     type_plots = ["comp_mean_confidence_by_case"; "comp_mean_sd_by_case";"comp_mean_conf_spectrum_by_case";"comp_mean_sd_spectrum_by_case"];
     
     % Loop through each plot type combination
-    for l = 1:4
+    for l = 1:2
         % Loop through each map type: A, B, C
         for i = ["A", "B", "C"]
             map = 'MAP_' + i;

@@ -99,7 +99,8 @@ nan_table = computeNaNPercentages(Data_sub_aligned);
 % Whole analysis previously done are made again to check the results of
 % alignment (for the moment, only in the time domain)
 spaghetti_confidence_signals(Data_sub_aligned,fc,figure_path)
-compare_case_signals(Data_sub_aligned,fc,figure_path)  
+%%
+compare_case_signals(Data_sub_aligned,fc,figure_path)   
 compare_traces_between_sub(Data_sub_aligned,fc,figure_path) 
 compare_maps_between_signals(Data_sub_aligned,fc,figure_path)
 
