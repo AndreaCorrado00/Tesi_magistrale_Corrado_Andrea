@@ -39,7 +39,7 @@ function QRS_position = detectQRS(signal, Fc)
     QRS_position = NaN;  % Use NaN if no QRS is found
     
     % Find the most prominent QRS complex in the original filtered signal
-    windowBefore = round(0.05 * Fc); % 200ms before the peak
+    windowBefore = round(0.05 * Fc); % 50ms before the peak
     windowAfter = round(0.3 * Fc);  % 300ms after the peak
     
     for i = 1:length(peakLocations)
@@ -59,7 +59,3 @@ function QRS_position = detectQRS(signal, Fc)
         end
     end
 end
-
-
-
-

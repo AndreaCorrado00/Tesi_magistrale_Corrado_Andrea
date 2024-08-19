@@ -17,7 +17,7 @@ function traces_subplots_by_sub(data, fc, figure_path)
             subjects = fieldnames(data.(map));
             
             % Loop through each subject
-            for j = 1:length(subjects)
+            for j = 10 %:length(subjects)
                 sub = map + num2str(j);
                 traces = fieldnames(data.(string(map)).(string(sub)));
                 
