@@ -144,7 +144,7 @@ plot_alignment=false;
 Data_aligned=single_sub_alignment(Data_aligned,fc,window,'only_ref',[],plot_alignment);
 
 %% Plotting first results
-traces_subplots_by_sub(Data_aligned, fc, figure_path + "\single_records_aligned") 
+traces_subplots_by_sub(Data_aligned, fc, figure_path + "\single_records_aligned")
 
 
 
