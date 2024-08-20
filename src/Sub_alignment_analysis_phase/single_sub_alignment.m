@@ -46,10 +46,10 @@ function newData=single_sub_alignment(data,Fc,window, strategy,tollerance,plot_a
             newData.(mapName).(subjectName).rov_trace = rovSignals;
             switch strategy
                 case 'only_ref'
-                    newData.(mapName).(subjectName).QRS_positions_ref_trace = QRSpositions_ref;
+                    newData.(mapName).(subjectName).QRS_position_ref_trace = QRSpositions_ref;
                 case 'ref_and_spare2'
-                    newData.(mapName).(subjectName).QRS_positions_ref_trace = QRSpositions_ref;
-                    newData.(mapName).(subjectName).QRS_positions_spare2_trace = QRSpositions_spare2;
+                    newData.(mapName).(subjectName).QRS_position_ref_trace = QRSpositions_ref;
+                    newData.(mapName).(subjectName).QRS_position_spare2_trace = QRSpositions_spare2;
             end
             
 
