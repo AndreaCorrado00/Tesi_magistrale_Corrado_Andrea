@@ -58,6 +58,10 @@ close
 
 
 %%                                               NEW EVALUATION MADE ON NEW DATA
+clc
+clear
+close
+%% Loading data and folders
 dataFolder = "D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Other\";
 src_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\Spectrum_comparison_phase";
 figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\Spectrum_investigation_phase";
