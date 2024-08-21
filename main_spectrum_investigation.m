@@ -72,8 +72,10 @@ fc=300;
 
 %% Building window spectrum analysis
 % First, spectrums are evaluated usign the whole signal
-
+windowsize=1000;
+spectrum_struct = evaluate_Physionet_spectrums(Signals, fc, windowsize);
 % Then, using windows of increasing dimentions
-
-
+%% 
+load(dataFolder+"Spectrums_PhysionetData.mat")
+plotting_PhysioNet_signals(spectrum_struct, Labels, figure_path, fc,  'single_signal', true)
 
