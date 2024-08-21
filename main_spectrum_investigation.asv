@@ -68,12 +68,6 @@ figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\T
 addpath(src_path)
 load(dataFolder+'PhysionetData.mat')
 
-fc=300;
-
-%% Building window spectrum analysis
-% First, spectrums are evaluated usign the whole signal
-
-% Then, using windows of increasing dimentions
 
 
 
