@@ -1,4 +1,4 @@
-function build_PhysioNet_plot(signals, title_plot, Fc)
+function build_PhysioNet_plot(signals, title_plot, Fc, plot_type)
 
 % signals is the field of the struct with all the psd traces for a certain subect
 switch plot_type

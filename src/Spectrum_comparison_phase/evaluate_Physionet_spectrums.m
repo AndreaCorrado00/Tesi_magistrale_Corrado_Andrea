@@ -29,7 +29,7 @@ function spectrum_struct = evaluate_Physionet_spectrums(signals, Fc, windowsize)
             
             % Estrarre il segnale finestrato
             end_idx = min(j + windowsize - 1, signal_length);
-            windowed_signal = signal(j:end_idx);
+            windowed_signal = signal(1:end_idx);
             
             % Calcolo dello spettro per il segnale finestrato
             psd_windowed= calculate_PSD(windowed_signal, Fc);

@@ -4,17 +4,18 @@ switch plot_type
         signals_names=fieldnames(data);
 
         for i=1:length(signals_names)
-            signals_group=data.(signals_names(i));
+            signals_group=data.(signals_names{i});
             windows_names=fieldnames(signals_group);
             for j=1:length(windows_names)
                 fig = figure(1);
                 fig.WindowState = "maximized";
 
                 % Define the title for the plot
-                title_plot = 'Spectrum for signal: '+num2str(i)+', class: '+labels(i);
+                class=get_class_name(string(labels(i)));
+                title_plot = "Spectrum for signal: "+num2str(i)+", class: "+class;
 
                 % Build and display the plot based on the specified type
-                build_PhysioNet_plot(signals, title_plot, Fc)
+                build_PhysioNet_plot(data.(signals_names{i}).(windows_names{j}), title_plot, Fc,plot_type)
 
 
                 % Get the current figure
@@ -22,8 +23,9 @@ switch plot_type
 
                 % Save the plot if 'saving' is true
                 if saving
-                    file_name = "Single_record_Sub_" + num2str(i) + "Physionet_eval";
-                    save_plot(file_name, plot_type, fullfile(figure_path, "data_visual"), fig, true);
+                    file_name = "Single_spectrum_Sub_" + num2str(i) + "_Physionet_eval_points_"+num2str(length(data.(signals_names{i}).(windows_names{j})));
+                    save_plot(file_name, plot_type, fullfile(figure_path, "single_spectrums"), fig, true);
+                    pause(1)
                 else
                     % Pause to allow viewing and then close the figure if not saving
                     pause(3);

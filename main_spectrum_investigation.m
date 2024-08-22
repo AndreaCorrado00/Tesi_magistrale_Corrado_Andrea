@@ -64,7 +64,7 @@ close
 %% Loading data and folders
 dataFolder = "D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Other\";
 src_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\Spectrum_comparison_phase";
-figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\Spectrum_investigation_phase";
+figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\Spectrum_investigation_phase\PhysioNet_data";
 addpath(src_path)
 load(dataFolder+'PhysionetData.mat')
 
@@ -73,9 +73,9 @@ fc=300;
 %% Building window spectrum analysis
 % First, spectrums are evaluated usign the whole signal
 windowsize=1000;
-spectrum_struct = evaluate_Physionet_spectrums(Signals, fc, windowsize);
-% Then, using windows of increasing dimentions
-%% 
-load(dataFolder+"Spectrums_PhysionetData.mat")
+spectrum_struct= evaluate_Physionet_spectrums(Signals, fc, windowsize);
+
+%% Loading data previously saved
+%load(dataFolder+"Spectrums_PhysionetData.mat")
 plotting_PhysioNet_signals(spectrum_struct, Labels, figure_path, fc,  'single_signal', true)
 
