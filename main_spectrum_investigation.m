@@ -75,7 +75,10 @@ fc=300;
 windowsize=1000;
 spectrum_struct= evaluate_Physionet_spectrums(Signals, fc, windowsize);
 
-%% Loading data previously saved
+%% Loading data previously saved and plotting single signals
 %load(dataFolder+"Spectrums_PhysionetData.mat")
 plotting_PhysioNet_signals(spectrum_struct, Labels, figure_path, fc,  'single_signal', true)
+
+%% Spaghetti plot for each signal
+plotting_PhysioNet_signals(spectrum_struct, Labels, figure_path, fc,  'spaghetti_plot', true)
 

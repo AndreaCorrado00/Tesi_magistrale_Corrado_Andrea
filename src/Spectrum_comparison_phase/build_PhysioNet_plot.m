@@ -1,4 +1,4 @@
-function build_PhysioNet_plot(signals, title_plot, Fc, plot_type)
+function build_PhysioNet_plot(signals, title_plot, Fc, plot_type,color)
 
 % signals is the field of the struct with all the psd traces for a certain subect
 switch plot_type
@@ -50,10 +50,18 @@ switch plot_type
         % here a single signal is expected
         M=length(signals);
         x = [0:Fc/M:Fc-Fc/M];
-        plot(x, signals, 'b-', "LineWidth", 2)
+        plot(x, signals, 'b-', "LineWidth", 2, "Color",color)
         xlabel('f [Hz]'); % Label for x-axis
         ylabel('Spectrum'); % Label for y-axis
         title_plot=title_plot+', n° points: '+num2str(M);
         title(title_plot)
-        
+    case 'spaghetti_plot'
+        % here a single signal is expected but the color changes
+        M=length(signals);
+        x = [0:Fc/M:Fc-Fc/M];
+      
+        plot(x, signals, "LineWidth", 2, "Color",color)
+        xlabel('f [Hz]'); % Label for x-axis
+        ylabel('Spectrum'); % Label for y-axis
+        title(title_plot)
 end
