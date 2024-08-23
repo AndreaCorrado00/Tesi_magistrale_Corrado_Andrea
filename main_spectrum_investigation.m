@@ -70,6 +70,16 @@ load(dataFolder+'PhysionetData.mat')
 
 fc=300;
 
+%% Sintetic data
+% Don't run these lines if you want to proceed with the complete analysis
+load(dataFolder+'example_ecg_data_2.mat')
+y_1=y;
+load(dataFolder+'example_ecg_data.mat')
+y_2=y;
+fc=1000;
+
+Signals={y_1;y_2};
+Labels=Labels(1:2);
 %% Building window spectrum analysis
 % First, spectrums are evaluated usign the whole signal
 windowsize=1000;
@@ -77,7 +87,7 @@ spectrum_struct= evaluate_Physionet_spectrums(Signals, fc, windowsize);
 
 %% Loading data previously saved and plotting single signals
 %load(dataFolder+"Spectrums_PhysionetData.mat")
-plotting_PhysioNet_signals(spectrum_struct, Labels, figure_path, fc,  'single_signal', true)
+plotting_PhysioNet_signals(spectrum_struct, Labels, figure_path, fc,  'single_signal', false)
 
 %% Spaghetti plot for each signal
 plotting_PhysioNet_signals(spectrum_struct, Labels, figure_path, fc,  'spaghetti_plot', true)

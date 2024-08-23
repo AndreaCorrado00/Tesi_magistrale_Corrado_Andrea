@@ -48,9 +48,10 @@ switch plot_type
 
     case 'single_signal'
         % here a single signal is expected
-        M=length(signals);
+        M=length(signals(:,1));
         x = [0:Fc/M:Fc-Fc/M];
-        plot(x, signals, 'b-', "LineWidth", 2, "Color",color)
+        x=signals(:,2);
+        plot(x, signals(:,1), 'b-', "LineWidth", 2, "Color",color)
         xlabel('f [Hz]'); % Label for x-axis
         ylabel('Spectrum'); % Label for y-axis
         title_plot=title_plot+', n° points: '+num2str(M);

@@ -15,9 +15,10 @@ function p_opt = evaluate_order(signal, min_order, max_order, step, eps)
     
     % Initialize AIC vector to store AIC values for each order
     AIC_vec = nan(length(p), 1);
-    
+    AIC_diff=[];
     % Initialize optimal order position
     p_opt = 0;
+
     
     % Loop through each order to evaluate the AR model
     for i = 1:length(p)
@@ -26,15 +27,23 @@ function p_opt = evaluate_order(signal, min_order, max_order, step, eps)
         
         % Calculate AIC for the current model
         AIC_vec(i) = aic(th, 'aic');
-        
-        % Check for convergence in AIC values
-        if i ~= 1 && abs(AIC_vec(i - 1) - AIC_vec(i)) < eps
-            pos_opt = i;
+        if i>1
+            AIC_diff(i)=abs(AIC_vec(i - 1) - AIC_vec(i));
         end
+
+        
+
+
+        % % Check for convergence in AIC values
+        % if i ~= 1 && abs(AIC_vec(i - 1) - AIC_vec(i)) < eps
+        %     AIC_diff(i)=abs(AIC_vec(i - 1) - AIC_vec(i));
+        %     pos_opt = i;
+        % end
     end
+    pos_opt=find(AIC_diff(2:end)<eps,1);
     
     % If no convergence was found, choose the order with the minimum AIC
-    if p_opt == 0
+    if isempty(pos_opt)
         pos_opt = find(AIC_vec == min(AIC_vec));
     end
     
