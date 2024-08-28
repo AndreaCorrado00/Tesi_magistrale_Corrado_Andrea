@@ -68,18 +68,12 @@ figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\T
 addpath(src_path)
 load(dataFolder+'PhysionetData.mat')
 
-fc=300;
+fc=360;
 
 %% Sintetic data
-% Don't run these lines if you want to proceed with the complete analysis
-load(dataFolder+'example_ecg_data_2.mat')
-y_1=y;
-load(dataFolder+'example_ecg_data.mat')
-y_2=y;
-fc=1000;
+show_spectrum_evaluation_pipeline("high_frequency_ecg")
 
-Signals={y_1;y_2};
-Labels=Labels(1:2);
+% "high_frequency_ecg" "Low_frequency_ecg" "PhysioNet_healthy" "PhysioNet_Pathological"
 %% Building window spectrum analysis
 % First, spectrums are evaluated usign the whole signal
 windowsize=1000;

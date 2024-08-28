@@ -67,11 +67,11 @@ src_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI
 figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\Spectrum_investigation_phase\PhysioNet_data";
 addpath(src_path)
 load(dataFolder+'PhysionetData.mat')
-load(dataFolder+'example_ecg_data_2.mat')
-load(dataFolder+'example_ecg_data.mat')
 
 fc=300;
 
+%% Sintetic data
+show_spectrum_evaluation_pipeline('High_Frequency_ecg')
 %% Building window spectrum analysis
 % First, spectrums are evaluated usign the whole signal
 windowsize=1000;
@@ -79,7 +79,7 @@ spectrum_struct= evaluate_Physionet_spectrums(Signals, fc, windowsize);
 
 %% Loading data previously saved and plotting single signals
 %load(dataFolder+"Spectrums_PhysionetData.mat")
-plotting_PhysioNet_signals(spectrum_struct, Labels, figure_path, fc,  'single_signal', true)
+plotting_PhysioNet_signals(spectrum_struct, Labels, figure_path, fc,  'single_signal', false)
 
 %% Spaghetti plot for each signal
 plotting_PhysioNet_signals(spectrum_struct, Labels, figure_path, fc,  'spaghetti_plot', true)

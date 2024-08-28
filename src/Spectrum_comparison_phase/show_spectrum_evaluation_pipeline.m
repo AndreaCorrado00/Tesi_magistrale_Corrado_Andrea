@@ -1,0 +1,192 @@
+function show_spectrum_evaluation_pipeline(type)
+load("D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Other\ecg_spectrum_analysis_pipeline_test.mat")
+
+disp('This code shows a proposed pipeline to obtain ECG spectra:')
+disp('   1. Filter the signal with wavelet thresholding and numerical filters')
+disp('   2. Find the best AR order, which ensures the highest similarity between AR spectrum and Welch one')
+disp('   3. Evaluate the spectrum')
+
+switch type
+    case "high_frequency_ecg"
+        disp('Simulation of Spectrum evaluation pipeline on a signal with High Frequency Noise')
+        ecg = ecg_simulation.high_freq;
+        Fs = 1000; % Hz
+        step = 1000; % Increment of points from which to evaluate the spectrum
+    case "Low_frequency_ecg"
+        disp('Simulation of Spectrum evaluation pipeline on a signal with Low Frequency Noise')
+        ecg = ecg_simulation.low_freq;
+        Fs = 1000; % Hz
+        step = 1000; % Increment of points from which to evaluate the spectrum
+
+    case "PhysioNet_healthy"
+        disp('Simulation of Spectrum evaluation pipeline on a signal from PhysioNet DB of a healthy subject')
+        ecg = ecg_simulation.healthy;
+        Fs = 360; % Hz
+        step = 720; % Increment of points from which to evaluate the spectrum
+    case "PhysioNet_Pathological"
+        disp('Simulation of Spectrum evaluation pipeline on a signal from PhysioNet DB of a pathological subject')
+        ecg = ecg_simulation.patological;
+        Fs = 360; % Hz
+        step = 720; % Increment of points from which to evaluate the spectrum
+end
+
+%% Starting of simulation
+x_original = ecg - mean(ecg); % Subtract the mean
+N_original = length(x_original);
+disp( ' ')
+pause(2)
+disp('----PREPROCESSING----')
+disp('0. Signal is processed by eliminating the mean')
+if type == "PhysioNet_healthy" || type == "PhysioNet_Pathological"
+    %% Signal reduction (avoid artifacts)
+    disp('      Moreover, in this case, the signal is windowed to avoid artifacts')
+    x_original = x_original / 1000;
+
+    t_start = 5; % Start time in seconds
+    t_end = 15; % End time in seconds
+
+    % Calculate corresponding indices
+    start_index = round(t_start * Fs) + 1; % +1 because MATLAB indexes from 1
+    end_index = round(t_end * Fs);
+
+    % Extract samples
+    x_original = x_original(start_index:end_index);
+    N_original = length(x_original);
+end
+%% Multiple signal length handling
+pause(1)
+disp( ' ')
+disp("1. Now you'll see a signal of increasing length which will be filtered" + ...
+    " using a numerical filter pipeline and a mixed wavelet-numerical one.")
+disp("   Wavelet-numerical is the chosen one to proceed with the spectrum evaluation. Then:")
+disp("   - Spectrum is evaluated with AR method and compared with the Welch spectrum. Each time the order of the AR is evaluated.")
+disp("   - Results of spectrum evaluations can be seen in figure 2, while in figure 1 there will be the signal.")
+
+pause(10)
+
+n_subs = round(N_original / step);
+n_cols = ceil(sqrt(n_subs)); 
+n_rows = ceil(n_subs / n_cols); 
+
+for i = step:step:N_original
+
+    x = x_original(1:i);
+    N = length(x);
+    Ts = 1 / Fs; 
+    t = 0:Ts:Ts*N-Ts; 
+    
+    %% Numerical filter
+    % High pass
+    Wp = 0.5; % Hz
+    Ws = (Wp - Wp / 4);
+
+    Rp = 0.90; % percentage
+    Rs = 0.10;
+
+    % Parameters conversion
+    Wp = Wp / (Fs / 2);
+    Ws = Ws / (Fs / 2);
+    Rp = -20 * log10(Rp);
+    Rs = -20 * log10(Rs);
+
+    % Filter evaluation
+    [n, Wn] = ellipord(Wp, Ws, Rp, Rs);
+    [b, a] = ellip(n, Rp, Rs, Wn, "high");
+    x_f_1 = filter(b, a, x);
+
+    % Low pass
+    Wp = 80; % Hz
+    Ws = 100;
+    Rp = 0.95; 
+    Rs = 0.1;
+   
+    Wp = Wp / (Fs / 2);
+    Ws = Ws / (Fs / 2);
+    Rp = -20 * log10(Rp);
+    Rs = -20 * log10(Rs);
+
+   
+    [n, Wp] = ellipord(Wp, Ws, Rp, Rs);
+    [b, a] = ellip(n, Rp, Rs, Wp, 'low');
+    x_f_2 = filter(b, a, x_f_1);
+
+    %% Wavelet denoising
+    x_w = denoise_ecg_wavelet(x, Fs, 'db8', 7);
+    %% Filters comparison
+    figure(1)
+    title("Number of points: " + num2str(i))
+    subplot(211)
+    plot(t, x, 'k:', t, x_f_2, 'r', t, x_w, 'b')
+    legend('original', 'numeric', 'wavelet')
+    ylabel('Amplitude [mV]')
+
+    subplot(212)
+    plot(t, x, 'k:', t, x_f_2, 'r', t, x_w, 'b')
+    xlim([0 1])
+    xlabel('time[s]')
+    ylabel('Amplitude [mV]')
+
+    %% AR spectrum estimation 
+    p = evaluate_order(x_w, 10, 15, 1, 0.3, Fs);
+    th = ar(x_w, p, 'burg');
+    [H, f] = freqz(1, th.a, N, Fs); 
+    f_DSP = f;
+    DSP = th.NoiseVariance * (abs(H).^2);
+
+    %% Welch spectrum estimation
+    window = hamming(512); % Hamming window
+    noverlap = length(window) / 2; % overlapping
+    nfft = 2048; % Points of fft
+
+    % Welch periodogram
+    [pxx, f] = pwelch(x_w, window, noverlap, nfft, Fs);
+
+    % Normalization
+    U = max(DSP) / max(pxx); 
+
+    pxx = U * pxx;
+
+    %% Results
+    figure(2)
+    sgtitle('Power spectrum estimation')
+    subplot(n_rows, n_cols, i/step)
+    plot(f_DSP, DSP)
+    hold on
+    plot(f, pxx);
+    hold off
+    ylabel('PSD')
+    xlabel('f [Hz]')
+    title("N: " + num2str(N) + ", p_{AR}=" + num2str(p))
+    xlim([0, 60])
+    legend('AR estimation', 'Welch')
+end
+
+
+% %% Plot in DB
+% % Passo 1: Conversione della PSD in dB
+% PSD_dB = 10 * log10(pxx);
+% 
+% % Passo 2: Conversione delle frequenze da Hz a rad/s
+% f_rad = 2 * pi * f;
+% 
+% % Passo 3: Plot dello spettro in dB/Hz vs rad/s con scala logaritmica
+% figure;
+% plot(f, PSD_dB);
+% %set(gca, 'XScale', 'log'); % Imposta scala logaritmica sull'asse delle frequenze
+% xlabel('Frequenza (rad/s)');
+% ylabel('PSD (dB/Hz)');
+% title('Spettro di densità di potenza (PSD) in dB/Hz vs rad/s (Scala Logaritmica)');
+% grid on;
+% 
+% hold on
+% % Passo 1: Conversione della PSD in dB
+% PSD_dB = 10 * log10(DSP);
+% 
+% % Passo 2: Conversione delle frequenze da Hz a rad/s
+% f_rad = 2 * pi * f_DSP;
+% 
+% % Passo 3: Plot dello spettro in dB/Hz vs rad/s con scala logaritmica
+% plot(f_DSP, PSD_dB,'r-');
+% %set(gca, 'XScale', 'log'); % Imposta scala logaritmica sull'asse delle frequenze
+% 
+% legend('Welch','Parametric AR')
