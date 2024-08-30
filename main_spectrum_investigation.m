@@ -17,7 +17,7 @@ close
 % %% Handling the dataset
 % % To make the dataset more handable, it is converted into a struct
 % MIT_dataset_builder(dataFolder);
-% 
+
 % %% Loading data
 % load("D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Other\MIT_dataset.mat")
 % %% Example of data
@@ -71,7 +71,7 @@ load(dataFolder+'PhysionetData.mat')
 fc=360;
 
 %% Sintetic data
-show_spectrum_evaluation_pipeline("high_frequency_ecg")
+show_spectrum_evaluation_pipeline("Low_frequency_ecg")
 
 % "high_frequency_ecg" "Low_frequency_ecg" "PhysioNet_healthy" "PhysioNet_Pathological"
 %% Building window spectrum analysis

@@ -34,7 +34,7 @@ end
 x_original = ecg - mean(ecg); % Subtract the mean
 N_original = length(x_original);
 disp( ' ')
-pause(2)
+%pause(2)
 disp('----PREPROCESSING----')
 disp('0. Signal is processed by eliminating the mean')
 if type == "PhysioNet_healthy" || type == "PhysioNet_Pathological"
@@ -54,7 +54,7 @@ if type == "PhysioNet_healthy" || type == "PhysioNet_Pathological"
     N_original = length(x_original);
 end
 %% Multiple signal length handling
-pause(1)
+%pause(1)
 disp( ' ')
 disp("1. Now you'll see a signal of increasing length which will be filtered" + ...
     " using a numerical filter pipeline and a mixed wavelet-numerical one.")
@@ -62,7 +62,7 @@ disp("   Wavelet-numerical is the chosen one to proceed with the spectrum evalua
 disp("   - Spectrum is evaluated with AR method and compared with the Welch spectrum. Each time the order of the AR is evaluated.")
 disp("   - Results of spectrum evaluations can be seen in figure 2, while in figure 1 there will be the signal.")
 
-pause(10)
+%pause(10)
 
 n_subs = round(N_original / step);
 n_cols = ceil(sqrt(n_subs)); 
@@ -111,7 +111,7 @@ for i = step:step:N_original
     x_f_2 = filter(b, a, x_f_1);
 
     %% Wavelet denoising
-    x_w = denoise_ecg_wavelet(x, Fs, 'db8', 7);
+    x_w = denoise_ecg_wavelet(x, Fs, 'sym8', 7);
     %% Filters comparison
     figure(1)
     title("Number of points: " + num2str(i))
@@ -127,7 +127,7 @@ for i = step:step:N_original
     ylabel('Amplitude [mV]')
 
     %% AR spectrum estimation 
-    p = evaluate_order(x_w, 10, 15, 1, 0.3, Fs);
+    p = evaluate_order(x_w,8, 16, 1, 0.3, Fs);
     th = ar(x_w, p, 'burg');
     [H, f] = freqz(1, th.a, N, Fs); 
     f_DSP = f;
@@ -146,19 +146,30 @@ for i = step:step:N_original
 
     pxx = U * pxx;
 
+    %% Spectrogram estimation
+    FT_x=fft(x_w,N);
+    S=abs(FT_x).^2/N;
+    f_S=0:Fs/N:Fs-Fs/N;
+
+    % Normalization
+    U=max(DSP)/max(S);
+    S=U.*S;
+
+
     %% Results
     figure(2)
     sgtitle('Power spectrum estimation')
     subplot(n_rows, n_cols, i/step)
-    plot(f_DSP, DSP)
     hold on
-    plot(f, pxx);
+    plot(f, pxx,'Color',[0.8500 0.3250 0.0980],'LineWidth',0.5)
+    plot(f_S,S,'Color',[0.9290 0.6940 0.1250],'LineWidth',0.5)
+    plot(f_DSP, DSP,'Color',[0 0.4470 0.7410],'LineWidth',1.5)
     hold off
     ylabel('PSD')
     xlabel('f [Hz]')
     title("N: " + num2str(N) + ", p_{AR}=" + num2str(p))
     xlim([0, 60])
-    legend('AR estimation', 'Welch')
+    legend( 'Welch','FFT','AR estimation')
 end
 
 
