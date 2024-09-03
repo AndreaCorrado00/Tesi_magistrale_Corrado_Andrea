@@ -183,7 +183,7 @@ for i = step:step:N_original
 end
 
 %% Different order comparison
-p_candidates=[10:10:100];
+p_candidates=[10:50:160];
 
 %% Spectrogram estimation
 FT_x=fft(x_w,N);
@@ -225,7 +225,7 @@ for k=1:length(p_candidates)
 
     % plots
 
-    plot(f_DSP,DSP,'LineWidth',1.5)
+    plot(f_DSP,DSP,'LineWidth',0.8)
 
     legend_entries{k}="AR order = "+num2str(p);
 

@@ -71,7 +71,7 @@ load(dataFolder+'PhysionetData.mat')
 fc=360;
 
 %% Sintetic data
-show_spectrum_evaluation_pipeline("high_frequency_ecg")
+show_spectrum_evaluation_pipeline("PhysioNet_healthy")
 
 % "high_frequency_ecg" "Low_frequency_ecg" "PhysioNet_healthy" "PhysioNet_Pathological"
 %% Building window spectrum analysis

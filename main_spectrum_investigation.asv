@@ -17,7 +17,7 @@ close
 % %% Handling the dataset
 % % To make the dataset more handable, it is converted into a struct
 % MIT_dataset_builder(dataFolder);
-% 
+
 % %% Loading data
 % load("D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Other\MIT_dataset.mat")
 % %% Example of data
@@ -68,10 +68,12 @@ figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\T
 addpath(src_path)
 load(dataFolder+'PhysionetData.mat')
 
-fc=300;
+fc=360;
 
 %% Sintetic data
-show_spectrum_evaluation_pipeline('High_Frequency_ecg')
+show_spectrum_evaluation_pipeline("PhysioNet_healthy")
+
+% "high_frequency_ecg" "Low_frequency_ecg" "PhysioNet_healthy" "PhysioNet_Pathological"
 %% Building window spectrum analysis
 % First, spectrums are evaluated usign the whole signal
 windowsize=1000;
