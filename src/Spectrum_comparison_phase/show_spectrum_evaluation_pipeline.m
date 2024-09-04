@@ -136,12 +136,25 @@ for i = step:step:N_original
     xlabel('time[s]')
     ylabel('Amplitude [mV]')
 
-    %% AR spectrum estimation 
-    p = evaluate_order(x_w, 40, 60, 2, 10);
+    %% AR spectrum estimation (YW)
+    disp('AR YW')
+    p = evaluate_order(x_w, 40, 60, 2, 0.5);
     th = ar(x_w, p, 'yw');
     [H, f] = freqz(1, th.a, N, Fs); 
     f_DSP = f;
     DSP = th.NoiseVariance * (abs(H).^2);
+
+    %% AR spectrum estimation (burg)
+    disp('AR burg')
+    p_bu = evaluate_order(x_w, 8, 14, 2, 3);
+    th = ar(x_w, p_bu, 'burg');
+    [H, f] = freqz(1, th.a, N, Fs); 
+    f_BU = f;
+    DSP_BU = th.NoiseVariance * (abs(H).^2);
+
+    % Normalization
+    U=max(DSP)/max(DSP_BU);
+    DSP_BU=U.*DSP_BU;
 
     %% Welch spectrum estimation
     window = hamming(512); % Hamming window
@@ -173,74 +186,75 @@ for i = step:step:N_original
     hold on
     plot(f, pxx,'Color',[0.8500 0.3250 0.0980],'LineWidth',0.5)
     plot(f_S,S,'Color',[0.9290 0.6940 0.1250],'LineWidth',0.5)
-    plot(f_DSP, DSP,'Color',[0 0.4470 0.7410],'LineWidth',1.5)
+    plot(f_DSP, DSP,'Color',[0.4940 0.1840 0.5560],'LineWidth',1.5)
+    plot(f_BU, DSP_BU,'Color',[0 0.4470 0.7410],'LineWidth',1.5)
     hold off
     ylabel('PSD')
     xlabel('f [Hz]')
-    title("N: " + num2str(N) + ", p_{AR}=" + num2str(p))
+    title("N: " + num2str(N) + ", p_{AR}(YW)=" + num2str(p)+", p_{AR}(BU)="+num2str(p_bu))
     xlim([0, 60])
-    legend( 'Welch','FFT','AR estimation')
+    legend( 'Welch','FFT','AR YW estimation','AR Burg estimation')
 end
 
-%% Different order comparison
-p_candidates=[10:50:160];
-
-%% Spectrogram estimation
-FT_x=fft(x_w,N);
-S=abs(FT_x).^2/N;
-f_S=0:Fs/N:Fs-Fs/N;
-
-
-
-%% Welch spectrum estimation
-window = hamming(512); % Hamming window
-noverlap = length(window) / 2; % overlapping
-nfft = 2048; % Points of fft
-% Welch periodogram
-[pxx, f_w] = pwelch(x_w, window, noverlap, nfft, Fs);
-
-
-
-
-%% Orders comparison
-
-figure(3)
-title('AR Spectrums comparison')
-ylabel('PSD')
-xlabel('f [Hz]')
-xlim([0, 60])
-
-hold on
-
-legend_entries={};
-for k=1:length(p_candidates)
-    p=p_candidates(k);
-
-    %% AR spectrum estimation 
-    th = ar(x_w, p, 'yw');
-    [H, f] = freqz(1, th.a, N, Fs); 
-    f_DSP = f;
-    DSP = th.NoiseVariance * (abs(H).^2);
-
-
-    % plots
-
-    plot(f_DSP,DSP,'LineWidth',0.8)
-
-    legend_entries{k}="AR order = "+num2str(p);
-
-end
-% Normalization
-U = max(DSP) / max(pxx);
-pxx = U * pxx;
-
-% Normalization
-U=max(DSP)/max(S);
-S=U.*S;
-
-plot(f_w,pxx,'b--',f_S,S,'k:')
-legend_entries{k+1}="Welch";
-legend_entries{k+2}="Spectrogram";
-legend(legend_entries)
-hold off
+% %% Different order comparison
+% p_candidates=[10:50:160];
+% 
+% %% Spectrogram estimation
+% FT_x=fft(x_w,N);
+% S=abs(FT_x).^2/N;
+% f_S=0:Fs/N:Fs-Fs/N;
+% 
+% 
+% 
+% %% Welch spectrum estimation
+% window = hamming(512); % Hamming window
+% noverlap = length(window) / 2; % overlapping
+% nfft = 2048; % Points of fft
+% % Welch periodogram
+% [pxx, f_w] = pwelch(x_w, window, noverlap, nfft, Fs);
+% 
+% 
+% 
+% 
+% %% Orders comparison
+% 
+% figure(3)
+% title('AR Spectrums comparison')
+% ylabel('PSD')
+% xlabel('f [Hz]')
+% xlim([0, 60])
+% 
+% hold on
+% 
+% legend_entries={};
+% for k=1:length(p_candidates)
+%     p=p_candidates(k);
+% 
+%     %% AR spectrum estimation 
+%     th = ar(x_w, p, 'yw');
+%     [H, f] = freqz(1, th.a, N, Fs); 
+%     f_DSP = f;
+%     DSP = th.NoiseVariance * (abs(H).^2);
+% 
+% 
+%     % plots
+% 
+%     plot(f_DSP,DSP,'LineWidth',0.8)
+% 
+%     legend_entries{k}="AR order = "+num2str(p);
+% 
+% end
+% % Normalization
+% U = max(DSP) / max(pxx);
+% pxx = U * pxx;
+% 
+% % Normalization
+% U=max(DSP)/max(S);
+% S=U.*S;
+% 
+% plot(f_w,pxx,'b--',f_S,S,'k:')
+% legend_entries{k+1}="Welch";
+% legend_entries{k+2}="Spectrogram";
+% legend(legend_entries)
+% hold off
 

@@ -23,12 +23,15 @@ function p_opt = evaluate_order(signal, min_order, max_order, step, eps)
     % Loop through each order to evaluate the AR model
     for i = 1:length(p)
         % Fit AR model with current order
-        th = ar(signal - mean(signal), p(i), 'yw');
+        th = ar(signal - mean(signal), p(i), 'ls');
 
         % Calculate AIC for the current model
-        AIC_vec(i) = aic(th, 'AIC');
+        AIC_vec(i) = aic(th, 'nAIC');
         if i>1
             AIC_diff(i)=abs(AIC_vec(i - 1) - AIC_vec(i));
+            % if AIC_diff(i)<eps
+            %     break
+            % end
         end
     end
     pos_opt=find(AIC_diff(2:end)<eps,1);
