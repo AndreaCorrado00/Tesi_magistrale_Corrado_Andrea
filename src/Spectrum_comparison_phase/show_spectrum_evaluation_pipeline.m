@@ -70,7 +70,7 @@ n_rows = ceil(n_subs / n_cols);
 
 for i = step:step:N_original
 
-    x = x_original(1:i);
+    x = x_original(1:i)-mean(x_original(1:i));
     N = length(x);
     Ts = 1 / Fs; 
     t = 0:Ts:Ts*N-Ts; 
@@ -137,7 +137,6 @@ for i = step:step:N_original
     ylabel('Amplitude [mV]')
 
     %% AR spectrum estimation (ls)
-    disp('AR YW')
     p = evaluate_order(x_w, 8, 14, 2, 6);
     th = ar(x_w, p, 'ls');
     [H, f] = freqz(1, th.a, N, Fs); 
@@ -145,7 +144,6 @@ for i = step:step:N_original
     DSP = th.NoiseVariance * (abs(H).^2);
 
     %% AR spectrum estimation (burg)
-    disp('AR burg')
     p_bu = evaluate_order(x_w, 8, 14, 2, 6);
     th = ar(x_w, p_bu, 'burg');
     [H, f] = freqz(1, th.a, N, Fs); 

@@ -74,6 +74,8 @@ close
 show_spectrum_evaluation_pipeline("high_frequency_ecg") 
 
 % "high_frequency_ecg" "Low_frequency_ecg" "PhysioNet_healthy" "PhysioNet_Pathological"
+%% Spectrum composition
+build_and_show_expected_spectrums()
 
 %%
 % %% Building window spectrum analysis
