@@ -11,7 +11,7 @@ function x_denoised = denoise_ecg_wavelet(x,Fc,type, nLevels)
         decompositionLevel = maxDecompositionLevel;
         warning(['Level is reduced to ' num2str(decompositionLevel) ' to adapt better to the signal length']);
     end
-
+    % 
     % % Symmetric padding handling
     % pow2Length = 2^nextpow2(signalLength);
     % if pow2Length > signalLength

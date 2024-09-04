@@ -61,28 +61,30 @@ close
 clc
 clear
 close
-%% Loading data and folders
+% Loading data and folders
 dataFolder = "D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Other\";
 src_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\Spectrum_comparison_phase";
 figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\Spectrum_investigation_phase\PhysioNet_data";
 addpath(src_path)
-load(dataFolder+'PhysionetData.mat')
 
-fc=360;
 
 %% Sintetic data
+clc
+close
 show_spectrum_evaluation_pipeline("high_frequency_ecg") 
 
 % "high_frequency_ecg" "Low_frequency_ecg" "PhysioNet_healthy" "PhysioNet_Pathological"
-%% Building window spectrum analysis
-% First, spectrums are evaluated usign the whole signal
-windowsize=1000;
-spectrum_struct= evaluate_Physionet_spectrums(Signals, fc, windowsize);
 
-%% Loading data previously saved and plotting single signals
-%load(dataFolder+"Spectrums_PhysionetData.mat")
-plotting_PhysioNet_signals(spectrum_struct, Labels, figure_path, fc,  'single_signal', false)
-
-%% Spaghetti plot for each signal
-plotting_PhysioNet_signals(spectrum_struct, Labels, figure_path, fc,  'spaghetti_plot', true)
+%%
+% %% Building window spectrum analysis
+% % First, spectrums are evaluated usign the whole signal
+% windowsize=1000;
+% spectrum_struct= evaluate_Physionet_spectrums(Signals, fc, windowsize);
+% 
+% %% Loading data previously saved and plotting single signals
+% %load(dataFolder+"Spectrums_PhysionetData.mat")
+% plotting_PhysioNet_signals(spectrum_struct, Labels, figure_path, fc,  'single_signal', false)
+% 
+% %% Spaghetti plot for each signal
+% plotting_PhysioNet_signals(spectrum_struct, Labels, figure_path, fc,  'spaghetti_plot', true)
 

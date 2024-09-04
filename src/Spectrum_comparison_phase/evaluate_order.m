@@ -29,9 +29,9 @@ function p_opt = evaluate_order(signal, min_order, max_order, step, eps)
         AIC_vec(i) = aic(th, 'nAIC');
         if i>1
             AIC_diff(i)=abs(AIC_vec(i - 1) - AIC_vec(i));
-            % if AIC_diff(i)<eps
-            %     break
-            % end
+            if AIC_diff(i)<eps
+                break
+            end
         end
     end
     pos_opt=find(AIC_diff(2:end)<eps,1);
