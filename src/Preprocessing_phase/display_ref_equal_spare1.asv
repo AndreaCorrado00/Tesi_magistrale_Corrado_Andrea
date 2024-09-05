@@ -1,0 +1,26 @@
+function display_ref_equal_spare1(data)
+
+
+% Loop through each plot type combination
+    for l = 1:6
+        % Loop through each map type: A, B, C
+        for i = ["A", "B", "C"]
+            disp(["MA"])
+            map = 'MAP_' + i;
+            subjects = fieldnames(data.(map));
+            
+            % Loop through each subject
+            for j = 1:length(subjects)
+                sub = map + num2str(j);
+          
+                ref_trace=fieldnames(data.(string(map)).(string(sub))).ref_trace;
+                spare1_trace=fieldnames(data.(string(map)).(string(sub))).spare1_trace;
+
+                for k=1:length(ref_trace)
+                    if sum(ref_trace(:,k)-spare1_trace(:,k))==0
+                        disp(["Subject "+num2str(j)+" has spare1=ref in record "+num2str(k)]);
+                    end
+                end               
+            end
+        end
+    end

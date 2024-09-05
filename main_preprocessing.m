@@ -63,11 +63,12 @@ compare_maps_between_signals(data,fc,figure_path)
   
 
 %%                                                   SUBJECT SPECIFIC INVESTIGATIONS
-%% 2.4 3D plot of signals between subjects 
+%% 3.1 3D plot of signals between subjects 
 compare_traces_between_sub_3D_figure(data, fc,figure_path) 
 
-%% 2.5 Subplots of traces record comprison for each subject 
+%% 3.2 Subplots of traces record comprison for each subject 
 traces_subplots_by_sub(data, fc, figure_path) 
 
-
+%% 3.3 Subjects with Ref trace equal to spare 1 trace
+display_ref_equal_spare1(data)
 
