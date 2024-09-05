@@ -137,14 +137,14 @@ for i = step:step:N_original
     ylabel('Amplitude [mV]')
 
     %% AR spectrum estimation (ls)
-    p = evaluate_order(x_w, 8, 14, 2, 6);
+    p = evaluate_order(x_w, 8, 14, 2, 6,'ls');
     th = ar(x_w, p, 'ls');
     [H, f] = freqz(1, th.a, N, Fs); 
     f_DSP = f;
     DSP = th.NoiseVariance * (abs(H).^2);
 
     %% AR spectrum estimation (burg)
-    p_bu = evaluate_order(x_w, 8, 14, 2, 6);
+    p_bu = evaluate_order(x_w, 8, 14, 2, 6,'burg');
     th = ar(x_w, p_bu, 'burg');
     [H, f] = freqz(1, th.a, N, Fs); 
     f_BU = f;

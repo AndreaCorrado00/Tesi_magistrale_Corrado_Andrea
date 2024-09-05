@@ -71,7 +71,7 @@ addpath(src_path)
 %% Sintetic data
 clc
 close
-show_spectrum_evaluation_pipeline("high_frequency_ecg") 
+show_spectrum_evaluation_pipeline("Low_frequency_ecg") 
 
 % "high_frequency_ecg" "Low_frequency_ecg" "PhysioNet_healthy" "PhysioNet_Pathological"
 %% Spectrum composition
