@@ -27,10 +27,10 @@ function traces_subplots_by_sub(data, fc, figure_path)
                     % Create a new figure
                     fig = figure(1);
                     fig.WindowState = "maximized";
-                    traces_names=["rov", "ref", "spare2"];
+                    traces_names=["rov", "ref","spare1", "spare2","spare3"];
                     % Loop through each trace type and plot comparisons
-                    for k = 1:3
-                        subplot(3,1,k)
+                    for k = 1:5
+                        subplot(5,1,k)
                         trace = traces_names(k) + "_trace";
                         title_plot = 'MAP:' + i + ' (' + get_name_of_map(i) + '), sub:' + num2str(j) +', '+ traces_names(k)+' trace, record: '+num2str(h);
                         signals=table2array(data.(map).(sub).(trace));
@@ -49,7 +49,7 @@ function traces_subplots_by_sub(data, fc, figure_path)
                     end
                     % Save the plot
                     file_name="MAP_"+i+"_sub_"+num2str(j)+'_record_'+num2str(h)+'_';
-                    save_plot(file_name, type_plots(l), figure_path + "\single_records", fig, true);
+                    save_plot(file_name, type_plots(l), figure_path + "\whole_single_records", fig, true);
                 end
 
              

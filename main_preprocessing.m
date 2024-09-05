@@ -60,21 +60,17 @@ compare_traces_between_sub(data,fc,figure_path)
 % comparison between maps within subjects and traces
 compare_maps_between_signals(data,fc,figure_path)
 
-%% 2.3 Similarity between signals 
-%table_corr=correlation_signals_within_maps(data,'rov_trace');
-% Table corr is made of fields related to subjects into which it's possible
-% to find the correlation matrix between the mean 'rov' trace (in this
-% case) within maps.
-
-% plot_R2_distribution_maps(table_corr,'rov trace',figure_path,true)
   
 
 %%                                                   SUBJECT SPECIFIC INVESTIGATIONS
-%% 2.4 3D plot of signals between subjects 
+%% 3.1 3D plot of signals between subjects 
 compare_traces_between_sub_3D_figure(data, fc,figure_path) 
 
-%% 2.5 Subplots of traces record comprison for each subject 
+%% 3.2 Subplots of traces record comprison for each subject 
 traces_subplots_by_sub(data, fc, figure_path) 
+
+%% 3.3 Subjects with Ref trace equal to spare 1 trace
+display_ref_equal_spare1(data)
 
 
 
