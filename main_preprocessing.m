@@ -72,3 +72,5 @@ traces_subplots_by_sub(data, fc, figure_path)
 %% 3.3 Subjects with Ref trace equal to spare 1 trace
 display_ref_equal_spare1(data)
 
+
+
