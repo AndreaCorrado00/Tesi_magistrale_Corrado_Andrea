@@ -70,6 +70,18 @@ function newData = single_sub_alignment(data, Fc, window, strategy, tollerance, 
                         QRS_ref = QRSpositions_ref{:, k};
                         QRS_spare2 = QRSpositions_spare2{:, k};
                         rovSignals{:, k} = align_to_QRS_ref_and_spare2(signal, QRS_ref, QRS_spare2, half_width, ref, tollerance, plot_alignment);
+                    case 'ref_and_spare1'
+                        % Align using both reference and spare2 QRS positions
+                        tollerance = tollerance * Fc;  % Convert tolerance from seconds to samples
+                        
+                        % Retrieve and impute missing QRS positions for the spare1 trace
+                        QRSpositions_spare1 = newData.(mapName).(subjectName).QRS_position_spare1_trace;
+                        QRSpositions_spare1 = impute_QRS_pos(QRSpositions_spare1);
+                        
+                        % Align the rov signal considering both reference and spare2 QRS positions
+                        QRS_ref = QRSpositions_ref{:, k};
+                        QRS_spare1= QRSpositions_spare1{:, k};
+                        rovSignals{:, k} = align_to_QRS_ref_and_spare2(signal, QRS_ref, QRS_spare1, half_width, ref, tollerance, plot_alignment);
                 end
             end
 
@@ -83,6 +95,9 @@ function newData = single_sub_alignment(data, Fc, window, strategy, tollerance, 
                 case 'ref_and_spare2'
                     newData.(mapName).(subjectName).QRS_position_ref_trace = QRSpositions_ref;
                     newData.(mapName).(subjectName).QRS_position_spare2_trace = QRSpositions_spare2;
+                case 'ref_and_spare1'
+                    newData.(mapName).(subjectName).QRS_position_ref_trace = QRSpositions_ref;
+                    newData.(mapName).(subjectName).QRS_position_spare1_trace = QRSpositions_spare1;
             end
         end
     end

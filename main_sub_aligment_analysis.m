@@ -60,7 +60,7 @@ plotQRSForSubjects(QRS_detected_data, subjectIndices,fc,figure_path)
 % QRS with the median of the ref trace QRS.
 
 window=0.01; %time window into whitch finding the maximum in seconds
-plot_alignment=true;
+plot_alignment=false;
 Data_sub_aligned=single_sub_alignment(QRS_detected_data,fc,window,'only_ref',[],plot_alignment);
 % Note, the function imputes the position of the QRS if necessary
 
@@ -92,60 +92,77 @@ Data_sub_aligned=single_sub_alignment(QRS_detected_data,fc,window,'ref_and_spare
 % Note, the function imputes the position of the QRS if necessary
 traces_subplots_by_sub(Data_sub_aligned, fc, figure_path + "\single_records_v2")  
 
+%% Rebuilding the dataset, part 3
+% Now the strategy is: 
+% step zero: find the QRS into the spare 2 trace
+QRS_detected_data=analyzeQRS(QRS_detected_data,fc,true,'spare1_trace');
+% For each rov signal
+    % check if the QRS_ref is next to QRS_spare1
+    % if yes, define the the neighborhood like done so far
+    % if no, define the neighborhood around the QRS_spare1
+% than proceed as done before
+
+window=0.01; %time window into whitch finding the maximum in seconds
+plot_alignment=false;
+tollerance=0.05; %tollerance in [sec] of distance between QRS points in ref and spare2 traces
+Data_sub_aligned=single_sub_alignment(QRS_detected_data,fc,window,'ref_and_spare1',tollerance,plot_alignment);
+
+%% Checking the result
+% Note, the function imputes the position of the QRS if necessary
+traces_subplots_by_sub(Data_sub_aligned, fc, figure_path + "\single_records_v3")  
+
 %% Checking the lost in terms of informations
 nan_table = computeNaNPercentages(Data_sub_aligned);
 
-%% Remaking analysis
-% Whole analysis previously done are made again to check the results of
-% alignment (for the moment, only in the time domain)
-spaghetti_confidence_signals(Data_sub_aligned,fc,figure_path)
-%%
-compare_case_signals(Data_sub_aligned,fc,figure_path)   
-compare_traces_between_sub(Data_sub_aligned,fc,figure_path) 
-compare_maps_between_signals(Data_sub_aligned,fc,figure_path)
+% %% Remaking analysis
+% % Whole analysis previously done are made again to check the results of
+% % alignment (for the moment, only in the time domain)
+% spaghetti_confidence_signals(Data_sub_aligned,fc,figure_path)
+% %%
+% compare_case_signals(Data_sub_aligned,fc,figure_path)   
+% compare_traces_between_sub(Data_sub_aligned,fc,figure_path) 
+% compare_maps_between_signals(Data_sub_aligned,fc,figure_path)
 
-
-
-%%                                              WHOLE DATASET COMMON POINT ALIGNMENT
-% The scope of this part of code is find out if it's possible to define a
-% common point to align signals. Such common point will be the same for ALL
-% rov signals and for ALL subjects
-clear
-close all
-clc
-
-processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed";
-src_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\Sub_alignment_analysis_phase";
-figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\Sub_alignment_analysis";
-addpath(src_path)
-
-%% Loading Data
-load(processed_data_path+'\dataset_single_aligned.mat')
-fc=2035;
-%% Inspecting reference QRS distribution
-QRS_vec=build_and_plot_QRS_distribution(Data_sub_aligned);
-QRS_median=median(QRS_vec);
-
-disp(['Median location of QRS: ',num2str(QRS_median)])
-disp(['  in seconds: ',num2str(QRS_median/fc)])
-
-% Good news: QRS are all around 0.5s seconds
-
-%% Alignment respect to the median of QRS
-% basically, the whole dataset is subscribed with the medan, then the
-% function single_sub_aligned with ref strategy is used on the previusly
-% aligned datased, leading to a dataset alignd respect to the same point
-
-Data_aligned=substitute_QRS_pos_with_median(Data_sub_aligned,QRS_median);
-
-% alignment
-window=0.01; %time window into whitch finding the maximum in seconds
-plot_alignment=false;
-Data_aligned=single_sub_alignment(Data_aligned,fc,window,'only_ref',[],plot_alignment);
-
-%% Plotting first results
-traces_subplots_by_sub(Data_aligned, fc, figure_path + "\single_records_aligned")
-
-%% Remaking population analysis
+% %%                                              WHOLE DATASET COMMON POINT ALIGNMENT
+% % The scope of this part of code is find out if it's possible to define a
+% % common point to align signals. Such common point will be the same for ALL
+% % rov signals and for ALL subjects
+% clear
+% close all
+% clc
+% 
+% processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed";
+% src_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\Sub_alignment_analysis_phase";
+% figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\Sub_alignment_analysis";
+% addpath(src_path)
+% 
+% %% Loading Data
+% load(processed_data_path+'\dataset_single_aligned.mat')
+% fc=2035;
+% %% Inspecting reference QRS distribution
+% QRS_vec=build_and_plot_QRS_distribution(Data_sub_aligned);
+% QRS_median=median(QRS_vec);
+% 
+% disp(['Median location of QRS: ',num2str(QRS_median)])
+% disp(['  in seconds: ',num2str(QRS_median/fc)])
+% 
+% % Good news: QRS are all around 0.5s seconds
+% 
+% %% Alignment respect to the median of QRS
+% % basically, the whole dataset is subscribed with the medan, then the
+% % function single_sub_aligned with ref strategy is used on the previusly
+% % aligned datased, leading to a dataset alignd respect to the same point
+% 
+% Data_aligned=substitute_QRS_pos_with_median(Data_sub_aligned,QRS_median);
+% 
+% % alignment
+% window=0.01; %time window into whitch finding the maximum in seconds
+% plot_alignment=false;
+% Data_aligned=single_sub_alignment(Data_aligned,fc,window,'only_ref',[],plot_alignment);
+% 
+% %% Plotting first results
+% traces_subplots_by_sub(Data_aligned, fc, figure_path + "\single_records_aligned")
+% 
+% %% Remaking population analysis
 
 
