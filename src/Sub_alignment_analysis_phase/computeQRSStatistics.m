@@ -1,4 +1,4 @@
-function QRSStatsTable = computeQRSStatistics(data)
+function QRSStatsTable = computeQRSStatistics(data,QRS_signal)
 % computeQRSStatistics - Computes the mean, variability, extreme values, and
 % signal count of QRS positions for each subject and returns a table with these statistics.
 %
@@ -33,7 +33,7 @@ function QRSStatsTable = computeQRSStatistics(data)
             subjectName = sprintf('%s%d', mapName, j);
             
             % Extract QRS positions for the current subject
-            QRS_positions = data.(mapName).(subjectName).QRS_position;
+            QRS_positions = data.(mapName).(subjectName).(QRS_signal);
             
             % Combine QRS positions from all signals into a single array
             allQRSPositions = [];

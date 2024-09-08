@@ -1,0 +1,86 @@
+function plot_QRS_positions(data, Fc)
+    % Definizione dei colori per i soggetti
+    numSubjects = 12; % Presumendo che ci siano 12 soggetti
+    colorMap = lines(numSubjects); % Per avere colori distinti per ciascun soggetto
+    figure;
+    
+    % Nome delle MAP per scorrere le varie mappe
+    maps = {'MAP_A', 'MAP_B', 'MAP_C'};
+    
+    % Itero attraverso le mappe
+    for mapIdx = 1:length(maps)
+        mapName = maps{mapIdx};
+        
+        % Prendo la struttura relativa alla mappa corrente
+        currentMap = data.(mapName);
+        
+        % Creo tre subplot per la mappa corrente
+        for traceIdx = 1:numSubjects
+            subjectName = sprintf('MAP_%s%d', mapName(end), traceIdx);
+            
+            % Verifica se il soggetto esiste nella mappa corrente
+            if ~isfield(currentMap, subjectName)
+                continue;
+            end
+            
+            % Ottengo i dati relativi al soggetto
+            subjectData = currentMap.(subjectName);
+            
+            % Numero di record nella tabella
+            numRecords = height(subjectData.ref_trace);
+            
+            % Prealloca le variabili per l'output del grafico
+            t_QRS_ref = [];
+            t_QRS_spare1 = [];
+            t_QRS_spare2 = [];
+            ref_trace = [];
+            spare1_trace = [];
+            spare2_trace = [];
+            
+            % Itero sui record per estrarre e raccogliere i dati
+            for recordIdx = 1:numRecords
+                % Estrazione delle posizioni QRS per il record corrente
+                QRS_pos_ref = subjectData.QRS_position_ref_trace{recordIdx};
+                QRS_pos_spare1 = subjectData.QRS_position_spare1_trace{recordIdx};
+                QRS_pos_spare2 = subjectData.QRS_position_spare2_trace{recordIdx};
+                
+                % Estrazione dei valori dei segnali per il record corrente
+                ref_trace = [ref_trace; subjectData.ref_trace{QRS_pos_ref}];
+                spare1_trace = [spare1_trace; subjectData.spare1_trace{recordIdx}(QRS_pos_spare1)];
+                spare2_trace = [spare2_trace; subjectData.spare2_trace{recordIdx}(QRS_pos_spare2)];
+                
+                % Posizioni QRS nel tempo
+                t_QRS_ref = [t_QRS_ref; QRS_pos_ref / Fc];
+                t_QRS_spare1 = [t_QRS_spare1; QRS_pos_spare1 / Fc];
+                t_QRS_spare2 = [t_QRS_spare2; QRS_pos_spare2 / Fc];
+            end
+            
+            % Primo subplot: ref (nuvola di punti per ogni soggetto)
+            subplot(3, 3, mapIdx);
+            hold on;
+            plot(t_QRS_ref, ref_trace, 'o', 'Color', colorMap(traceIdx, :), 'DisplayName', subjectName);
+            title(['QRSpositions\_ref for ' mapName]);
+            xlabel('Time (s)');
+            ylabel('Signal Value (ref)');
+            
+            % Secondo subplot: spare1 (nuvola di punti per ogni soggetto)
+            subplot(3, 3, mapIdx + 3);
+            hold on;
+            plot(t_QRS_spare1, spare1_trace, 'o', 'Color', colorMap(traceIdx, :));
+            title(['QRSpositions\_spare1 for ' mapName]);
+            xlabel('Time (s)');
+            ylabel('Signal Value (spare1)');
+            
+            % Terzo subplot: spare2 (nuvola di punti per ogni soggetto)
+            subplot(3, 3, mapIdx + 6);
+            hold on;
+            plot(t_QRS_spare2, spare2_trace, 'o', 'Color', colorMap(traceIdx, :));
+            title(['QRSpositions\_spare2 for ' mapName]);
+            xlabel('Time (s)');
+            ylabel('Signal Value (spare2)');
+        end
+    end
+    
+    % Legenda unica
+    legend('show', 'Location', 'bestoutside');
+end

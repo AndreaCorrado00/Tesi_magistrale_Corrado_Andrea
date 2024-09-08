@@ -109,7 +109,7 @@ Data_sub_aligned_3=single_sub_alignment(QRS_detected_data,fc,window,'ref_and_spa
 
 %% Checking the result
 % Note, the function imputes the position of the QRS if necessary
-traces_subplots_by_sub(Data_sub_aligned, fc, figure_path + "\single_records_v3")  
+traces_subplots_by_sub(Data_sub_aligned_3, fc, figure_path + "\single_records_v3")  
 
 %% Checking the lost in terms of informations
 nan_table = computeNaNPercentages(Data_sub_aligned);
