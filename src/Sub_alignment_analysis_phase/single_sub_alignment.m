@@ -74,7 +74,14 @@ function newData = single_sub_alignment(data, Fc, window, strategy, tollerance, 
                         QRS_ref = QRSpositions_ref{:, k};
                         QRS_spare2 = QRSpositions_spare2{:, k};
                         rovSignals{:, k} = align_to_QRS_ref_and_spare(signal, QRS_ref, QRS_spare2, half_width, ref, tollerance, plot_alignment);
-                    case 'ref_and_spare1'
+                    case 'only_spare1'
+                        % Retrieve and impute missing QRS positions for the reference trace
+                        QRSpositions_spare1 = newData.(mapName).(subjectName).QRS_position_spare1_trace;
+                        QRSpositions_spare1 = impute_QRS_pos(QRSpositions_spare1);
+                        % Align the rov signal to the reference QRS positions
+                        QRS_pos = QRSpositions_spare1{:, k};
+                        rovSignals{:, k} = align_to_QRS_ref(signal, QRS_pos, half_width, ref, plot_alignment);
+                    case 'spare2_and_spare1'
                         % Retrieve and impute missing QRS positions for the reference trace
                         QRSpositions_ref = newData.(mapName).(subjectName).QRS_position_ref_trace;
                         QRSpositions_ref = impute_QRS_pos(QRSpositions_ref);
@@ -105,7 +112,9 @@ function newData = single_sub_alignment(data, Fc, window, strategy, tollerance, 
                 case 'ref_and_spare2'
                     newData.(mapName).(subjectName).QRS_position_ref_trace = QRSpositions_ref;
                     newData.(mapName).(subjectName).QRS_position_spare2_trace = QRSpositions_spare2;
-                case 'ref_and_spare1'
+                case 'only_spare1'
+                    newData.(mapName).(subjectName).QRS_position_spare1_trace = QRSpositions_spare1;
+                case 'spare2_and_spare1'
                     newData.(mapName).(subjectName).QRS_position_ref_trace = QRSpositions_ref;
                     newData.(mapName).(subjectName).QRS_position_spare2_trace = QRSpositions_spare2;
                     newData.(mapName).(subjectName).QRS_position_spare1_trace = QRSpositions_spare1;

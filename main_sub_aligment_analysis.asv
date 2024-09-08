@@ -65,9 +65,26 @@ Data_sub_aligned_2=single_sub_alignment(QRS_detected_data,fc,window,'ref_and_spa
 % Note, the function imputes the position of the QRS if necessary
 traces_subplots_by_sub(Data_sub_aligned_2, fc, figure_path + "\single_records_v2")  
 
+%% Rebuilding the dataset, part 3
+% Now the strategy is: 
+% step zero: find the QRS into the spare 2 trace
+QRS_detected_data=analyzeQRS(QRS_detected_data,fc,true,'spare1_trace');
+% For each rov signal
+    % check if the QRS_ref is next to QRS_spare1
+    % if yes, define the the neighborhood like done so far
+    % if no, define the neighborhood around the QRS_spare1
+% than proceed as done before
 
+window=0.01; %time window into whitch finding the maximum in seconds
+plot_alignment=false;
+tollerance=0.05; %tollerance in [sec] of distance between QRS points in ref and spare2 traces
+Data_sub_aligned_3=single_sub_alignment(QRS_detected_data,fc,window,'ref_and_spare1',tollerance,plot_alignment);
 
-%% Rebuilding the dataset, part 3   
+    %% Checking the result
+% Note, the function imputes the position of the QRS if necessary
+traces_subplots_by_sub(Data_sub_aligned_3, fc, figure_path + "\single_records_v3")  
+
+%% Rebuilding the dataset, part 4
 QRS_detected_data=analyzeQRS(QRS_detected_data,fc,true,'spare1_trace');
 
 window=0.01; %time window into whitch finding the maximum in seconds
@@ -79,18 +96,6 @@ Data_sub_aligned_3=single_sub_alignment(QRS_detected_data,fc,window,'only_spare1
 % Note, the function imputes the position of the QRS if necessary
 traces_subplots_by_sub(Data_sub_aligned_3, fc, figure_path + "\single_records_v3")  
 
-%% Rebuilding the dataset, part 4
-% Now the strategy is: 
-QRS_detected_data=analyzeQRS(QRS_detected_data,fc,true,'spare1_trace');
-
-window=0.01; %time window into whitch finding the maximum in seconds
-plot_alignment=false;
-tollerance=0.05; %tollerance in [sec] of distance between QRS points in ref and spare2 traces
-Data_sub_aligned_3=single_sub_alignment(QRS_detected_data,fc,[],'spare2_and_spare1',tollerance,plot_alignment);
-
-    %% Checking the result
-% Note, the function imputes the position of the QRS if necessary
-traces_subplots_by_sub(Data_sub_aligned_3, fc, figure_path + "\single_records_v4")  
 
 %% Position of QRS analysis
 
