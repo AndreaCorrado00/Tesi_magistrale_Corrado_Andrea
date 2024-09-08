@@ -61,11 +61,11 @@ plotQRSForSubjects(QRS_detected_data, subjectIndices,fc,figure_path)
 
 window=0.01; %time window into whitch finding the maximum in seconds
 plot_alignment=false;
-Data_sub_aligned=single_sub_alignment(QRS_detected_data,fc,window,'only_ref',[],plot_alignment);
+Data_sub_aligned_1=single_sub_alignment(QRS_detected_data,fc,window,'only_ref',[],plot_alignment);
 % Note, the function imputes the position of the QRS if necessary
 
 %% Checking the result
-traces_subplots_by_sub(Data_sub_aligned, fc, figure_path + "\single_records_v1") 
+traces_subplots_by_sub(Data_sub_aligned_1, fc, figure_path + "\single_records_v1") 
 % Looking at these results looks clear that not all traces are correctly
 % aligned respect to the QRS. What happens is that sometimes some traces
 % seems to have aligned the atrial response with the QRS of the
@@ -86,11 +86,11 @@ QRS_detected_data=analyzeQRS(QRS_detected_data,fc,true,'spare2_trace');
 window=0.01; %time window into whitch finding the maximum in seconds
 plot_alignment=false;
 tollerance=0.05; %tollerance in [sec] of distance between QRS points in ref and spare2 traces
-Data_sub_aligned=single_sub_alignment(QRS_detected_data,fc,window,'ref_and_spare2',tollerance,plot_alignment);
+Data_sub_aligned_2=single_sub_alignment(QRS_detected_data,fc,window,'ref_and_spare2',tollerance,plot_alignment);
 
 %% Checking the result
 % Note, the function imputes the position of the QRS if necessary
-traces_subplots_by_sub(Data_sub_aligned, fc, figure_path + "\single_records_v2")  
+traces_subplots_by_sub(Data_sub_aligned_2, fc, figure_path + "\single_records_v2")  
 
 %% Rebuilding the dataset, part 3
 % Now the strategy is: 
@@ -105,7 +105,7 @@ QRS_detected_data=analyzeQRS(QRS_detected_data,fc,true,'spare1_trace');
 window=0.01; %time window into whitch finding the maximum in seconds
 plot_alignment=false;
 tollerance=0.05; %tollerance in [sec] of distance between QRS points in ref and spare2 traces
-Data_sub_aligned=single_sub_alignment(QRS_detected_data,fc,window,'ref_and_spare1',tollerance,plot_alignment);
+Data_sub_aligned_3=single_sub_alignment(QRS_detected_data,fc,window,'ref_and_spare1',tollerance,plot_alignment);
 
 %% Checking the result
 % Note, the function imputes the position of the QRS if necessary

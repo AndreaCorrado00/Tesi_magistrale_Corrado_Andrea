@@ -1,12 +1,12 @@
-function new_signal = align_to_QRS_ref_and_spare2(signal, QRS_ref, QRS_spare2, half_width, reference, tollerance, plot_flag)
+function new_signal = align_to_QRS_ref_and_spare(signal, QRS_ref, QRS_spare, half_width, reference, tollerance, plot_flag)
     % align_to_QRS_ref_and_spare2 - Aligns a signal to a QRS position based on two reference signals.
     %
-    % Syntax: new_signal = align_to_QRS_ref_and_spare2(signal, QRS_ref, QRS_spare2, half_width, reference, tollerance, plot_flag)
+    % Syntax: new_signal = align_to_QRS_ref_and_spare2(signal, QRS_ref, QRS_spare, half_width, reference, tollerance, plot_flag)
     %
     % Inputs:
     %    signal - The signal to be aligned.
     %    QRS_ref - The position of the QRS complex in the reference signal.
-    %    QRS_spare2 - The position of the QRS complex in the secondary reference signal.
+    %    QRS_spare - The position of the QRS complex in the secondary reference signal.
     %    half_width - The half-width of the neighborhood around the QRS position to be considered for alignment.
     %    reference - The reference signal used for comparison and plotting.
     %    tollerance - The allowed difference between the QRS positions in the reference signals.
@@ -21,7 +21,7 @@ function new_signal = align_to_QRS_ref_and_spare2(signal, QRS_ref, QRS_spare2, h
 
     %% Finding the maximum in the neighborhood
     % Determine the neighborhood around the QRS position in either the reference or secondary reference signal.
-    [neighborhood, neighbor_idx] = evaluate_neighbors_from_Ref_spare2(signal, QRS_ref, QRS_spare2, half_width, tollerance);
+    [neighborhood, neighbor_idx] = evaluate_neighbors_from_Ref_spare2(signal, QRS_ref, QRS_spare, half_width, tollerance);
 
     % Find the position of the maximum value within the neighborhood
     max_pos_into_neighbor = find(neighborhood == max(neighborhood));
