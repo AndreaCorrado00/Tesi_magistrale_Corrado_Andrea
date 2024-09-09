@@ -48,32 +48,40 @@ clc;clear;close;
 % Now the same analysis/visualizations made for population dataset are made
 % subject by subject, to check possible inter subjects differences
 load(processed_data_path+'\dataset.mat');
+
+% Loading paths
+    src_pre_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\Preprocessing_phase";
+    figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\Preprocessing_phase";
+    addpath(src_pre_path)
+%% Data and functions paths
+
+
+pop=false;
+if pop
+
+else
+
+end
+
+
+
+%%                                                       DATA PREPROCESSING
+
+%%                                                               DATA EDA
 fc=2035;
 
-% Adding paths
-src_pre_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\Preprocessing_phase";
-figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\Preprocessing_phase";
-addpath(src_pre_path)
+%% 2. Data proprieties
 
-%% 3.0 Data visualization as they are 
-spaghetti_confidence_signals(data,fc,figure_path)
 
-%% 3.1 Signals direct comparisons 
-% Comparison between different signals mean/periodogram traces for the same case
-compare_case_signals(data,fc,figure_path)   
-% Comparison within traces between subjects 
-compare_traces_between_sub(data,fc,figure_path) 
-% comparison between maps within subjects and traces
-compare_maps_between_signals(data,fc,figure_path)
-
-%% Subject specific investigations
-% 3D plots of the signals, sub by sub
+%%                                                   SUBJECT SPECIFIC INVESTIGATIONS
+%% 3.1 3D plot of signals between subjects 
 compare_traces_between_sub_3D_figure(data, fc,figure_path) 
-% subplots of single records sub by sub
-traces_subplots_by_sub(data, fc, figure_path) 
-% Checking if and where reference trace is the same as spare 1 trace
-display_ref_equal_spare1(data)
 
+%% 3.2 Subplots of traces record comprison for each subject 
+traces_subplots_by_sub(data, fc, figure_path) 
+
+%% 3.3 Subjects with Ref trace equal to spare 1 trace
+display_ref_equal_spare1(data)
 
 
 
