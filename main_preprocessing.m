@@ -74,6 +74,44 @@ traces_subplots_by_sub(data, fc, figure_path)
 % Checking if and where reference trace is the same as spare 1 trace
 display_ref_equal_spare1(data)
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RESULTS of these first steps are available into <1. risultati data analysis.pptx>%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+%%                           ---------- SPECTRUM EVALUATION ALGORITHM ----------
+clc;clear;close
+% This part of preprocessing is used to build a solid framework into which
+% evaluate how to extract correct visualizations of spectrums.
+
+% Because are used syntetic data, it's not necessary to load them
+
+% Adding path
+src_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\Spectrum_comparison_phase";
+addpath(src_path)
+%% Sintetic data algorithm performances 
+close;clc; % cleaning environment
+show_spectrum_evaluation_pipeline("Low_frequency_ecg") 
+
+% Other example of situations: 
+% "high_frequency_ecg" "Low_frequency_ecg" "PhysioNet_healthy" "PhysioNet_Pathological"
+%% Spectrum composition
+build_and_show_expected_spectrums()
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RESULTS, explanation and further comments available into <3. in-depth spectrum analysis.pptx>%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+%%
+
+
+
 
 
 
