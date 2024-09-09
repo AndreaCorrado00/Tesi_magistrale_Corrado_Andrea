@@ -20,14 +20,14 @@ clc;clear;close;
 % First, population analysis is done on data as they are, so without
 % preprocessing, filtering and so on.
 
-% Loading data
-fc=2035;
-load(processed_data_path+'\dataset_pop.mat');
-
 % Adding path
 src_pop_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\Preprocessing_pop_phase";
 figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\Preprocessing_pop_phase";
 addpath(src_pop_path)
+
+% Loading data
+fc=2035;
+load(processed_data_path+'\dataset_pop.mat');
 
 %% 2.0 Data visualization as they are 
 spaghetti_confidence_signals(data,fc,figure_path)
@@ -47,13 +47,15 @@ compare_maps_between_signals(data,fc,figure_path)
 clc;clear;close;
 % Now the same analysis/visualizations made for population dataset are made
 % subject by subject, to check possible inter subjects differences
-load(processed_data_path+'\dataset.mat');
-fc=2035;
 
 % Adding paths
 src_pre_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\Preprocessing_phase";
 figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\Preprocessing_phase";
 addpath(src_pre_path)
+
+% Loading data 
+load(processed_data_path+'\dataset.mat');
+fc=2035;
 
 %% 3.0 Data visualization as they are 
 spaghetti_confidence_signals(data,fc,figure_path)
@@ -114,14 +116,11 @@ build_and_show_expected_spectrums()
 
 % First, a solid way to align traces should be found record by record and
 % subject by subject. 
+clc;clear;close;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % RESULTS, explanation and further comments available into <3. Record alignment by subjects.pptx>%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% Loading previusly made data
-load(processed_data_path+'\dataset.mat');
-fc=2035;
 
 % Adding paths
 processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed";
@@ -129,10 +128,15 @@ src_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI
 figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\Sub_alignment_analysis";
 addpath(src_path)
 
+% Loading previusly made data
+load(processed_data_path+'\dataset.mat');
+fc=2035;
+
 %% 5.0 Finding QRS into different traces
-QRS_detected_data=analyzeQRS(data,fc,true,'ref_trace');
-QRS_detected_data=analyzeQRS(QRS_detected_data,fc,true,'spare1_trace');
-QRS_detected_data=analyzeQRS(QRS_detected_data,fc,true,'spare2_trace');
+show_qrs_pos_example=false;
+QRS_detected_data=analyzeQRS(data,fc,show_qrs_pos_example,'ref_trace');
+QRS_detected_data=analyzeQRS(QRS_detected_data,fc,show_qrs_pos_example,'spare1_trace');
+QRS_detected_data=analyzeQRS(QRS_detected_data,fc,show_qrs_pos_example,'spare2_trace');
 
 %% 5.1 Position of QRS analysis
 show_QRS_positions(QRS_detected_data,fc)
@@ -149,7 +153,7 @@ show_QRS_positions(QRS_detected_data,fc)
     plot_alignment=false;
     tollerance=0.05; %tollerance in [sec] of distance between QRS points in ref and spare2 traces
     Data_sub_aligned_2=single_sub_alignment(QRS_detected_data,fc,window,'ref_and_spare2',tollerance,plot_alignment);
-
+%%
     % 5.1.3 Strategy 3
     % a real QRS is only into the spare1 trace
     window=0.01; %time window into whitch finding the maximum in seconds
@@ -157,16 +161,13 @@ show_QRS_positions(QRS_detected_data,fc)
     tollerance=0.05; %tollerance in [sec] of distance between QRS points in ref and spare2 traces
     Data_sub_aligned_3=single_sub_alignment(QRS_detected_data,fc,window,'only_spare1',tollerance,plot_alignment);
 
-%% 5.3 Checking and saving results
+%% 5.3 Checking and saving results from strategies
     % Strategy 1
 traces_subplots_by_sub(Data_sub_aligned_1, fc, figure_path + "\single_records_v1") 
     % Strategy 2
 traces_subplots_by_sub(Data_sub_aligned_2, fc, figure_path + "\single_records_v2") 
     % Strategy 3
 traces_subplots_by_sub(Data_sub_aligned_3, fc, figure_path + "\single_records_v3")  
-
-
-
 
 %% 
 
