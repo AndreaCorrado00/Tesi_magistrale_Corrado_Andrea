@@ -86,17 +86,14 @@ QRS_detected_data=analyzeQRS(QRS_detected_data,fc,true,'spare1_trace');
 window=0.01; %time window into whitch finding the maximum in seconds
 plot_alignment=false;
 tollerance=0.05; %tollerance in [sec] of distance between QRS points in ref and spare2 traces
-Data_sub_aligned_3=single_sub_alignment(QRS_detected_data,fc,[],'spare2_and_spare1',tollerance,plot_alignment);
+Data_sub_aligned_4=single_sub_alignment(QRS_detected_data,fc,[],'spare2_and_spare1',tollerance,plot_alignment);
 
     %% Checking the result
 % Note, the function imputes the position of the QRS if necessary
 traces_subplots_by_sub(Data_sub_aligned_3, fc, figure_path + "\single_records_v4")  
 
 %% Position of QRS analysis
-
-% QRSStatsTable_ref = computeQRSStatistics(QRS_detected_data,"QRS_position_ref_trace");
-% QRSStatsTable_spare1 = computeQRSStatistics(QRS_detected_data,"QRS_position_spare1_trace");
-% QRSStatsTable_spare2 = computeQRSStatistics(QRS_detected_data,"QRS_position_spare2_trace");
+show_QRS_positions(QRS_detected_data,fc)
 %% Checking the lost in terms of informations
 nan_table = computeNaNPercentages(Data_sub_aligned_3);
 
