@@ -110,10 +110,7 @@ build_and_show_expected_spectrums()
 
 
 
-%%                         ---------- TRACES ALIGMENT STRATEGIES ----------
-
-% First, a solid way to align traces should be found record by record and
-% subject by subject. 
+%% ---------- SPECTRUM EVALUATION ALGORITHM ----------
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % RESULTS, explanation and further comments available into <3. Record alignment by subjects.pptx>%
@@ -134,9 +131,7 @@ QRS_detected_data=analyzeQRS(data,fc,true,'ref_trace');
 QRS_detected_data=analyzeQRS(QRS_detected_data,fc,true,'spare1_trace');
 QRS_detected_data=analyzeQRS(QRS_detected_data,fc,true,'spare2_trace');
 
-%% 5.1 Position of QRS analysis
-show_QRS_positions(QRS_detected_data,fc)
-%% 5.2 Implementing aligment strategies
+%% 5.1 Implementing aligment strategies
     % 5.1.1 Strategy 1
     % QRS is sorely into the ref trace
     window=0.01; %time window into which finding the maximum in seconds
@@ -157,16 +152,9 @@ show_QRS_positions(QRS_detected_data,fc)
     tollerance=0.05; %tollerance in [sec] of distance between QRS points in ref and spare2 traces
     Data_sub_aligned_3=single_sub_alignment(QRS_detected_data,fc,window,'only_spare1',tollerance,plot_alignment);
 
-%% 5.3 Checking and saving results
-    % Strategy 1
+%% 5.2 Checking and saving results
+    % 
 traces_subplots_by_sub(Data_sub_aligned_1, fc, figure_path + "\single_records_v1") 
-    % Strategy 2
 traces_subplots_by_sub(Data_sub_aligned_2, fc, figure_path + "\single_records_v2") 
-    % Strategy 3
 traces_subplots_by_sub(Data_sub_aligned_3, fc, figure_path + "\single_records_v3")  
-
-
-
-
-%% 
 
