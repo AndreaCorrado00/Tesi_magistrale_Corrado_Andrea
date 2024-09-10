@@ -1,34 +1,11 @@
-function show_scalogram_evaluation_pipeline(type)
-load("D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Other\ecg_spectrum_analysis_pipeline_test.mat")
+function show_scalogram_AVNRT_data(data)
 
-disp('This code shows a proposed pipeline to obtain ECG scalograms')
-disp('using directly the original signal (zero mean) and varying the number of points of evaluation')
+% Data are expected to be the struct of only traces of a single subject,
+% then the first record will be evaluated to provide an example
 
-switch type
-    case "high_frequency_ecg"
-        disp('Simulation of Spectrum evaluation pipeline on a signal with High Frequency Noise')
-        ecg = ecg_simulation.high_freq;
-        Fs = 1000; % Hz
-        step = 1000; % Increment of points from which to evaluate the spectrum
-    case "Low_frequency_ecg"
-        disp('Simulation of Spectrum evaluation pipeline on a signal with Low Frequency Noise')
-        ecg = ecg_simulation.low_freq;
-        Fs = 1000; % Hz
-        step = 1000; % Increment of points from which to evaluate the spectrum
-
-    case "PhysioNet_healthy"
-        disp('Simulation of Spectrum evaluation pipeline on a signal from PhysioNet DB of a healthy subject')
-        ecg = ecg_simulation.healthy;
-        Fs = 360; % Hz
-        step = 720; % Increment of points from which to evaluate the spectrum
-    case "PhysioNet_Pathological"
-        disp('Simulation of Spectrum evaluation pipeline on a signal from PhysioNet DB of a pathological subject')
-        ecg = ecg_simulation.patological;
-        Fs = 360; % Hz
-        step = 720; % Increment of points from which to evaluate the spectrum
-end
 
 %% Starting of simulation
+
 x_original = ecg - mean(ecg); % Subtract the mean
 N_original = length(x_original);
 disp( ' ')
@@ -98,5 +75,3 @@ ylabel('Frequency (Hz)');
 ylim([0,120])
 
 colorbar('Location','southoutside');
-
-

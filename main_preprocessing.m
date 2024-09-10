@@ -182,11 +182,18 @@ src_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI
 figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\Scalogram_analysis_pipeline_phase";
 addpath(src_path)
 
-%% 
+%% 6.0 Scalogram evluation on didactical signals
 show_scalogram_evaluation_pipeline("high_frequency_ecg")
 
 % Other example of situations: 
 % "high_frequency_ecg" "Low_frequency_ecg" "PhysioNet_healthy" "PhysioNet_Pathological"
 
+%% 6.1 Algorthm application on AVNRT data
+processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed";
+% Loading previusly made data
+load(processed_data_path+'\dataset.mat');
+fc=2035;
+
+% 
 
 
