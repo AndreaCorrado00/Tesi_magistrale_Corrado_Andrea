@@ -194,13 +194,8 @@ processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 202
 load(processed_data_path+'\dataset.mat');
 fc=2035;
 
-MAP_A1_example=data.MAP_A.MAP_A7;
-MAP_B1_example=data.MAP_B.MAP_B7;
-MAP_C1_example=data.MAP_C.MAP_C7;
+% data_example;
 
 % 
-show_scalogram_AVNRT_data(MAP_C1_example,'Example MAP A, sub 1',false)
-%%
-show_scalogram_AVNRT_data(MAP_B1_example,'Example MAP B, sub 1',false)
-show_scalogram_AVNRT_data(MAP_C1_example,'Example MAP C, sub 1',false)
+
 
