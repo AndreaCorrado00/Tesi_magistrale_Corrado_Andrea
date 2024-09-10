@@ -169,5 +169,24 @@ traces_subplots_by_sub(Data_sub_aligned_2, fc, figure_path + "\single_records_v2
     % Strategy 3
 traces_subplots_by_sub(Data_sub_aligned_3, fc, figure_path + "\single_records_v3")  
 
+
+
+
+
+%%                     ---------- SCALOGRAM EVALUATION ALGORITHM ----------
+clc;clear;close;
+% This part of the code is used to build a robust pipeline to evaluate
+% scalograms of signals. Before applying it to the AVNRT data, the producer
+% will be tested on didactical signals.
+src_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\Scalogram_analysis_pipeline_phase";
+figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\Scalogram_analysis_pipeline_phase";
+addpath(src_path)
+
 %% 
+show_scalogram_evaluation_pipeline("high_frequency_ecg")
+
+% Other example of situations: 
+% "high_frequency_ecg" "Low_frequency_ecg" "PhysioNet_healthy" "PhysioNet_Pathological"
+
+
 
