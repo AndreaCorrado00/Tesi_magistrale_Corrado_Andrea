@@ -101,7 +101,7 @@ src_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI
 addpath(src_path)
 %% 4.0 Sintetic data algorithm performances 
 close;clc; % cleaning environment
-show_spectrum_evaluation_pipeline("Low_frequency_ecg") 
+show_spectrum_evaluation_pipeline("high_frequency_ecg") 
 
 % Other example of situations: 
 % "high_frequency_ecg" "Low_frequency_ecg" "PhysioNet_healthy" "PhysioNet_Pathological"
