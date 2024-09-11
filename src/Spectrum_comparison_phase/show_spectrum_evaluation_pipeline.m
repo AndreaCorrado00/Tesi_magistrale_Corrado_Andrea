@@ -121,7 +121,6 @@ for i = step:step:N_original
 
     %% Wavelet denoising
     x_w = denoise_ecg_wavelet(x, Fs, 'sym4', 9);
-    
     %% Filters comparison
     figure(1)
     title("Number of points: " + num2str(i))
