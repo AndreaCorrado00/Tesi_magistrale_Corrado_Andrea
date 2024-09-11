@@ -44,7 +44,7 @@ function x_denoised = denoise_ecg_wavelet(x,Fc,type, nLevels)
     x_denoised = filtfilt(b, a, x_denoised);
 
     % Low pass filter
-    [b, a] = butter(8, 40 / (Fc / 2), 'low');
+    [b, a] = butter(8, 70 / (Fc / 2), 'low');
     x_denoised = filtfilt(b, a, x_denoised);
 
 

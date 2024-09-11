@@ -123,9 +123,7 @@ MAP_C1_example=data.MAP_C.MAP_C7;
 show_filter_result=true;
 Example_filtered=apply_filter(MAP_A1_example,show_filter_result);
 
-% Example of spectrums
-show_spectrum_AVNRT_example(Example_filtered)
-
+show_spectrum_AVNRT_example()
 
 
 %%                         ---------- TRACES ALIGMENT STRATEGIES ----------
