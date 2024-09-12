@@ -1,4 +1,4 @@
-function x_denoised = denoise_ecg_wavelet(x,Fc,type, nLevels)
+function x_denoised = handable_denoise_ecg_wavelet(x,Fc,type, nLevels,padding,BP_band_stop)
 
     waveletType= type;
     decompositionLevel = nLevels; 
@@ -12,16 +12,18 @@ function x_denoised = denoise_ecg_wavelet(x,Fc,type, nLevels)
         warning(['Level is reduced to ' num2str(decompositionLevel) ' to adapt better to the signal length']);
     end
 
-    % 
-    % % Symmetric padding handling
-    % pow2Length = 2^nextpow2(signalLength);
-    % if pow2Length > signalLength
-    %     % Strang, G., and T. Nguyen. Wavelets and Filter Banks. Wellesley, MA: Wellesley-Cambridge Press,
-    %     x_padded = wextend('1D', 'sym', x, pow2Length - signalLength);
-    % else
-    %     x_padded = x;
-    % end
-    x_padded=x;
+    if padding
+        % Symmetric padding handling
+        pow2Length = 2^nextpow2(signalLength);
+        if pow2Length > signalLength
+            % Strang, G., and T. Nguyen. Wavelets and Filter Banks. Wellesley, MA: Wellesley-Cambridge Press,
+            x_padded = wextend('1D', 'sym', x, pow2Length - signalLength);
+        else
+            x_padded = x;
+        end
+    else
+        x_padded=x;
+    end
     %  DWT (Discrete Wavelet Transform)
     [C, L] = wavedec(x_padded, decompositionLevel, waveletType);
 
@@ -44,14 +46,7 @@ function x_denoised = denoise_ecg_wavelet(x,Fc,type, nLevels)
     x_denoised = filtfilt(b, a, x_denoised);
 
     % Low pass filter
-    [b, a] = butter(8, 70 / (Fc / 2), 'low');
+    [b, a] = butter(8, BP_band_stop / (Fc / 2), 'low');
     x_denoised = filtfilt(b, a, x_denoised);
 
 end
-    % % High pass filter
-    % [b, a] = ellip(6,-20*log10(0.99),-20*log10(0.1), 0.5 / (Fc / 2), 'high');
-    % x_denoised = filtfilt(b, a, x_denoised);
-    % 
-    % % Low pass filter
-    % [b, a] = ellip(7,-20*log10(0.95),-20*log10(0.1), 60 / (Fc / 2), 'low');
-    % x_denoised = filtfilt(b, a, x_denoised);

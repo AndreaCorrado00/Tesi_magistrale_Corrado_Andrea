@@ -119,12 +119,20 @@ MAP_A1_example=data.MAP_A.MAP_A7;
 MAP_B1_example=data.MAP_B.MAP_B7;
 MAP_C1_example=data.MAP_C.MAP_C7;
 
-% filter application
-show_filter_result=true;
-Example_filtered=apply_filter(MAP_A1_example,show_filter_result);
+    %% 4.2.1 Evaluatig filtering performance
+    % As explained in the presentation, filter architepture could change to
+    % suit better AVNRT signals.
+    show_pipeline_performances(MAP_A1_example)
 
-% Example of spectrums
-show_spectrum_AVNRT_example(Example_filtered)
+    %% 4.2.2 Example of complete-optimized pipeline 
+    % Example of Filter application and spectrum evaluation
+    % filter application
+    show_filter_result=true;
+    Example_filtered=apply_filter(MAP_A1_example,show_filter_result);
+
+    % Example of spectrums
+    show_spectrum_AVNRT_example(Example_filtered)
+
 
 
 
@@ -169,7 +177,7 @@ show_QRS_positions(QRS_detected_data,fc)
     plot_alignment=false;
     tollerance=0.05; %tollerance in [sec] of distance between QRS points in ref and spare2 traces
     Data_sub_aligned_2=single_sub_alignment(QRS_detected_data,fc,window,'ref_and_spare2',tollerance,plot_alignment);
-%%
+
     % 5.1.3 Strategy 3
     % a real QRS is only into the spare1 trace
     window=0.01; %time window into whitch finding the maximum in seconds
