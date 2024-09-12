@@ -164,6 +164,7 @@ QRS_detected_data=analyzeQRS(QRS_detected_data,fc,show_qrs_pos_example,'spare2_t
 
 %% 5.1 Position of QRS analysis
 show_QRS_positions(QRS_detected_data,fc)
+
 %% 5.2 Implementing aligment strategies
     % 5.1.1 Strategy 1
     % QRS is sorely into the ref trace
@@ -227,4 +228,12 @@ show_scalogram_AVNRT_data(MAP_C1_example,'Example MAP A, sub 1',false)
 %%
 show_scalogram_AVNRT_data(MAP_B1_example,'Example MAP B, sub 1',false)
 show_scalogram_AVNRT_data(MAP_C1_example,'Example MAP C, sub 1',false)
+
+
+
+%%                            ---------- WHOLE DATASET ALIGNMENT ----------              
+% Here, all rove traces are aligned respect to the same point: 0.5. The
+% point of alignment is the fiducial point, i.e., the maximum of the
+% ventricular contraction evaluated in phase 5. Different strategies,
+% different fiducial points, different results.
 
