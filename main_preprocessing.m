@@ -181,7 +181,7 @@ show_QRS_positions(QRS_detected_data,fc)
 
     % 5.1.3 Strategy 3
     % a real QRS is only into the spare1 trace
-    window=0.01; %time window into whitch finding the maximum in seconds
+    window=0.1; %time window into whitch finding the maximum in seconds
     plot_alignment=false;
     Data_sub_aligned_3=single_sub_alignment(QRS_detected_data,fc,window,'only_spare1',[],plot_alignment);
 
@@ -243,10 +243,11 @@ addpath(src_path)
 
 % Loading previusly made data
 load(processed_data_path+'\dataset_aligned_STR_3.mat');
+load(processed_data_path+'\dataset.mat');
 fc=2035;
 
 %% 7.1 Whole dataset alignment
-Aligned_DB= align_and_filter_dataset(Data_sub_aligned_3,false,0.5,fc);
+Aligned_DB= align_and_filter_dataset(data,Data_sub_aligned_3,false,0.5,fc);
 
 %% 7.2 Showing some examples
 show_alignment_results(Aligned_DB,fc)

@@ -20,6 +20,7 @@ for i = ["A", "B", "C"]
         title("Subject: ",num2str(j))
         xlabel('Time [s]')
         ylabel('Amplitude [mV]')
+        xlim([0,1])
         
     end
 end
