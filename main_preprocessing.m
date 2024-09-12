@@ -183,8 +183,7 @@ show_QRS_positions(QRS_detected_data,fc)
     % a real QRS is only into the spare1 trace
     window=0.01; %time window into whitch finding the maximum in seconds
     plot_alignment=false;
-    tollerance=0.05; %tollerance in [sec] of distance between QRS points in ref and spare2 traces
-    Data_sub_aligned_3=single_sub_alignment(QRS_detected_data,fc,window,'only_spare1',tollerance,plot_alignment);
+    Data_sub_aligned_3=single_sub_alignment(QRS_detected_data,fc,window,'only_spare1',[],plot_alignment);
 
 %% 5.3 Checking and saving results from strategies
     % Strategy 1
@@ -250,3 +249,4 @@ fc=2035;
 Aligned_DB= align_and_filter_dataset(Data_sub_aligned_3,false,0.5,fc);
 
 %% 7.2 Showing some examples
+show_alignment_results(Aligned_DB,fc)
