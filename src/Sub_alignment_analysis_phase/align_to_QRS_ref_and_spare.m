@@ -1,4 +1,4 @@
-function new_signal = align_to_QRS_ref_and_spare(signal, QRS_ref, QRS_spare, half_width, reference, tollerance, plot_flag)
+function [FP_pos,new_signal] = align_to_QRS_ref_and_spare(signal, QRS_ref, QRS_spare, half_width, reference, tollerance, plot_flag)
     % align_to_QRS_ref_and_spare2 - Aligns a signal to a QRS position based on two reference signals.
     %
     % Syntax: new_signal = align_to_QRS_ref_and_spare2(signal, QRS_ref, QRS_spare, half_width, reference, tollerance, plot_flag)
@@ -25,7 +25,7 @@ function new_signal = align_to_QRS_ref_and_spare(signal, QRS_ref, QRS_spare, hal
 
     % Find the position of the maximum value within the neighborhood
     max_pos_into_neighbor = find(neighborhood == max(neighborhood));
-
+    
     % If the maximum is found at multiple points, select the first occurrence
     if length(max_pos_into_neighbor) > 1
         max_pos_into_neighbor = max_pos_into_neighbor(1); % taking the first point
@@ -33,7 +33,8 @@ function new_signal = align_to_QRS_ref_and_spare(signal, QRS_ref, QRS_spare, hal
 
     % Translate the neighborhood index to the signal index
     max_pos_into_signal = neighbor_idx(max_pos_into_neighbor);
-
+    FP_pos=max_pos_into_signal;
+    
     % Calculate the distance between the QRS position and the maximum position in the signal
     distance = QRS_ref - max_pos_into_signal;
 

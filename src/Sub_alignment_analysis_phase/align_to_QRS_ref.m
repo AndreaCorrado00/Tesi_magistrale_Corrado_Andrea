@@ -1,4 +1,4 @@
-function new_signal = align_to_QRS_ref(signal, QRS_pos, half_width, reference, plot_flag)
+function [FP_pos,new_signal] = align_to_QRS_ref(signal, QRS_pos, half_width, reference, plot_flag)
     % align_to_QRS_ref - Aligns a signal to a QRS position based on the local maximum.
     %
     % Syntax: new_signal = align_to_QRS_ref(signal, QRS_pos, half_width, reference, plot_flag)
@@ -19,7 +19,8 @@ function new_signal = align_to_QRS_ref(signal, QRS_pos, half_width, reference, p
 
     % Position of the maximum value within the neighborhood
     max_pos_into_neighbor = find(neighborhood == max(neighborhood));
-
+    
+    
     % If the maximum occurs at multiple points, select only the first one
     if length(max_pos_into_neighbor) > 1
         max_pos_into_neighbor = max_pos_into_neighbor(1); % take only the first point
@@ -27,6 +28,7 @@ function new_signal = align_to_QRS_ref(signal, QRS_pos, half_width, reference, p
 
     % Translate the maximum position from the neighborhood to the full signal
     max_pos_into_signal = neighbor_idx(max_pos_into_neighbor);
+    FP_pos=max_pos_into_signal;
 
     % Distance between the QRS position and the identified maximum in the signal
     distance = QRS_pos - max_pos_into_signal;

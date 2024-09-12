@@ -40,15 +40,16 @@ function newData = single_sub_alignment(data, Fc, window, strategy, tollerance, 
             % Extract the rov and reference signals from the data structure
             rovSignals = newData.(mapName).(subjectName).rov_trace;
             refSignals = newData.(mapName).(subjectName).ref_trace;
-            
+            FP_positions={};
             % Loop through each signal (column) in the rovSignals table
             for k = 1:width(rovSignals)
                 signal = rovSignals{:, k};  % Extract the k-th signal from the rov trace
                 half_width = round((Fc * window) / 2);  % Calculate half of the alignment window in samples
                 ref = refSignals{:, k};  % Extract the corresponding reference signal
+
+               
                 
 
-                
                 % Switch based on the selected alignment strategy
                 switch strategy
                     case 'only_ref'
@@ -57,8 +58,10 @@ function newData = single_sub_alignment(data, Fc, window, strategy, tollerance, 
                         QRSpositions_ref = impute_QRS_pos(QRSpositions_ref);
                         % Align the rov signal to the reference QRS positions
                         QRS_pos = QRSpositions_ref{:, k};
-                        rovSignals{:, k} = align_to_QRS_ref(signal, QRS_pos, half_width, ref, plot_alignment);
-                        
+                        [FP_pos,new_rov]= align_to_QRS_ref(signal, QRS_pos, half_width, ref, plot_alignment);
+                        rovSignals{:, k}=new_rov;
+                        FP_positions{k}=FP_pos;
+
                     case 'ref_and_spare2'
                         % Retrieve and impute missing QRS positions for the reference trace
                         QRSpositions_ref = newData.(mapName).(subjectName).QRS_position_ref_trace;
@@ -73,14 +76,18 @@ function newData = single_sub_alignment(data, Fc, window, strategy, tollerance, 
                         % Align the rov signal considering both reference and spare2 QRS positions
                         QRS_ref = QRSpositions_ref{:, k};
                         QRS_spare2 = QRSpositions_spare2{:, k};
-                        rovSignals{:, k} = align_to_QRS_ref_and_spare(signal, QRS_ref, QRS_spare2, half_width, ref, tollerance, plot_alignment);
+                        [FP_pos,new_rov] = align_to_QRS_ref_and_spare(signal, QRS_ref, QRS_spare2, half_width, ref, tollerance, plot_alignment);
+                        rovSignals{:, k}=new_rov;
+                        FP_positions{k}=FP_pos;
                     case 'only_spare1'
                         % Retrieve and impute missing QRS positions for the reference trace
                         QRSpositions_spare1 = newData.(mapName).(subjectName).QRS_position_spare1_trace;
                         QRSpositions_spare1 = impute_QRS_pos(QRSpositions_spare1);
                         % Align the rov signal to the reference QRS positions
                         QRS_pos = QRSpositions_spare1{:, k};
-                        rovSignals{:, k} = align_to_QRS_ref(signal, QRS_pos, half_width, ref, plot_alignment);
+                        [FP_pos,new_rov] = align_to_QRS_ref(signal, QRS_pos, half_width, ref, plot_alignment);
+                        rovSignals{:, k}=new_rov;
+                        FP_positions{k}=FP_pos;
                     case 'spare2_and_spare1'
                         % Retrieve and impute missing QRS positions for the reference trace
                         QRSpositions_ref = newData.(mapName).(subjectName).QRS_position_ref_trace;
@@ -98,13 +105,15 @@ function newData = single_sub_alignment(data, Fc, window, strategy, tollerance, 
                         % Align the rov signal considering both reference and spare2 QRS positions
                         QRS_spare2 = QRSpositions_spare2{:, k};
                         QRS_spare1= QRSpositions_spare1{:, k};
-                        rovSignals{:, k} = align_to_QRS_ref_and_spare(signal, QRS_spare1, QRS_spare2, half_width, ref, tollerance, plot_alignment);
+                        [FP_pos, new_rov] = align_to_QRS_ref_and_spare(signal, QRS_spare1, QRS_spare2, half_width, ref, tollerance, plot_alignment);
+                        rovSignals{:, k}=new_rov;
+                        FP_positions{k}=FP_pos;
                 end
             end
 
             % Save the aligned rov signals back into the data structure
             newData.(mapName).(subjectName).rov_trace = rovSignals;
-            
+            newData.(mapName).(subjectName).FP_position_rov = FP_positions;
             % Save the updated QRS positions based on the strategy used
             switch strategy
                 case 'only_ref'
