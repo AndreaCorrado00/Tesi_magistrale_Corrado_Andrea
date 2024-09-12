@@ -252,5 +252,11 @@ Aligned_DB= align_and_filter_dataset(data,Data_sub_aligned_3,true,0.5,fc);
 %% 7.2 Showing some examples
 show_alignment_results(Aligned_DB,fc)
 
-%% 7.3 remaking population analysis
+%% 7.3 Building the new_population dataset
+POP_DB_aligned=build_pop_dataset_after_alignment(data);
+
+
+
+
+
 
