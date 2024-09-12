@@ -231,11 +231,19 @@ show_scalogram_AVNRT_data(MAP_C1_example,'Example MAP C, sub 1',false)
 
 
 
-%%                            ---------- WHOLE DATASET ALIGNMENT ----------              
+%%                            ---------- WHOLE DATASET ALIGNMENT ----------  
+clc;clear;close;
 % Here, all rove traces are aligned respect to the same point: 0.5. The
 % point of alignment is the fiducial point, i.e., the maximum of the
 % ventricular contraction evaluated in phase 5. Different strategies,
 % different fiducial points, different results.
+processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed";
 src_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\whole_DB_alignment_and_filter_phase";
 figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\whole_DB_alignment_and_filter_phase";
 addpath(src_path)
+
+% Loading previusly made data
+load(processed_data_path+'\dataset.mat');
+fc=2035;
+
+%% 
