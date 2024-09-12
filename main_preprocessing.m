@@ -248,13 +248,13 @@ load(processed_data_path+'\dataset.mat');
 fc=2035;
 
 %% 7.1 Whole dataset alignment
-Aligned_DB= align_and_filter_dataset(data,Data_sub_aligned_3,true,0.5,fc);
+Aligned_DB= align_and_filter_dataset(data,Data_sub_aligned_3,false,0.5,fc);
 
 %% 7.2 Showing some examples
 show_alignment_results(Aligned_DB,fc)
 
 %% 7.3 Building the new_population dataset
-POP_DB_aligned=build_pop_dataset_after_alignment(data);
+POP_DB_aligned=build_pop_dataset_after_alignment(Aligned_DB);
 
 %% 7.4 Plotting single records results
 traces_subplots_by_sub(Aligned_DB, fc, figure_path + "\single_records") 
@@ -269,6 +269,10 @@ clc;clear;close;
 % Now, the population dataset is evaluated again using what has been
 % studied before. So functions, pretty similar to the ones used before, are
 % update with the last methods implemented.
+% N.B. As the only traces aligned are rov traces and all records have been
+% filtered, changes will be appreciable on the rov_trace analysis and on
+% spectrums analysis
+
 
 processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed";
 src_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\DB_aligned_population_analysis_phase";
@@ -279,6 +283,17 @@ addpath(src_path)
 load(processed_data_path+'\dataset_pop_aligned.mat');
 fc=2035;
 
-%% 
+%% 8.1 Data visualization as they are 
+spaghetti_confidence_signals(POP_DB_aligned,fc,figure_path)
+
+%% 8.2 Signals direct comparisons 
+% Comparison between different signals mean/periodogram traces for the same case
+compare_case_signals(POP_DB_aligned,fc,figure_path)   
+% Comparison within traces between subjects 
+compare_traces_between_sub(POP_DB_aligned,fc,figure_path) 
+% comparison between maps within subjects and traces
+compare_maps_between_signals(POP_DB_aligned,fc,figure_path)
+
+%%
 
 

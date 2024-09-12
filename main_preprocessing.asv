@@ -229,6 +229,8 @@ show_scalogram_AVNRT_data(MAP_C1_example,'Example MAP C, sub 1',false)
 
 
 
+
+
 %%                            ---------- WHOLE DATASET ALIGNMENT ----------  
 clc;clear;close;
 % Here, all rove traces are aligned respect to the same point: 0.5. The
@@ -246,31 +248,44 @@ load(processed_data_path+'\dataset.mat');
 fc=2035;
 
 %% 7.1 Whole dataset alignment
-Aligned_DB= align_and_filter_dataset(data,Data_sub_aligned_3,true,0.5,fc);
+Aligned_DB= align_and_filter_dataset(data,Data_sub_aligned_3,false,0.5,fc);
 
 %% 7.2 Showing some examples
 show_alignment_results(Aligned_DB,fc)
 
 %% 7.3 Building the new_population dataset
-POP_DB_aligned=build_pop_dataset_after_alignment(data);
+POP_DB_aligned=build_pop_dataset_after_alignment(Aligned_DB);
 
-%% 7.4 Plotting single recrda results
-traces_subplots_by_sub(Aligned_DB, fc, figure_path + "\single_records_v1") 
+%% 7.4 Plotting single records results
+traces_subplots_by_sub(Aligned_DB, fc, figure_path + "\single_records") 
+
+
+
+
+
 
 %%                ---------- ALIGNED DATASET POPULATION ANALYSIS ---------- 
 clc;clear;close;
-% Here, all rove traces are aligned respect to the same point: 0.5. The
-% point of alignment is the fiducial point, i.e., the maximum of the
-% ventricular contraction evaluated in phase 5. Different strategies,
-% different fiducial points, different results.
+% Now, the population dataset is evaluated again using what has been
+% studied before. So functions, pretty similar to the ones used before, are
+% update with the last methods implemented.
+
 processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed";
-src_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\whole_DB_alignment_and_filter_phase";
-figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\whole_DB_alignment_and_filter_phase";
+src_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\DB_aligned_population_analysis_phase";
+figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\DB_aligned_population_analysis_phase";
 addpath(src_path)
 
 % Loading previusly made data
-load(processed_data_path+'\dataset_aligned_STR_3.mat');
-load(processed_data_path+'\dataset.mat');
+load(processed_data_path+'\dataset_pop_aligned.mat');
 fc=2035;
+
+%% 8.1 Population analysis results
+% N.B. As the onl traces aligned are rov traces and all records have been
+% filtered, changes will be appreciable on the rov_trace analysis and on
+% spectrums analysis
+
+
+
+
 
 
