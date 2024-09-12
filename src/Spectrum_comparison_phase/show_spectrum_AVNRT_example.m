@@ -36,7 +36,7 @@ for i=1:5
     DSP = th.NoiseVariance * (abs(H).^2);
 
     %% AR spectrum estimation (burg)
-    p_bu =evaluate_order(x_w, 8, 20, 2, 6,'burg');
+    p_bu =evaluate_order(x_w, 8, 16, 2, 7,'burg');
     th= ar(x_w-mean(x_w), p_bu, 'burg');
     [H, f] = freqz(1, th.a, N, Fs);
     f_BU = f;
@@ -76,13 +76,13 @@ for i=1:5
     plot(f, pxx,'Color',[0.8500 0.3250 0.0980],'LineWidth',0.5)
     plot(f_S,S,'Color',[0.9290 0.6940 0.1250],'LineWidth',0.5)
     plot(f_DSP, DSP,'Color',[0.4940 0.1840 0.5560],'LineWidth',1.5)
-    plot(f_BU, DSP_BU,'Color',[0 0.4470 0.7410],'LineWidth',1.5)
+   % plot(f_BU, DSP_BU,'Color',[0 0.4470 0.7410],'LineWidth',1.5)
     hold off
     ylabel('PSD')
     xlabel('f [Hz]')
     title(traces(i)+", p_{AR}(LS)=" + num2str(p)+", p_{AR}(BU)="+num2str(p_bu))
     xlim([0, 200])
-    legend( 'Welch','FFT','AR LS estimation','AR Burg estimation')
+    legend( 'Welch','FFT','AR LS estimation')
     hold on
 
 end
@@ -101,7 +101,7 @@ for i=1:5
     DSP = th.NoiseVariance * (abs(H).^2);
 
     %% AR spectrum estimation (burg)
-    p_bu =evaluate_order(x_w, 8, 20, 2, 6,'burg');
+    p_bu =evaluate_order(x_w, 8, 16, 2, 7,'burg');
     th= ar(x_w-mean(x_w), p_bu, 'burg');
     [H, f] = freqz(1, th.a, N, Fs);
     f_BU = f;
@@ -141,13 +141,13 @@ for i=1:5
     plot(f, pxx,'Color',[0.8500 0.3250 0.0980],'LineWidth',0.5)
     plot(f_S,S,'Color',[0.9290 0.6940 0.1250],'LineWidth',0.5)
     plot(f_DSP, DSP,'Color',[0.4940 0.1840 0.5560],'LineWidth',1.5)
-    plot(f_BU, DSP_BU,'Color',[0 0.4470 0.7410],'LineWidth',1.5)
+    %plot(f_BU, DSP_BU,'Color',[0 0.4470 0.7410],'LineWidth',1.5)
     hold off
     ylabel('PSD')
     xlabel('f [Hz]')
     title(traces(i)+", p_{AR}(LS)=" + num2str(p)+", p_{AR}(BU)="+num2str(p_bu))
     xlim([0, 200])
-    legend( 'Welch','FFT','AR LS estimation','AR Burg estimation')
+    legend( 'Welch','FFT','AR LS estimation')
     hold on
 
 end

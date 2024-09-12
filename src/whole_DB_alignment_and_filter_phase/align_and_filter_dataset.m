@@ -9,7 +9,6 @@ for i=1:3
     map=map_names(i);
     for j=  1:n_sub
         sub=map+num2str(j);
-        disp(sub)
         for k=1:width(newData.(map).(sub).rov_trace)
             % Extraction of signals
             rov=original_data.(map).(sub).rov_trace{:,k};
