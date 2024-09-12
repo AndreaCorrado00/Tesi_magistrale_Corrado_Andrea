@@ -236,4 +236,6 @@ show_scalogram_AVNRT_data(MAP_C1_example,'Example MAP C, sub 1',false)
 % point of alignment is the fiducial point, i.e., the maximum of the
 % ventricular contraction evaluated in phase 5. Different strategies,
 % different fiducial points, different results.
-
+src_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\whole_DB_alignment_and_filter_phase";
+figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\whole_DB_alignment_and_filter_phase";
+addpath(src_path)
