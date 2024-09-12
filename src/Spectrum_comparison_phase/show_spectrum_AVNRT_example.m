@@ -37,7 +37,7 @@ for i=1:5
 
     %% AR spectrum estimation (burg)
     p_bu =evaluate_order(x_w, 8, 20, 2, 6,'burg');
-    th= ar(x_w-mean(x_w), p_bu, 'yw');
+    th= ar(x_w-mean(x_w), p_bu, 'burg');
     [H, f] = freqz(1, th.a, N, Fs);
     f_BU = f;
     DSP_BU = th.NoiseVariance * (abs(H).^2);
@@ -102,7 +102,7 @@ for i=1:5
 
     %% AR spectrum estimation (burg)
     p_bu =evaluate_order(x_w, 8, 20, 2, 6,'burg');
-    th= ar(x_w-mean(x_w), p_bu, 'yw');
+    th= ar(x_w-mean(x_w), p_bu, 'burg');
     [H, f] = freqz(1, th.a, N, Fs);
     f_BU = f;
     DSP_BU = th.NoiseVariance * (abs(H).^2);

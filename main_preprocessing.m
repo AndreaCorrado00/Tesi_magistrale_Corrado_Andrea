@@ -115,20 +115,20 @@ load(processed_data_path+'\dataset.mat');
 fc=2035;
 
 % Building examples
-MAP_A1_example=data.MAP_A.MAP_A7;
-MAP_B1_example=data.MAP_B.MAP_B7;
-MAP_C1_example=data.MAP_C.MAP_C7;
+MAP_A1_example=data.MAP_A.MAP_A1;
+MAP_B1_example=data.MAP_B.MAP_B1;
+MAP_C1_example=data.MAP_C.MAP_C1;
 
     %% 4.2.1 Evaluatig filtering performance
     % As explained in the presentation, filter architepture could change to
     % suit better AVNRT signals.
-    show_pipeline_performances(MAP_A1_example)
+    show_pipeline_performances(MAP_C1_example)
 
     %% 4.2.2 Example of complete-optimized pipeline 
     % Example of Filter application and spectrum evaluation
     % filter application
     show_filter_result=true;
-    Example_filtered=apply_filter(MAP_A1_example,show_filter_result);
+    Example_filtered=apply_filter(MAP_C1_example,show_filter_result);
 
     % Example of spectrums
     show_spectrum_AVNRT_example(Example_filtered)
@@ -218,9 +218,9 @@ processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 202
 load(processed_data_path+'\dataset.mat');
 fc=2035;
 
-MAP_A1_example=data.MAP_A.MAP_A7;
-MAP_B1_example=data.MAP_B.MAP_B7;
-MAP_C1_example=data.MAP_C.MAP_C7;
+MAP_A1_example=data.MAP_A.MAP_A1;
+MAP_B1_example=data.MAP_B.MAP_B1;
+MAP_C1_example=data.MAP_C.MAP_C1;
 
  
 show_scalogram_AVNRT_data(MAP_C1_example,'Example MAP A, sub 1',false)
@@ -232,7 +232,7 @@ show_scalogram_AVNRT_data(MAP_C1_example,'Example MAP C, sub 1',false)
 
 
 %%                            ---------- WHOLE DATASET ALIGNMENT ----------  
-clc;clear;close;
+%clc;clear;close;
 % Here, all rove traces are aligned respect to the same point: 0.5. The
 % point of alignment is the fiducial point, i.e., the maximum of the
 % ventricular contraction evaluated in phase 5. Different strategies,
@@ -268,11 +268,10 @@ traces_subplots_by_sub(Aligned_DB, fc, figure_path + "\single_records")
 clc;clear;close;
 % Now, the population dataset is evaluated again using what has been
 % studied before. So functions, pretty similar to the ones used before, are
-% update with the last methods implemented.
+% update with the last methods implemented (spectrum eval).
 % N.B. As the only traces aligned are rov traces and all records have been
 % filtered, changes will be appreciable on the rov_trace analysis and on
 % spectrums analysis
-
 
 processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed";
 src_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\DB_aligned_population_analysis_phase";

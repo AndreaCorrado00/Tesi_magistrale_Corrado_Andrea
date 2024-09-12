@@ -14,16 +14,25 @@ function plotting_signals(signals_table, title_plot, Fc, freq_plot, variability_
 
  if freq_plot
         % If plotting in frequency domain
-        x = [0:Fc/M:Fc-Fc/M]; 
+        %x = [0:Fc/M:Fc-Fc/M]; 
         % Convert signals to power spectrum
+         figure(1)
+         hold on
         for i = 1:N
-            p=evaluate_order(signals_table(:,i),5,50,2,0.05);
-            th=ar(table2array(signals_table(:,i))-table2array(mean(signals_table(:,i))),p,'ls'); 
-            [H,~]=freqz(1,th.a,M,Fc); 
+           
+            signal=prepare_signal(signals_table(:,i));
+            p=evaluate_order(signal,8,20,2,6,'ls');
+            th=ar(signal,p,'ls'); 
+            [H,x]=freqz(1,th.a,M,Fc); 
             DSP=(abs(H).^2)*th.NoiseVariance;
             signals_table(:, i) = array2table(DSP);
+            if max(DSP)<40
+                plot(x,DSP)
+
+            end
+            pause(1)
         end
-        x_lim = [0, 200]; % Define x-axis limits
+        x_lim = [0, 100]; % Define x-axis limits
         x_label = 'f [Hz]'; % Label for x-axis
         y_label = 'Spectrum'; % Label for y-axis
 else
@@ -38,7 +47,7 @@ end
 mean_sig = table2array(mean(signals_table, 2));
 
 % Plot the mean signal
-plot(x, mean_sig, 'k-', "LineWidth", 3)
+plot(x, mean_sig, 'b-', "LineWidth", 1)
 hold on
 
 if ~variability_plot && ~sd_plot
@@ -50,7 +59,7 @@ if ~variability_plot && ~sd_plot
     xlim(x_lim)
     min_y_lim = table2array(min(min(signals_table), [], 2));
     max_y_lim = table2array(max(max(signals_table), [], 2));
-    ylim([min_y_lim - 0.05 * min_y_lim, max_y_lim + 0.05 * max_y_lim])
+    %ylim([min_y_lim - 0.05 * min_y_lim, max_y_lim + 0.05 * max_y_lim])
     title('Mean and single records: ' + title_plot + ' (n:' + num2str(N) + ')')
     xlabel(x_label)
     ylabel(y_label)
@@ -86,7 +95,7 @@ elseif sd_plot && ~variability_plot
     % Plot mean +/- sd
         % Calculate variability limits (95% intervals)
         sd_vec= [];
-        for i = 1:M
+        for i = 1:N
             signals_i =table2array(signals_table(i, :));
             sd_vec(i)=std(signals_i);
         end

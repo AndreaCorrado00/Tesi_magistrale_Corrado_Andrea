@@ -13,6 +13,10 @@ for i=1:3
         for k=1:width(newData.(map).(sub).rov_trace)
             % Extraction of signals
             rov=original_data.(map).(sub).rov_trace{:,k};
+            if filter 
+                rov=denoise_ecg_wavelet(rov-mean(rov), Fc, 'sym4',9);
+            end
+
             ref=original_data.(map).(sub).ref_trace{:,k};
             spare1=original_data.(map).(sub).spare1_trace{:,k};
             spare2=original_data.(map).(sub).spare2_trace{:,k};
@@ -20,7 +24,6 @@ for i=1:3
 
             if filter
                 % DWT Filter application
-                newData.(map).(sub).rov_trace{:,k}=denoise_ecg_wavelet(rov-mean(rov), Fc, 'sym4',9);
                 newData.(map).(sub).ref_trace{:,k}=denoise_ecg_wavelet(ref-mean(ref), Fc, 'sym4',9);
                 newData.(map).(sub).spare1_trace{:,k}=denoise_ecg_wavelet(spare1-mean(spare1), Fc,'sym4',9);
                 newData.(map).(sub).spare2_trace{:,k}=denoise_ecg_wavelet(spare2-mean(spare2), Fc, 'sym4',9);
