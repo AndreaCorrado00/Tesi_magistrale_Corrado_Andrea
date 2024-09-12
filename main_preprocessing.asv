@@ -222,9 +222,8 @@ MAP_A1_example=data.MAP_A.MAP_A7;
 MAP_B1_example=data.MAP_B.MAP_B7;
 MAP_C1_example=data.MAP_C.MAP_C7;
 
-% 
+ 
 show_scalogram_AVNRT_data(MAP_C1_example,'Example MAP A, sub 1',false)
-%%
 show_scalogram_AVNRT_data(MAP_B1_example,'Example MAP B, sub 1',false)
 show_scalogram_AVNRT_data(MAP_C1_example,'Example MAP C, sub 1',false)
 
@@ -247,7 +246,31 @@ load(processed_data_path+'\dataset.mat');
 fc=2035;
 
 %% 7.1 Whole dataset alignment
-Aligned_DB= align_and_filter_dataset(data,Data_sub_aligned_3,false,0.5,fc);
+Aligned_DB= align_and_filter_dataset(data,Data_sub_aligned_3,true,0.5,fc);
 
 %% 7.2 Showing some examples
 show_alignment_results(Aligned_DB,fc)
+
+%% 7.3 Building the new_population dataset
+POP_DB_aligned=build_pop_dataset_after_alignment(data);
+
+%% 7.4 Plotting single recrda results
+traces_subplots_by_sub(Aligned_DB, fc, figure_path + "\single_records_v1") 
+
+%%                ---------- ALIGNED DATASET POPULATION ANALYSIS ---------- 
+clc;clear;close;
+% Here, all rove traces are aligned respect to the same point: 0.5. The
+% point of alignment is the fiducial point, i.e., the maximum of the
+% ventricular contraction evaluated in phase 5. Different strategies,
+% different fiducial points, different results.
+processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed";
+src_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\whole_DB_alignment_and_filter_phase";
+figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\whole_DB_alignment_and_filter_phase";
+addpath(src_path)
+
+% Loading previusly made data
+load(processed_data_path+'\dataset_aligned_STR_3.mat');
+load(processed_data_path+'\dataset.mat');
+fc=2035;
+
+

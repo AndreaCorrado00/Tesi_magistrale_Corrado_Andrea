@@ -222,11 +222,12 @@ MAP_A1_example=data.MAP_A.MAP_A7;
 MAP_B1_example=data.MAP_B.MAP_B7;
 MAP_C1_example=data.MAP_C.MAP_C7;
 
-% 
+ 
 show_scalogram_AVNRT_data(MAP_C1_example,'Example MAP A, sub 1',false)
-%%
 show_scalogram_AVNRT_data(MAP_B1_example,'Example MAP B, sub 1',false)
 show_scalogram_AVNRT_data(MAP_C1_example,'Example MAP C, sub 1',false)
+
+
 
 
 
@@ -255,8 +256,29 @@ show_alignment_results(Aligned_DB,fc)
 %% 7.3 Building the new_population dataset
 POP_DB_aligned=build_pop_dataset_after_alignment(data);
 
+%% 7.4 Plotting single records results
+traces_subplots_by_sub(Aligned_DB, fc, figure_path + "\single_records") 
 
 
 
+
+
+
+%%                ---------- ALIGNED DATASET POPULATION ANALYSIS ---------- 
+clc;clear;close;
+% Now, the population dataset is evaluated again using what has been
+% studied before. So functions, pretty similar to the ones used before, are
+% update with the last methods implemented.
+
+processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed";
+src_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\DB_aligned_population_analysis_phase";
+figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\DB_aligned_population_analysis_phase";
+addpath(src_path)
+
+% Loading previusly made data
+load(processed_data_path+'\dataset_pop_aligned.mat');
+fc=2035;
+
+%% 
 
 
