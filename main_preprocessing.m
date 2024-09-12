@@ -243,7 +243,10 @@ figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\T
 addpath(src_path)
 
 % Loading previusly made data
-load(processed_data_path+'\dataset.mat');
+load(processed_data_path+'\dataset_aligned_STR_3.mat');
 fc=2035;
 
-%% 
+%% 7.1 Whole dataset alignment
+Aligned_DB= align_and_filter_dataset(Data_sub_aligned_3,false,0.5,fc);
+
+%% 7.2 Showing some examples
