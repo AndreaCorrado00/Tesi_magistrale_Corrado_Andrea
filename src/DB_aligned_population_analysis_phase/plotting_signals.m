@@ -14,12 +14,11 @@ function plotting_signals(signals_table, title_plot, Fc, freq_plot, variability_
 
  if freq_plot
         % If plotting in frequency domain
-        %x = [0:Fc/M:Fc-Fc/M]; 
+        % x = [0:Fc/M:Fc-Fc/M]; 
         % Convert signals to power spectrum
-         figure(1)
-         hold on
+        figure(1)
+        hold on
         for i = 1:N
-           
             signal=prepare_signal(signals_table(:,i));
             p=evaluate_order(signal,8,20,2,6,'ls');
             th=ar(signal,p,'ls'); 
@@ -28,14 +27,15 @@ function plotting_signals(signals_table, title_plot, Fc, freq_plot, variability_
             signals_table(:, i) = array2table(DSP);
             if max(DSP)<40
                 plot(x,DSP)
-
+            else
+                disp(i)
             end
             pause(1)
         end
         x_lim = [0, 100]; % Define x-axis limits
         x_label = 'f [Hz]'; % Label for x-axis
         y_label = 'Spectrum'; % Label for y-axis
-else
+ else
     % If plotting in time domain
     x = [0:1/Fc:1-1/Fc]';
     x_lim = [0, x(end)];
@@ -95,7 +95,7 @@ elseif sd_plot && ~variability_plot
     % Plot mean +/- sd
         % Calculate variability limits (95% intervals)
         sd_vec= [];
-        for i = 1:N
+        for i = 1:M
             signals_i =table2array(signals_table(i, :));
             sd_vec(i)=std(signals_i);
         end

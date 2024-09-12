@@ -25,6 +25,13 @@ function compare_by_plotting_signals(signals_table, title_plot, Fc, freq_plot, v
         x_label = 'f [Hz]'; % Label for x-axis
         y_label = 'Spectrum'; % Label for y-axis
     else
+        for i = 1:N
+            p=evaluate_order(signals_table(:,i),8,20,2,6,'ls');
+            th=ar(table2array(signals_table(:,i))-table2array(mean(signals_table(:,i))),p,'ls'); 
+            [H,~]=freqz(1,th.a,M,Fc); 
+            DSP=(abs(H).^2)*th.NoiseVariance;
+            signals_table(:, i) = array2table(DSP);
+        end
         % If plotting in time domain
         x = [0:1/Fc:1-1/Fc]';
         x_lim = [0, x(end)]; % Define x-axis limits

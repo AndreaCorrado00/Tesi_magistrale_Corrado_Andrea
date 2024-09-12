@@ -22,7 +22,7 @@ table_pox = [false, false,false;
 type_plots = ["spaghetti"; "confidence";"mean_sd"; "spaghetti_freq"; "confidence_freq";"mean_sd_freq"];
 
 % Loop through each plot type combination
-for l = 3
+for l = 2
     % Loop through each map type: A, B, C
     for i = "C" %["A", "B", "C"]
         map = 'MAP_' + i;
