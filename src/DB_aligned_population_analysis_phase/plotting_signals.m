@@ -111,7 +111,7 @@ elseif sd_plot && ~variability_plot
         sd_vec= [];
         for i = 1:M
             signals_i =table2array(signals_table(i, :));
-            sd_vec(i)=std(signals_i);
+            sd_vec(i)=std(signals_i, "omitmissing");
         end
 
         % Plot the 95% confidence intervals with the same color as the mean

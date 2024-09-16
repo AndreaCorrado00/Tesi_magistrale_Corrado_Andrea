@@ -24,7 +24,7 @@ type_plots = ["spaghetti"; "confidence";"mean_sd"; "spaghetti_freq"; "confidence
 % Loop through each plot type combination
 for l = 1:6
     % Loop through each map type: A, B, C
-    for i = "B" %["A", "B", "C"]
+    for i = ["A", "B", "C"]
         map = 'MAP_' + i;
         % Loop through each trace type
         for k = "rov" %["rov", "ref", "spare1", "spare2", "spare3"]
