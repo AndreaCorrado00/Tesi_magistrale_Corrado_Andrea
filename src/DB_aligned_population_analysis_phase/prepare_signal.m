@@ -12,6 +12,7 @@ signal_without_nans = signal(~nan_indices);
 % Perform filtering on the signal without NaNs
 new_signal = denoise_ecg_wavelet(signal_without_nans, 2035, 'sym4', 9);
 
+
 % Scale the signal
 new_signal = (new_signal - max(new_signal)) ./ (max(new_signal) - min(new_signal));
 

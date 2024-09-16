@@ -24,36 +24,29 @@ function compare_case_signals(data, fc, figure_path)
         % Loop through each map type: A, B, C
         for i = ["A", "B", "C"]
             map = 'MAP_' + i;
-            subjects = fieldnames(data.(map));
-            
-            % Loop through each subject
-            for j = 1:length(subjects)
-                sub = map + num2str(j);
-                traces = fieldnames(data.(string(map)).(string(sub)));
-                
-                % Create a new figure
-                fig = figure(1);
-                fig.WindowState = "maximized";
-                hold on
-                traces_names=["rov", "ref", "spare2"];
-                % Loop through each trace type and plot comparisons
-                for k = 1:3
-                    subplot(3,1,k)
-                    trace = traces_names(k) + "_trace";
-                    title_plot = 'MAP:' + i + ' (' + get_name_of_map(i) + '), population, '+ traces_names(k)+' trace';
-                    
-                    % Plot the signal comparisons
-                    compare_by_plotting_signals(data.(map).(sub).(trace), title_plot, fc, table_pox(1, l), table_pox(2, l), table_pox(3, l));
-                end
-                
-                % Add legend to the plot
-                %legend('ROV', 'REF', 'SPARE 2', 'SPARE 3');
-                hold off
-                
-                % Save the plot
-                file_name="MAP_"+i+"_population_";
-                save_plot(file_name, type_plots(l), figure_path + "\cases_comp", fig, true);
+
+
+
+            % Create a new figure
+            fig = figure(1);
+            fig.WindowState = "maximized";
+            hold on
+            traces_names=["rov", "ref", "spare1","spare2","spare3"];
+            % Loop through each trace type and plot comparisons
+            for k = 1:5
+                subplot(3,1,k)
+                trace = traces_names(k) + "_trace";
+                title_plot = 'MAP:' + i + ' (' + get_name_of_map(i) + '), population, '+ traces_names(k)+' trace';
+
+                % Plot the signal comparisons
+                compare_by_plotting_signals(data.(map).(trace), title_plot, fc, table_pox(1, l), table_pox(2, l), table_pox(3, l));
             end
+            hold off
+
+            % Save the plot
+            file_name="MAP_"+i+"_population_";
+            save_plot(file_name, type_plots(l), figure_path + "\cases_comp", fig, true);
+
         end
     end
 end

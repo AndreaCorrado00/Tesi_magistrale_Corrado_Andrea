@@ -10,40 +10,57 @@ function compare_by_plotting_signals(signals_table, title_plot, Fc, freq_plot, v
     % Get the size of the signals table
     [M, N] = size(signals_table);
     
+    table_or=signals_table;
     if freq_plot
         % If plotting in frequency domain
-        x = [0:Fc/M:Fc-Fc/M]; 
+        % x = [0:Fc/M:Fc-Fc/M];
         % Convert signals to power spectrum
+        % figure(1)
+        % hold on
+        % i_anomalies=[];
         for i = 1:N
-            p=evaluate_order(signals_table(:,i),8,20,2,6,'ls');
-            th=ar(table2array(signals_table(:,i))-table2array(mean(signals_table(:,i))),p,'ls'); 
-            [H,~]=freqz(1,th.a,M,Fc); 
+            signal=prepare_signal(signals_table(:,i),'remove');
+            p=evaluate_order(signal,8,20,2,6,'ls');
+            th=ar(signal,p,'ls');
+            [H,x]=freqz(1,th.a,M,Fc);
             DSP=(abs(H).^2)*th.NoiseVariance;
             signals_table(:, i) = array2table(DSP);
+
+            % Improves visualization
+            if max(DSP)>40
+                signals_table(:,i) = array2table(nan(M,1));
+            end
+
         end
-        x_lim = [0, 200]; % Define x-axis limits
+
+        % for i=1:length(i_anomalies)
+        %     t = [0:1/Fc:1-1/Fc]';
+        %     figure;
+        %     plot(t,table2array(table_or(:,i)))
+        %     title(num2str(i)+" record")
+        % end
+
+        x_lim = [0, 100]; % Define x-axis limits
         x_label = 'f [Hz]'; % Label for x-axis
         y_label = 'Spectrum'; % Label for y-axis
     else
-        for i = 1:N
-            p=evaluate_order(signals_table(:,i),8,20,2,6,'ls');
-            th=ar(table2array(signals_table(:,i))-table2array(mean(signals_table(:,i))),p,'ls'); 
-            [H,~]=freqz(1,th.a,M,Fc); 
-            DSP=(abs(H).^2)*th.NoiseVariance;
-            signals_table(:, i) = array2table(DSP);
+        for i=1:N
+            signal=prepare_signal(signals_table(:,i),'restore');
+            signals_table(:, i) = array2table(signal);
         end
+
         % If plotting in time domain
         x = [0:1/Fc:1-1/Fc]';
-        x_lim = [0, x(end)]; % Define x-axis limits
-        x_label = 'time [s]'; % Label for x-axis
-        y_label = 'Voltage [mV]'; % Label for y-axis
+        x_lim = [0, x(end)];
+        x_label = 'time [s]';
+        y_label = 'Voltage [mV]';
     end
 
-    % Calculate the mean of the signals
-    mean_sig = table2array(mean(signals_table, 2));
+    % Calculate the mean signal
+    mean_sig = table2array(mean(signals_table, 2,"omitnan"));
 
     % Plot the mean signal and save its handle
-    h_mean = plot(x, mean_sig, "LineWidth", 1);
+    h_mean = plot(x, mean_sig, "LineWidth", 1.5);
     hold on;
 
     % Get the color of the mean line
@@ -98,7 +115,7 @@ function compare_by_plotting_signals(signals_table, title_plot, Fc, freq_plot, v
         sd_vec= [];
         for i = 1:M
             signals_i =table2array(signals_table(i, :));
-            sd_vec(i)=std(signals_i);
+            sd_vec(i)=std(signals_i,"omitmissing");
         end
 
         % Plot the 95% confidence intervals with the same color as the mean
