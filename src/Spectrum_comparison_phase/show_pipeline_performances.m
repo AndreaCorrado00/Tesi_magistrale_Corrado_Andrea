@@ -63,9 +63,9 @@ legend('Original', 'DWT no padding','DWT padding',"Location","bestoutside")
 %% Filtering performances with BP cutoff modified
 BP_cut_freq=[40:10:90];
 figure(3)
-sgtitle('Different Cut-off frequences performances (Ref signal)')
+sgtitle('Different Cut-off frequences performances (Rov signal)')
 for i=1:length(BP_cut_freq)
-        x=ref-mean(ref);
+        x=rov-mean(rov);
         % DWT Filtering
         x_w=handable_denoise_ecg_wavelet(x, Fs, 'sym4',9,false,BP_cut_freq(i));
         % BP filtering

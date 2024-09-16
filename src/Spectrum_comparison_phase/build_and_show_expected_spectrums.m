@@ -11,7 +11,7 @@ x= ecg - mean(ecg); % Subtract the mean
 
 %% Multiple signal length handling
 
-x_w = denoise_ecg_wavelet(x, Fs, 'sym4', 9);
+x_w = handable_denoise_ecg_wavelet(x, Fs, 'sym4', 9,false,50);
 
 %% Single beat extraction
 x=x(1:1000);

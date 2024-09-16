@@ -120,7 +120,7 @@ for i = step:step:N_original
     x_f_2 = filtfilt(b, a, x_denoised);
 
     %% Wavelet denoising
-    x_w = denoise_ecg_wavelet(x, Fs, 'sym4', 9);
+    x_w = handable_denoise_ecg_wavelet(x, Fs, 'sym4', 9,false,50);
     %% Filters comparison
     figure(1)
     title("Number of points: " + num2str(i))
