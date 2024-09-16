@@ -293,6 +293,9 @@ compare_traces_between_sub(POP_DB_aligned,fc,figure_path)
 % comparison between maps within subjects and traces
 compare_maps_between_signals(POP_DB_aligned,fc,figure_path)
 
-%%
+%% 8.2 Preparing dataset for feature extraction
+% Hint: perform 1 time spectrum analysis, filtering ecc then pass such DB
+% to the feature extraction function.
+
 
 
