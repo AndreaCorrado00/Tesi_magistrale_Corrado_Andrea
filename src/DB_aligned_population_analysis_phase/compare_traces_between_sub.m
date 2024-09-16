@@ -29,14 +29,7 @@ function compare_traces_between_sub(data, fc, figure_path)
             
             % Loop through each trace type
             for k = ["rov", "ref", "spare1", "spare2", "spare3"]
-                
-                % Initialize legend entries for each trace type
-                legend_entries = cell(1, length(subjects));
-                
-                % Loop through each subject
-                for j = 1:length(subjects)
-                    sub = map + num2str(j);
-                    trace = k + '_trace';
+                trace = k + '_trace';
                     title_plot = 'MAP:' + i + ' (' + get_name_of_map(i) + '), trace:' + k ;
                     
                     % Create a new figure
@@ -45,9 +38,7 @@ function compare_traces_between_sub(data, fc, figure_path)
                     hold on
                     
                     % Plot the signal comparisons for the current trace type
-                    compare_by_plotting_signals(data.(map).(sub).(trace), title_plot, fc, table_pox(1, l), table_pox(2, l), table_pox(3, l));
-                    
-                end
+                    compare_by_plotting_signals(data.(map).(trace), title_plot, fc, table_pox(1, l), table_pox(2, l), table_pox(3, l));
                 
                 % Add legend to the plot
                 %legend(legend_entries);
