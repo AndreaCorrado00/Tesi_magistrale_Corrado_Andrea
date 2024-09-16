@@ -218,21 +218,26 @@ processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 202
 load(processed_data_path+'\dataset.mat');
 fc=2035;
 
-MAP_A1_example=data.MAP_A.MAP_A1;
-MAP_B1_example=data.MAP_B.MAP_B1;
-MAP_C1_example=data.MAP_C.MAP_C1;
+MAP_A1_example=data.MAP_A.MAP_A7;
+MAP_B1_example=data.MAP_B.MAP_B7;
+MAP_C1_example=data.MAP_C.MAP_C7;
 
- 
-show_scalogram_AVNRT_data(MAP_C1_example,'Example MAP A, sub 1',false)
-show_scalogram_AVNRT_data(MAP_B1_example,'Example MAP B, sub 1',false)
-show_scalogram_AVNRT_data(MAP_C1_example,'Example MAP C, sub 1',false)
+% Options
+filtering=true;
+log_scale_visualization=true;
+
+% Application
+show_scalogram_AVNRT_data(MAP_A1_example,'Example MAP A, sub 7',filtering,log_scale_visualization)
+show_scalogram_AVNRT_data(MAP_B1_example,'Example MAP B, sub 7',filtering,log_scale_visualization)
+show_scalogram_AVNRT_data(MAP_C1_example,'Example MAP C, sub 7',filtering,log_scale_visualization)
+
 
 
 
 
 
 %%                            ---------- WHOLE DATASET ALIGNMENT ----------  
-%clc;clear;close;
+clc;clear;close;
 % Here, all rove traces are aligned respect to the same point: 0.5. The
 % point of alignment is the fiducial point, i.e., the maximum of the
 % ventricular contraction evaluated in phase 5. Different strategies,

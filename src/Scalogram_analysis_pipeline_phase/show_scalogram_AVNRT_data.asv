@@ -41,22 +41,54 @@ for i=1:5
     [coefficients, frequencies] = cwt(x, 'FilterBank', fb);
 
     if log_scale
-        scalogram_values=log10(abs(coefficients).^2 + eps); 
-    else
-        scalogram_values=abs(coefficients).^2;
     end
-
-    contourf(t, frequencies, scalogram_values, 200, 'LineColor', 'none');
+    contourf(t, frequencies, abs(coefficients).^2, 200, 'LineColor', 'none');
     xlabel('Time (s)');
     ylabel('Frequency (Hz)');
     ylim([0,120])
     title(traces(i));
     colorbar;
-    
+    clim([0 0.5*max(abs(coefficients(:)).^2)]); 
 
 
 end
 
+figure;
+sgtitle('Log space')
+for i=1:5
+    subplot(3,2,i)
+
+    x=tab_signals(:,i)-mean(tab_signals(:,i));
+    if filter
+        x=denoise_ecg_wavelet(x,Fs,'sym4',9);
+        % x=denoise_ecg_BP(x,Fs);
+    end
+    N = length(x);
+    Ts = 1 / Fs;
+    t = 0:Ts:Ts*N-Ts;
+
+    % CWT filterbank decomposition
+    fb = cwtfilterbank('SignalLength', N, ...
+        'SamplingFrequency', Fs, ...
+        'VoicesPerOctave', 12, ...
+        'Wavelet', 'morse');
+
+    % Scalogram
+    [coefficients, frequencies] = cwt(x, 'FilterBank', fb);
+
+    log_coefficients = log10(abs(coefficients).^2 + eps); 
+
+    contourf(t, frequencies, log_coefficients, 200, 'LineColor', 'none');
+    xlabel('Time (s)');
+    ylabel('Frequency (Hz)');
+    ylim([0,120])
+    title(traces(i));
+    colorbar;
+    colormap jet
+    % clim([0 0.5*max(abs(coefficients(:)).^2)]); 
+
+
+end
 
 for i=1:5
 
@@ -80,18 +112,12 @@ for i=1:5
     % Scalogram
     [coefficients, frequencies] = cwt(x, 'FilterBank', fb);
 
-    if log_scale
-        scalogram_values=log10(abs(coefficients).^2 + eps); 
-    else
-        scalogram_values=abs(coefficients).^2;
-    end
-
     % plots
     subplot(3,3,1:3)
     plot(t,x,'b-')
     ylabel('Amplitude [mV]')
     subplot(3,3,4:9)
-    contourf(t, frequencies, scalogram_values, 200, 'LineColor', 'none');
+    contourf(t, frequencies, abs(coefficients).^2, 50, 'LineColor', 'none');
     xlabel('Time (s)');
     ylabel('Frequency (Hz)');
     ylim([0,120])
