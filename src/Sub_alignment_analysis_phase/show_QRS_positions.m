@@ -1,4 +1,13 @@
 function show_QRS_positions(data, Fc)
+    % Function to plot QRS positions and values for each subject across different traces and maps.
+    %
+    % INPUTS:
+    %   data - Structured data containing QRS position and trace information
+    %   Fc - Sampling frequency for normalization of QRS positions
+    %
+    % OUTPUT:
+    %   None. The function displays a figure with QRS positions and values.
+
     % Define MAP names (MAP_A, MAP_B, MAP_C)
     mapNames = {'A', 'B', 'C'};
     
@@ -50,14 +59,15 @@ function show_QRS_positions(data, Fc)
             fig = figure(1);
             fig.WindowState = "maximized";
 
-
-            Traces=["ref trace","spare1 trace","spare2 trace"];
+            Traces = ["ref trace", "spare1 trace", "spare2 trace"];
+            
             % Row 1: ref_trace, Row 2: spare1_trace, Row 3: spare2_trace
             for traceIdx = 1:3
                 subplot(3, length(mapNames), (traceIdx - 1) * length(mapNames) + i);
-                xlim([0,1])
+                xlim([0, 1])
                 xlabel('QRS Positions (s)');
                 ylabel('QRS Values');
+                
                 % Select the correct QRS positions and values for each trace
                 if traceIdx == 1
                     QRS_pos = QRS_pos_ref;
@@ -84,7 +94,7 @@ function show_QRS_positions(data, Fc)
                     title(['MAP ' mapNames{i}]);  % Title for each map column
                 end
                 if i == 1
-                    ylabel([Traces(traceIdx)],"FontWeight","bold");  % Label for each trace row
+                    ylabel([Traces(traceIdx)], "FontWeight", "bold");  % Label for each trace row
                 end
             end
         end
@@ -92,5 +102,3 @@ function show_QRS_positions(data, Fc)
     
     sgtitle('QRS Positions and Values for all Subjects across Traces and Maps');
 end
-
-
