@@ -34,7 +34,7 @@ function compare_case_signals(data, fc, figure_path)
             traces_names=["rov", "ref", "spare1","spare2","spare3"];
             % Loop through each trace type and plot comparisons
             for k = 1:5
-                subplot(3,1,k)
+                subplot(5,1,k)
                 trace = traces_names(k) + "_trace";
                 title_plot = 'MAP:' + i + ' (' + get_name_of_map(i) + '), population, '+ traces_names(k)+' trace';
 
