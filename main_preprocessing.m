@@ -259,14 +259,17 @@ Aligned_DB= align_and_filter_dataset(data,Data_sub_aligned_3,false,0.5,fc);
 show_alignment_results(Aligned_DB,fc)
 
 %% 7.3 Building the new_population dataset
+% whole DB even unclear ref traces
 POP_DB_aligned=build_pop_dataset_after_alignment(Aligned_DB);
 
 %% 7.4 Plotting single records results
 traces_subplots_by_sub(Aligned_DB, fc, figure_path + "\single_records") 
 
 
-
-
+%% Intermediate step: pop analysis on subject with ref trace with QRS
+vec_subs=[1,2,4,6,11];
+ref_QRS_data=extract_single_subs(Aligned_DB, vec_subs);
+POP_DB_aligned=build_pop_dataset_after_alignment(ref_QRS_data);
 
 
 %%                ---------- ALIGNED DATASET POPULATION ANALYSIS ---------- 
@@ -290,13 +293,12 @@ fc=2035;
 %% 8.1 Data visualization as they are 
 spaghetti_confidence_signals(POP_DB_aligned,fc,figure_path)
 
-%% 8.2 Signals direct comparisons 
+% 8.2 Signals direct comparisons 
 % Comparison between different signals mean/periodogram traces for the same case
 compare_case_signals(POP_DB_aligned,fc,figure_path)   
-%%
 % Comparison within traces between subjects 
 compare_traces_between_sub(POP_DB_aligned,fc,figure_path) 
-%% comparison between maps within subjects and traces
+% comparison between maps within subjects and traces
 compare_maps_between_signals(POP_DB_aligned,fc,figure_path)
 
 %% 8.2 Preparing dataset for feature extraction
