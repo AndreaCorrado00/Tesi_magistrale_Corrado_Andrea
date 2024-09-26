@@ -105,29 +105,29 @@ legend('Original', 'DWT Filter', 'BP Filter', "Location", "bestoutside")
 
 %% FINAL CONFIGURATION Performances 
 figure(4)
-sgtitle({'Filtering Performances: Final Pipeline', 'Padding Absent, Cut-off at 70 Hz'})
+sgtitle({'Filtering Performances: Final Pipeline', 'sym4 wavelet, BP 0.5-60 Hz'})
 
 for i = 1:5
     x = tab_signals(:,i) - mean(tab_signals(:,i)); % Remove DC offset
     
     % DWT Filtering
-    x_w = handable_denoise_ecg_wavelet(x, Fs, 'sym4', 9, false, 70);
+    x_w = handable_denoise_ecg_wavelet(x, Fs, 'sym4', 9, false, 60);
     
     % BP Filtering
-    x_BP = handable_denoise_ecg_BP(x, Fs, 70);
+    x_BP = handable_denoise_ecg_BP(x, Fs, 60);
     
     % Plotting results
     N = length(x);
     Ts = 1 / Fs;
     t = 0:Ts:Ts*N-Ts;
     subplot(3,2,i)
-    plot(t, x, 'k:', t, x_w, 'b-', t, x_BP, 'r-')
-    % plot(t, x, 'k:', t, x_w, 'b-')
+    % plot(t, x, 'k:', t, x_w, 'b-', t, x_BP, 'r-')
+    plot(t, x, 'k:', t, x_w, 'b-')
     xlabel('Time [s]')
     ylabel('Amplitude [mV]')
     title(traces(i))
 end
-legend('Original', 'DWT Filter', 'BP Filter', "Location", "bestoutside")
-% legend('Original', 'DWT Filter', "Location", "bestoutside")
+% legend('Original', 'DWT Filter', 'BP Filter', "Location", "bestoutside")
+legend('Original', 'DWT Filter', "Location", "bestoutside")
 
 end

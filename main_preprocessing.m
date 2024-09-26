@@ -117,7 +117,7 @@ fc=2035;
 % Building examples
 MAP_A1_example=data.MAP_A.MAP_A1;
 MAP_B1_example=data.MAP_B.MAP_B1;
-MAP_C1_example=data.MAP_C.MAP_C1;
+MAP_C1_example=data.MAP_C.MAP_C8;
 
     %% 4.2.1 Evaluatig filtering performance
     % As explained in the presentation, filter architepture could change to

@@ -149,7 +149,7 @@ for i = step:step:N_original
     f_BU = f;
     DSP_BU = th.NoiseVariance * (abs(H).^2);
 
-
+    
     % Normalization
     U=max(DSP)/max(DSP_BU);
     DSP_BU=U.*DSP_BU;
