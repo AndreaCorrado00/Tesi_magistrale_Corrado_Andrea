@@ -122,10 +122,12 @@ for i = 1:5
     t = 0:Ts:Ts*N-Ts;
     subplot(3,2,i)
     plot(t, x, 'k:', t, x_w, 'b-', t, x_BP, 'r-')
+    % plot(t, x, 'k:', t, x_w, 'b-')
     xlabel('Time [s]')
     ylabel('Amplitude [mV]')
     title(traces(i))
 end
 legend('Original', 'DWT Filter', 'BP Filter', "Location", "bestoutside")
+% legend('Original', 'DWT Filter', "Location", "bestoutside")
 
 end
