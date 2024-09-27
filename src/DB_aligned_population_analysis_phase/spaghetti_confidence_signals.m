@@ -41,13 +41,7 @@ for l = 1:6
             % Get the current figure
             fig = gcf;
 
-            % Save the plot
-            
-            
-            
-            
-            
-            
+            % Save the plot            
             file_name="MAP_"+i+"_trace_"+k+"_";
             save_plot(file_name, type_plots(l), figure_path + "\data_visual", fig, true);
         end

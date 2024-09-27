@@ -67,7 +67,7 @@ hold on
 if ~variability_plot && ~sd_plot
     % If not plotting variability bands, plot individual signals
     for i = 1:N
-        plot(x, table2array(signals_table(:,i)), ':', "LineWidth", 0.4)
+        plot(x, table2array(signals_table(:,i)), ':', "LineWidth", 0.4,'Color',[.5 .5 .5])
     end
    
     xlim(x_lim)
@@ -128,6 +128,6 @@ elseif sd_plot && ~variability_plot
         xlim(x_lim); % Set x-axis limits
 end
 
-plot(x, mean_sig, 'k-', "LineWidth", 1.5)
+plot(x, mean_sig, "Color", "#0072BD", "LineWidth", 1.5)
 hold off
 end

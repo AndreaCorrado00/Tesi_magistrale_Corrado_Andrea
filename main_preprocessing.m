@@ -168,12 +168,12 @@ show_QRS_positions(QRS_detected_data,fc)
 %% 5.2 Implementing aligment strategies
     % 5.1.1 Strategy 1
     % QRS is sorely into the ref trace
-    window=0.01; %time window into which finding the maximum in seconds
+    window=0.2; %time window into which finding the maximum in seconds
     plot_alignment=false;
     Data_sub_aligned_1=single_sub_alignment(QRS_detected_data,fc,window,'only_ref',[],plot_alignment);
 
     % 5.1.2 Strategy 2
-    % QRS is in both ref and spare2 trces but possibly shifted
+    % QRS is in both ref and spare2 traces but possibly shifted
     window=0.01; %time window into which finding the maximum in seconds
     plot_alignment=false;
     tollerance=0.05; %tollerance in [sec] of distance between QRS points in ref and spare2 traces
@@ -248,12 +248,12 @@ figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\T
 addpath(src_path)
 
 % Loading previusly made data
-load(processed_data_path+'\dataset_aligned_STR_3.mat');
+load(processed_data_path+'\dataset_aligned_STR_1.mat');
 load(processed_data_path+'\dataset.mat');
 fc=2035;
 
 %% 7.1 Whole dataset alignment
-Aligned_DB= align_and_filter_dataset(data,Data_sub_aligned_3,false,0.5,fc);
+Aligned_DB= align_and_filter_dataset(data,Data_sub_aligned_1,false,0.5,fc);
 
 %% 7.2 Showing some examples
 show_alignment_results(Aligned_DB,fc)
