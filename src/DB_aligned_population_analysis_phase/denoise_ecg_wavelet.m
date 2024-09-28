@@ -22,6 +22,7 @@ function x_denoised = denoise_ecg_wavelet(x, Fc, type, nLevels)
 
     % Padding the signal (if needed) to ensure proper wavelet decomposition
     x_padded = x; 
+    
 
     % Perform the Discrete Wavelet Transform (DWT)
     [C, L] = wavedec(x_padded, decompositionLevel, waveletType);

@@ -293,7 +293,7 @@ fc=2035;
 %% 8.1 Data visualization as they are 
 spaghetti_confidence_signals(POP_DB_aligned,fc,figure_path)
 
-% 8.2 Signals direct comparisons 
+%% 8.2 Signals direct comparisons 
 % Comparison between different signals mean/periodogram traces for the same case
 compare_case_signals(POP_DB_aligned,fc,figure_path)   
 % Comparison within traces between subjects 
