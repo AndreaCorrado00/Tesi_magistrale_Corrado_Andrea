@@ -23,8 +23,8 @@ function new_signal = prepare_signal(signal, nan_option)
     % Perform wavelet denoising on the signal without NaNs
     new_signal = denoise_ecg_wavelet(signal_without_nans, 2035, 'sym4', 9);
 
-    % Scale the signal to the range [0, 1]
-    new_signal = (new_signal - max(new_signal)) ./ (max(new_signal) - min(new_signal));
+    % % Scale the signal to the range [0, 1]
+    % new_signal = (new_signal - max(new_signal)) ./ (max(new_signal) - min(new_signal));
 
     % Subtract the mean from the scaled signal
     new_signal = new_signal - mean(new_signal);

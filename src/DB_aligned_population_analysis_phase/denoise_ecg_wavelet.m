@@ -43,7 +43,7 @@ function x_denoised = denoise_ecg_wavelet(x, Fc, type, nLevels)
     x_denoised = x_denoised_padded(1:signalLength);
 
     % Apply high-pass filter to remove low-frequency noise
-    [b, a] = butter(6, 1 / (Fc / 2), 'high');
+    [b, a] = butter(6, 3 / (Fc / 2), 'high');
     x_denoised = filtfilt(b, a, x_denoised);
 
     % Apply low-pass filter to remove high-frequency noise

@@ -290,10 +290,13 @@ addpath(src_path)
 load(processed_data_path+'\dataset_pop_aligned.mat');
 fc=2035;
 
-%% 8.1 Data visualization as they are 
+%% Single record visualization after preprocessing
+traces_subplots_by_sub(POP_DB_aligned, fc, figure_path + "\single_records")
+
+%% 8.2 Data visualization as they are 
 spaghetti_confidence_signals(POP_DB_aligned,fc,figure_path)
 
-%% 8.2 Signals direct comparisons 
+%% 8.3 Signals direct comparisons 
 % Comparison between different signals mean/periodogram traces for the same case
 compare_case_signals(POP_DB_aligned,fc,figure_path)   
 % Comparison within traces between subjects 
@@ -301,7 +304,7 @@ compare_traces_between_sub(POP_DB_aligned,fc,figure_path)
 % comparison between maps within subjects and traces
 compare_maps_between_signals(POP_DB_aligned,fc,figure_path)
 
-%% 8.2 Preparing dataset for feature extraction
+%% 8.4 Preparing dataset for feature extraction
 % Hint: perform 1 time spectrum analysis, filtering ecc then pass such DB
 % to the feature extraction function.
 
