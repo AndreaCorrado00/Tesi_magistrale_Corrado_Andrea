@@ -23,6 +23,7 @@ clc;clear;close;
 % Adding path
 src_pop_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\Preprocessing_pop_phase";
 figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\Preprocessing_pop_phase";
+processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed";
 addpath(src_pop_path)
 
 % Loading data
@@ -51,6 +52,7 @@ clc;clear;close;
 % Adding paths
 src_pre_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\Preprocessing_phase";
 figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\Preprocessing_phase";
+processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed";
 addpath(src_pre_path)
 
 % Loading data 
@@ -233,9 +235,11 @@ show_scalogram_AVNRT_data(MAP_C1_example,'Example MAP C, sub 7',filtering,log_sc
 
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % More correct comments on the previous parts are summarized into <4. Recap filters-spectrum-alignment> %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 
 
 
@@ -270,10 +274,23 @@ POP_DB_aligned=build_pop_dataset_after_alignment(Aligned_DB);
 traces_subplots_by_sub(Aligned_DB, fc, figure_path + "\single_records") 
 
 
-%% Intermediate step: pop analysis on subject with ref trace with QRS
-vec_subs=[1,2,4,6,11];
-ref_QRS_data=extract_single_subs(Aligned_DB, vec_subs);
-POP_DB_aligned=build_pop_dataset_after_alignment(ref_QRS_data);
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Intermediate step: pop analysis on subject with ref trace with QRS     %
+vec_subs=[1,2,4,6,11];                                                    %
+ref_QRS_data=extract_single_subs(Aligned_DB, vec_subs);                   %
+POP_DB_aligned=build_pop_dataset_after_alignment(ref_QRS_data);           %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Following section work on data which have the reference trace clearly 
+% interpretable. That's because of this "intermediate step. Once clarified
+% the nature of reference trace and defined the best way to alig traces,
+% it's possible to proceed.
+
 
 
 

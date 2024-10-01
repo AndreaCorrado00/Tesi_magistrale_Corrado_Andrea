@@ -242,6 +242,8 @@ show_scalogram_AVNRT_data(MAP_C1_example,'Example MAP C, sub 7',filtering,log_sc
 
 
 
+
+
 %%                            ---------- WHOLE DATASET ALIGNMENT ----------  
 clc;clear;close;
 % Here, all rov traces are aligned respect to the same point: 0.5. The
@@ -272,10 +274,23 @@ POP_DB_aligned=build_pop_dataset_after_alignment(Aligned_DB);
 traces_subplots_by_sub(Aligned_DB, fc, figure_path + "\single_records") 
 
 
-%% Intermediate step: pop analysis on subject with ref trace with QRS
-vec_subs=[1,2,4,6,11];
-ref_QRS_data=extract_single_subs(Aligned_DB, vec_subs);
-POP_DB_aligned=build_pop_dataset_after_alignment(ref_QRS_data);
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Intermediate step: pop analysis on subject with ref trace with QRS     %
+vec_subs=[1,2,4,6,11];                                                    %
+ref_QRS_data=extract_single_subs(Aligned_DB, vec_subs);                   %
+POP_DB_aligned=build_pop_dataset_after_alignment(ref_QRS_data);           %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Following section work on data which have the reference trace clearly 
+% interpretable. That's because of this "intermediate step. Once clarified
+% the nature of reference trace and defined the best way to alig traces,
+% it's possible to proceed.
+
 
 
 
