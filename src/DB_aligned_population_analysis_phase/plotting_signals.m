@@ -73,7 +73,6 @@ if ~variability_plot && ~sd_plot
     xlim(x_lim)
     min_y_lim = table2array(min(min(signals_table), [], 2));
     max_y_lim = table2array(max(max(signals_table), [], 2));
-    %ylim([min_y_lim - 0.05 * min_y_lim, max_y_lim + 0.05 * max_y_lim])
     title('Mean and single records: ' + title_plot + ' (n:' + num2str(N) + ')')
     xlabel(x_label)
     ylabel(y_label)
@@ -98,7 +97,6 @@ elseif variability_plot && ~sd_plot
     xlim([0, x(end)])
     min_y_lim = min(VAR_LIMS(:,1));
     max_y_lim = max(VAR_LIMS(:,2));
-    %ylim([min_y_lim - 0.05 * min_y_lim, max_y_lim + 0.05 * max_y_lim])
     title('Mean and confidence intervals at 95%: ' + title_plot + ' (n:' + num2str(N) + ')')
     xlabel(x_label)
     ylabel(y_label)
@@ -118,10 +116,8 @@ elseif sd_plot && ~variability_plot
         plot(x, mean_sig+sd_vec', 'k:', "LineWidth", 0.8);
         plot(x, mean_sig-sd_vec', 'k:', "LineWidth", 0.8);
         xlim([0, x(end)]); % Set x-axis limits
-        % Calculate y-axis limits based on the variability limits
         min_y_lim = min(mean_sig-sd_vec');
         max_y_lim = max(mean_sig+sd_vec');
-        %ylim([min_y_lim - 0.05 * min_y_lim, max_y_lim + 0.05 * max_y_lim]); % Set y-axis limits
         title(['Mean +/- SD : ', title_plot]); % Set plot title
         xlabel(x_label); % Set x-axis label
         ylabel(y_label); % Set y-axis label

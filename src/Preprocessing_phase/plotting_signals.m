@@ -17,7 +17,7 @@ function plotting_signals(signals_table, title_plot, Fc, freq_plot, variability_
         x = [0:Fc/M:Fc-Fc/M]; 
         % Convert signals to power spectrum
         for i = 1:N
-            p=evaluate_order(signals_table(:,i),5,50,2,0.05);
+            p=evaluate_order(signals_table(:,i),20,30,2,0.05);
             th=ar(table2array(signals_table(:,i))-table2array(mean(signals_table(:,i))),p,'ls'); 
             [H,~]=freqz(1,th.a,M,Fc); 
             DSP=(abs(H).^2)*th.NoiseVariance;
@@ -37,20 +37,16 @@ end
 % Calculate the mean signal
 mean_sig = table2array(mean(signals_table, 2));
 
-% Plot the mean signal
-plot(x, mean_sig, 'k-', "LineWidth", 3)
-hold on
 
+hold on
 if ~variability_plot && ~sd_plot
     % If not plotting variability bands, plot individual signals
     for i = 1:N
-        plot(x, table2array(signals_table(:,i)), ':', "LineWidth", 0.4)
+        plot(x, table2array(signals_table(:,i)),':', "LineWidth", 0.4,'Color',[.5 .5 .5])
     end
-    hold off
     xlim(x_lim)
     min_y_lim = table2array(min(min(signals_table), [], 2));
     max_y_lim = table2array(max(max(signals_table), [], 2));
-    ylim([min_y_lim - 0.05 * min_y_lim, max_y_lim + 0.05 * max_y_lim])
     title('Mean and single records: ' + title_plot + ' (n:' + num2str(N) + ')')
     xlabel(x_label)
     ylabel(y_label)
@@ -75,12 +71,11 @@ elseif variability_plot && ~sd_plot
     xlim([0, x(end)])
     min_y_lim = min(VAR_LIMS(:,1));
     max_y_lim = max(VAR_LIMS(:,2));
-    ylim([min_y_lim - 0.05 * min_y_lim, max_y_lim + 0.05 * max_y_lim])
     title('Mean and confidence intervals at 95%: ' + title_plot + ' (n:' + num2str(N) + ')')
     xlabel(x_label)
     ylabel(y_label)
     xlim(x_lim)
-    hold off
+   
 
 elseif sd_plot && ~variability_plot
     % Plot mean +/- sd
@@ -98,11 +93,12 @@ elseif sd_plot && ~variability_plot
         % Calculate y-axis limits based on the variability limits
         min_y_lim = min(mean_sig-sd_vec');
         max_y_lim = max(mean_sig+sd_vec');
-        ylim([min_y_lim - 0.05 * min_y_lim, max_y_lim + 0.05 * max_y_lim]); % Set y-axis limits
         title(['Mean +/- SD : ', title_plot]); % Set plot title
         xlabel(x_label); % Set x-axis label
         ylabel(y_label); % Set y-axis label
         xlim(x_lim); % Set x-axis limits
 end
-
+% Plot the mean signal
+plot(x, mean_sig, "Color", "#0072BD", "LineWidth", 1.5)
+hold off
 end
