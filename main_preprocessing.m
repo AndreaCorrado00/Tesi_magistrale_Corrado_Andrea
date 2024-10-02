@@ -281,7 +281,8 @@ traces_subplots_by_sub(Aligned_DB, fc, figure_path + "\single_records")
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Intermediate step: pop analysis on subject with ref trace with QRS     %
 vec_subs=[1,2,4,6,11];                                                    %
-ref_QRS_data=extract_single_subs(Aligned_DB, vec_subs);                   %
+ref_QRS_data=extract_single_subs(Aligned_DB, vec_subs);  
+show_alignment_results(ref_QRS_data,fc)
 POP_DB_aligned=build_pop_dataset_after_alignment(ref_QRS_data);           %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
