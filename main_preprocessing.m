@@ -149,10 +149,6 @@ MAP_C1_example=data.MAP_C.MAP_C8;
     show_spectrum_AVNRT_example(Example_filtered)
 
 
-%
-% show_AR_model_performance("Low_frequency_ecg")
-% % "high_frequency_ecg" "Low_frequency_ecg" "PhysioNet_healthy" "PhysioNet_Pathological"
-
 
 %%                         ---------- TRACES ALIGMENT STRATEGIES ----------
 
