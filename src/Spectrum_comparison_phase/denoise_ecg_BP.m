@@ -7,7 +7,7 @@ function x_denoised = denoise_ecg_BP(x, Fc)
     %   x_denoised - The denoised ECG signal after applying high-pass and low-pass filters.
     
     % High pass filter to remove baseline drift
-    [b, a] = butter(6, 1 / (Fc / 2), 'high');
+    [b, a] = butter(6, 3 / (Fc / 2), 'high');
     x_denoised = filtfilt(b, a, x); % Apply zero-phase filtering to avoid phase distortion
 
     % Low pass filter to remove high-frequency noise

@@ -1,7 +1,6 @@
 function show_filter_pipeline(noise_type)
 %load("D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Other\ecg_spectrum_analysis_pipeline_test.mat") 
 
-
 %% Building the ground truth
 % ECG parameters
 Fs = 1000;           % F sampling(Hz)
@@ -12,7 +11,6 @@ t = 0:1/Fs:duration;
 ecg_signal = ecg(length(t));
 
 ecg_signal=repmat(ecg_signal,1,25);
-
 ecg_signal=sgolayfilt(ecg_signal,2,31);
 
 N = length(ecg_signal);
@@ -21,9 +19,9 @@ t = 0:Ts:Ts*N-Ts;
 
 switch noise_type
     case "white_noise_stationary_var_fix"
-        var_noise=0.005;
+        var_noise=0.002;
         noise=sqrt(var_noise) * randn(1, N);
-        x=ecg_signal+noise;
+        noisy_ecg=ecg_signal+noise;
 
         noise_title="White,  gaussian noise with variance "+ num2str(var_noise);
     case "baseline_drift"
@@ -38,7 +36,7 @@ switch noise_type
         % Generazione delle sinusoidi
         noise = A1 * sin(2 * pi * f1 * t) + A2 * sin(2 * pi * f2 * t)+sqrt(0.001)*randn(1,N);
         
-        x=ecg_signal+noise;
+        noisy_ecg=ecg_signal+noise;
         noise_title="Baseline drift simulation ";
      
 end
@@ -46,68 +44,71 @@ end
 figure(1)
 subplot(311)
 plot(t,ecg_signal)
+xlim([0,t(end)])
 title('Reference')
 subplot(312)
 plot(t,noise)
+xlim([0,t(end)])
 title(noise_title)
 subplot(313)
-plot(t, x)
+plot(t, noisy_ecg)
+xlim([0,t(end)])
 title('Noisy reference')
 
 %% Starting of simulation
-x_original = x - mean(x); % Subtract the mean
-N_original = length(x_original);
+N_original = length(noisy_ecg);
 disp( ' ')
-step=2000;
-
-n_subs = round(N_original / step);
-n_cols = ceil(sqrt(n_subs)); 
-n_rows = ceil(n_subs / n_cols); 
 
 
+N_points=[1000,N_original];
 
 % for each ECG (n° beats) length the proposed pipeline is evaluated
-for i =  step:step:N_original
-    ref_win=ecg_signal(1:i);
-    noise_win=noise(1:N);
-    x = x_original(1:i)-mean(x_original(1:i));
+for i = 1: length(N_points)
+    lim=N_points(i);
+    ref_win=ecg_signal(1:lim)-mean(ecg_signal(1:lim));
+    noise_win=noise(1:lim)-mean(noise(1:lim));
+    x = noisy_ecg(1:lim)-mean(noisy_ecg(1:lim));
     N = length(x);
     Ts = 1 / Fs;
     t = 0:Ts:Ts*N-Ts;
 
-
     x_w=handable_denoise_ecg_wavelet(x,Fs,'sym4',9,false,60);
+    x_w=x_w-mean(x_w);
     x_bp=handable_denoise_ecg_BP(x,Fs,60);
+    x_bp=x_bp-mean(x_bp);
 
     % SNR evaluation
-    P_noise=sum(noise_win.^2)/N;
-    P_x=sum(x.^2)/N;
-    P_w=sum(x_w.^2)/N;
-    P_bp=sum(x_bp.^2)/N;
+    % Noise
+    P_noise_original=sum(noise_win.^2);
+    P_noise_residual_w=sum((x_w-ref_win).^2);
+    P_noise_residual_bp=sum((x_bp-ref_win).^2);
+    % Signal
+    P_ref_win=sum(ref_win.^2);
+    P_w=sum(x_w.^2);
+    P_bp=sum(x_bp.^2);
 
-    SNR_original=10*log10(P_x/P_noise);
-    SNR_wavelet=10*log10(P_w/P_noise);
-    SNR_bandpass=10*log10(P_bp/P_noise);
+    SNR_original= 10*log10(P_ref_win/P_noise_original);
+    SNR_wavelet= 10*log10(P_w/P_noise_residual_w);
+    SNR_bandpass= 10*log10(P_bp/P_noise_residual_bp);
 
-    disp(SNR_original)
-    disp(SNR_wavelet)
-    disp(SNR_bandpass)
 
-    figure(i/step + 1)
-    %subplot(n_rows,n_cols,i/step)
+    figure(i+1)
     hold on
-    sgtitle("Denoising pipeline, N° points: "+num2str(i))
+    sgtitle("Denoising pipeline, N° points: "+num2str(N_points(i)))
     plot(t,x,"Color",[.5,.5,.5],"LineStyle",":","LineWidth",0.5)
     plot(t,ref_win,"Color",[.3,.3,.3],"LineWidth",0.7)
     plot(t,x_bp,"Color",[0.9290 0.6940 0.1250],"LineWidth",0.9)
     plot(t,x_w,"Color",	"#0072BD","LineWidth",0.9)
     xlabel('time [s]')
     ylabel('Amplitude [mV]')
+    xlim([0,t(end)])
+    
+    % Add SNR values as annotations
+    annotation('textbox', [0.85, 0.5, 0.1, 0.1], 'String', ...
+        {['SNR Original: ', num2str(SNR_original, '%.2f'), ' dB'], ...
+         ['SNR Bandpass: ', num2str(SNR_bandpass, '%.2f'), ' dB'], ...
+         ['SNR Wavelet: ', num2str(SNR_wavelet, '%.2f'), ' dB']}, ...
+        'FitBoxToText', 'on', 'BackgroundColor', 'w', 'EdgeColor', 'k', 'FontSize', 10);
     hold off
     legend(["Noisy signal","Ground truth","BP digital","Wavalet th + BP digital"],"Location","bestoutside")
-
-
-   
 end
-
-

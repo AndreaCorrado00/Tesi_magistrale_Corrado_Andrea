@@ -86,11 +86,13 @@ display_ref_equal_spare1(data)
 
 
 
-%%                      ---------- SPECTRUM EVALUATION ALGORITHM ----------
+%%    ---------- PREPROCESSING AND SPECTRUM EVALUATION ALGORITHM ----------
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % RESULTS, explanation and further comments available into <3. in-depth spectrum analysis.pptx>%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% NB: comments aren't correct due to futher evaluations done. For a more
+% complete and clear overview the thesis text will be more solid and clear.
 
 clc;clear;close
 % This part of preprocessing is used to build a solid framework into which
@@ -106,10 +108,10 @@ addpath(src_path)
 % Based on literature, proposed methods are digital filter or DWT
 % thresholding plus digital filter. These method will be evaluated using
 % didactical examples.
-close;clc; % cleaning environment
+close;clc;close all; % cleaning environment
+show_filter_pipeline("white_noise_stationary_var_fix")
 
-
-
+%baseline_drift white_noise_stationary_var_fix
 %% 4.1 Sintetic data algorithm performances 
 close;clc; % cleaning environment
 show_spectrum_evaluation_pipeline("high_frequency_ecg") 
@@ -145,9 +147,11 @@ MAP_C1_example=data.MAP_C.MAP_C8;
     show_spectrum_AVNRT_example(Example_filtered)
 
 
-%% 
-show_AR_model_performance("Low_frequency_ecg")
-% "high_frequency_ecg" "Low_frequency_ecg" "PhysioNet_healthy" "PhysioNet_Pathological"
+%
+% show_AR_model_performance("Low_frequency_ecg")
+% % "high_frequency_ecg" "Low_frequency_ecg" "PhysioNet_healthy" "PhysioNet_Pathological"
+
+
 %%                         ---------- TRACES ALIGMENT STRATEGIES ----------
 
 % First, a solid way to align traces should be found record by record and

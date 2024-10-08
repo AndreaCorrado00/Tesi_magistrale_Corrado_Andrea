@@ -86,7 +86,7 @@ display_ref_equal_spare1(data)
 
 
 
-%%                      ---------- SPECTRUM EVALUATION ALGORITHM ----------
+%%    ---------- PREPROCESSING AND SPECTRUM EVALUATION ALGORITHM ----------
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % RESULTS, explanation and further comments available into <3. in-depth spectrum analysis.pptx>%
@@ -109,12 +109,16 @@ addpath(src_path)
 % thresholding plus digital filter. These method will be evaluated using
 % didactical examples.
 close;clc;close all; % cleaning environment
-show_filter_pipeline("white_noise_stationary_var_fix")
+show_filter_pipeline("baseline_drift")
 
+% Other example of situations: 
 %baseline_drift white_noise_stationary_var_fix
+
 %% 4.1 Sintetic data algorithm performances 
+% Preprocessin pipeline is then applied on didactical examples. Then,
+% spectrums are evaluated. 
 close;clc; % cleaning environment
-show_spectrum_evaluation_pipeline("Low_frequency_ecg") 
+show_spectrum_evaluation_pipeline("high_frequency_ecg") 
 
 % Other example of situations: 
 % "high_frequency_ecg" "Low_frequency_ecg" "PhysioNet_healthy" "PhysioNet_Pathological"
@@ -133,8 +137,6 @@ MAP_B1_example=data.MAP_B.MAP_B1;
 MAP_C1_example=data.MAP_C.MAP_C8;
 
     %% 4.3.1 Evaluatig filtering performance
-    % As explained in the presentation, filter architepture could change to
-    % suit better AVNRT signals.
     show_pipeline_performances(MAP_C1_example)
 
     %% 4.3.2 Example of complete-optimized pipeline 

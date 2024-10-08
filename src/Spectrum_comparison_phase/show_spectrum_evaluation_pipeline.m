@@ -73,57 +73,15 @@ for i = step:step:N_original
     x = x_original(1:i)-mean(x_original(1:i));
     N = length(x);
     Ts = 1 / Fs; 
-    t = 0:Ts:Ts*N-Ts; 
-    
-    %% Numerical filter
-    % % High pass
-    % Wp = 0.5; % Hz
-    % Ws = (Wp - Wp / 4);
-    % 
-    % Rp = 0.90; % percentage
-    % Rs = 0.10;
-    % 
-    % % Parameters conversion
-    % Wp = Wp / (Fs / 2);
-    % Ws = Ws / (Fs / 2);
-    % Rp = -20 * log10(Rp);
-    % Rs = -20 * log10(Rs);
-    % 
-    % % Filter evaluation
-    % [n, Wn] = ellipord(Wp, Ws, Rp, Rs);
-    % [b, a] = ellip(n, Rp, Rs, Wn, "high");
-    % x_f_1 = filter(b, a, x);
-    % 
-    % % Low pass
-    % Wp = 80; % Hz
-    % Ws = 100;
-    % Rp = 0.95; 
-    % Rs = 0.1;
-    % 
-    % Wp = Wp / (Fs / 2);
-    % Ws = Ws / (Fs / 2);
-    % Rp = -20 * log10(Rp);
-    % Rs = -20 * log10(Rs);
-    % 
-    % 
-    % [n, Wp] = ellipord(Wp, Ws, Rp, Rs);
-    % [b, a] = ellip(n, Rp, Rs, Wp, 'low');
-    % x_f_2 = filter(b, a, x_f_1);
+    t = 0:Ts:Ts*N-Ts;
 
-
-    % High pass filter
-    [b, a] = butter(6, 1 / (Fs / 2), 'high');
-    x_denoised = filtfilt(b, a, x);
-
-    % Low pass filter
-    [b, a] = butter(8, 40 / (Fs / 2), 'low');
-    x_f_2 = filtfilt(b, a, x_denoised);
-
+    %% Digital filter
+    x_f_2=handable_denoise_ecg_BP(x,Fs,60);
     %% Wavelet denoising
     x_w = handable_denoise_ecg_wavelet(x, Fs, 'sym4', 9,false,40);
     %% Filters comparison
     figure(1)
-    title("Number of points: " + num2str(i))
+    sgtitle("Filter performance with N° points= "+num2str(i))
     subplot(211)
     plot(t, x, 'k:', t, x_f_2, 'r', t, x_w, 'b')
     legend('original', 'numeric', 'wavelet')
@@ -194,65 +152,62 @@ for i = step:step:N_original
     legend( 'Welch','FFT','AR LS estimation','AR Burg estimation')
 end
 
-%% Different order comparison
-p_candidates=[6:1:14];
+% %% Different order comparison
+% p_candidates=[6:1:14];
+% 
+% %% Spectrogram estimation
+% FT_x=fft(x_w,N);
+% S=abs(FT_x).^2/N;
+% f_S=0:Fs/N:Fs-Fs/N;
+% 
+% 
+% 
+% %% Welch spectrum estimation
+% window = hamming(512); % Hamming window
+% noverlap = length(window) / 2; % overlapping
+% nfft = 2048; % Points of fft
+% % Welch periodogram
+% [pxx, f_w] = pwelch(x_w, window, noverlap, nfft, Fs);
 
-%% Spectrogram estimation
-FT_x=fft(x_w,N);
-S=abs(FT_x).^2/N;
-f_S=0:Fs/N:Fs-Fs/N;
-
-
-
-%% Welch spectrum estimation
-window = hamming(512); % Hamming window
-noverlap = length(window) / 2; % overlapping
-nfft = 2048; % Points of fft
-% Welch periodogram
-[pxx, f_w] = pwelch(x_w, window, noverlap, nfft, Fs);
-
-
-
-
-%% Orders comparison
-
-figure(3)
-title('AR Spectrums comparison')
-ylabel('PSD')
-xlabel('f [Hz]')
-xlim([0, 60])
-
-hold on
-
-legend_entries={};
-for k=1:length(p_candidates)
-    p=p_candidates(k);
-
-    %% AR spectrum estimation 
-    th = ar(x_w, p, 'burg');
-    [H, f] = freqz(1, th.a, N, Fs); 
-    f_DSP = f;
-    DSP = th.NoiseVariance * (abs(H).^2);
-
-
-    % plots
-
-    plot(f_DSP,DSP,'LineWidth',0.8)
-
-    legend_entries{k}="AR order = "+num2str(p);
-
-end
-% Normalization
-U = max(DSP) / max(pxx);
-pxx = U * pxx;
-
-% Normalization
-U=max(DSP)/max(S);
-S=U.*S;
-
-plot(f_w,pxx,'b--',f_S,S,'k:')
-legend_entries{k+1}="Welch";
-legend_entries{k+2}="Spectrogram";
-legend(legend_entries)
-hold off
-
+% %% Orders comparison
+% 
+% figure(3)
+% title('AR Spectrums comparison')
+% ylabel('PSD')
+% xlabel('f [Hz]')
+% xlim([0, 60])
+% 
+% hold on
+% 
+% legend_entries={};
+% for k=1:length(p_candidates)
+%     p=p_candidates(k);
+% 
+%     %% AR spectrum estimation 
+%     th = ar(x_w, p, 'burg');
+%     [H, f] = freqz(1, th.a, N, Fs); 
+%     f_DSP = f;
+%     DSP = th.NoiseVariance * (abs(H).^2);
+% 
+% 
+%     % plots
+% 
+%     plot(f_DSP,DSP,'LineWidth',0.8)
+% 
+%     legend_entries{k}="AR order = "+num2str(p);
+% 
+% end
+% % Normalization
+% U = max(DSP) / max(pxx);
+% pxx = U * pxx;
+% 
+% % Normalization
+% U=max(DSP)/max(S);
+% S=U.*S;
+% 
+% plot(f_w,pxx,'b--',f_S,S,'k:')
+% legend_entries{k+1}="Welch";
+% legend_entries{k+2}="Spectrogram";
+% legend(legend_entries)
+% hold off
+% 

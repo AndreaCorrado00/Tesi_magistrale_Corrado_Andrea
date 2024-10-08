@@ -5,7 +5,7 @@ function x_denoised = handable_denoise_ecg_wavelet(x, Fc, type, nLevels, padding
     %   Fc           - The sampling frequency of the ECG signal.
     %   type         - The type of wavelet for decomposition (e.g., 'db4').
     %   nLevels      - The number of wavelet decomposition levels.
-    %   padding      - Boolean to decide whether to symmetrically pad the signal.
+    %   padding      - Boolean to decide whether to apply circular padding.
     %   BP_band_stop - The cutoff frequency for the low-pass filter.
     % OUTPUT:
     %   x_denoised   - The denoised ECG signal after wavelet thresholding and filtering.
@@ -22,11 +22,12 @@ function x_denoised = handable_denoise_ecg_wavelet(x, Fc, type, nLevels, padding
         warning(['Level is reduced to ' num2str(decompositionLevel) ' to adapt better to the signal length']);
     end
 
-    % Symmetric padding if required
+    % Circular padding if required
     if padding
         pow2Length = 2^nextpow2(signalLength);
         if pow2Length > signalLength
-            x_padded = wextend('1D', 'sym', x, pow2Length - signalLength);
+            % Circular padding with 'zpd' (zero-phase delay) extension
+            x_padded = wextend('1D', 'zpd', x, pow2Length - signalLength);
         else
             x_padded = x;
         end
@@ -53,7 +54,7 @@ function x_denoised = handable_denoise_ecg_wavelet(x, Fc, type, nLevels, padding
     x_denoised = x_denoised_padded(1:signalLength);
 
     % Apply high-pass filter to remove low-frequency noise
-    [b, a] = butter(6, 1 / (Fc / 2), 'high');
+    [b, a] = butter(6, 3 / (Fc / 2), 'high');
     x_denoised = filtfilt(b, a, x_denoised);
 
     % Apply low-pass filter with customizable cutoff frequency
