@@ -108,13 +108,13 @@ addpath(src_path)
 % Based on literature, proposed methods are digital filter or DWT
 % thresholding plus digital filter. These method will be evaluated using
 % didactical examples.
-close;clc; % cleaning environment
-show_filter_pipeline("white_noise_stationary")
+close;clc;close all; % cleaning environment
+show_filter_pipeline("white_noise_stationary_var_fix")
 
-
+%baseline_drift white_noise_stationary_var_fix
 %% 4.1 Sintetic data algorithm performances 
 close;clc; % cleaning environment
-show_spectrum_evaluation_pipeline("high_frequency_ecg") 
+show_spectrum_evaluation_pipeline("Low_frequency_ecg") 
 
 % Other example of situations: 
 % "high_frequency_ecg" "Low_frequency_ecg" "PhysioNet_healthy" "PhysioNet_Pathological"

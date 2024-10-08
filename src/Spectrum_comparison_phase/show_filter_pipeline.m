@@ -1,40 +1,64 @@
 function show_filter_pipeline(noise_type)
 %load("D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Other\ecg_spectrum_analysis_pipeline_test.mat") 
 
-% Parametri del segnale ECG
-Fs = 1000;           % Frequenza di campionamento (Hz)
-duration = 10;       % Durata del segnale (secondi)
-t = 0:1/Fs:duration; % Vettore temporale
 
-% Genera segnale ECG sintetico
+%% Building the ground truth
+% ECG parameters
+Fs = 1000;           % F sampling(Hz)
+duration = 1;       % Duration (s)
+t = 0:1/Fs:duration; 
+
+% 30 seconds of Syntetic ECG
 ecg_signal = ecg(length(t));
 
-% Visualizza il segnale ECG
-figure;
-plot(t, ecg_signal);
-title('Segnale ECG Simulato');
-xlabel('Tempo (s)');
-ylabel('Ampiezza');
-switch type
-    case "white_noise_stationary"
-       
-        ecg = ecg_simulation.high_freq;
-        Fs = 1000; % Hz
-        step = 1000; % Increment of points from which to evaluate the spectrum
-        noise=extract_noise("high_frequency_ecg",Fs,ecg);
+ecg_signal=repmat(ecg_signal,1,25);
 
+ecg_signal=sgolayfilt(ecg_signal,2,31);
+
+N = length(ecg_signal);
+Ts = 1 / Fs;
+t = 0:Ts:Ts*N-Ts;
+
+switch noise_type
+    case "white_noise_stationary_var_fix"
+        var_noise=0.005;
+        noise=sqrt(var_noise) * randn(1, N);
+        x=ecg_signal+noise;
+
+        noise_title="White,  gaussian noise with variance "+ num2str(var_noise);
     case "baseline_drift"
+        % Frequenze delle sinusoidi
+        f1 = 0.166;    % Frequenza della prima sinusoide (Hz)
+        f2 = 0.332;  % Frequenza della seconda sinusoide (Hz)
+
+        % Amplitudini delle sinusoidi
+        A1 = 0.1;  % Ampiezza della prima sinusoide
+        A2 = 0.1;  % Ampiezza della seconda sinusoide
+
+        % Generazione delle sinusoidi
+        noise = A1 * sin(2 * pi * f1 * t) + A2 * sin(2 * pi * f2 * t)+sqrt(0.001)*randn(1,N);
         
-        ecg = ecg_simulation.low_freq;
-        Fs = 1000; % Hz
-        step = 1000; % Increment of points from which to evaluate the spectrum
-        noise=extract_noise("Low_frequency_ecg",Fs,ecg);
+        x=ecg_signal+noise;
+        noise_title="Baseline drift simulation ";
+     
 end
 
+figure(1)
+subplot(311)
+plot(t,ecg_signal)
+title('Reference')
+subplot(312)
+plot(t,noise)
+title(noise_title)
+subplot(313)
+plot(t, x)
+title('Noisy reference')
+
 %% Starting of simulation
-x_original = ecg - mean(ecg); % Subtract the mean
+x_original = x - mean(x); % Subtract the mean
 N_original = length(x_original);
 disp( ' ')
+step=2000;
 
 n_subs = round(N_original / step);
 n_cols = ceil(sqrt(n_subs)); 
@@ -43,8 +67,9 @@ n_rows = ceil(n_subs / n_cols);
 
 
 % for each ECG (n° beats) length the proposed pipeline is evaluated
-for i =  1:n_subs % step:step:N_original
-
+for i =  step:step:N_original
+    ref_win=ecg_signal(1:i);
+    noise_win=noise(1:N);
     x = x_original(1:i)-mean(x_original(1:i));
     N = length(x);
     Ts = 1 / Fs;
@@ -54,9 +79,35 @@ for i =  1:n_subs % step:step:N_original
     x_w=handable_denoise_ecg_wavelet(x,Fs,'sym4',9,false,60);
     x_bp=handable_denoise_ecg_BP(x,Fs,60);
 
+    % SNR evaluation
+    P_noise=sum(noise_win.^2)/N;
+    P_x=sum(x.^2)/N;
+    P_w=sum(x_w.^2)/N;
+    P_bp=sum(x_bp.^2)/N;
+
+    SNR_original=10*log10(P_x/P_noise);
+    SNR_wavelet=10*log10(P_w/P_noise);
+    SNR_bandpass=10*log10(P_bp/P_noise);
+
+    disp(SNR_original)
+    disp(SNR_wavelet)
+    disp(SNR_bandpass)
+
+    figure(i/step + 1)
+    %subplot(n_rows,n_cols,i/step)
+    hold on
+    sgtitle("Denoising pipeline, N° points: "+num2str(i))
+    plot(t,x,"Color",[.5,.5,.5],"LineStyle",":","LineWidth",0.5)
+    plot(t,ref_win,"Color",[.3,.3,.3],"LineWidth",0.7)
+    plot(t,x_bp,"Color",[0.9290 0.6940 0.1250],"LineWidth",0.9)
+    plot(t,x_w,"Color",	"#0072BD","LineWidth",0.9)
+    xlabel('time [s]')
+    ylabel('Amplitude [mV]')
+    hold off
+    legend(["Noisy signal","Ground truth","BP digital","Wavalet th + BP digital"],"Location","bestoutside")
 
 
-    
-
+   
 end
+
 
