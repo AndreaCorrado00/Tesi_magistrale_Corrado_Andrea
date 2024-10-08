@@ -1,22 +1,7 @@
 function show_filter_pipeline(noise_type)
-%load("D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Other\ecg_spectrum_analysis_pipeline_test.mat") 
-
-% Parametri del segnale ECG
-Fs = 1000;           % Frequenza di campionamento (Hz)
-duration = 10;       % Durata del segnale (secondi)
-t = 0:1/Fs:duration; % Vettore temporale
-
-% Genera segnale ECG sintetico
-ecg_signal = ecg(length(t));
-
-% Visualizza il segnale ECG
-figure;
-plot(t, ecg_signal);
-title('Segnale ECG Simulato');
-xlabel('Tempo (s)');
-ylabel('Ampiezza');
+%load("D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Other\ecg_spectrum_analysis_pipeline_test.mat")
 switch type
-    case "white_noise_stationary"
+    case "gaussian_stationary"
        
         ecg = ecg_simulation.high_freq;
         Fs = 1000; % Hz

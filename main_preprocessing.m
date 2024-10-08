@@ -109,7 +109,7 @@ addpath(src_path)
 % thresholding plus digital filter. These method will be evaluated using
 % didactical examples.
 close;clc; % cleaning environment
-
+show_filter_pipeline("white_noise_stationary")
 
 
 %% 4.1 Sintetic data algorithm performances 
