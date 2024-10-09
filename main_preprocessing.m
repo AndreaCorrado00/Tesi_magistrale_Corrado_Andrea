@@ -109,7 +109,7 @@ addpath(src_path)
 % thresholding plus digital filter. These method will be evaluated using
 % didactical examples.
 close;clc;close all; % cleaning environment
-show_filter_pipeline_syntetic("white_noise_stationary_var_fix")
+show_filter_pipeline_syntetic("baseline_drift")
 
 % Other example of situations: 
 %baseline_drift white_noise_stationary_var_fix
@@ -117,8 +117,8 @@ show_filter_pipeline_syntetic("white_noise_stationary_var_fix")
 %% 4.1 Didactical data Preprocessing 
 % Preprocessin pipeline is then applied on didactical examples. Then,
 % spectrums are evaluated. 
-close;clc; % cleaning environment
-show_filter_pipeline_didactical("high_frequency_ecg") 
+close;clc;close all; % cleaning environment
+show_filter_pipeline_didactical("Low_frequency_ecg") 
 
 % Other example of situations: 
 % "high_frequency_ecg" "Low_frequency_ecg" "PhysioNet_healthy" "PhysioNet_Pathological"
@@ -133,12 +133,12 @@ build_and_show_expected_spectrums()
 % Such conclusion can be reached even from the results below
 
 %% 4.3 Spectrum evaluation on didactical examples
-show_spectrum_evaluation_pipeline("high_frequency_ecg")
+show_spectrum_evaluation_pipeline("Low_frequency_ecg")
 
 % Other example of situations: 
 % "high_frequency_ecg" "Low_frequency_ecg" "PhysioNet_healthy" "PhysioNet_Pathological"
 
-%% 4.4 Spectrum evaluation algorithm on AVNRT data
+%% 4.4 Preprocessing and Spectrum evaluation algorithm on AVNRT data
 processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed";
 % Loading previusly made data
 load(processed_data_path+'\dataset.mat');
@@ -149,10 +149,10 @@ MAP_A1_example=data.MAP_A.MAP_A1;
 MAP_B1_example=data.MAP_B.MAP_B1;
 MAP_C1_example=data.MAP_C.MAP_C8;
 
-    %% 4.4.1 Evaluatig filtering performance
+    %% 4.4.1 Evaluating filtering performance
     show_pipeline_performances(MAP_C1_example)
 
-    %% 4.4.2 Example of complete-optimized pipeline 
+    %% 4.4.2 Example of complete pipeline 
     % Example of Filter application and spectrum evaluation
     % filter application
     show_filter_result=true;

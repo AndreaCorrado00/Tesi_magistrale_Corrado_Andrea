@@ -130,5 +130,5 @@ for i = 1: length(N_points)
          ['SNR Wavelet: ', num2str(SNR_wavelet, '%.2f'), ' dB']}, ...
         'FitBoxToText', 'on', 'BackgroundColor', 'w', 'EdgeColor', 'k', 'FontSize', 10);
     hold off
-    legend(["Noisy signal","Ground truth","BP digital","Wavalet th + BP digital"],"Location","bestoutside")
+    legend(["Noisy signal","BP digital","Wavalet th + BP digital"],"Location","bestoutside")
 end
