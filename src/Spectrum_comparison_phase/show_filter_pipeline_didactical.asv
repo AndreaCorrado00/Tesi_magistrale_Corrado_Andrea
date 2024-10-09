@@ -1,0 +1,138 @@
+function show_filter_pipeline_didactical(type)
+load("D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Other\ecg_spectrum_analysis_pipeline_test.mat")
+
+switch type
+    case "high_frequency_ecg"
+       
+        ecg = ecg_simulation.high_freq;
+        Fs = 1000; % Hz
+        step = 1000; % Increment of points from which to evaluate the spectrum
+    case "Low_frequency_ecg"
+        
+        ecg = ecg_simulation.low_freq;
+        Fs = 1000; % Hz
+        step = 1000; % Increment of points from which to evaluate the spectrum
+
+    case "PhysioNet_healthy"
+
+        ecg = ecg_simulation.healthy;
+        Fs = 360; % Hz
+        step = 720; % Increment of points from which to evaluate the spectrum
+    case "PhysioNet_Pathological"
+        ecg = ecg_simulation.patological;
+        Fs = 360; % Hz
+        step = 720; % Increment of points from which to evaluate the spectrum
+end
+
+%% Starting of simulation
+x_original = ecg - mean(ecg); % Subtract the mean
+N_original = length(x_original);
+
+if type == "PhysioNet_healthy" || type == "PhysioNet_Pathological"
+    %% Signal reduction (avoid artifacts)
+    x_original = x_original / 1000;
+
+    t_start = 5; % Start time in seconds
+    t_end = 15; % End time in seconds
+
+    % Calculate corresponding indices
+    start_index = round(t_start * Fs) + 1; % +1 because MATLAB indexes from 1
+    end_index = round(t_end * Fs);
+
+    % Extract samples
+    x_original = x_original(start_index:end_index);
+
+end
+
+N = length(x_original);
+Ts = 1 / Fs;
+t = 0:Ts:Ts*N-Ts;
+
+% Evaluating the noise as the part of the ecg signal which is know that's
+% not informative.
+noise_sup=extract_noise(3,60,Fs,x_original);
+reference_sup=x_original-noise_sup;
+
+figure(1)
+subplot(311)
+plot(t,x_original)
+xlim([0,t(end)])
+title('Original signal')
+subplot(312)
+plot(t,noise_sup)
+xlim([0,t(end)])
+title('Extracted noise ')
+subplot(313)
+plot(t, reference_sup)
+xlim([0,t(end)])
+title('Extracted reference')
+
+
+%% Starting of simulation
+N_original = length(x_original);
+
+N_points=[step,N_original];
+
+% for each ECG (n° beats) length the proposed pipeline is evaluated
+for i = 1: length(N_points)
+    lim=N_points(i);
+
+    x = x_original(1:lim)-mean(x_original(1:lim));
+    % Noise and reference evalution (windowed)
+    noise_win=extract_noise(3,60,Fs,x);
+    ref_win=x-noise_win;
+    
+    
+
+    % Plots elements
+    N = length(x);
+    Ts = 1 / Fs;
+    t = 0:Ts:Ts*N-Ts;
+
+    x_w=handable_denoise_ecg_wavelet(x,Fs,'sym4',9,false,60);
+    x_w=x_w-mean(x_w);
+    x_bp=handable_denoise_ecg_BP(x,Fs,60);
+    x_bp=x_bp-mean(x_bp);
+
+    % Noise evaluations
+    % Original
+    
+    % Band Pass
+    % Wavelet 
+
+
+    % SNR evaluation
+    % Noise
+    P_noise_original=sum(noise_win.^2);
+    P_noise_residual_w=sum((x_w-ref_win).^2);
+    P_noise_residual_bp=sum((x_bp-ref_win).^2);
+    % Signal
+    P_ref_win=sum(ref_win.^2);
+    P_w=sum(x_w.^2);
+    P_bp=sum(x_bp.^2);
+
+    SNR_original= 10*log10(P_ref_win/P_noise_original);
+    SNR_wavelet= 10*log10(P_w/P_noise_residual_w);
+    SNR_bandpass= 10*log10(P_bp/P_noise_residual_bp);
+
+
+    figure(i+1)
+    hold on
+    sgtitle("Denoising pipeline, N° points: "+num2str(N_points(i)))
+    plot(t,x,"Color",[.5,.5,.5],"LineStyle",":","LineWidth",0.5)
+    %plot(t,ref_win,"Color",[.3,.3,.3],"LineWidth",0.7)
+    plot(t,x_bp,"Color",[0.9290 0.6940 0.1250],"LineWidth",0.9)
+    plot(t,x_w,"Color",	"#0072BD","LineWidth",0.9)
+    xlabel('time [s]')
+    ylabel('Amplitude [mV]')
+    xlim([0,t(end)])
+    
+    % Add SNR values as annotations
+    annotation('textbox', [0.85, 0.5, 0.1, 0.1], 'String', ...
+        {['SNR Original: ', num2str(SNR_original, '%.2f'), ' dB'], ...
+         ['SNR Bandpass: ', num2str(SNR_bandpass, '%.2f'), ' dB'], ...
+         ['SNR Wavelet: ', num2str(SNR_wavelet, '%.2f'), ' dB']}, ...
+        'FitBoxToText', 'on', 'BackgroundColor', 'w', 'EdgeColor', 'k', 'FontSize', 10);
+    hold off
+    legend(["Noisy signal","Ground truth","BP digital","Wavalet th + BP digital"],"Location","bestoutside")
+end

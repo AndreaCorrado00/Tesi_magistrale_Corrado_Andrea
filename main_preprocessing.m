@@ -109,23 +109,36 @@ addpath(src_path)
 % thresholding plus digital filter. These method will be evaluated using
 % didactical examples.
 close;clc;close all; % cleaning environment
-show_filter_pipeline("baseline_drift")
+show_filter_pipeline_syntetic("white_noise_stationary_var_fix")
 
 % Other example of situations: 
 %baseline_drift white_noise_stationary_var_fix
 
-%% 4.1 Sintetic data algorithm performances 
+%% 4.1 Didactical data Preprocessing 
 % Preprocessin pipeline is then applied on didactical examples. Then,
 % spectrums are evaluated. 
 close;clc; % cleaning environment
-show_spectrum_evaluation_pipeline("high_frequency_ecg") 
+show_filter_pipeline_didactical("high_frequency_ecg") 
 
 % Other example of situations: 
 % "high_frequency_ecg" "Low_frequency_ecg" "PhysioNet_healthy" "PhysioNet_Pathological"
 %% 4.2 Spectrum composition
 build_and_show_expected_spectrums()
+% Is this evaluation good? Actually not. In fact, as the ECG is a
+% quasi-periodical signal, what is expected is a band-made spectrum with
+% many peaks, that's not the situation.
+% There are some reasons, on of these is that AR spectrum estimation
+% require a stationary signal. 
 
-%% 4.3 Spectrum evaluation algorithm on AVNRT data
+% Such conclusion can be reached even from the results below
+
+%% 4.3 Spectrum evaluation on didactical examples
+show_spectrum_evaluation_pipeline("high_frequency_ecg")
+
+% Other example of situations: 
+% "high_frequency_ecg" "Low_frequency_ecg" "PhysioNet_healthy" "PhysioNet_Pathological"
+
+%% 4.4 Spectrum evaluation algorithm on AVNRT data
 processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed";
 % Loading previusly made data
 load(processed_data_path+'\dataset.mat');
@@ -136,10 +149,10 @@ MAP_A1_example=data.MAP_A.MAP_A1;
 MAP_B1_example=data.MAP_B.MAP_B1;
 MAP_C1_example=data.MAP_C.MAP_C8;
 
-    %% 4.3.1 Evaluatig filtering performance
+    %% 4.4.1 Evaluatig filtering performance
     show_pipeline_performances(MAP_C1_example)
 
-    %% 4.3.2 Example of complete-optimized pipeline 
+    %% 4.4.2 Example of complete-optimized pipeline 
     % Example of Filter application and spectrum evaluation
     % filter application
     show_filter_result=true;

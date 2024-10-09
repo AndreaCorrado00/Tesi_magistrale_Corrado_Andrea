@@ -1,4 +1,4 @@
-function show_filter_pipeline(noise_type)
+function show_filter_pipeline_syntetic(noise_type)
 %load("D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Other\ecg_spectrum_analysis_pipeline_test.mat") 
 
 %% Building the ground truth
@@ -57,7 +57,6 @@ title('Noisy reference')
 
 %% Starting of simulation
 N_original = length(noisy_ecg);
-disp( ' ')
 
 
 N_points=[1000,N_original];

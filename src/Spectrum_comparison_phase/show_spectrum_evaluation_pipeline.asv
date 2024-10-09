@@ -3,7 +3,7 @@ load("D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tes
 
 switch type
     case "high_frequency_ecg"
-        name="ECG with high frequency noise";
+       
         ecg = ecg_simulation.high_freq;
         Fs = 1000; % Hz
         step = 1000; % Increment of points from which to evaluate the spectrum
@@ -28,6 +28,8 @@ end
 %% Starting of simulation
 x_original = ecg - mean(ecg); % Subtract the mean
 N_original = length(x_original);
+disp( ' ')
+%pause(2)
 
 if type == "PhysioNet_healthy" || type == "PhysioNet_Pathological"
     %% Signal reduction (avoid artifacts)
@@ -107,7 +109,7 @@ for i = step:step:N_original
 
     %% Results
     figure(1)
-    sgtitle("Power spectrum estimation: "+name)
+    sgtitle('Power spectrum estimation')
     subplot(n_rows, n_cols, i/step)
     hold on
     plot(f, pxx,'Color',[0.8500 0.3250 0.0980],'LineWidth',0.5)
