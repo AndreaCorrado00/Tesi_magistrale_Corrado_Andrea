@@ -49,10 +49,10 @@ t = 0:Ts:Ts*N-Ts;
 
 % Evaluating the noise as the part of the ecg signal which is know that's
 % not informative.
-noise_sup=extract_noise(3,60,Fs,x_original);
+noise_sup=extract_noise(3,60,Fs,x_original,true);
 reference_sup=x_original-noise_sup;
 
-figure(1)
+figure(2)
 subplot(311)
 plot(t,x_original)
 xlim([0,t(end)])
@@ -90,12 +90,12 @@ for i = 1: length(N_points)
 
     % Noise evaluations
     % Original
-    noise_win=extract_noise(3,60,Fs,x);
+    noise_win=extract_noise(3,60,Fs,x,false);
     ref_win=x-noise_win;
     % Band Pass
-    noise_win_bp=extract_noise(3,60,Fs,x_bp);
+    noise_win_bp=extract_noise(3,60,Fs,x_bp,false);
     % Wavelet 
-    noise_win_w=extract_noise(3,60,Fs,x_w);
+    noise_win_w=extract_noise(3,60,Fs,x_w,false);
 
     % SNR evaluation
     % Noise
