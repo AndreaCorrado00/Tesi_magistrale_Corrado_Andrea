@@ -54,6 +54,7 @@ subplot(313)
 plot(t, noisy_ecg)
 xlim([0,t(end)])
 title('Noisy reference')
+xlabel('Time [s]')
 
 %% Starting of simulation
 N_original = length(noisy_ecg);

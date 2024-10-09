@@ -65,7 +65,7 @@ subplot(313)
 plot(t, reference_sup)
 xlim([0,t(end)])
 title('Extracted reference')
-
+xlabel('Time [s]')
 
 %% Starting of simulation
 N_original = length(x_original);
@@ -112,7 +112,7 @@ for i = 1: length(N_points)
     SNR_bandpass= 10*log10(P_bp/P_noise_residual_bp);
 
 
-    figure(i+1)
+    figure(i+2)
     hold on
     sgtitle("Denoising pipeline, N° points: "+num2str(N_points(i)+", "+name))
     plot(t,x,"Color",[.5,.5,.5],"LineStyle",":","LineWidth",0.5)
