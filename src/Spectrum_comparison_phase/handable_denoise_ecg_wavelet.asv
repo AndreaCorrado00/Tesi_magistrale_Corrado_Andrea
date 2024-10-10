@@ -1,4 +1,4 @@
-function x_denoised = handable_denoise_ecg_wavelet(x, Fc, type, nLevels, padding, BP_band_pass, BP_band_stop)
+function x_denoised = handable_denoise_ecg_wavelet(x, Fc, type, nLevels, padding, BP_band_stop)
     % This function denoises an ECG signal using wavelet transform with optional padding and custom band-stop filtering.
     % INPUTS:
     %   x            - The raw ECG signal.
@@ -17,7 +17,6 @@ function x_denoised = handable_denoise_ecg_wavelet(x, Fc, type, nLevels, padding
     signalLength = length(x);
    % Circular padding if required
 if padding
-    N=5;
     % Ensure N is greater than 1 and odd (for a proper central repetition)
     if mod(N, 2) == 0
         error('N must be an odd number to have a central repetition');
@@ -65,15 +64,14 @@ end
     % Reconstruct the signal using inverse DWT
     x_denoised_padded = waverec(C, L, waveletType);
 
+    % Remove the padding and return the original signal length
+    x_denoised = x_denoised_padded(idx_start:idx_end-1);
+
     % Apply high-pass filter to remove low-frequency noise
-    [b, a] = butter(6, BP_band_pass / (Fc / 2), 'high');
-    x_denoised_padded = filtfilt(b, a, x_denoised_padded);
+    [b, a] = butter(6, 1 / (Fc / 2), 'high');
+    x_denoised = filtfilt(b, a, x_denoised);
 
     % Apply low-pass filter with customizable cutoff frequency
     [b, a] = butter(8, BP_band_stop / (Fc / 2), 'low');
-    x_denoised_padded = filtfilt(b, a, x_denoised_padded);
-
-    % Remove the padding and return the original signal length
-    x_denoised = x_denoised_padded(idx_start:idx_end);
-
+    x_denoised = filtfilt(b, a, x_denoised);
 end

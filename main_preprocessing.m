@@ -108,7 +108,7 @@ MAP_B1_example=data.MAP_B.MAP_B1;
 MAP_C1_example=data.MAP_C.MAP_C8;
 
 % Evaluating filtering performance
-    show_pipeline_performances(MAP_C1_example)
+    show_pipeline_performances(MAP_B1_example)
 
 
 

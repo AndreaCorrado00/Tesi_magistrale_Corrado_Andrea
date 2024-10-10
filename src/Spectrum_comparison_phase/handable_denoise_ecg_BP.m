@@ -1,4 +1,4 @@
-function x_denoised = handable_denoise_ecg_BP(x, Fc, BP_band_stop)
+function x_denoised = handable_denoise_ecg_BP(x, Fc, BP_pass_band,BP_band_stop)
     % This function denoises an ECG signal using a customizable band-stop filter.
     % INPUTS:
     %   x            - The raw ECG signal.
@@ -8,7 +8,7 @@ function x_denoised = handable_denoise_ecg_BP(x, Fc, BP_band_stop)
     %   x_denoised   - The denoised ECG signal after applying high-pass and customizable low-pass filters.
     
     % High pass filter to remove baseline drift
-    [b, a] = butter(6, 3 / (Fc / 2), 'high');
+    [b, a] = butter(6, BP_pass_band / (Fc / 2), 'high');
     x_denoised = filtfilt(b, a, x);
 
     % Low pass filter with customizable cutoff frequency

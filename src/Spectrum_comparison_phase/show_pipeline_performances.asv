@@ -52,71 +52,18 @@ traces = ["Rov trace", "Ref trace", "Spare1 trace", "Spare2 trace", "Spare3 trac
 % end
 % legend('Original', 'DWT Filter', 'BP Filter', "Location", "bestoutside")
 
-
-%% Filtering performances with BP pass freq modified
-BP_pass_freq = 0.5:0.5:3;
-figure(1)
-sgtitle('Different Cut-off Frequencies Performances (Rov Signal)')
-
-for i = 1:length(BP_pass_freq)
-    x = rov - mean(rov); % Remove DC offset
-
-    % DWT Filtering
-    x_w = handable_denoise_ecg_wavelet(x, Fs, 'sym4', 9, false, BP_pass_freq(i),45);
-
-    % BP Filtering
-    x_BP = handable_denoise_ecg_BP(x, Fs, BP_pass_freq(i),45);
-
-    % Plotting results
-    N = length(x);
-    Ts = 1 / Fs;
-    t = 0:Ts:Ts*N-Ts;
-    subplot(3,3,i)
-    plot(t, x, 'k:', t, x_w, 'b-', t, x_BP, 'r-')
-    xlabel('Time [s]')
-    ylabel('Amplitude [mV]')
-    title("Cut-off at 45 Hz, Pass band at: " + num2str(BP_pass_freq(i)) + " Hz")
-end
-legend('Original', 'DWT Filter', 'BP Filter', "Location", "bestoutside")
-
-%% Filtering performances with BP cutoff modified
-BP_cut_freq = 40:10:90;
-figure(2)
-sgtitle('Different Cut-off Frequencies Performances (Rov Signal)')
-
-for i = 1:length(BP_cut_freq)
-    x = rov - mean(rov); % Remove DC offset
-
-    % DWT Filtering
-    x_w = handable_denoise_ecg_wavelet(x, Fs, 'sym4', 9, false,2, BP_cut_freq(i));
-
-    % BP Filtering
-    x_BP = handable_denoise_ecg_BP(x, Fs,2, BP_cut_freq(i));
-
-    % Plotting results
-    N = length(x);
-    Ts = 1 / Fs;
-    t = 0:Ts:Ts*N-Ts;
-    subplot(3,3,i)
-    plot(t, x, 'k:', t, x_w, 'b-', t, x_BP, 'r-')
-    xlabel('Time [s]')
-    ylabel('Amplitude [mV]')
-    title("Pass band: 2 Hz, Cut-off at: " + num2str(BP_cut_freq(i)) + " Hz")
-end
-legend('Original', 'DWT Filter', 'BP Filter', "Location", "bestoutside")
-
 %% Filtering performances using or not padding 
-figure(3)
+figure(2)
 sgtitle('Padding Presence Comparison')
 
 for i = 1:5
     x = tab_signals(:,i) - mean(tab_signals(:,i)); % Remove DC offset
 
     % DWT Filtering without padding
-    x_w = handable_denoise_ecg_wavelet(x, Fs, 'sym4', 9, false, 2,60);
+    x_w = handable_denoise_ecg_wavelet(x, Fs, 'sym4', 9, false, 1,50);
     
     % DWT Filtering with padding
-    x_w_padded = handable_denoise_ecg_wavelet(x, Fs, 'sym4', 9, true,2, 60);
+    x_w_padded = handable_denoise_ecg_wavelet(x, Fs, 'sym4', 9, true,1, 50);
     
     % Plotting results
     N = length(x);
@@ -130,6 +77,57 @@ for i = 1:5
 end
 legend('Original', 'DWT No Padding', 'DWT Padding', "Location", "bestoutside")
 
+%% Filtering performances with BP cutoff modified
+BP_cut_freq = 40:10:90;
+figure(3)
+sgtitle('Different Cut-off Frequencies Performances (Rov Signal)')
+
+for i = 1:length(BP_cut_freq)
+    x = rov - mean(rov); % Remove DC offset
+
+    % DWT Filtering
+    x_w = handable_denoise_ecg_wavelet(x, Fs, 'sym4', 9, false, BP_cut_freq(i));
+
+    % BP Filtering
+    x_BP = handable_denoise_ecg_BP(x, Fs, BP_cut_freq(i));
+
+    % Plotting results
+    N = length(x);
+    Ts = 1 / Fs;
+    t = 0:Ts:Ts*N-Ts;
+    subplot(3,3,i)
+    plot(t, x, 'k:', t, x_w, 'b-', t, x_BP, 'r-')
+    xlabel('Time [s]')
+    ylabel('Amplitude [mV]')
+    title("Cut-off at: " + num2str(BP_cut_freq(i)) + " Hz")
+end
+legend('Original', 'DWT Filter', 'BP Filter', "Location", "bestoutside")
+
+%% Filtering performances with BP cutoff modified
+BP_cut_freq = 40:10:90;
+figure(3)
+sgtitle('Different Cut-off Frequencies Performances (Rov Signal)')
+
+for i = 1:length(BP_cut_freq)
+    x = rov - mean(rov); % Remove DC offset
+
+    % DWT Filtering
+    x_w = handable_denoise_ecg_wavelet(x, Fs, 'sym4', 9, false, BP_cut_freq(i));
+
+    % BP Filtering
+    x_BP = handable_denoise_ecg_BP(x, Fs, BP_cut_freq(i));
+
+    % Plotting results
+    N = length(x);
+    Ts = 1 / Fs;
+    t = 0:Ts:Ts*N-Ts;
+    subplot(3,3,i)
+    plot(t, x, 'k:', t, x_w, 'b-', t, x_BP, 'r-')
+    xlabel('Time [s]')
+    ylabel('Amplitude [mV]')
+    title("Cut-off at: " + num2str(BP_cut_freq(i)) + " Hz")
+end
+legend('Original', 'DWT Filter', 'BP Filter', "Location", "bestoutside")
 
 %% FINAL CONFIGURATION Performances 
 figure(4)
@@ -142,14 +140,14 @@ for i = 1:5
     x_w = handable_denoise_ecg_wavelet(x, Fs, 'sym4', 9, false, 3, 60);
     
     % BP Filtering
-    x_BP = handable_denoise_ecg_BP(x, Fs, 3, 60);
+    x_BP = handable_denoise_ecg_BP(x, Fs, 60);
     
     % Plotting results
     N = length(x);
     Ts = 1 / Fs;
     t = 0:Ts:Ts*N-Ts;
     subplot(3,2,i)
-    %plot(t, x, 'k:', t, x_w, 'b-', t, x_BP, 'r-')
+    % plot(t, x, 'k:', t, x_w, 'b-', t, x_BP, 'r-')
     plot(t, x, 'k:', t, x_w, 'b-')
     xlabel('Time [s]')
     ylabel('Amplitude [mV]')
