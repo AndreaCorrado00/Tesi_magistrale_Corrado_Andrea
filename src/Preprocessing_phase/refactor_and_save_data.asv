@@ -18,10 +18,10 @@ function data = refactor_and_save_data(original_data_path,processed_data_path)
         % Loop through each map type: A (indifferent), B (effective), C (dangerous)
         for map_name = ["A", "B", "C"]
             % Loading the map data from CSV file
-            MAP= readtable(original_data_path + "\MAP_" + map_name + "\MAP_" + map_name + num2str(i) + ".csv");
+            MAP_1 = readtable(original_data_path + "\MAP_" + map_name + "\MAP_" + map_name + num2str(i) + ".csv");
 
             % Refactoring the map data (assumed to be performed by the function maps_refactoring)
-            MAP= maps_refactoring(MAP, processed_data_path + '\MAP_' + map_name + '\MAP_' + map_name + num2str(i) + '_refactored.csv');
+            MAP_2 = maps_refactoring(MAP, processed_data_path + '\MAP_' + map_name + '\MAP_' + map_name + num2str(i) + '_refactored.csv');
 
             % Creating field names for the struct
             main_field = 'MAP_' + map_name;

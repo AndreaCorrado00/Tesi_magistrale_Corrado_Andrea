@@ -11,7 +11,7 @@ processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 202
 
 refactoring=false;
 if refactoring==true
-        refactor_and_save_pop_data(original_data_path,processed_data_path);
+        % refactor_and_save_pop_data(original_data_path,processed_data_path);
         refactor_and_save_data(original_data_path,processed_data_path);
 end
 
