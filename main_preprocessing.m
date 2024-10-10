@@ -13,38 +13,9 @@ addpath(src_pre_path)
 
 refactoring=true;
 if refactoring==true
-        % refactor_and_save_pop_data(original_data_path,processed_data_path);
         refactor_and_save_data(original_data_path,processed_data_path);
 end
 
-%%                                ---------- POPULATION ANALYSIS ----------
-% clc;clear;close;
-% % First, population analysis is done on data as they are, so without
-% % preprocessing, filtering and so on.
-% 
-% % Adding path
-% src_pop_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\Preprocessing_pop_phase";
-% figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\Preprocessing_pop_phase";
-% processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed";
-% addpath(src_pop_path)
-% 
-% % Loading data
-% fc=2035;
-% load(processed_data_path+'\dataset_pop.mat');
-% 
-% %% 2.0 Data visualization as they are 
-% spaghetti_confidence_signals(data,fc,figure_path)
-% 
-% %% 2.1 Signals direct comparisons 
-% % Comparison between different signals mean/periodogram traces for the same case
-% compare_case_signals(data,fc,figure_path)   
-% % Comparison within traces between subjects 
-% comparclcclce_traces_between_sub(data,fc,figure_path) 
-% % comparison between maps within subjects and traces
-% compare_maps_between_signals(data,fc,figure_path)
-
-
-  
 
 %%                           ---------- SINGLE SUBJECTS ANALYSIS ----------
 clc;clear;close;
@@ -78,21 +49,16 @@ compare_traces_between_sub(data,fc,figure_path)
 % comparison between maps within subjects and traces
 compare_maps_between_signals(data,fc,figure_path)
 
-%% Subject specific investigations
-% 3D plots of the signals, sub by sub
-compare_traces_between_sub_3D_figure(data, fc,figure_path) 
+%% Single records for each subject
 % subplots of single records sub by sub
 traces_subplots_by_sub(data, fc, figure_path) 
-% Checking if and where reference trace is the same as spare 1 trace
-display_ref_equal_spare1(data)
 
 
 
 
 
-%%    ---------- PREPROCESSING AND SPECTRUM EVALUATION ALGORITHM ----------
 
-
+%%                            ---------- PREPROCESSING ALGORITHM ----------
 
 clc;clear;close
 % This part of preprocessing is used to build a solid framework into which
@@ -122,7 +88,40 @@ show_filter_pipeline_didactical("high_frequency_ecg")
 
 % Other example of situations: 
 % "high_frequency_ecg" "Low_frequency_ecg" "PhysioNet_healthy" "PhysioNet_Pathological"
-%% 4.2 Spectrum composition
+
+
+
+
+
+%%               ---------- PREPROCESSING ALGORITHM ON AVNRT DATA----------
+% Adding path
+src_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\Spectrum_comparison_phase";
+addpath(src_path)
+processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed";
+% Loading previusly made data
+load(processed_data_path+'\dataset.mat');
+fc=2035;
+%% 5.1 Preprocessing and Spectrum evaluation algorithm on AVNRT data
+% Building examples
+MAP_A1_example=data.MAP_A.MAP_A1;
+MAP_B1_example=data.MAP_B.MAP_B1;
+MAP_C1_example=data.MAP_C.MAP_C8;
+
+% Evaluating filtering performance
+    show_pipeline_performances(MAP_C1_example)
+
+
+
+
+
+%%                        ---------- SPECTRUM EVALUATION PIPELINE----------
+% Adding path
+src_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\Spectrum_comparison_phase";
+addpath(src_path)
+%% 6.1 Spectrum composition
+% First, let's make some preliminary observations on the expected spectrum
+% shape of a single beat ecg.
+
 build_and_show_expected_spectrums()
 % Is this evaluation good? Actually not. In fact, as the ECG is a
 % quasi-periodical signal, what is expected is a band-made spectrum with
@@ -132,34 +131,14 @@ build_and_show_expected_spectrums()
 
 % Such conclusion can be reached even from the results below
 
-%% 4.3 Spectrum evaluation on didactical examples
+%% 6.2 Spectrum evaluation on didactical examples
 show_spectrum_evaluation_pipeline("Low_frequency_ecg")
 
 % Other example of situations: 
 % "high_frequency_ecg" "Low_frequency_ecg" "PhysioNet_healthy" "PhysioNet_Pathological"
 
-%% 4.4 Preprocessing and Spectrum evaluation algorithm on AVNRT data
-processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed";
-% Loading previusly made data
-load(processed_data_path+'\dataset.mat');
-fc=2035;
 
-% Building examples
-MAP_A1_example=data.MAP_A.MAP_A1;
-MAP_B1_example=data.MAP_B.MAP_B1;
-MAP_C1_example=data.MAP_C.MAP_C8;
 
-    %% 4.4.1 Evaluating filtering performance
-    show_pipeline_performances(MAP_C1_example)
-
-    % %% 4.4.2 Example of complete pipeline 
-    % % Example of Filter application and spectrum evaluation
-    % % filter application
-    % show_filter_result=true;
-    % Example_filtered=apply_filter(MAP_C1_example,show_filter_result);
-    % 
-    % % Example of spectrums
-    % show_spectrum_AVNRT_example(Example_filtered)
 
 
 
@@ -169,9 +148,6 @@ MAP_C1_example=data.MAP_C.MAP_C8;
 % subject by subject. 
 clc;clear;close;
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% RESULTS, explanation and further comments available into <3. Record alignment by subjects.pptx>%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Adding paths
 processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed";
@@ -183,16 +159,16 @@ addpath(src_path)
 load(processed_data_path+'\dataset.mat');
 fc=2035;
 
-%% 5.0 Finding QRS into different traces
+%% 7.0 Finding QRS into different traces
 show_qrs_pos_example=false;
 QRS_detected_data=analyzeQRS(data,fc,show_qrs_pos_example,'ref_trace');
 QRS_detected_data=analyzeQRS(QRS_detected_data,fc,show_qrs_pos_example,'spare1_trace');
 QRS_detected_data=analyzeQRS(QRS_detected_data,fc,show_qrs_pos_example,'spare2_trace');
 
-%% 5.1 Position of QRS analysis
+%% 7.1 Position of QRS analysis
 show_QRS_positions(QRS_detected_data,fc)
 
-%% 5.2 Implementing aligment strategies
+%% 7.2 Implementing aligment strategies
     % 5.1.1 Strategy 1
     % QRS is sorely into the ref trace
     window=0.2; %time window into which finding the maximum in seconds
@@ -212,7 +188,7 @@ show_QRS_positions(QRS_detected_data,fc)
     plot_alignment=false;
     Data_sub_aligned_3=single_sub_alignment(QRS_detected_data,fc,window,'only_spare1',[],plot_alignment);
 
-%% 5.3 Checking and saving results from strategies
+%% 7.3 Checking and saving results from strategies
     % Strategy 1
 traces_subplots_by_sub(Data_sub_aligned_1, fc, figure_path + "\single_records_v1") 
     % Strategy 2
@@ -233,13 +209,13 @@ src_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI
 figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\Scalogram_analysis_pipeline_phase";
 addpath(src_path)
 
-%% 6.0 Scalogram evaluation on didactical signals
+%% 8.0 Scalogram evaluation on didactical signals
 show_scalogram_evaluation_pipeline("high_frequency_ecg")
 
 % Other example of situations: 
 % "high_frequency_ecg" "Low_frequency_ecg" "PhysioNet_healthy" "PhysioNet_Pathological"
 
-%% 6.1 Algorthm application on AVNRT data
+%% 8.1 Algorthm application on AVNRT data
 processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed";
 % Loading previusly made data
 load(processed_data_path+'\dataset.mat');
@@ -285,37 +261,34 @@ load(processed_data_path+'\dataset_aligned_STR_1.mat');
 load(processed_data_path+'\dataset.mat');
 fc=2035;
 
-%% 7.1 Whole dataset alignment
+%% 9.1 Whole dataset alignment
 Aligned_DB= align_and_filter_dataset(data,Data_sub_aligned_1,false,0.5,fc);
 
-%% 7.2 Showing some examples
+%% 9.2 Showing some examples
 show_alignment_results(Aligned_DB,fc)
 
-%% 7.3 Building the new_population dataset
+%% 9.3 Building the new_population dataset
 % whole DB even unclear ref traces
 POP_DB_aligned=build_pop_dataset_after_alignment(Aligned_DB);
 
-%% 7.4 Plotting single records results
+%% 9.4 Plotting single records results
 traces_subplots_by_sub(Aligned_DB, fc, figure_path + "\single_records") 
 
-
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Intermediate step: pop analysis on subject with ref trace with QRS     %
-vec_subs=[1,2,4,6,11];                                                    %
-ref_QRS_data=extract_single_subs(Aligned_DB, vec_subs);  
-show_alignment_results(ref_QRS_data,fc)
-POP_DB_aligned=build_pop_dataset_after_alignment(ref_QRS_data);           %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% Following section work on data which have the reference trace clearly 
-% interpretable. That's because of this "intermediate step. Once clarified
-% the nature of reference trace and defined the best way to alig traces,
-% it's possible to proceed.
+% 
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %% Intermediate step: pop analysis on subject with ref trace with QRS     %
+% vec_subs=[1,2,4,6,11];                                                    %
+% ref_QRS_data=extract_single_subs(Aligned_DB, vec_subs);  
+% show_alignment_results(ref_QRS_data,fc)
+% POP_DB_aligned=build_pop_dataset_after_alignment(ref_QRS_data);           %
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 
+% % Following section work on data which have the reference trace clearly 
+% % interpretable. That's because of this "intermediate step. Once clarified
+% % the nature of reference trace and defined the best way to alig traces,
+% % it's possible to proceed.
 
 
 
@@ -353,7 +326,7 @@ compare_traces_between_sub(POP_DB_aligned,fc,figure_path)
 % comparison between maps within subjects and traces
 compare_maps_between_signals(POP_DB_aligned,fc,figure_path)
 
-%% 8.4 Preparing dataset for feature extraction
+
 
 
 

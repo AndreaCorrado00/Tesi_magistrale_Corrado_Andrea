@@ -13,43 +13,12 @@ addpath(src_pre_path)
 
 refactoring=true;
 if refactoring==true
-        % refactor_and_save_pop_data(original_data_path,processed_data_path);
         refactor_and_save_data(original_data_path,processed_data_path);
 end
 
-%%                                ---------- POPULATION ANALYSIS ----------
-% clc;clear;close;
-% % First, population analysis is done on data as they are, so without
-% % preprocessing, filtering and so on.
-% 
-% % Adding path
-% src_pop_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\Preprocessing_pop_phase";
-% figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\Preprocessing_pop_phase";
-% processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed";
-% addpath(src_pop_path)
-% 
-% % Loading data
-% fc=2035;
-% load(processed_data_path+'\dataset_pop.mat');
-% 
-% %% 2.0 Data visualization as they are 
-% spaghetti_confidence_signals(data,fc,figure_path)
-% 
-% %% 2.1 Signals direct comparisons 
-% % Comparison between different signals mean/periodogram traces for the same case
-% compare_case_signals(data,fc,figure_path)   
-% % Comparison within traces between subjects 
-% comparclcclce_traces_between_sub(data,fc,figure_path) 
-% % comparison between maps within subjects and traces
-% compare_maps_between_signals(data,fc,figure_path)
-
-
-  
 
 %%                           ---------- SINGLE SUBJECTS ANALYSIS ----------
 clc;clear;close;
-% Now the same analysis/visualizations made for population dataset are made
-% subject by subject, to check possible inter subjects differences
 
 % Adding paths
 src_pre_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\Preprocessing_phase";
@@ -60,6 +29,14 @@ addpath(src_pre_path)
 % Loading data 
 load(processed_data_path+'\dataset.mat');
 fc=2035;
+
+%% Preliminar observations
+% Are NaN present?
+computeNaNPercentages(data)
+% Are there some subjects repeated?
+display_subjects_repeated(data)
+% Are spare1==reference?
+display_ref_equal_spare1(data)
 
 %% 3.0 Data visualization as they are 
 spaghetti_confidence_signals(data,fc,figure_path)
@@ -72,25 +49,16 @@ compare_traces_between_sub(data,fc,figure_path)
 % comparison between maps within subjects and traces
 compare_maps_between_signals(data,fc,figure_path)
 
-%% Subject specific investigations
-% 3D plots of the signals, sub by sub
-compare_traces_between_sub_3D_figure(data, fc,figure_path) 
+%% Single records for each subject
 % subplots of single records sub by sub
 traces_subplots_by_sub(data, fc, figure_path) 
-% Checking if and where reference trace is the same as spare 1 trace
-display_ref_equal_spare1(data)
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% RESULTS of these first steps are available into <1. risultati data analysis.pptx>%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 
 
 
-%%    ---------- PREPROCESSING AND SPECTRUM EVALUATION ALGORITHM ----------
 
-
+%%                            ---------- PREPROCESSING ALGORITHM ----------
 
 clc;clear;close
 % This part of preprocessing is used to build a solid framework into which
@@ -136,29 +104,29 @@ show_spectrum_evaluation_pipeline("Low_frequency_ecg")
 % Other example of situations: 
 % "high_frequency_ecg" "Low_frequency_ecg" "PhysioNet_healthy" "PhysioNet_Pathological"
 
+%% 
+processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed";
+% Loading previusly made data
+load(processed_data_path+'\dataset.mat');
+fc=2035;
 %% 4.4 Preprocessing and Spectrum evaluation algorithm on AVNRT data
-% processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed";
-% % Loading previusly made data
-% load(processed_data_path+'\dataset.mat');
-% fc=2035;
-% 
-% % Building examples
-% MAP_A1_example=data.MAP_A.MAP_A1;
-% MAP_B1_example=data.MAP_B.MAP_B1;
-% MAP_C1_example=data.MAP_C.MAP_C8;
-% 
-%     %% 4.4.1 Evaluating filtering performance
-%     show_pipeline_performances(MAP_C1_example)
-% 
-%     %% 4.4.2 Example of complete pipeline 
-%     % Example of Filter application and spectrum evaluation
-%     % filter application
-%     show_filter_result=true;
-%     Example_filtered=apply_filter(MAP_C1_example,show_filter_result);
-% 
-%     % Example of spectrums
-%     show_spectrum_AVNRT_example(Example_filtered)
-% 
+% Building examples
+MAP_A1_example=data.MAP_A.MAP_A1;
+MAP_B1_example=data.MAP_B.MAP_B1;
+MAP_C1_example=data.MAP_C.MAP_C8;
+
+    %% 4.4.1 Evaluating filtering performance
+    show_pipeline_performances(MAP_C1_example)
+
+    % %% 4.4.2 Example of complete pipeline 
+    % % Example of Filter application and spectrum evaluation
+    % % filter application
+    % show_filter_result=true;
+    % Example_filtered=apply_filter(MAP_C1_example,show_filter_result);
+    % 
+    % % Example of spectrums
+    % show_spectrum_AVNRT_example(Example_filtered)
+
 
 
 %%                         ---------- TRACES ALIGMENT STRATEGIES ----------

@@ -22,7 +22,7 @@ function compare_maps_between_signals(data, fc, figure_path)
     maps = ["A", "B", "C"];
     
     % Loop through each plot type combination
-    for l = 1:4
+    for l = 1:2
         % Loop through each trace type
         for k = ["rov", "ref", "spare1", "spare2", "spare3"]
             
