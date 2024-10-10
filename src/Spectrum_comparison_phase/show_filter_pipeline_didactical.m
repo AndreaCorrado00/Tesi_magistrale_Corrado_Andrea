@@ -83,19 +83,19 @@ for i = 1: length(N_points)
     Ts = 1 / Fs;
     t = 0:Ts:Ts*N-Ts;
 
-    x_w=handable_denoise_ecg_wavelet(x,Fs,'sym4',9,false,60);
+    x_w=handable_denoise_ecg_wavelet(x,Fs,'sym4',9,false,1,60);
     x_w=x_w-mean(x_w);
-    x_bp=handable_denoise_ecg_BP(x,Fs,60);
+    x_bp=handable_denoise_ecg_BP(x,Fs,1,60);
     x_bp=x_bp-mean(x_bp);
 
     % Noise evaluations
     % Original
-    noise_win=extract_noise(3,60,Fs,x,false);
+    noise_win=extract_noise(2,60,Fs,x,false);
     ref_win=x-noise_win;
     % Band Pass
-    noise_win_bp=extract_noise(3,60,Fs,x_bp,false);
+    noise_win_bp=extract_noise(2,60,Fs,x_bp,false);
     % Wavelet 
-    noise_win_w=extract_noise(3,60,Fs,x_w,false);
+    noise_win_w=extract_noise(2,60,Fs,x_w,false);
 
     % SNR evaluation
     % Noise

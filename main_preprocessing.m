@@ -75,7 +75,7 @@ addpath(src_path)
 % thresholding plus digital filter. These method will be evaluated using
 % didactical examples.
 close;clc;close all; % cleaning environment
-show_filter_pipeline_syntetic("white_noise_stationary_var_fix")
+show_filter_pipeline_syntetic("baseline_drift")
 
 % Other example of situations: 
 %baseline_drift white_noise_stationary_var_fix
@@ -106,7 +106,7 @@ fc=2035;
 MAP_A1_example=data.MAP_A.MAP_A1;
 MAP_B1_example=data.MAP_B.MAP_B1;
 MAP_C1_example=data.MAP_C.MAP_C8;
-
+    
 % Evaluating filtering performance
     show_pipeline_performances(MAP_B1_example)
 

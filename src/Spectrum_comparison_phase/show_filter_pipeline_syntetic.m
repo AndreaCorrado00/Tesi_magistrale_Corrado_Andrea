@@ -34,7 +34,7 @@ switch noise_type
         A2 = 0.1;  % Ampiezza della seconda sinusoide
 
         % Generazione delle sinusoidi
-        noise = A1 * sin(2 * pi * f1 * t) + A2 * sin(2 * pi * f2 * t)+sqrt(0.001)*randn(1,N);
+        noise = A1 * sin(2 * pi * f1 * t) + A2 * sin(2 * pi * f2 * t)+sqrt(0.002)*randn(1,N);
         
         noisy_ecg=ecg_signal+noise;
         noise_title="Baseline drift simulation ";
@@ -72,9 +72,9 @@ for i = 1: length(N_points)
     Ts = 1 / Fs;
     t = 0:Ts:Ts*N-Ts;
 
-    x_w=handable_denoise_ecg_wavelet(x,Fs,'sym4',9,false,60);
+    x_w=handable_denoise_ecg_wavelet(x,Fs,'sym4',9,false,1,60);
     x_w=x_w-mean(x_w);
-    x_bp=handable_denoise_ecg_BP(x,Fs,60);
+    x_bp=handable_denoise_ecg_BP(x,Fs,1,60);
     x_bp=x_bp-mean(x_bp);
 
     % SNR evaluation
