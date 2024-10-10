@@ -22,6 +22,7 @@ end
 
 % Finding signals in the map data
 signals = MAP{:,1};
+
 rov_idx = find(strcmp(signals, 'rov trace:'));
 if length(rov_idx) > 1
     rov_idx = rov_idx(end, end);
@@ -45,7 +46,7 @@ end
 spare3_idx = find(strcmp(signals, 'spare3 trace:'));
 if length(spare3_idx) > 1
     spare3_idx = spare3_idx(end, end);
-end
+end 
 
 end_idx = find(strcmp(signals, 'FFT spectrum is available for FFT maps only'));
 

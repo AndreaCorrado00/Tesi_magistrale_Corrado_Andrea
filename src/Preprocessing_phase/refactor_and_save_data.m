@@ -14,11 +14,12 @@ function data = refactor_and_save_data(original_data_path,processed_data_path)
     n_el = numel(dir(original_data_path + "\MAP_A")) - 2;
 
     % Loop through each element (file)
-    for i = [5] % 1:n_el
+    for i = 1:n_el
         % Loop through each map type: A (indifferent), B (effective), C (dangerous)
         for map_name = ["A", "B", "C"]
             % Loading the map data from CSV file
             MAP= readtable(original_data_path + "\MAP_" + map_name + "\MAP_" + map_name + num2str(i) + ".csv");
+            names_field=extract_names(MAP);
 
             % Refactoring the map data (assumed to be performed by the function maps_refactoring)
             MAP= maps_refactoring(MAP, processed_data_path + '\MAP_' + map_name + '\MAP_' + map_name + num2str(i) + '_refactored.csv');
@@ -29,6 +30,7 @@ function data = refactor_and_save_data(original_data_path,processed_data_path)
 
             % Adding the refactored map data to the struct
             data.(main_field).(sub_field) = MAP;
+            data.(main_field).(sub_field).traces_origin=names_field;
         end
     end
 

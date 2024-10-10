@@ -1,7 +1,5 @@
 function display_ref_equal_spare1(data)
-
-
-
+disp('Checking subjects with ref==spare1...')
 % Loop through each map type: A, B, C
 for i = ["A", "B", "C"]
     disp('')
