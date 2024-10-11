@@ -17,14 +17,9 @@ function x_denoised = handable_denoise_ecg_wavelet(x, Fc, type, nLevels, padding
     signalLength = length(x);
    % Circular padding if required
 if padding
-    N=5;
-    % Ensure N is greater than 1 and odd (for a proper central repetition)
-    if mod(N, 2) == 0
-        error('N must be an odd number to have a central repetition');
-    end
-    
-    % Replicate the signal N times
-    x_padded = repmat(x, N, 1);
+    N=3;
+    % Mirror padding
+    x_padded = [flip(x);x;flip(x)];
     
     % Calculate the start index of the central repetition
     idx_start = ((N - 1) / 2) * signalLength + 1;
