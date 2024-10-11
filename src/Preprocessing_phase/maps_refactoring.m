@@ -51,11 +51,11 @@ end
 end_idx = find(strcmp(signals, 'FFT spectrum is available for FFT maps only'));
 
 % Extraction of data tables for each trace type
-MAP_out.rov_trace = MAP(rov_idx + 1:ref_idx - 1, 2:end);
-MAP_out.ref_trace = MAP(ref_idx + 1:spare1_idx - 1, 2:end);
-MAP_out.spare1_trace = MAP(spare1_idx + 1:spare2_idx - 1, 2:end);
-MAP_out.spare2_trace = MAP(spare2_idx + 1:spare3_idx - 1, 2:end);
-MAP_out.spare3_trace = MAP(spare3_idx + 1:end_idx - 1, 2:end);
+MAP_out.rov_trace = varfun(@(x) str2double(x), MAP(rov_idx + 1:ref_idx - 1, 2:end));
+MAP_out.ref_trace =varfun(@(x) str2double(x),  MAP(ref_idx + 1:spare1_idx - 1, 2:end));
+MAP_out.spare1_trace = varfun(@(x) str2double(x), MAP(spare1_idx + 1:spare2_idx - 1, 2:end));
+MAP_out.spare2_trace = varfun(@(x) str2double(x), MAP(spare2_idx + 1:spare3_idx - 1, 2:end));
+MAP_out.spare3_trace = varfun(@(x) str2double(x), MAP(spare3_idx + 1:end_idx - 1, 2:end));
 
 % Conversion of char into double
 % To use the data properly in MATLAB, these are converted from char to double.

@@ -38,6 +38,16 @@ display_subjects_repeated(data)
 % Are spare1==reference?
 display_ref_equal_spare1(data)
 
+% % Removing repeated subjects
+% data.MAP_A=rmfield(data.MAP_A, 'MAP_A5');
+% data.MAP_B=rmfield(data.MAP_B, 'MAP_B5');
+% data.MAP_C=rmfield(data.MAP_C, 'MAP_C5');
+% 
+% save("D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed\dataset.mat", 'data');
+% 
+% clear("data"); 
+% load(processed_data_path+'\dataset.mat');
+
 %% 3.0 Data visualization as they are 
 spaghetti_confidence_signals(data,fc,figure_path)
 
@@ -75,7 +85,7 @@ addpath(src_path)
 % thresholding plus digital filter. These method will be evaluated using
 % didactical examples.
 close;clc;close all; % cleaning environment
-show_filter_pipeline_syntetic("white_noise_stationary_var_fix")
+show_filter_pipeline_syntetic("baseline_drift")
 
 % Other example of situations: 
 %baseline_drift white_noise_stationary_var_fix
@@ -88,7 +98,40 @@ show_filter_pipeline_didactical("high_frequency_ecg")
 
 % Other example of situations: 
 % "high_frequency_ecg" "Low_frequency_ecg" "PhysioNet_healthy" "PhysioNet_Pathological"
-%% 4.2 Spectrum composition
+
+
+
+
+
+%%               ---------- PREPROCESSING ALGORITHM ON AVNRT DATA----------
+% Adding path
+src_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\Spectrum_comparison_phase";
+addpath(src_path)
+processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed";
+% Loading previusly made data
+load(processed_data_path+'\dataset.mat');
+fc=2035;
+%% 5.1 Preprocessing and Spectrum evaluation algorithm on AVNRT data
+% Building examples
+MAP_A1_example=data.MAP_A.MAP_A1;
+MAP_B1_example=data.MAP_B.MAP_B1;
+MAP_C1_example=data.MAP_C.MAP_C8;
+    
+% Evaluating filtering performance
+    show_pipeline_performances(MAP_B1_example)
+
+
+
+
+
+%%                        ---------- SPECTRUM EVALUATION PIPELINE----------
+% Adding path
+src_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\Spectrum_comparison_phase";
+addpath(src_path)
+%% 6.1 Spectrum composition
+% First, let's make some preliminary observations on the expected spectrum
+% shape of a single beat ecg.
+
 build_and_show_expected_spectrums()
 % Is this evaluation good? Actually not. In fact, as the ECG is a
 % quasi-periodical signal, what is expected is a band-made spectrum with
@@ -98,93 +141,12 @@ build_and_show_expected_spectrums()
 
 % Such conclusion can be reached even from the results below
 
-%% 4.3 Spectrum evaluation on didactical examples
+%% 6.2 Spectrum evaluation on didactical examples
 show_spectrum_evaluation_pipeline("Low_frequency_ecg")
 
 % Other example of situations: 
 % "high_frequency_ecg" "Low_frequency_ecg" "PhysioNet_healthy" "PhysioNet_Pathological"
 
-%% 
-processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed";
-% Loading previusly made data
-load(processed_data_path+'\dataset.mat');
-fc=2035;
-%% 4.4 Preprocessing and Spectrum evaluation algorithm on AVNRT data
-% Building examples
-MAP_A1_example=data.MAP_A.MAP_A1;
-MAP_B1_example=data.MAP_B.MAP_B1;
-MAP_C1_example=data.MAP_C.MAP_C8;
-
-    %% 4.4.1 Evaluating filtering performance
-    show_pipeline_performances(MAP_C1_example)
-
-    % %% 4.4.2 Example of complete pipeline 
-    % % Example of Filter application and spectrum evaluation
-    % % filter application
-    % show_filter_result=true;
-    % Example_filtered=apply_filter(MAP_C1_example,show_filter_result);
-    % 
-    % % Example of spectrums
-    % show_spectrum_AVNRT_example(Example_filtered)
-
-
-
-%%                         ---------- TRACES ALIGMENT STRATEGIES ----------
-
-% First, a solid way to align traces should be found record by record and
-% subject by subject. 
-clc;clear;close;
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% RESULTS, explanation and further comments available into <3. Record alignment by subjects.pptx>%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% Adding paths
-processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed";
-src_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\Sub_alignment_analysis_phase";
-figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\Sub_alignment_analysis";
-addpath(src_path)
-
-% Loading previusly made data
-load(processed_data_path+'\dataset.mat');
-fc=2035;
-
-%% 5.0 Finding QRS into different traces
-show_qrs_pos_example=false;
-QRS_detected_data=analyzeQRS(data,fc,show_qrs_pos_example,'ref_trace');
-QRS_detected_data=analyzeQRS(QRS_detected_data,fc,show_qrs_pos_example,'spare1_trace');
-QRS_detected_data=analyzeQRS(QRS_detected_data,fc,show_qrs_pos_example,'spare2_trace');
-
-%% 5.1 Position of QRS analysis
-show_QRS_positions(QRS_detected_data,fc)
-
-%% 5.2 Implementing aligment strategies
-    % 5.1.1 Strategy 1
-    % QRS is sorely into the ref trace
-    window=0.2; %time window into which finding the maximum in seconds
-    plot_alignment=false;
-    Data_sub_aligned_1=single_sub_alignment(QRS_detected_data,fc,window,'only_ref',[],plot_alignment);
-
-    % 5.1.2 Strategy 2
-    % QRS is in both ref and spare2 traces but possibly shifted
-    window=0.01; %time window into which finding the maximum in seconds
-    plot_alignment=false;
-    tollerance=0.05; %tollerance in [sec] of distance between QRS points in ref and spare2 traces
-    Data_sub_aligned_2=single_sub_alignment(QRS_detected_data,fc,window,'ref_and_spare2',tollerance,plot_alignment);
-
-    % 5.1.3 Strategy 3
-    % a real QRS is only into the spare1 trace
-    window=0.2; %time window into whitch finding the maximum in seconds
-    plot_alignment=false;
-    Data_sub_aligned_3=single_sub_alignment(QRS_detected_data,fc,window,'only_spare1',[],plot_alignment);
-
-%% 5.3 Checking and saving results from strategies
-    % Strategy 1
-traces_subplots_by_sub(Data_sub_aligned_1, fc, figure_path + "\single_records_v1") 
-    % Strategy 2
-traces_subplots_by_sub(Data_sub_aligned_2, fc, figure_path + "\single_records_v2") 
-    % Strategy 3
-traces_subplots_by_sub(Data_sub_aligned_3, fc, figure_path + "\single_records_v3")  
 
 
 
@@ -199,13 +161,13 @@ src_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI
 figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\Scalogram_analysis_pipeline_phase";
 addpath(src_path)
 
-%% 6.0 Scalogram evaluation on didactical signals
+%% 8.0 Scalogram evaluation on didactical signals
 show_scalogram_evaluation_pipeline("high_frequency_ecg")
 
 % Other example of situations: 
 % "high_frequency_ecg" "Low_frequency_ecg" "PhysioNet_healthy" "PhysioNet_Pathological"
 
-%% 6.1 Algorthm application on AVNRT data
+%% 8.1 Algorthm application on AVNRT data
 processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed";
 % Loading previusly made data
 load(processed_data_path+'\dataset.mat');
@@ -232,6 +194,73 @@ show_scalogram_AVNRT_data(MAP_C1_example,'Example MAP C, sub 7',filtering,log_sc
 
 
 
+%%                         ---------- TRACES ALIGMENT STRATEGIES ----------
+
+% Alignment is necessary becouse of different nature of reference traces.
+% In fact, as we know, we can divide the dataset into two macro areas: Ref
+% with CS signals and Ref with QRS. the idea is pretty simple:
+%   1. case ref=CS -> find peak into spare traces
+%   2. case ref=QRS -> find peak into ref trace 
+
+% In this part of the code the Fiducial Point (i.e., the maximum of the
+% ventricular conduction into rov trace) is found
+
+clc;clear;close;
+
+% Adding paths
+processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed";
+src_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\Sub_alignment_analysis_phase";
+figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\Sub_alignment_analysis";
+addpath(src_path)
+
+% Loading previusly made data
+load(processed_data_path+'\dataset.mat');
+fc=2035;
+
+%%
+% Alignment strategy 
+newData = find_fiducial_point(data, fc, 0.2);
+
+%%
+
+% 
+% %% 7.0 Finding QRS into different traces
+% show_qrs_pos_example=false;
+% QRS_detected_data=analyzeQRS(data,fc,show_qrs_pos_example,'ref_trace');
+% QRS_detected_data=analyzeQRS(QRS_detected_data,fc,show_qrs_pos_example,'spare1_trace');
+% QRS_detected_data=analyzeQRS(QRS_detected_data,fc,show_qrs_pos_example,'spare2_trace');
+% 
+% %% 7.1 Position of QRS analysis
+% show_QRS_positions(QRS_detected_data,fc)
+% 
+% %% 7.2 Implementing aligment strategies
+%     % 5.1.1 Strategy 1
+%     % QRS is sorely into the ref trace
+%     window=0.2; %time window into which finding the maximum in seconds
+%     plot_alignment=false;
+%     Data_sub_aligned_1=single_sub_alignment(QRS_detected_data,fc,window,'only_ref',[],plot_alignment);
+% 
+%     % 5.1.2 Strategy 2
+%     % QRS is in both ref and spare2 traces but possibly shifted
+%     window=0.01; %time window into which finding the maximum in seconds
+%     plot_alignment=false;
+%     tollerance=0.05; %tollerance in [sec] of distance between QRS points in ref and spare2 traces
+%     Data_sub_aligned_2=single_sub_alignment(QRS_detected_data,fc,window,'ref_and_spare2',tollerance,plot_alignment);
+% 
+%     % 5.1.3 Strategy 3
+%     % a real QRS is only into the spare1 trace
+%     window=0.2; %time window into whitch finding the maximum in seconds
+%     plot_alignment=false;
+%     Data_sub_aligned_3=single_sub_alignment(QRS_detected_data,fc,window,'only_spare1',[],plot_alignment);
+% 
+% %% 7.3 Checking and saving results from strategies
+%     % Strategy 1
+% traces_subplots_by_sub(Data_sub_aligned_1, fc, figure_path + "\single_records_v1") 
+%     % Strategy 2
+% traces_subplots_by_sub(Data_sub_aligned_2, fc, figure_path + "\single_records_v2") 
+%     % Strategy 3
+% traces_subplots_by_sub(Data_sub_aligned_3, fc, figure_path + "\single_records_v3")  
+
 
 
 
@@ -251,37 +280,34 @@ load(processed_data_path+'\dataset_aligned_STR_1.mat');
 load(processed_data_path+'\dataset.mat');
 fc=2035;
 
-%% 7.1 Whole dataset alignment
+%% 9.1 Whole dataset alignment
 Aligned_DB= align_and_filter_dataset(data,Data_sub_aligned_1,false,0.5,fc);
 
-%% 7.2 Showing some examples
+%% 9.2 Showing some examples
 show_alignment_results(Aligned_DB,fc)
 
-%% 7.3 Building the new_population dataset
+%% 9.3 Building the new_population dataset
 % whole DB even unclear ref traces
 POP_DB_aligned=build_pop_dataset_after_alignment(Aligned_DB);
 
-%% 7.4 Plotting single records results
+%% 9.4 Plotting single records results
 traces_subplots_by_sub(Aligned_DB, fc, figure_path + "\single_records") 
 
-
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Intermediate step: pop analysis on subject with ref trace with QRS     %
-vec_subs=[1,2,4,6,11];                                                    %
-ref_QRS_data=extract_single_subs(Aligned_DB, vec_subs);  
-show_alignment_results(ref_QRS_data,fc)
-POP_DB_aligned=build_pop_dataset_after_alignment(ref_QRS_data);           %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% Following section work on data which have the reference trace clearly 
-% interpretable. That's because of this "intermediate step. Once clarified
-% the nature of reference trace and defined the best way to alig traces,
-% it's possible to proceed.
+% 
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %% Intermediate step: pop analysis on subject with ref trace with QRS     %
+% vec_subs=[1,2,4,6,11];                                                    %
+% ref_QRS_data=extract_single_subs(Aligned_DB, vec_subs);  
+% show_alignment_results(ref_QRS_data,fc)
+% POP_DB_aligned=build_pop_dataset_after_alignment(ref_QRS_data);           %
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 
+% % Following section work on data which have the reference trace clearly 
+% % interpretable. That's because of this "intermediate step. Once clarified
+% % the nature of reference trace and defined the best way to alig traces,
+% % it's possible to proceed.
 
 
 
@@ -319,7 +345,7 @@ compare_traces_between_sub(POP_DB_aligned,fc,figure_path)
 % comparison between maps within subjects and traces
 compare_maps_between_signals(POP_DB_aligned,fc,figure_path)
 
-%% 8.4 Preparing dataset for feature extraction
+
 
 
 

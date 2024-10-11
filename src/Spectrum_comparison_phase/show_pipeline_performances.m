@@ -133,7 +133,7 @@ legend('Original', 'DWT No Padding', 'DWT Padding', "Location", "bestoutside")
 
 %% FINAL CONFIGURATION Performances 
 figure(4)
-sgtitle({'Filtering Performances: Final Pipeline', 'sym4 wavelet, BP 3-60 Hz'})
+sgtitle({'Filtering Performances: Final Pipeline', 'sym4 wavelet th & BP 2-60 Hz'})
 
 for i = 1:5
     x = tab_signals(:,i) - mean(tab_signals(:,i)); % Remove DC offset
