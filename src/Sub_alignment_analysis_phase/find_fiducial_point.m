@@ -56,7 +56,7 @@ for i = 1:length(mapNames)
             % Saving QRS position informations
             QRS_pos_fiel_name="QRS_position_"+trace_align;
             newData.(mapName).(subjectName).(QRS_pos_fiel_name)=QRS_positions;
-            newData.(mapName).(subjectName).alignement_trace=trace_align;
+            newData.(mapName).(subjectName).alignment_trace=trace_align;
         %     % Switch based on the selected alignment strategy
         % 
         % % Save the updated QRS positions based on the strategy used

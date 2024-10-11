@@ -12,7 +12,8 @@ function newData = align_and_filter_dataset(original_data, sub_align_data, filte
     % OUTPUT:
     %   newData - Struct with aligned and filtered traces
 
-    newData = original_data;
+    newData = sub_align_data;
+    
     map_names = ["MAP_A", "MAP_B", "MAP_C"];
     n_sub = length(fieldnames(newData.MAP_A));
 
@@ -45,6 +46,7 @@ function newData = align_and_filter_dataset(original_data, sub_align_data, filte
                 FP = sub_align_data.(map).(sub).FP_position_rov{:, k};
                 RP_pos = round(RP * Fc); % Convert reference point from seconds to indices
                 newData.(map).(sub).rov_trace{:, k} = align_rov_traces(FP, RP_pos, rov);
+
             end
         end
     end

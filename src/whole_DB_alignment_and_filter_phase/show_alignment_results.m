@@ -57,7 +57,10 @@ function show_alignment_results(data, fc)
             num_str = regexp(sub, '\d+', 'match');
             
             % Set the title for the subplot using the subject number
-            title("Subject: " + string(num_str))
+            alignment_trace=data.(map).(sub).alignment_trace;
+            alignment_trace=strsplit(alignment_trace,"_");
+            alignment_trace=alignment_trace(1)+" "+alignment_trace(2);
+            title("Subject: " + string(num_str), "trace with QRS: "+alignment_trace)
 
             % Label the x-axis and y-axis
             xlabel('Time [s]')
