@@ -23,7 +23,7 @@ function traces_subplots_by_sub(data, fc, figure_path)
         % Loop through each map type: A, B, C
         for i = ["A", "B", "C"]
             map = 'MAP_' + i;
-            subjects = fieldnames(data.(map));
+           
 
 
             [~, N] = size(data.(map).rov_trace);
@@ -40,7 +40,8 @@ function traces_subplots_by_sub(data, fc, figure_path)
                     title_plot = 'MAP:' + i + ' (' + get_name_of_map(i) + '),'+ traces_names(k)+' trace, record: '+num2str(h);
                     signals = data.(map).(trace);
 
-                    signal=prepare_signal(signals(:,h),'restore');
+                    % signal=prepare_signal(signals(:,h),'restore');
+                    signal=signals(:,h);
                    
                  
                     % Plot the trace signals

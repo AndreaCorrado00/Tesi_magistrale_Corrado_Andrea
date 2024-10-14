@@ -33,22 +33,14 @@ table_or=signals_table;
             end
 
         end
-
-        % for i=1:length(i_anomalies)
-        %     t = [0:1/Fc:1-1/Fc]';
-        %     figure;
-        %     plot(t,table2array(table_or(:,i)))
-        %     title(num2str(i)+" record")
-        % end
-
         x_lim = [0, 100]; % Define x-axis limits
         x_label = 'f [Hz]'; % Label for x-axis
         y_label = 'Spectrum'; % Label for y-axis
  else
-     for i=1:N
-         signal=prepare_signal(signals_table(:,i),'restore');
-         signals_table(:, i) = array2table(signal);
-     end
+     % for i=1:N
+     %     signal=prepare_signal(signals_table(:,i),'restore');
+     %     signals_table(:, i) = array2table(signal);
+     % end
 
     % If plotting in time domain
     x = [0:1/Fc:1-1/Fc]';

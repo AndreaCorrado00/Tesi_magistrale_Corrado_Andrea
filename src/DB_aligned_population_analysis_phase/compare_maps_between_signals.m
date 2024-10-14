@@ -24,7 +24,7 @@ function compare_maps_between_signals(data, fc, figure_path)
     % Loop through each plot type combination
     for l = 1:2
         % Loop through each trace type
-        for k = ["rov", "ref", "spare1", "spare2", "spare3"]
+        for k = "rov" % ["rov", "ref", "spare1", "spare2", "spare3"]
 
 
             % Initialize legend entries for the current trace type

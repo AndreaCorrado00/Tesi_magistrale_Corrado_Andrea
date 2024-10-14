@@ -38,16 +38,6 @@ display_subjects_repeated(data)
 % Are spare1==reference?
 display_ref_equal_spare1(data)
 
-% % Removing repeated subjects
-% data.MAP_A=rmfield(data.MAP_A, 'MAP_A5');
-% data.MAP_B=rmfield(data.MAP_B, 'MAP_B5');
-% data.MAP_C=rmfield(data.MAP_C, 'MAP_C5');
-% 
-% save("D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed\dataset.mat", 'data');
-% 
-% clear("data"); 
-% load(processed_data_path+'\dataset.mat');
-
 %% 3.0 Data visualization as they are 
 spaghetti_confidence_signals(data,fc,figure_path)
 
@@ -286,28 +276,20 @@ Aligned_DB= align_and_filter_dataset(data,Data_sub_aligned_1,false,0.5,fc);
 %% 9.2 Showing some examples
 show_alignment_results(Aligned_DB,fc)
 
-%% 9.3 Building the new_population dataset
-% whole DB even unclear ref traces
-POP_DB_aligned=build_pop_dataset_after_alignment(Aligned_DB);
-
-%% 9.4 Plotting single records results
+%% 9.3 Plotting single records results
 traces_subplots_by_sub(Aligned_DB, fc, figure_path + "\single_records") 
 
-% 
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% %% Intermediate step: pop analysis on subject with ref trace with QRS     %
-% vec_subs=[1,2,4,6,11];                                                    %
-% ref_QRS_data=extract_single_subs(Aligned_DB, vec_subs);  
-% show_alignment_results(ref_QRS_data,fc)
-% POP_DB_aligned=build_pop_dataset_after_alignment(ref_QRS_data);           %
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 
-% % Following section work on data which have the reference trace clearly 
-% % interpretable. That's because of this "intermediate step. Once clarified
-% % the nature of reference trace and defined the best way to alig traces,
-% % it's possible to proceed.
+%% 9.4 Dropping repeated subjects
+Aligned_DB.MAP_A=rmfield(Aligned_DB.MAP_A, 'MAP_A5');
+Aligned_DB.MAP_B=rmfield(Aligned_DB.MAP_B, 'MAP_B5');
+Aligned_DB.MAP_C=rmfield(Aligned_DB.MAP_C, 'MAP_C5');
+
+save("D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed\aligned_subjects_DB.mat", 'Aligned_DB');
+load(processed_data_path+'\aligned_subjects_DB.mat');
+%% 9.5 Building the new_population dataset
+POP_DB_aligned=build_pop_dataset_after_alignment(Aligned_DB);
+
+
 
 
 
@@ -315,12 +297,8 @@ traces_subplots_by_sub(Aligned_DB, fc, figure_path + "\single_records")
 
 %%                ---------- ALIGNED DATASET POPULATION ANALYSIS ---------- 
 clc;clear;close;
-% Now, the population dataset is evaluated again using what has been
-% studied before. So functions, pretty similar to the ones used before, are
-% update with the last methods implemented (spectrum eval).
-% N.B. As the only traces aligned are rov traces and all records have been
-% filtered, changes will be appreciable on the rov_trace analysis and into
-% spectrums analysis
+% Ppopulation plots are done to summarize. They not intend to be a complete
+% and deep representation, but just a quick overview on the data we have.
 
 processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed";
 src_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\DB_aligned_population_analysis_phase";
@@ -338,10 +316,9 @@ traces_subplots_by_sub(POP_DB_aligned, fc, figure_path + "\single_records")
 spaghetti_confidence_signals(POP_DB_aligned,fc,figure_path)
 
 %% 8.3 Signals direct comparisons 
-% Comparison between different signals mean/periodogram traces for the same case
-compare_case_signals(POP_DB_aligned,fc,figure_path)   
-% Comparison within traces between subjects 
-compare_traces_between_sub(POP_DB_aligned,fc,figure_path) 
+% Comparison between different signals mean traces for the same case
+% compare_case_signals(POP_DB_aligned,fc,figure_path)   
+
 % comparison between maps within subjects and traces
 compare_maps_between_signals(POP_DB_aligned,fc,figure_path)
 
