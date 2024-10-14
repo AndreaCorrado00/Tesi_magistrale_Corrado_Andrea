@@ -15,24 +15,27 @@ function x_denoised = handable_denoise_ecg_wavelet(x, Fc, type, nLevels, padding
 
   
     signalLength = length(x);
-   % Circular padding if required
-if padding
-    N=3;
-    % Mirror padding
-    x_padded = [flip(x);x;flip(x)];
-    
-    % Calculate the start index of the central repetition
-    idx_start = ((N - 1) / 2) * signalLength + 1;
-    
-    % Calculate the end index of the central repetition
-    idx_end = idx_start + signalLength - 1;
-    
-else
-    % No padding, so keep the original signal
-    x_padded = x;
-    idx_start = 1;                       % Start from the first element
-    idx_end = signalLength;               % End at the last element
-end
+
+    if padding
+        N = 400;  % Number of samples to use from the flipped signal
+
+        % Mirror padding with N samples
+        x_flipped = flip(x);  % Flipped signal
+
+        % Create the padded signal using N samples from the flipped signal
+        x_padded = [x_flipped(1:N); x; x_flipped(1:N)];
+
+        % The original signal starts right after the padding
+        idx_start = N + 1;                   % The start index is N+1 (after padding)
+        idx_end = idx_start + signalLength - 1;  % The end index is calculated based on the original signal length
+
+    else
+        % No padding, keep the original signal
+        x_padded = x;
+        idx_start = 1;                        % Start from the first element
+        idx_end = signalLength;                % End at the last element
+    end
+
 
 
     % Check if the signal length supports the proposed decomposition level

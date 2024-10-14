@@ -35,10 +35,10 @@ traces = ["Rov trace", "Ref trace", "Spare1 trace", "Spare2 trace", "Spare3 trac
 %     x = tab_signals(:,i) - mean(tab_signals(:,i)); % Remove DC offset
 % 
 %     % DWT Filtering
-%     x_w = handable_denoise_ecg_wavelet(x, Fs, 'sym4', 9, false,1,60);
+%     x_w = handable_denoise_ecg_wavelet(x, Fs, 'sym4', 9, false, 40);
 % 
 %     % BP Filtering
-%     x_BP = handable_denoise_ecg_BP(x, Fs,1, 60);
+%     x_BP = handable_denoise_ecg_BP(x, Fs, 40);
 % 
 %     % Plotting results
 %     N = length(x);
@@ -113,10 +113,10 @@ for i = 1:5
     x = tab_signals(:,i) - mean(tab_signals(:,i)); % Remove DC offset
 
     % DWT Filtering without padding
-    x_w = handable_denoise_ecg_wavelet(x, Fs, 'sym4', 9, false, 1 ,60);
+    x_w = handable_denoise_ecg_wavelet(x, Fs, 'sym4', 9, false, 1.2,60);
     
     % DWT Filtering with padding
-    x_w_padded = handable_denoise_ecg_wavelet(x, Fs, 'sym4', 9, true, 1 , 60);
+    x_w_padded = handable_denoise_ecg_wavelet(x, Fs, 'sym4', 9, true,1.1, 60);
     
     % Plotting results
     N = length(x);
@@ -139,7 +139,7 @@ for i = 1:5
     x = tab_signals(:,i) - mean(tab_signals(:,i)); % Remove DC offset
     
     % DWT Filtering
-    x_w = handable_denoise_ecg_wavelet(x, Fs, 'sym4', 9, false, 3, 60);
+    x_w = handable_denoise_ecg_wavelet(x, Fs, 'sym4', 9, false, 2, 60);
     
     % BP Filtering
     x_BP = handable_denoise_ecg_BP(x, Fs, 2, 60);
