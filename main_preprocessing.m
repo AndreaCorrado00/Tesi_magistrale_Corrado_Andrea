@@ -75,7 +75,7 @@ addpath(src_path)
 % thresholding plus digital filter. These method will be evaluated using
 % didactical examples.
 close;clc;close all; % cleaning environment
-show_filter_pipeline_syntetic("baseline_drift")
+show_filter_pipeline_syntetic("white_noise_stationary_var_fix")
 
 % Other example of situations: 
 %baseline_drift white_noise_stationary_var_fix

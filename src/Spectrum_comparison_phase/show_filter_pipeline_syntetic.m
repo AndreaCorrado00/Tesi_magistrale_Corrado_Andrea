@@ -12,6 +12,7 @@ ecg_signal = ecg(length(t));
 
 ecg_signal=repmat(ecg_signal,1,25);
 ecg_signal=sgolayfilt(ecg_signal,2,31);
+ecg_signal=ecg_signal-mean(ecg_signal);
 
 N = length(ecg_signal);
 Ts = 1 / Fs;
