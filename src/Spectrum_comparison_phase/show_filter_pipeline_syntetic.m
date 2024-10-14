@@ -81,8 +81,8 @@ for i = 1: length(N_points)
     % SNR evaluation
     % Noise
     P_noise_original=sum(noise_win.^2);
-    P_noise_residual_w=sum((x_w-ref_win).^2);
-    P_noise_residual_bp=sum((x_bp-ref_win).^2);
+    P_noise_residual_w= sum(extract_noise(2,60,Fs,x_w,false).^2); % sum((x_w-ref_win).^2);
+    P_noise_residual_bp=sum(extract_noise(2,60,Fs,x_bp,false).^2); %sum((x_bp-ref_win).^2);
     % Signal
     P_ref_win=sum(ref_win.^2);
     P_w=sum(x_w.^2);
