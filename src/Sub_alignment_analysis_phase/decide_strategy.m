@@ -4,7 +4,7 @@ function trace_align=decide_strategy(traces_origin)
 ref_origin=strsplit(string(traces_origin{2,2}));
 ref_origin=ref_origin(1);
 
-if ref_origin ~= "CS"
+if upper(ref_origin) ~= "CS"
 % In this case, reference has inside ECG
     trace_align="ref_trace";
 else

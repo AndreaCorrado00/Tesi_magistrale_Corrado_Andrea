@@ -24,30 +24,39 @@ for i = 1:length(mapNames)
         alignSignals = newData.(mapName).(subjectName).(trace_align);
         FP_positions={};
         QRS_positions={};
-
         % Loop through each signal (column) in the rovSignals table
         for k = 1:width(rovSignals)
             signal = rovSignals{:, k};  % Extract the k-th signal from the rov trace
             half_width = round((Fc * window) / 2);  % Calculate half of the alignment window in samples
             alignSignal = alignSignals{:, k};  % Extract the corresponding reference signal
-            QRS_pos=find(abs(alignSignal)==max(abs(alignSignal)),1);
 
+            % Define the QRS position based on the maximum value in alignSignal
+            % centered around 0.5 seconds from the start of the signal
+            center_time = 0.5;  % Center point in seconds
+            center_sample = round(center_time * Fc);  % Convert to sample index
 
-            % alignement and fiducial point
-            [FP_pos,new_rov] = align_to_QRS(signal, QRS_pos, half_width);
-            % saving rov trace
-            rovSignals{:, k}=new_rov;
-            % saving FP position
-            FP_positions{k}=FP_pos;
-            QRS_positions{k}=QRS_pos;
-            % 
-            % switch trace_align
-            %     case "ref_trace"
-            % 
-            %     case "spare_trace"
-            % 
-            % end
+            % Define the neighborhood in seconds
+            neighborhood_seconds = 0.3;
+            % Convert the neighborhood to sample indices
+            neighborhood_samples = round(neighborhood_seconds * Fc);  % Fs is the sampling frequency in Hz
+
+            % Calculate the range for the QRS search
+            search_start = max(center_sample - neighborhood_samples, 1);  % Ensure we don't go below index 1
+            search_end = min(center_sample + neighborhood_samples, length(alignSignal));  % Ensure we don't exceed signal length
+
+            % Find the QRS position by looking for the maximum in the defined neighborhood
+            [~, local_max_index] = max(abs(alignSignal(search_start:search_end)));  % Find the maximum in the neighborhood
+            QRS_pos = local_max_index + search_start - 1;  % Adjust index back to the original signal
+
+            % Alignment and fiducial point
+            [FP_pos, new_rov] = align_to_QRS(signal, QRS_pos, half_width);
+            % Saving rov trace
+            rovSignals{:, k} = new_rov;
+            % Saving FP position
+            FP_positions{k} = FP_pos;
+            QRS_positions{k} = QRS_pos;
         end
+
 
         % Save the aligned rov signals back into the data structure
             newData.(mapName).(subjectName).rov_trace = rovSignals;
