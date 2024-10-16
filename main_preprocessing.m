@@ -151,13 +151,13 @@ src_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI
 figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\Scalogram_analysis_pipeline_phase";
 addpath(src_path)
 
-%% 8.0 Scalogram evaluation on didactical signals
+%% 7.0 Scalogram evaluation on didactical signals
 show_scalogram_evaluation_pipeline("high_frequency_ecg")
 
 % Other example of situations: 
 % "high_frequency_ecg" "Low_frequency_ecg" "PhysioNet_healthy" "PhysioNet_Pathological"
 
-%% 8.1 Algorthm application on AVNRT data
+%% 7.1 Algorthm application on AVNRT data
 processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed";
 % Loading previusly made data
 load(processed_data_path+'\dataset.mat');
@@ -207,12 +207,16 @@ addpath(src_path)
 load(processed_data_path+'\dataset.mat');
 fc=2035;
 
-%%
+%% 8.1 Demonstrating that reference traces have the main oeaks aligned
+show_ref_maximum_positions(data, fc)
+%% 8.2 Single subject alignment and finding fiducial points
 % Alignment strategy 
 Data_sub_aligned_1 = find_fiducial_point(data, fc, 0.2);
 
 save("D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed\dataset_aligned_STR_1.mat", 'Data_sub_aligned_1');
 
+%% 8.3 Plotting single subject results after alignment
+traces_subplots_by_sub(Data_sub_aligned_1, fc, figure_path + "\single_records") 
 %% old strategy
 
 % 
@@ -313,7 +317,7 @@ fc=2035;
 
 %% Single record visualization after preprocessing
 traces_subplots_by_sub(POP_DB_aligned, fc, figure_path + "\single_records")
-
+    
 %% 8.2 Data visualization as they are 
 spaghetti_confidence_signals(POP_DB_aligned,fc,figure_path)
 
@@ -324,7 +328,7 @@ spaghetti_confidence_signals(POP_DB_aligned,fc,figure_path)
 % comparison between maps within subjects and traces
 compare_maps_between_signals(POP_DB_aligned,fc,figure_path)
 
-
+    
 
 
 

@@ -41,7 +41,7 @@ function traces_subplots_by_sub(data, fc, figure_path)
                     signals = data.(map).(trace);
 
                     % signal=prepare_signal(signals(:,h),'restore');
-                    signal=signals(:,h);
+                    signal=table2array(signals(:,h));
                    
                  
                     % Plot the trace signals
