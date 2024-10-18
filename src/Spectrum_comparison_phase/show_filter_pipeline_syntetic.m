@@ -70,9 +70,13 @@ RMSE_bp_vector=[];
 % for each ECG (n° beats) length the proposed pipeline is evaluated
 for i = 1: length(N_points)
     lim=N_points(i);
+
     ref_win=ecg_signal(lim-Fs+1:lim)-mean(ecg_signal(lim-Fs+1:lim));
+
     noise_win=noise(lim-Fs+1:lim)-mean(noise(lim-Fs+1:lim));
+
     x = noisy_ecg(lim-Fs+1:lim)-mean(noisy_ecg(lim-Fs+1:lim));
+
     N = length(x);
     t =t_original(lim-Fs+1:lim);
 
@@ -90,8 +94,8 @@ for i = 1: length(N_points)
     SNR_original= 10*log10(P_ref_win/P_noise_original);
 
     % Goodness of filtering is evaluated with RMSE
-    RMSE_wavelet=sqrt((1/N)*sum((ref_win-x_w).^2));
-    RMSE_bp=sqrt((1/N)*sum((ref_win-x_bp).^2));
+    RMSE_wavelet=sqrt(sum((ref_win-x_w).^2)/N);
+    RMSE_bp=sqrt(sum((ref_win-x_bp).^2)/N);
 
     % saving results,
     RMSE_bp_vector=[RMSE_bp_vector;RMSE_bp];
@@ -151,9 +155,9 @@ sgtitle(noise_title)
 annotation_text = sprintf('Paired T-test result: \n');
 
 if h == 1
-    annotation_text = [annotation_text, sprintf('Wavelet RMSE and BP RMSE are significantly different \n  with a p-value of: %.4e', p)];
+    annotation_text = [annotation_text, sprintf('Wavelet RMSE and BP RMSE are significantly different \n  with a p-value of: %.4e \n', p)];
 else
-    annotation_text = [annotation_text, sprintf('Wavelet RMSE and BP RMSE are not significantly different \n  with a p-value of: %.4e', p)];
+    annotation_text = [annotation_text, sprintf('Wavelet RMSE and BP RMSE are not significantly different \n  with a p-value of: %.4e \n', p)];
 end
 
 annotation('textbox', [0.4, 0.02, 0.3, 0.1], 'String', annotation_text, ...

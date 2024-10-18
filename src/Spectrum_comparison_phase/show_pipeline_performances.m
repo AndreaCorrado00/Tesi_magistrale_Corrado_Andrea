@@ -133,9 +133,11 @@ traces = ["Rov trace", "Ref trace", "Spare1 trace", "Spare2 trace", "Spare3 trac
 
 %% FINAL CONFIGURATION Performances 
 figure;
-sgtitle({'Filtering Performances: Final Pipeline', 'sym4 wavelet th & BP 2-60 Hz'})
+% sgtitle({'Filtering Performances: Final Pipeline', 'sym4 wavelet th & BP 2-60 Hz'})
+sgtitle({'Filtering Performances: BP 2-60 Hz'})
 
 for i = 1:5
+  
     x = tab_signals(:,i) - mean(tab_signals(:,i)); % Remove DC offset
     
     % DWT Filtering
@@ -149,13 +151,15 @@ for i = 1:5
     Ts = 1 / Fs;
     t = 0:Ts:Ts*N-Ts;
     subplot(3,2,i)
-    %plot(t, x, 'k:', t, x_w, 'b-', t, x_BP, 'r-')
-    plot(t, x, 'k:', t, x_w, 'b-')
+    % plot(t, x, 'k:', t, x_w, 'b-', t, x_BP, 'r-')
+    plot(t, x, 'k:')
+    hold on
+    plot(t, x_BP, "Color","#0072BD")
     xlabel('Time [s]')
     ylabel('Amplitude [mV]')
     title(traces(i))
 end
 % legend('Original', 'DWT Filter', 'BP Filter', "Location", "bestoutside")
-legend('Original', 'DWT Filter', "Location", "bestoutside")
+legend('Original', 'BP Filter', "Location", "bestoutside")
 
 end

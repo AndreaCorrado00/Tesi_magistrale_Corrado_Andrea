@@ -75,7 +75,7 @@ addpath(src_path)
 % thresholding plus digital filter. These method will be evaluated using
 % didactical examples.
 close;clc;close all; % cleaning environment
-show_filter_pipeline_syntetic("baseline_drift")
+show_filter_pipeline_syntetic("white_noise_stationary_var_fix")
 
 % Other example of situations: 
 %baseline_drift white_noise_stationary_var_fix
@@ -83,7 +83,7 @@ show_filter_pipeline_syntetic("baseline_drift")
 %% 4.1 Didactical data examples
 % Preprocessing pipeline is applied on didactical examples
 close;clc;close all; % cleaning environment
-show_filter_pipeline_didactical("high_frequency_ecg") 
+show_filter_pipeline_didactical("Low_frequency_ecg") 
 
 % Other example of situations: 
 % "high_frequency_ecg" "Low_frequency_ecg" "PhysioNet_healthy" "PhysioNet_Pathological"
@@ -107,6 +107,7 @@ MAP_B7_example=data.MAP_B.MAP_B7;
 MAP_C7_example=data.MAP_C.MAP_C7;
     
 % Evaluating filtering performance
+close all;
     show_pipeline_performances(MAP_A7_example)
     show_pipeline_performances(MAP_B7_example)
     show_pipeline_performances(MAP_C7_example)

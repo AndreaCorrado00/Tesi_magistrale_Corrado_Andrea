@@ -74,13 +74,18 @@ for i = 1: length(N_points)
     sgtitle("Denoising pipeline, N° points: "+num2str(N_points(i)+", "+name))
     plot(t,x,"Color",[.5,.5,.5],"LineStyle",":","LineWidth",0.5)
     %plot(t,ref_win,"Color",[.3,.3,.3],"LineWidth",0.7)
-    plot(t,x_bp,"Color",[0.9290 0.6940 0.1250],"LineWidth",0.9)
-    plot(t,x_w,"Color",	"#0072BD","LineWidth",0.9)
+    % plot(t,x_w,"Color",	"#0072BD","LineWidth",0.9)
+    % plot(t,x_bp,"Color",[0.9290 0.6940 0.1250],"LineWidth",0.9)
+    plot(t,x_bp,"Color","#0072BD","LineWidth",0.9)
+
+    
     xlabel('time [s]')
     ylabel('Amplitude [mV]')
     xlim([0,t(end)])
     
     
     hold off
-    legend(["Noisy signal","BP digital","Wavalet th + BP digital"],"Location","bestoutside")
+    legend(["Noisy signal","BP digital"],"Location","bestoutside")
+
+    % legend(["Noisy signal","Wavalet th + BP digital","BP digital"],"Location","bestoutside")
 end
