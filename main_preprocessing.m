@@ -209,10 +209,23 @@ fc=2035;
 
 %% 8.1 Demonstrating that reference traces have the main oeaks aligned
 show_ref_maximum_positions(data, fc)
+
+%% 8.2 Does have sense align traces?
+% Considering only traces with reference as ECG, whihc is the size of the
+% database?
+
+show_DB_reduction(data)
+
+% Map B and C, yet less represented in the original DB, are reduced by the
+% 50%. The class less reduced is MAP A. 
+
+% Building an alignment could "save" these signals from being discarded.
+
 %% 8.2 Single subject alignment and finding fiducial points
 % Alignment strategy 
-Data_sub_aligned_1 = find_fiducial_point(data, fc, 0.2);
+Data_sub_aligned_1 = find_guide_trace(data, fc);
 
+%%
 save("D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed\dataset_aligned_STR_1.mat", 'Data_sub_aligned_1');
 
 %% 8.3 Plotting single subject results after alignment

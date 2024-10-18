@@ -1,4 +1,4 @@
-function newData = find_fiducial_point(data, Fc, window)
+function newData = find_guide_trace(data, Fc)
 
 % Initialize newData as a copy of the input data
 newData = data;
@@ -20,15 +20,15 @@ for i = 1:length(mapNames)
         guide_trace=decide_strategy(newData.(mapName).(subjectName).traces_origin);
 
         % Extract the rov and reference signals from the data structure
-        rovSignals = newData.(mapName).(subjectName).rov_trace;
+        % rovSignals = newData.(mapName).(subjectName).rov_trace;
         guideSignals = newData.(mapName).(subjectName).(guide_trace);
-        FP_positions={};
-        QRS_positions={};
+        % FP_positions={};
+        R_peaks={};
         % Loop through each signal (column) in the rovSignals table
         for k = 1:width(rovSignals)
-            signal = rovSignals{:, k};  % Extract the k-th signal from the rov trace
-            half_width = round((Fc * window) / 2);  % Calculate half of the alignment window in samples
-            guideSignals = guideSignals{:, k};  % Extract the corresponding reference signal
+            % signal = rovSignals{:, k};  % Extract the k-th signal from the rov trace
+            % half_width = round((Fc * window) / 2);  % Calculate half of the alignment window in samples
+            guideSignals = guideSignals{:, k};  % Extract the corresponding guide signal
 
             % Define the QRS position based on the maximum value in guideSignals
             % centered around 0.5 seconds from the start of the signal
@@ -46,26 +46,26 @@ for i = 1:length(mapNames)
 
             % Find the QRS position by looking for the maximum in the defined neighborhood
             [~, local_max_index] = max(abs(guideSignals(search_start:search_end)));  % Find the maximum in the neighborhood
-            QRS_pos = local_max_index + search_start - 1;  % Adjust index back to the original signal
+            R_peak = local_max_index + search_start - 1;  % Adjust index back to the original signal
 
             % Alignment and fiducial point
-            [FP_pos, new_rov] = align_to_QRS(signal, QRS_pos, half_width);
+            % [FP_pos, new_rov] = align_to_QRS(signal, QRS_pos, half_width);
             % Saving rov trace
-            rovSignals{:, k} = new_rov;
+            % rovSignals{:, k} = new_rov;
             % Saving FP position
-            FP_positions{k} = FP_pos;
-            QRS_positions{k} = QRS_pos;
+            % FP_positions{k} = FP_pos;
+            R_peaks{k} = R_peak;
         end
 
 
         % Save the alisgned rov signals back into the data structure
-            newData.(mapName).(subjectName).rov_trace = rovSignals;
-            newData.(mapName).(subjectName).FP_position_rov = FP_positions;
+            % newData.(mapName).(subjectName).rov_trace = rovSignals;
+            % newData.(mapName).(subjectName).FP_position_rov = FP_positions;
 
             % Saving QRS position informations
-            QRS_pos_fiel_name="QRS_position_"+trace_align;
-            newData.(mapName).(subjectName).(QRS_pos_fiel_name)=QRS_positions;
-            newData.(mapName).(subjectName).alignment_trace=trace_align;
+            QRS_pos_fiel_name="R_peaks"+guide_trace;
+            newData.(mapName).(subjectName).(QRS_pos_fiel_name)=R_peaks;
+            % newData.(mapName).(subjectName).alignment_trace=trace_align;
         %     % Switch based on the selected alignment strategy
         % 
         % % Save the updated QRS positions based on the strategy used
