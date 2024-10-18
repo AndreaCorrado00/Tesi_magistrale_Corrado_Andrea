@@ -105,41 +105,41 @@ traces = ["Rov trace", "Ref trace", "Spare1 trace", "Spare2 trace", "Spare3 trac
 % end
 % legend('Original', 'DWT Filter', 'BP Filter', "Location", "bestoutside")
 
-%% Filtering performances using or not padding 
-figure(3)
-sgtitle('Padding Presence Comparison')
-
-for i = 1:5
-    x = tab_signals(:,i) - mean(tab_signals(:,i)); % Remove DC offset
-
-    % DWT Filtering without padding
-    x_w = handable_denoise_ecg_wavelet(x, Fs, 'sym4', 9, false, 1 ,60);
-    
-    % DWT Filtering with padding
-    x_w_padded = handable_denoise_ecg_wavelet(x, Fs, 'sym4', 9, true, 1 , 60);
-    
-    % Plotting results
-    N = length(x);
-    Ts = 1 / Fs;
-    t = 0:Ts:Ts*N-Ts;
-    subplot(3,2,i)
-    plot(t, x, 'k:', t, x_w, 'b-', t, x_w_padded, 'r-')
-    xlabel('Time [s]')
-    ylabel('Amplitude [mV]')
-    title(traces(i))
-end
-legend('Original', 'DWT No Padding', 'DWT Padding', "Location", "bestoutside")
+% %% Filtering performances using or not padding 
+% figure(3)
+% sgtitle('Padding Presence Comparison')
+% 
+% for i = 1:5
+%     x = tab_signals(:,i) - mean(tab_signals(:,i)); % Remove DC offset
+% 
+%     % DWT Filtering without padding
+%     x_w = handable_denoise_ecg_wavelet(x, Fs, 'sym4', 9, false, 1 ,60);
+% 
+%     % DWT Filtering with padding
+%     x_w_padded = handable_denoise_ecg_wavelet(x, Fs, 'sym4', 9, true, 1 , 60);
+% 
+%     % Plotting results
+%     N = length(x);
+%     Ts = 1 / Fs;
+%     t = 0:Ts:Ts*N-Ts;
+%     subplot(3,2,i)
+%     plot(t, x, 'k:', t, x_w, 'b-', t, x_w_padded, 'r-')
+%     xlabel('Time [s]')
+%     ylabel('Amplitude [mV]')
+%     title(traces(i))
+% end
+% legend('Original', 'DWT No Padding', 'DWT Padding', "Location", "bestoutside")
 
 
 %% FINAL CONFIGURATION Performances 
-figure(4)
+figure;
 sgtitle({'Filtering Performances: Final Pipeline', 'sym4 wavelet th & BP 2-60 Hz'})
 
 for i = 1:5
     x = tab_signals(:,i) - mean(tab_signals(:,i)); % Remove DC offset
     
     % DWT Filtering
-    x_w = handable_denoise_ecg_wavelet(x, Fs, 'sym4', 9, false, 3, 60);
+    x_w = handable_denoise_ecg_wavelet(x, Fs, 'sym4', 9, false, 2, 60);
     
     % BP Filtering
     x_BP = handable_denoise_ecg_BP(x, Fs, 2, 60);

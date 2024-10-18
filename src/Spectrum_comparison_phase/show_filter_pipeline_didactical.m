@@ -47,25 +47,6 @@ N = length(x_original);
 Ts = 1 / Fs;
 t = 0:Ts:Ts*N-Ts;
 
-% Evaluating the noise as the part of the ecg signal which is know that's
-% not informative.
-noise_sup=extract_noise(3,60,Fs,x_original,true);
-reference_sup=x_original-noise_sup;
-
-figure(2)
-subplot(311)
-plot(t,x_original)
-xlim([0,t(end)])
-title('Original signal')
-subplot(312)
-plot(t,noise_sup)
-xlim([0,t(end)])
-title('Extracted noise ')
-subplot(313)
-plot(t, reference_sup)
-xlim([0,t(end)])
-title('Extracted reference')
-xlabel('Time [s]')
 
 %% Starting of simulation
 N_original = length(x_original);
@@ -83,34 +64,10 @@ for i = 1: length(N_points)
     Ts = 1 / Fs;
     t = 0:Ts:Ts*N-Ts;
 
-    x_w=handable_denoise_ecg_wavelet(x,Fs,'sym4',9,false,1,60);
+    x_w=handable_denoise_ecg_wavelet(x,Fs,'sym4',9,false,2,60);
     x_w=x_w-mean(x_w);
-    x_bp=handable_denoise_ecg_BP(x,Fs,1,60);
+    x_bp=handable_denoise_ecg_BP(x,Fs,2,60);
     x_bp=x_bp-mean(x_bp);
-
-    % Noise evaluations
-    % Original
-    noise_win=extract_noise(2,60,Fs,x,false);
-    ref_win=x-noise_win;
-    % Band Pass
-    noise_win_bp=extract_noise(2,60,Fs,x_bp,false);
-    % Wavelet 
-    noise_win_w=extract_noise(2,60,Fs,x_w,false);
-
-    % SNR evaluation
-    % Noise
-    P_noise_original=sum(noise_win.^2);
-    P_noise_residual_w=sum(noise_win_w.^2);
-    P_noise_residual_bp=sum(noise_win_bp.^2);
-    % Signal
-    P_ref_win=sum(ref_win.^2);
-    P_w=sum(x_w.^2);
-    P_bp=sum(x_bp.^2);
-
-    SNR_original= 10*log10(P_ref_win/P_noise_original);
-    SNR_wavelet= 10*log10(P_w/P_noise_residual_w);
-    SNR_bandpass= 10*log10(P_bp/P_noise_residual_bp);
-
 
     figure(i+2)
     hold on
@@ -123,12 +80,7 @@ for i = 1: length(N_points)
     ylabel('Amplitude [mV]')
     xlim([0,t(end)])
     
-    % Add SNR values as annotations
-    annotation('textbox', [0.85, 0.5, 0.1, 0.1], 'String', ...
-        {['SNR Original: ', num2str(SNR_original, '%.2f'), ' dB'], ...
-         ['SNR Bandpass: ', num2str(SNR_bandpass, '%.2f'), ' dB'], ...
-         ['SNR Wavelet: ', num2str(SNR_wavelet, '%.2f'), ' dB']}, ...
-        'FitBoxToText', 'on', 'BackgroundColor', 'w', 'EdgeColor', 'k', 'FontSize', 10);
+    
     hold off
     legend(["Noisy signal","BP digital","Wavalet th + BP digital"],"Location","bestoutside")
 end

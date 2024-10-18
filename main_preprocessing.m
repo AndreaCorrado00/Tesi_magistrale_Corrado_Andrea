@@ -80,9 +80,8 @@ show_filter_pipeline_syntetic("baseline_drift")
 % Other example of situations: 
 %baseline_drift white_noise_stationary_var_fix
 
-%% 4.1 Didactical data Preprocessing 
-% Preprocessin pipeline is then applied on didactical examples. Then,
-% spectrums are evaluated. 
+%% 4.1 Didactical data examples
+% Preprocessing pipeline is applied on didactical examples
 close;clc;close all; % cleaning environment
 show_filter_pipeline_didactical("high_frequency_ecg") 
 
@@ -103,14 +102,14 @@ load(processed_data_path+'\dataset.mat');
 fc=2035;
 %% 5.1 Preprocessing and Spectrum evaluation algorithm on AVNRT data
 % Building examples
-MAP_A1_example=data.MAP_A.MAP_A1;
-MAP_B1_example=data.MAP_B.MAP_B1;
-MAP_C1_example=data.MAP_C.MAP_C8;
+MAP_A7_example=data.MAP_A.MAP_A7;
+MAP_B7_example=data.MAP_B.MAP_B7;
+MAP_C7_example=data.MAP_C.MAP_C7;
     
 % Evaluating filtering performance
-    show_pipeline_performances(MAP_C1_example)
-
-
+    show_pipeline_performances(MAP_A7_example)
+    show_pipeline_performances(MAP_B7_example)
+    show_pipeline_performances(MAP_C7_example)
 
 
 
