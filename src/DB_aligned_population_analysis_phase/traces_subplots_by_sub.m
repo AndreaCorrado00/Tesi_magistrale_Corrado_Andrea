@@ -37,7 +37,7 @@ function traces_subplots_by_sub(data, fc, figure_path)
                 for k = 1:5
                     subplot(5,1,k)
                     trace = traces_names(k) + "_trace";
-                    title_plot = 'MAP:' + i + ' (' + get_name_of_map(i) + '),'+ traces_names(k)+' trace, record: '+num2str(h);
+                    title_plot = 'MAP:' + i + ' (' + get_name_of_map(i) + '), '+ traces_names(k)+' trace, record: '+num2str(h);
                     signals = data.(map).(trace);
 
                     % signal=prepare_signal(signals(:,h),'restore');

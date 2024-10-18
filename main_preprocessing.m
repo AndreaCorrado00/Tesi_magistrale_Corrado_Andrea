@@ -229,46 +229,28 @@ data = find_guide_trace_and_filter(data, fc,false);
 Aligned_DB= align_dataset(data,0.5,fc);
 
 
-%% Showing results examples
+%% 8.4  Showing results examples
 show_alignment_results(Aligned_DB,fc)
 
 
-%% 9.3 Plotting single records results
+%% 8.5 Plotting single records results
 traces_subplots_by_sub(Aligned_DB, fc, figure_path + "\single_records") 
 
-%% 9.4 Dropping repeated subjects
+
+%% 8.6 Dropping repeated subjects
 Aligned_DB.MAP_A=rmfield(Aligned_DB.MAP_A, 'MAP_A5');
 Aligned_DB.MAP_B=rmfield(Aligned_DB.MAP_B, 'MAP_B5');
 Aligned_DB.MAP_C=rmfield(Aligned_DB.MAP_C, 'MAP_C5');
 
 save("D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed\aligned_subjects_DB.mat", 'Aligned_DB');
 load(processed_data_path+'\aligned_subjects_DB.mat');
-%% 9.5 Building the new_population dataset
+
+
+%% 8.7 Building the new dataset
 POP_DB_aligned=build_pop_dataset_after_alignment(Aligned_DB);
 
+save("D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed\dataset_pop_aligned.mat", 'POP_DB_aligned');
 
-
-% %%                            ---------- WHOLE DATASET ALIGNMENT ----------  
-% clc;clear;close;
-% % Here, all rov traces are aligned respect to the same point: 0.5. The
-% % point of alignment is the fiducial point, i.e., the maximum of the
-% % ventricular contraction evaluated in phase 5. Different strategies,
-% % different fiducial points, different results.
-% processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed";
-% src_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\whole_DB_alignment_and_filter_phase";
-% figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\whole_DB_alignment_and_filter_phase";
-% addpath(src_path)
-% 
-% % Loading previusly made data
-% % load(processed_data_path+'\dataset_aligned_STR_1.mat');
-% load(processed_data_path+'\dataset.mat');
-% fc=2035;
-% 
-% %% 9.1 Whole dataset alignment
-% Aligned_DB= align_and_filter_dataset(data,false,0.5,fc);
-% 
-% %% 9.2 Showing some examples
-% show_alignment_results(Aligned_DB,fc)
 
 
 
@@ -286,15 +268,13 @@ addpath(src_path)
 load(processed_data_path+'\dataset_pop_aligned.mat');
 fc=2035;
 
-%% Single record visualization after preprocessing
+%% 9.1 Single record visualization 
 traces_subplots_by_sub(POP_DB_aligned, fc, figure_path + "\single_records")
     
-%% 8.2 Data visualization as they are 
+%% 9.2 Data visualization as they are 
 spaghetti_confidence_signals(POP_DB_aligned,fc,figure_path)
 
-%% 8.3 Signals direct comparisons 
-% Comparison between different signals mean traces for the same case
-% compare_case_signals(POP_DB_aligned,fc,figure_path)   
+%% 9.3 Signals direct comparisons 
 
 % comparison between maps within subjects and traces
 compare_maps_between_signals(POP_DB_aligned,fc,figure_path)

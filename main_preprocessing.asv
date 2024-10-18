@@ -221,44 +221,21 @@ show_DB_reduction(data)
 
 % Building an alignment could "save" these signals from being discarded.
 
-%% 8.3  Single subject alignment and finding fiducial points
-% Alignment strategy 
-data = find_guide_trace(data, fc);
-
-% save("D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed\dataset_aligned_STR_1.mat", 'Data_sub_aligned_1');
-
-
-
-%% Full dataset alignment
+%% 8.3  Data alignment 
+% For each set of signals the R-peak is found
+data = find_guide_trace_and_filter(data, fc,false);
+% Then R peak is used to align each set os singals to have ventricular
+% conduction around 0.5 seconds
+Aligned_DB= align_dataset(data,0.5,fc);
 
 
-
-
-
-%%                            ---------- WHOLE DATASET ALIGNMENT ----------  
-clc;clear;close;
-% Here, all rov traces are aligned respect to the same point: 0.5. The
-% point of alignment is the fiducial point, i.e., the maximum of the
-% ventricular contraction evaluated in phase 5. Different strategies,
-% different fiducial points, different results.
-processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed";
-src_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\whole_DB_alignment_and_filter_phase";
-figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\whole_DB_alignment_and_filter_phase";
-addpath(src_path)
-
-% Loading previusly made data
-load(processed_data_path+'\dataset_aligned_STR_1.mat');
-load(processed_data_path+'\dataset.mat');
-fc=2035;
-
-%% 9.1 Whole dataset alignment
-Aligned_DB= align_and_filter_dataset(data,Data_sub_aligned_1,false,0.5,fc);
-
-%% 9.2 Showing some examples
+%% Showing results examples
 show_alignment_results(Aligned_DB,fc)
+
 
 %% 9.3 Plotting single records results
 traces_subplots_by_sub(Aligned_DB, fc, figure_path + "\single_records") 
+
 
 %% 9.4 Dropping repeated subjects
 Aligned_DB.MAP_A=rmfield(Aligned_DB.MAP_A, 'MAP_A5');
@@ -267,11 +244,12 @@ Aligned_DB.MAP_C=rmfield(Aligned_DB.MAP_C, 'MAP_C5');
 
 save("D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed\aligned_subjects_DB.mat", 'Aligned_DB');
 load(processed_data_path+'\aligned_subjects_DB.mat');
-%% 9.5 Building the new_population dataset
+
+
+%% 9.5 Building the new dataset
 POP_DB_aligned=build_pop_dataset_after_alignment(Aligned_DB);
 
-
-
+save("D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed\dataset_pop_aligned.mat", 'POP_DB_aligned');
 
 
 
