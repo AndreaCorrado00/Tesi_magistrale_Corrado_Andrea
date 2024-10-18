@@ -60,7 +60,7 @@ function show_alignment_results(data, fc)
             alignment_trace=data.(map).(sub).guide_trace;
             alignment_trace=strsplit(alignment_trace,"_");
             alignment_trace=alignment_trace(1)+" "+alignment_trace(2);
-            title("Subject: " + string(num_str), "trace with QRS: "+alignment_trace)
+            title("Subject: " + string(num_str), "ECG trace: "+alignment_trace)
 
             % Label the x-axis and y-axis
             xlabel('Time [s]')

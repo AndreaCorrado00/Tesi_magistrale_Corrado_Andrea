@@ -11,7 +11,7 @@ for i = ["A", "B", "C"]
     subjects = fieldnames(data.(map));
 
     % Loop through each subject
-    for j = 1:length(subjects)
+    for j =  1:length(subjects)
         sub = map + num2str(j);
        
 

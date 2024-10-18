@@ -221,79 +221,17 @@ show_DB_reduction(data)
 
 % Building an alignment could "save" these signals from being discarded.
 
-%% 8.2 Single subject alignment and finding fiducial points
-% Alignment strategy 
-Data_sub_aligned_1 = find_guide_trace(data, fc);
-
-%%
-save("D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed\dataset_aligned_STR_1.mat", 'Data_sub_aligned_1');
-
-%% 8.3 Plotting single subject results after alignment
-traces_subplots_by_sub(Data_sub_aligned_1, fc, figure_path + "\single_records") 
-%% old strategy
-
-% 
-% %% 7.0 Finding QRS into different traces
-% show_qrs_pos_example=false;
-% QRS_detected_data=analyzeQRS(data,fc,show_qrs_pos_example,'ref_trace');
-% QRS_detected_data=analyzeQRS(QRS_detected_data,fc,show_qrs_pos_example,'spare1_trace');
-% QRS_detected_data=analyzeQRS(QRS_detected_data,fc,show_qrs_pos_example,'spare2_trace');
-% 
-% %% 7.1 Position of QRS analysis
-% show_QRS_positions(QRS_detected_data,fc)
-% 
-% %% 7.2 Implementing aligment strategies
-%     % 5.1.1 Strategy 1
-%     % QRS is sorely into the ref trace
-%     window=0.2; %time window into which finding the maximum in seconds
-%     plot_alignment=false;
-%     Data_sub_aligned_1=single_sub_alignment(QRS_detected_data,fc,window,'only_ref',[],plot_alignment);
-% 
-%     % 5.1.2 Strategy 2
-%     % QRS is in both ref and spare2 traces but possibly shifted
-%     window=0.01; %time window into which finding the maximum in seconds
-%     plot_alignment=false;
-%     tollerance=0.05; %tollerance in [sec] of distance between QRS points in ref and spare2 traces
-%     Data_sub_aligned_2=single_sub_alignment(QRS_detected_data,fc,window,'ref_and_spare2',tollerance,plot_alignment);
-% 
-%     % 5.1.3 Strategy 3
-%     % a real QRS is only into the spare1 trace
-%     window=0.2; %time window into whitch finding the maximum in seconds
-%     plot_alignment=false;
-%     Data_sub_aligned_3=single_sub_alignment(QRS_detected_data,fc,window,'only_spare1',[],plot_alignment);
-% 
-% %% 7.3 Checking and saving results from strategies
-%     % Strategy 1
-% traces_subplots_by_sub(Data_sub_aligned_1, fc, figure_path + "\single_records_v1") 
-%     % Strategy 2
-% traces_subplots_by_sub(Data_sub_aligned_2, fc, figure_path + "\single_records_v2") 
-%     % Strategy 3
-% traces_subplots_by_sub(Data_sub_aligned_3, fc, figure_path + "\single_records_v3")  
+%% 8.3  Data alignment 
+% For each set of signals the R-peak is found
+data = find_guide_trace_and_filter(data, fc,false);
+% Then R peak is used to align each set os singals to have ventricular
+% conduction around 0.5 seconds
+Aligned_DB= align_dataset(data,0.5,fc);
 
 
-
-
-%%                            ---------- WHOLE DATASET ALIGNMENT ----------  
-clc;clear;close;
-% Here, all rov traces are aligned respect to the same point: 0.5. The
-% point of alignment is the fiducial point, i.e., the maximum of the
-% ventricular contraction evaluated in phase 5. Different strategies,
-% different fiducial points, different results.
-processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed";
-src_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\whole_DB_alignment_and_filter_phase";
-figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\whole_DB_alignment_and_filter_phase";
-addpath(src_path)
-
-% Loading previusly made data
-load(processed_data_path+'\dataset_aligned_STR_1.mat');
-load(processed_data_path+'\dataset.mat');
-fc=2035;
-
-%% 9.1 Whole dataset alignment
-Aligned_DB= align_and_filter_dataset(data,Data_sub_aligned_1,false,0.5,fc);
-
-%% 9.2 Showing some examples
+%% Showing results examples
 show_alignment_results(Aligned_DB,fc)
+
 
 %% 9.3 Plotting single records results
 traces_subplots_by_sub(Aligned_DB, fc, figure_path + "\single_records") 
@@ -310,7 +248,27 @@ POP_DB_aligned=build_pop_dataset_after_alignment(Aligned_DB);
 
 
 
-
+% %%                            ---------- WHOLE DATASET ALIGNMENT ----------  
+% clc;clear;close;
+% % Here, all rov traces are aligned respect to the same point: 0.5. The
+% % point of alignment is the fiducial point, i.e., the maximum of the
+% % ventricular contraction evaluated in phase 5. Different strategies,
+% % different fiducial points, different results.
+% processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed";
+% src_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\whole_DB_alignment_and_filter_phase";
+% figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\whole_DB_alignment_and_filter_phase";
+% addpath(src_path)
+% 
+% % Loading previusly made data
+% % load(processed_data_path+'\dataset_aligned_STR_1.mat');
+% load(processed_data_path+'\dataset.mat');
+% fc=2035;
+% 
+% %% 9.1 Whole dataset alignment
+% Aligned_DB= align_and_filter_dataset(data,false,0.5,fc);
+% 
+% %% 9.2 Showing some examples
+% show_alignment_results(Aligned_DB,fc)
 
 
 

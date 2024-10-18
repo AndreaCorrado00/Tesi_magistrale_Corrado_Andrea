@@ -1,4 +1,4 @@
-function new_signal = align_rov_traces(FP, RP, signal)
+function new_signal = align_traces(FP, RP, signal)
     % Aligns the input signal based on the fiducial point (FP) and the reference point (RP).
     % Adjusts the signal by padding with NaNs or trimming based on the distance between FP and RP.
     %

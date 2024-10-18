@@ -1,4 +1,4 @@
-function newData = align_and_filter_dataset(original_data, filter, RP, Fc)
+function newData = align_dataset(original_data,RP, Fc)
     % Aligns and filters the dataset based on the fiducial points and reference points.
     % Applies optional denoising to the signals and aligns them using the provided reference points.
     %

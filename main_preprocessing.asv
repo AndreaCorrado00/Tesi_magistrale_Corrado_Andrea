@@ -75,7 +75,7 @@ addpath(src_path)
 % thresholding plus digital filter. These method will be evaluated using
 % didactical examples.
 close;clc;close all; % cleaning environment
-show_filter_pipeline_syntetic("baseline_drift")
+show_filter_pipeline_syntetic("white_noise_stationary_var_fix")
 
 % Other example of situations: 
 %baseline_drift white_noise_stationary_var_fix
@@ -83,7 +83,7 @@ show_filter_pipeline_syntetic("baseline_drift")
 %% 4.1 Didactical data examples
 % Preprocessing pipeline is applied on didactical examples
 close;clc;close all; % cleaning environment
-show_filter_pipeline_didactical("high_frequency_ecg") 
+show_filter_pipeline_didactical("Low_frequency_ecg") 
 
 % Other example of situations: 
 % "high_frequency_ecg" "Low_frequency_ecg" "PhysioNet_healthy" "PhysioNet_Pathological"
@@ -107,6 +107,7 @@ MAP_B7_example=data.MAP_B.MAP_B7;
 MAP_C7_example=data.MAP_C.MAP_C7;
     
 % Evaluating filtering performance
+close all;
     show_pipeline_performances(MAP_A7_example)
     show_pipeline_performances(MAP_B7_example)
     show_pipeline_performances(MAP_C7_example)
@@ -208,53 +209,28 @@ fc=2035;
 
 %% 8.1 Demonstrating that reference traces have the main oeaks aligned
 show_ref_maximum_positions(data, fc)
-%% 8.2 Single subject alignment and finding fiducial points
+
+%% 8.2 Does have sense align traces?
+% Considering only traces with reference as ECG, whihc is the size of the
+% database?
+
+show_DB_reduction(data)
+
+% Map B and C, yet less represented in the original DB, are reduced by the
+% 50%. The class less reduced is MAP A. 
+
+% Building an alignment could "save" these signals from being discarded.
+
+%% 8.3  Single subject alignment and finding fiducial points
 % Alignment strategy 
-Data_sub_aligned_1 = find_fiducial_point(data, fc, 0.2);
+data = find_guide_trace(data, fc);
 
-save("D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed\dataset_aligned_STR_1.mat", 'Data_sub_aligned_1');
+% save("D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed\dataset_aligned_STR_1.mat", 'Data_sub_aligned_1');
 
-%% 8.3 Plotting single subject results after alignment
-traces_subplots_by_sub(Data_sub_aligned_1, fc, figure_path + "\single_records") 
-%% old strategy
 
-% 
-% %% 7.0 Finding QRS into different traces
-% show_qrs_pos_example=false;
-% QRS_detected_data=analyzeQRS(data,fc,show_qrs_pos_example,'ref_trace');
-% QRS_detected_data=analyzeQRS(QRS_detected_data,fc,show_qrs_pos_example,'spare1_trace');
-% QRS_detected_data=analyzeQRS(QRS_detected_data,fc,show_qrs_pos_example,'spare2_trace');
-% 
-% %% 7.1 Position of QRS analysis
-% show_QRS_positions(QRS_detected_data,fc)
-% 
-% %% 7.2 Implementing aligment strategies
-%     % 5.1.1 Strategy 1
-%     % QRS is sorely into the ref trace
-%     window=0.2; %time window into which finding the maximum in seconds
-%     plot_alignment=false;
-%     Data_sub_aligned_1=single_sub_alignment(QRS_detected_data,fc,window,'only_ref',[],plot_alignment);
-% 
-%     % 5.1.2 Strategy 2
-%     % QRS is in both ref and spare2 traces but possibly shifted
-%     window=0.01; %time window into which finding the maximum in seconds
-%     plot_alignment=false;
-%     tollerance=0.05; %tollerance in [sec] of distance between QRS points in ref and spare2 traces
-%     Data_sub_aligned_2=single_sub_alignment(QRS_detected_data,fc,window,'ref_and_spare2',tollerance,plot_alignment);
-% 
-%     % 5.1.3 Strategy 3
-%     % a real QRS is only into the spare1 trace
-%     window=0.2; %time window into whitch finding the maximum in seconds
-%     plot_alignment=false;
-%     Data_sub_aligned_3=single_sub_alignment(QRS_detected_data,fc,window,'only_spare1',[],plot_alignment);
-% 
-% %% 7.3 Checking and saving results from strategies
-%     % Strategy 1
-% traces_subplots_by_sub(Data_sub_aligned_1, fc, figure_path + "\single_records_v1") 
-%     % Strategy 2
-% traces_subplots_by_sub(Data_sub_aligned_2, fc, figure_path + "\single_records_v2") 
-%     % Strategy 3
-% traces_subplots_by_sub(Data_sub_aligned_3, fc, figure_path + "\single_records_v3")  
+
+%% Full dataset alignment
+
 
 
 

@@ -1,4 +1,4 @@
-function newData = find_guide_trace(data, Fc)
+function newData = find_guide_trace_and_filter(data, Fc,filter)
 
 % Initialize newData as a copy of the input data
 newData = data;
@@ -8,6 +8,31 @@ mapNames = {'A', 'B', 'C'};
 
 % Number of subjects (assumed to be 12)
 numSubjects = 12;
+
+for i = 1:length(mapNames)
+    mapName = 'MAP_' + string(mapNames{i});  % Construct the map name
+
+    % Loop through each subject within the current map
+    for j = 1:numSubjects
+        subjectName = sprintf('%s%d', mapName, j);  % Construct the subject name
+        % Filtering traces
+        if filter
+            rov = original_data.(mapName).(subjectName).rov_trace{:, k};
+            ref = original_data.(mapName).(subjectName).ref_trace{:, k};
+            spare1 = original_data.(mapName).(subjectName).spare1_trace{:, k};
+            spare2 = original_data.(mapName).(subjectName).spare2_trace{:, k};
+            spare3 = original_data.(mapName).(subjectName).spare3_trace{:, k};
+
+            % Apply wavelet denoising to other traces if specified
+            newData.(mapName).(subjectName).rov_trace = handable_denoise_ecg_BP(rov - mean(rov), Fc, 2,60);
+            newData.(mapName).(subjectName).ref_trace = handable_denoise_ecg_BP(ref - mean(ref), Fc,  2,60);
+            newData.(mapName).(subjectName).spare1_trace = handable_denoise_ecg_BP(spare1 - mean(spare1),  2,60);
+            newData.(mapName).(subjectName).spare2_trace = handable_denoise_ecg_BP(spare2 - mean(spare2), Fc, 2,60);
+            newData.(mapName).(subjectName).spare3_trace = handable_denoise_ecg_BP(spare3 - mean(spare3), Fc, 2,60);
+        end
+
+    end
+end
 
 % Loop through each map (e.g., MAP_A, MAP_B, MAP_C)
 for i = 1:length(mapNames)
@@ -20,15 +45,16 @@ for i = 1:length(mapNames)
         guide_trace=decide_strategy(newData.(mapName).(subjectName).traces_origin);
 
         % Extract the rov and reference signals from the data structure
-        % rovSignals = newData.(mapName).(subjectName).rov_trace;
+        rovSignals = newData.(mapName).(subjectName).rov_trace;
         guideSignals = newData.(mapName).(subjectName).(guide_trace);
+
         % FP_positions={};
         R_peaks={};
         % Loop through each signal (column) in the rovSignals table
         for k = 1:width(rovSignals)
-            % signal = rovSignals{:, k};  % Extract the k-th signal from the rov trace
-            % half_width = round((Fc * window) / 2);  % Calculate half of the alignment window in samples
-            guideSignals = guideSignals{:, k};  % Extract the corresponding guide signal
+
+           
+            guideSignal = guideSignals{:, k};  % Extract the corresponding guide signal
 
             % Define the QRS position based on the maximum value in guideSignals
             % centered around 0.5 seconds from the start of the signal
@@ -42,30 +68,19 @@ for i = 1:length(mapNames)
 
             % Calculate the range for the QRS search
             search_start = max(center_sample - neighborhood_samples, 1);  % Ensure we don't go below index 1
-            search_end = min(center_sample + neighborhood_samples, length(guideSignals));  % Ensure we don't exceed signal length
+            search_end = min(center_sample + neighborhood_samples, length(guideSignal));  % Ensure we don't exceed signal length
 
             % Find the QRS position by looking for the maximum in the defined neighborhood
-            [~, local_max_index] = max(abs(guideSignals(search_start:search_end)));  % Find the maximum in the neighborhood
+            [~, local_max_index] = max(abs(guideSignal(search_start:search_end)));  % Find the maximum in the neighborhood
             R_peak = local_max_index + search_start - 1;  % Adjust index back to the original signal
 
-            % Alignment and fiducial point
-            % [FP_pos, new_rov] = align_to_QRS(signal, QRS_pos, half_width);
-            % Saving rov trace
-            % rovSignals{:, k} = new_rov;
-            % Saving FP position
-            % FP_positions{k} = FP_pos;
             R_peaks{k} = R_peak;
         end
 
-
-        % Save the alisgned rov signals back into the data structure
-            % newData.(mapName).(subjectName).rov_trace = rovSignals;
-            % newData.(mapName).(subjectName).FP_position_rov = FP_positions;
-
             % Saving QRS position informations
-            QRS_pos_fiel_name="R_peaks"+guide_trace;
+            QRS_pos_fiel_name="R_peaks";
             newData.(mapName).(subjectName).(QRS_pos_fiel_name)=R_peaks;
-            % newData.(mapName).(subjectName).alignment_trace=trace_align;
+            newData.(mapName).(subjectName).guide_trace=guide_trace;
         %     % Switch based on the selected alignment strategy
         % 
         % % Save the updated QRS positions based on the strategy used
