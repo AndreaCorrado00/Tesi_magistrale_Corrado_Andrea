@@ -63,7 +63,7 @@ cm = confusion_matrix(y_true, pred_heuristic)
 disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=["MAP_A","MAP_B","MAP_C"])
 disp.plot(cmap=plt.cm.Blues)
 plt.title('Confusion Matrix')
-plt.show()
     
 he_report = classification_report(y_true, pred_heuristic, target_names=labels_unique)
 print(he_report)
+
