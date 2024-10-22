@@ -11,7 +11,12 @@ sys.path.append("D:/Desktop/ANDREA/Universita/Magistrale/Anno Accademico 2023-20
 sys.path.append("D:/Desktop/ANDREA/Universita/Magistrale/Anno Accademico 2023-2024/TESI/Tesi_magistrale/src/Classification_phase")
 
 #%% Loading data
-data=pd.read_csv("D:/Desktop/ANDREA/Universita/Magistrale/Anno Accademico 2023-2024/TESI/Tesi_magistrale/Data/Processed/AVNRT_DB.csv")
+use_filt_data=True;
+if use_filt_data:
+    data=pd.read_csv("D:/Desktop/ANDREA/Universita/Magistrale/Anno Accademico 2023-2024/TESI/Tesi_magistrale/Data/Processed/AVNRT_DB_FILT.csv")
+else:
+    data=pd.read_csv("D:/Desktop/ANDREA/Universita/Magistrale/Anno Accademico 2023-2024/TESI/Tesi_magistrale/Data/Processed/AVNRT_DB.csv")
+
 
 Fs=2035; # Fixed value of samplig rate, Hz
 
