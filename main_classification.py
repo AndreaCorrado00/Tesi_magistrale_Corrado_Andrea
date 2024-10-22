@@ -65,6 +65,7 @@ for i in range(0,dims[0]):
 # %% Performance of the heuristic classifier
 cm = confusion_matrix(y_true, pred_heuristic)
 
+cm_fig=plt.figure()
 disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=["MAP_A","MAP_B","MAP_C"])
 disp.plot(cmap=plt.cm.Blues)
 plt.title('Confusion Matrix')
