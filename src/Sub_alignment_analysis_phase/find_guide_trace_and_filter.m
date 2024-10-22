@@ -16,19 +16,23 @@ for i = 1:length(mapNames)
     for j = 1:numSubjects
         subjectName = sprintf('%s%d', mapName, j);  % Construct the subject name
         % Filtering traces
+        [M,N]=size(data.(mapName).(subjectName).rov_trace);
         if filter
-            rov = original_data.(mapName).(subjectName).rov_trace{:, k};
-            ref = original_data.(mapName).(subjectName).ref_trace{:, k};
-            spare1 = original_data.(mapName).(subjectName).spare1_trace{:, k};
-            spare2 = original_data.(mapName).(subjectName).spare2_trace{:, k};
-            spare3 = original_data.(mapName).(subjectName).spare3_trace{:, k};
+            for k=1:N
+            rov = data.(mapName).(subjectName).rov_trace{:, k};
+            ref = data.(mapName).(subjectName).ref_trace{:, k};
+            spare1 = data.(mapName).(subjectName).spare1_trace{:, k};
+            spare2 = data.(mapName).(subjectName).spare2_trace{:, k};
+            spare3 = data.(mapName).(subjectName).spare3_trace{:, k};
 
-            % Apply wavelet denoising to other traces if specified
-            newData.(mapName).(subjectName).rov_trace = handable_denoise_ecg_BP(rov - mean(rov), Fc, 2,60);
-            newData.(mapName).(subjectName).ref_trace = handable_denoise_ecg_BP(ref - mean(ref), Fc,  2,60);
-            newData.(mapName).(subjectName).spare1_trace = handable_denoise_ecg_BP(spare1 - mean(spare1),  2,60);
-            newData.(mapName).(subjectName).spare2_trace = handable_denoise_ecg_BP(spare2 - mean(spare2), Fc, 2,60);
-            newData.(mapName).(subjectName).spare3_trace = handable_denoise_ecg_BP(spare3 - mean(spare3), Fc, 2,60);
+            % Apply denoising to other traces if specified
+            newData.(mapName).(subjectName).rov_trace = array2table(handable_denoise_ecg_BP(rov - mean(rov), Fc, 2,60));
+            newData.(mapName).(subjectName).ref_trace = array2table(handable_denoise_ecg_BP(ref - mean(ref), Fc,  2,60));
+            newData.(mapName).(subjectName).spare1_trace = array2table(handable_denoise_ecg_BP(spare1 - mean(spare1), Fc,  2,60));
+            newData.(mapName).(subjectName).spare2_trace = array2table(handable_denoise_ecg_BP(spare2 - mean(spare2), Fc, 2,60));
+            newData.(mapName).(subjectName).spare3_trace = array2table(handable_denoise_ecg_BP(spare3 - mean(spare3), Fc, 2,60));
+            end
+
         end
 
     end

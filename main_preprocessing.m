@@ -223,7 +223,8 @@ show_DB_reduction(data)
 
 %% 8.3  Data alignment 
 % For each set of signals the R-peak is found
-data = find_guide_trace_and_filter(data, fc,false);
+filter_flag=true;
+data = find_guide_trace_and_filter(data, fc,filter_flag);
 % Then R peak is used to align each set os singals to have ventricular
 % conduction around 0.5 seconds
 Aligned_DB= align_dataset(data,0.5,fc);
