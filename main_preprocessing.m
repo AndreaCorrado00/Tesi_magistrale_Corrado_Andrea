@@ -254,7 +254,7 @@ save("D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tes
 
 
 
-%%                ---------- ALIGNED DATASET POPULATION ANALYSIS ---------- 
+%%                           ---------- ALIGNED DATASET ANALYSIS ---------- 
 clc;clear;close;
 % Ppopulation plots are done to summarize. They not intend to be a complete
 % and deep representation, but just a quick overview on the data we have.
@@ -279,8 +279,11 @@ spaghetti_confidence_signals(POP_DB_aligned,fc,figure_path)
 % comparison between maps within subjects and traces
 compare_maps_between_signals(POP_DB_aligned,fc,figure_path)
 
-    
 
+%% 9.4 Saving the dataset as single table of signals
+db_table = build_table_dataset(POP_DB_aligned);
+
+writetable(db_table,processed_data_path+"\AVNRT_DB.csv")
 
 
 
