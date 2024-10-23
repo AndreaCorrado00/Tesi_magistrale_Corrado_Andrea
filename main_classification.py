@@ -16,7 +16,8 @@ sys.path.append("D:/Desktop/ANDREA/Universita/Magistrale/Anno Accademico 2023-20
 from save_plot import save_plot
 from heuristic_classificator import heuristic_classificator
 from show_examples import show_examples
-
+from handle_filtered_data import handle_filtered_data
+from diplay_data_summary import diplay_data_summary
 # Exporting figures
 figure_path="D:/Desktop/ANDREA/Universita/Magistrale/Anno Accademico 2023-2024/TESI/Tesi_magistrale/Figure"
 
@@ -24,48 +25,24 @@ figure_path="D:/Desktop/ANDREA/Universita/Magistrale/Anno Accademico 2023-2024/T
 
 #%% Loading data
 use_filt_data=True;
-if use_filt_data:
-    data=pd.read_csv("D:/Desktop/ANDREA/Universita/Magistrale/Anno Accademico 2023-2024/TESI/Tesi_magistrale/Data/Processed/AVNRT_DB_FILT.csv")
-else:
-    data=pd.read_csv("D:/Desktop/ANDREA/Universita/Magistrale/Anno Accademico 2023-2024/TESI/Tesi_magistrale/Data/Processed/AVNRT_DB.csv")
+# Handling two parralel paths: filtered and not filtered dataset
+data,y_true,labels_unique,Fs,plot_last_name,fig_final_folder,subtitle_plots= handle_filtered_data(use_filt_data)
 
-
-Fs=2035; # Fixed value of samplig rate, Hz
-
-# extraction of labels and signals
-y_true=np.array(data['class'])
-labels_unique=np.unique(y_true)
-data=data.drop('class',axis=1)
 #%% Checking data
-print(data.head)
+diplay_data_summary(data,labels_unique)
 
-# data dimensionality
-dims=data.shape
-print("Number of signals: "+ str(dims[0]))
-print("Number of points: "+ str(dims[1]-1))
-
-# classes
-    # just to print 
-labels_string = ", ".join(labels_unique)
-print("Classes: " + labels_string)
-
-# NaN presence is known but:
-has_nan=data.isna().any().any()
-
-if has_nan :
-    print("Data have NaN points")
-    
 # other types of EDA have been made previously
 
 #%% Shoving an example of data series
 show_examples(data, Fs, 429,800,960)
 
+
 # %% Stratified train/test split
 
 
 # %% Building an heuristic classificator
+dims=data.shape
 pred_heuristic=np.empty(dims[0], dtype=object)
-
 
 for i in range(0,dims[0]):
     pred=heuristic_classificator(data.iloc[i],Fs)
@@ -77,10 +54,11 @@ cm = confusion_matrix(y_true, pred_heuristic)
 cm_fig, ax = plt.subplots()  
 disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=["MAP_A", "MAP_B", "MAP_C"])
 disp.plot(cmap=plt.cm.Blues, ax=ax)
-plt.title('Confusion Matrix: Heuristic classificator')
+plt.suptitle('Confusion Matrix: Heuristic classificator')
+plt.title(subtitle_plots)
 
 # Report of performance: baseline    
 he_report = classification_report(y_true, pred_heuristic, target_names=labels_unique)
 print(he_report)
 # saving confusion matrix
-save_plot(cm_fig,figure_path+"/Heuristic_classification_phase","CM_heuristic")
+save_plot(cm_fig,figure_path+"/Heuristic_classification_phase"+fig_final_folder,"CM_heuristic"+plot_last_name)
