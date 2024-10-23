@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import sys
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 from sklearn.metrics import classification_report
+from sklearn.model_selection import train_test_split
 
 #%% Adding paths, functions and exporting paths
 
@@ -38,7 +39,15 @@ show_examples(data, Fs, 429,800,960)
 
 
 # %% Stratified train/test split
+# Creiamo un array di indici
+indices = np.arange(data.shape[0])
 
+# Split sugli indici con stratify su y
+train_idx, test_idx = train_test_split(indices, test_size=0.3, stratify=y_true, random_state=42)
+
+# Test and training 
+# X_train, X_test = data[train_idx], data[test_idx]
+# y_train, y_test = y_true[train_idx], y_true[test_idx]
 
 # %% Building an heuristic classificator
 dims=data.shape
