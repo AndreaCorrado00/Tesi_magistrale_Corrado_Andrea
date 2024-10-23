@@ -53,9 +53,12 @@ train_idx, test_idx = train_test_split(indices, test_size=0.3, stratify=y_true, 
 dims=data.shape
 pred_heuristic=np.empty(dims[0], dtype=object)
 
+signal_peaks_and_class=[];
 for i in range(0,dims[0]):
-    pred=heuristic_classificator(data.iloc[i],Fs)
+    atr_peak,his_peak,vent_peak,pred=heuristic_classificator(data.iloc[i],Fs)
     pred_heuristic[i]=pred
+    signal_peaks_and_class.append([atr_peak,his_peak,vent_peak,pred])
+    
     
 # %% Performance of the heuristic classifier
 cm = confusion_matrix(y_true, pred_heuristic)
