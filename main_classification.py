@@ -25,7 +25,7 @@ figure_path="D:/Desktop/ANDREA/Universita/Magistrale/Anno Accademico 2023-2024/T
 
 
 #%% Loading data
-use_filt_data=False;
+use_filt_data=True;
 # Handling two parralel paths: filtered and not filtered dataset
 data,y_true,labels_unique,Fs,plot_last_name,fig_final_folder,subtitle_plots= handle_filtered_data(use_filt_data)
 
@@ -73,4 +73,5 @@ plt.title(subtitle_plots,fontsize=10)
 he_report = classification_report(y_true, pred_heuristic, target_names=labels_unique)
 print(he_report)
 # saving confusion matrix
-#save_plot(cm_fig,figure_path+"/Heuristic_classification_phase"+fig_final_folder,"CM_heuristic"+plot_last_name)
+save_plot(cm_fig,figure_path+"/Heuristic_classification_phase"+fig_final_folder,"CM_heuristic"+plot_last_name)
+
