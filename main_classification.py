@@ -24,7 +24,7 @@ figure_path="D:/Desktop/ANDREA/Universita/Magistrale/Anno Accademico 2023-2024/T
 
 
 #%% Loading data
-use_filt_data=True;
+use_filt_data=False;
 # Handling two parralel paths: filtered and not filtered dataset
 data,y_true,labels_unique,Fs,plot_last_name,fig_final_folder,subtitle_plots= handle_filtered_data(use_filt_data)
 
@@ -55,7 +55,7 @@ cm_fig, ax = plt.subplots()
 disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=["MAP_A", "MAP_B", "MAP_C"])
 disp.plot(cmap=plt.cm.Blues, ax=ax)
 plt.suptitle('Confusion Matrix: Heuristic classificator')
-plt.title(subtitle_plots)
+plt.title(subtitle_plots,fontsize=10)
 
 # Report of performance: baseline    
 he_report = classification_report(y_true, pred_heuristic, target_names=labels_unique)
