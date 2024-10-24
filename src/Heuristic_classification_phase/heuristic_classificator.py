@@ -45,7 +45,7 @@ def heuristic_classificator(record,Fs):
     if his_peak>0:
         pred_class="MAP_C"
         
-    elif atr_peak<=vent_peak or np.isnan(atr_peak):
+    elif atr_peak>=vent_peak or np.isnan(vent_peak):
         pred_class="MAP_B"
         
     else:
