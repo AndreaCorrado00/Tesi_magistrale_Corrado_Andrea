@@ -1,4 +1,4 @@
-def diplay_data_summary(data,labels_unique):
+def display_data_summary(data,labels_unique):
     print(data.head)
 
     # data dimensionality
