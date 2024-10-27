@@ -1,4 +1,4 @@
-def heuristic_classificator(record,Fs):
+def heuristic_classificator(record,Fs,mult_factor):
     import numpy as np
     from scipy.signal import find_peaks
     
@@ -15,7 +15,6 @@ def heuristic_classificator(record,Fs):
     his_phase=np.abs(record[atr_ind:ven_ind])
     
     # finding peaks
-    mult_factor=6;
     prominence_value=mult_factor*np.nanstd(atrial_phase)
     atr_peak,_ =find_peaks(atrial_phase,prominence=prominence_value)
     

@@ -21,13 +21,14 @@ from show_single_example import show_single_example
 from handle_filtered_data import handle_filtered_data
 from display_data_summary import display_data_summary
 from show_class_proportions import show_class_proportions
+from tune_prominence_mult_factor import tune_prominence_mult_factor
 # Exporting figures
 figure_path="D:/Desktop/ANDREA/Universita/Magistrale/Anno Accademico 2023-2024/TESI/Tesi_magistrale/Figure"
 
 
 
 #%% Loading data
-use_filt_data=True;
+use_filt_data=False;
 # Handling two parralel paths: filtered and not filtered dataset
 data,y_true,labels_unique,Fs,plot_last_name,fig_final_folder,subtitle_plots= handle_filtered_data(use_filt_data)
 
@@ -55,13 +56,16 @@ print("Training set")
 show_class_proportions(y_train,labels_unique)
 print("Test set")
 show_class_proportions(y_test,labels_unique)
-# %% Heuristic classificator: train 
+# %% Tuning prominence multiply factor 
+tune_prominence_mult_factor(x_train,y_train,np.array(np.arange(1,15,1)))
+save_plot(plt.gcf(),figure_path+"/Heuristic_classification_phase/other_figs","mult_factor_tuning")
+# %%  Heuristic classifier: train
 dims=x_train.shape
 pred_heuristic=np.empty(dims[0], dtype=object)
 
 signal_peaks_and_class_train=[];
 for i in range(0,dims[0]):
-    atr_peak,his_peak,vent_peak,pred=heuristic_classificator(x_train.iloc[i],Fs)
+    atr_peak,his_peak,vent_peak,pred=heuristic_classificator(x_train.iloc[i],Fs,5)
     pred_heuristic[i]=pred
     signal_peaks_and_class_train.append([atr_peak,his_peak,vent_peak,pred])
     
@@ -87,7 +91,7 @@ pred_heuristic=np.empty(dims[0], dtype=object)
 
 signal_peaks_and_class_test=[];
 for i in range(0,dims[0]):
-    atr_peak,his_peak,vent_peak,pred=heuristic_classificator(x_test.iloc[i],Fs)
+    atr_peak,his_peak,vent_peak,pred=heuristic_classificator(x_test.iloc[i],Fs,5)
     pred_heuristic[i]=pred
     signal_peaks_and_class_test.append([atr_peak,his_peak,vent_peak,pred])
     
