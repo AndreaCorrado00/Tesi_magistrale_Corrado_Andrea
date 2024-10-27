@@ -22,6 +22,8 @@ from handle_filtered_data import handle_filtered_data
 from display_data_summary import display_data_summary
 from show_class_proportions import show_class_proportions
 from tune_prominence_mult_factor import tune_prominence_mult_factor
+from tune_his_th import tune_his_th
+from tune_his_th_on_f1 import tune_his_th_on_f1
 # Exporting figures
 figure_path="D:/Desktop/ANDREA/Universita/Magistrale/Anno Accademico 2023-2024/TESI/Tesi_magistrale/Figure"
 
@@ -59,6 +61,14 @@ show_class_proportions(y_test,labels_unique)
 # %% Tuning prominence multiply factor 
 tune_prominence_mult_factor(x_train,y_train,np.array(np.arange(1,15,1)))
 save_plot(plt.gcf(),figure_path+"/Heuristic_classification_phase/other_figs","mult_factor_tuning")
+
+# %% Tuning of His Threshold value for strategy B
+# F1 score is used to tune the best percentile to be used as threshold
+tune_his_th_on_f1(x_train,y_train,np.arange(0,100,5),t_atr=0.38,t_ven=0.42)
+
+# then the threshold is fixed
+th_his=tune_his_th(x_train,t_atr=0.38,t_ven=0.42,Q_perc=45,boxplot=True)
+
 # %%  Heuristic classifier: train
 dims=x_train.shape
 pred_heuristic=np.empty(dims[0], dtype=object)
@@ -85,7 +95,7 @@ print(he_report)
 # saving confusion matrix
 save_plot(cm_fig,figure_path+"/Heuristic_classification_phase"+fig_final_folder,"CM_heuristic_train"+plot_last_name)
 
-# %% Heuristic classificator: test 
+# %% Heuristic classifier: test 
 dims=x_test.shape
 pred_heuristic=np.empty(dims[0], dtype=object)
 
@@ -112,7 +122,6 @@ print(he_report)
 save_plot(cm_fig,figure_path+"/Heuristic_classification_phase"+fig_final_folder,"CM_heuristic_test"+plot_last_name)
 
 # %% Showing correct results
-# %% Showing some unclear results
 show_single_example(x_train, Fs,103, 'MAP A correctly classified as MAP A') 
 fig=plt.gcf()
 save_plot(fig,figure_path+"/Heuristic_classification_phase/other_figs","ex_correct_class_1")
