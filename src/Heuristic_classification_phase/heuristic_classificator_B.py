@@ -3,8 +3,8 @@ def heuristic_classificator_B(record,Fs,his_bundle_th):
     
     record=np.array(record)
     
-    t_atr=0.35;
-    t_ven=0.45;
+    t_atr=0.39
+    t_ven=0.42
     
     atr_ind=round(t_atr*Fs)
     ven_ind=round(t_ven*Fs)
