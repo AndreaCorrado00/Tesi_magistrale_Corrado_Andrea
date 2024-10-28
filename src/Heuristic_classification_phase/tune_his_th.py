@@ -2,8 +2,6 @@ def tune_his_th(x_train, t_atr, t_ven, Q_perc, boxplot):
     import matplotlib.pyplot as plt
     import numpy as np
     
-    t_atr = 0.35
-    t_ven = 0.45
     
     atr_ind = round(t_atr * 2035)
     ven_ind = round(t_ven * 2035)

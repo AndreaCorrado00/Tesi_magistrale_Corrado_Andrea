@@ -3,7 +3,7 @@ def heuristic_classifier_B(record,Fs,his_bundle_th):
     
     record=np.array(record)
     
-    t_atr=0.39
+    t_atr=0.38
     t_ven=0.42
     
     atr_ind=round(t_atr*Fs)

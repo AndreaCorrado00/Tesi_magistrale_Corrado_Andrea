@@ -145,8 +145,8 @@ save_plot(fig,figure_path+"/Heuristic_classification_phase/other_figs","ex_miscl
 tune_his_th_on_f1(x_train,y_train,np.arange(0,100,5),t_atr=0.38,t_ven=0.42)
 save_plot(plt.gcf(),figure_path+"/Heuristic_classification_phase/other_figs","his_th_tuning")
 
-# then the threshold is fixed
-th_his=tune_his_th(x_train,t_atr=0.38,t_ven=0.42,Q_perc=45,boxplot=True)
+#%%  then the threshold is fixed
+th_his=tune_his_th(x_train,t_atr=0.38,t_ven=0.42,Q_perc=75,boxplot=True)
 save_plot(plt.gcf(),figure_path+"/Heuristic_classification_phase/other_figs","his_th_tuning_boxplot")
 # %%  Heuristic classifier: train
 dims=x_train.shape
