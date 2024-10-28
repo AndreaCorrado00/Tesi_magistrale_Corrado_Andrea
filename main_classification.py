@@ -83,7 +83,7 @@ for i in range(0,dims[0]):
     
 # %% Performance of the heuristic classifier: train 
 # Fixed saving names
-cm_suptitle="Confusion Matrix: Heuristic classificator"
+cm_suptitle="Confusion Matrix: Heuristic classifier"
 cm_saving_path=figure_path+"/Heuristic_classification_phase"+fig_final_folder
 # Variable saving names
 cm_saving_name="CM_heuristic_train"+plot_last_name
@@ -161,7 +161,7 @@ for i in range(0,dims[0]):
     
 # %% Performance of the heuristic classifier: train 
 # Fixed saving names
-cm_suptitle="Confusion Matrix: Heuristic classificator"
+cm_suptitle="Confusion Matrix: Heuristic classifier"
 cm_saving_path=figure_path+"/Heuristic_classification_phase"+fig_final_folder
 # Variable saving names
 cm_saving_name="CM_heuristic_train_B"+plot_last_name
