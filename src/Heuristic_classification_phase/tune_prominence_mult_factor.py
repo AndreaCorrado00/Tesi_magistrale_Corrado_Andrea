@@ -5,7 +5,7 @@ def tune_prominence_mult_factor(signals,y_true,interval):
     import sys
     
     sys.path.append("D:/Desktop/ANDREA/Universita/Magistrale/Anno Accademico 2023-2024/TESI/Tesi_magistrale/src/Heuristic_classification_phase")
-    from heuristic_classificator import heuristic_classificator
+    from heuristic_classifier import heuristic_classifier
     
     f1_scores = np.zeros((len(interval), 3))
 
@@ -14,7 +14,7 @@ def tune_prominence_mult_factor(signals,y_true,interval):
         pred_heuristic = np.empty(dims[0], dtype=object)
         
         for i in range(dims[0]):
-            _, _, _, pred = heuristic_classificator(signals.iloc[i], 2035, mult_factor)
+            _, _, _, pred = heuristic_classifier(signals.iloc[i], 2035, mult_factor)
             pred_heuristic[i] = pred
         
         f1_scores[idx, :] = f1_score(y_true, pred_heuristic, average=None)

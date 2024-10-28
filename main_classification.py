@@ -12,8 +12,8 @@ sys.path.append("D:/Desktop/ANDREA/Universita/Magistrale/Anno Accademico 2023-20
 
 # Functions
 from save_plot import save_plot
-from heuristic_classificator import heuristic_classificator
-from heuristic_classificator_B import heuristic_classificator_B
+from heuristic_classifier import heuristic_classifier
+from heuristic_classifier_B import heuristic_classifier_B
 from show_examples import show_examples
 from show_single_example import show_single_example
 from handle_filtered_data import handle_filtered_data
@@ -76,7 +76,7 @@ pred_heuristic=np.empty(dims[0], dtype=object)
 
 signal_peaks_and_class_train=[];
 for i in range(0,dims[0]):
-    atr_peak,his_peak,vent_peak,pred=heuristic_classificator(x_train.iloc[i],Fs,5)
+    atr_peak,his_peak,vent_peak,pred=heuristic_classifier(x_train.iloc[i],Fs,5)
     pred_heuristic[i]=pred
     signal_peaks_and_class_train.append([atr_peak,his_peak,vent_peak,pred])
     
@@ -98,7 +98,7 @@ pred_heuristic=np.empty(dims[0], dtype=object)
 
 signal_peaks_and_class_test=[];
 for i in range(0,dims[0]):
-    atr_peak,his_peak,vent_peak,pred=heuristic_classificator(x_test.iloc[i],Fs,5)
+    atr_peak,his_peak,vent_peak,pred=heuristic_classifier(x_test.iloc[i],Fs,5)
     pred_heuristic[i]=pred
     signal_peaks_and_class_test.append([atr_peak,his_peak,vent_peak,pred])
     
@@ -111,7 +111,7 @@ evaluate_confusion_matrix(pred_heuristic,y_test,labels_unique,cm_suptitle=cm_sup
 
 
 # %% Showing correct results
-show_single_example(x_test, Fs,8, 'MAP A correctly classified as MAP A') 
+show_single_example(x_test, Fs,6, 'MAP A correctly classified as MAP A') 
 fig=plt.gcf()
 save_plot(fig,figure_path+"/Heuristic_classification_phase/other_figs","ex_correct_class_1")
 
@@ -154,7 +154,7 @@ pred_heuristic=np.empty(dims[0], dtype=object)
 
 signal_peaks_and_class_train=[];
 for i in range(0,dims[0]):
-    atr_peak,his_peak,vent_peak,pred=heuristic_classificator_B(x_train.iloc[i],Fs,th_his)
+    atr_peak,his_peak,vent_peak,pred=heuristic_classifier_B(x_train.iloc[i],Fs,th_his)
     pred_heuristic[i]=pred
     signal_peaks_and_class_train.append([atr_peak,his_peak,vent_peak,pred])
     
@@ -176,7 +176,7 @@ pred_heuristic=np.empty(dims[0], dtype=object)
 
 signal_peaks_and_class_test=[];
 for i in range(0,dims[0]):
-    atr_peak,his_peak,vent_peak,pred=heuristic_classificator_B(x_test.iloc[i],Fs,th_his)
+    atr_peak,his_peak,vent_peak,pred=heuristic_classifier_B(x_test.iloc[i],Fs,th_his)
     pred_heuristic[i]=pred
     signal_peaks_and_class_test.append([atr_peak,his_peak,vent_peak,pred])
     

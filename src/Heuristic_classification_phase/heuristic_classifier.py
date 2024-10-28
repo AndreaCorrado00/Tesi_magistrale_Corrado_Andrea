@@ -1,4 +1,4 @@
-def heuristic_classificator(record,Fs,mult_factor):
+def heuristic_classifier(record,Fs,mult_factor):
     import numpy as np
     from scipy.signal import find_peaks
     
@@ -41,7 +41,7 @@ def heuristic_classificator(record,Fs,mult_factor):
         vent_peak=np.nan
     
     # decision making
-    if his_peak>0:
+    if not(np.isnan(his_peak)):
         pred_class="MAP_C"
         
     elif atr_peak>=vent_peak or np.isnan(vent_peak):
@@ -51,3 +51,5 @@ def heuristic_classificator(record,Fs,mult_factor):
         pred_class="MAP_B"
   
     return atr_peak,his_peak,vent_peak,pred_class
+
+

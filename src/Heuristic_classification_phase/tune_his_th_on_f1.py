@@ -5,7 +5,7 @@ def tune_his_th_on_f1(signals, y_true,interval,t_atr, t_ven):
     import sys
     
     sys.path.append("D:/Desktop/ANDREA/Universita/Magistrale/Anno Accademico 2023-2024/TESI/Tesi_magistrale/src/Heuristic_classification_phase")
-    from heuristic_classificator_B import heuristic_classificator_B
+    from heuristic_classifier_B import heuristic_classifier_B
     from tune_his_th import tune_his_th
     
     f1_scores = np.zeros((len(interval), 3))
@@ -17,7 +17,7 @@ def tune_his_th_on_f1(signals, y_true,interval,t_atr, t_ven):
         his_bundle_th=tune_his_th(signals, t_atr, t_ven, Q_perc,False)
         
         for i in range(dims[0]):
-            _, _, _, pred = heuristic_classificator_B(signals.iloc[i], 2035, his_bundle_th)
+            _, _, _, pred = heuristic_classifier_B(signals.iloc[i], 2035, his_bundle_th)
             pred_heuristic[i] = pred
         
         f1_scores[idx, :] = f1_score(y_true, pred_heuristic, average=None)

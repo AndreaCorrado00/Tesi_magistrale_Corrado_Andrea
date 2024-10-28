@@ -1,4 +1,4 @@
-def heuristic_classificator_B(record,Fs,his_bundle_th):
+def heuristic_classifier_B(record,Fs,his_bundle_th):
     import numpy as np
     
     record=np.array(record)
@@ -34,3 +34,6 @@ def heuristic_classificator_B(record,Fs,his_bundle_th):
         pred_class="MAP_B"
   
     return atr_peak,his_peak,vent_peak,pred_class
+
+
+
