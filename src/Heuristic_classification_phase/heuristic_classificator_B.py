@@ -24,7 +24,7 @@ def heuristic_classificator_B(record,Fs,his_bundle_th):
         his_peak=np.nan
         
     # decision making
-    if his_peak>0:
+    if not(np.isnan(his_peak)):
         pred_class="MAP_C"
         
     elif atr_peak>=vent_peak or np.isnan(vent_peak):
