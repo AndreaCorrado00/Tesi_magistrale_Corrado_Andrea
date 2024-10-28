@@ -16,6 +16,7 @@ sys.path.append("D:/Desktop/ANDREA/Universita/Magistrale/Anno Accademico 2023-20
 # Functions
 from save_plot import save_plot
 from heuristic_classificator import heuristic_classificator
+from heuristic_classificator_B import heuristic_classificator_B
 from show_examples import show_examples
 from show_single_example import show_single_example
 from handle_filtered_data import handle_filtered_data
@@ -24,6 +25,7 @@ from show_class_proportions import show_class_proportions
 from tune_prominence_mult_factor import tune_prominence_mult_factor
 from tune_his_th import tune_his_th
 from tune_his_th_on_f1 import tune_his_th_on_f1
+from evaluate_confusion_matrix import evaluate_confusion_matrix
 # Exporting figures
 figure_path="D:/Desktop/ANDREA/Universita/Magistrale/Anno Accademico 2023-2024/TESI/Tesi_magistrale/Figure"
 
@@ -81,19 +83,14 @@ for i in range(0,dims[0]):
     
     
 # %% Performance of the heuristic classifier: train 
+cm_saving_path=figure_path+"/Heuristic_classification_phase"+fig_final_folder
+cm_saving_name="CM_heuristic_train"+plot_last_name
+cm_suptitle="Confusion Matrix: Heuristic classificator"
+cm_title=subtitle_plots+" train set" 
 cm = confusion_matrix(y_train, pred_heuristic)
 
-cm_fig, ax = plt.subplots()  
-disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=["MAP_A", "MAP_B", "MAP_C"])
-disp.plot(cmap=plt.cm.Blues, ax=ax)
-plt.suptitle('Confusion Matrix: Heuristic classificator')
-plt.title(subtitle_plots+" train set",fontsize=10)
+evaluate_confusion_matrix(pred_heuristic,y_train,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
 
-# Report of performance: baseline    
-he_report = classification_report(y_train, pred_heuristic, target_names=labels_unique)
-print(he_report)
-# saving confusion matrix
-save_plot(cm_fig,figure_path+"/Heuristic_classification_phase"+fig_final_folder,"CM_heuristic_train"+plot_last_name)
 
 # %% Heuristic classifier: test 
 dims=x_test.shape
@@ -120,6 +117,10 @@ he_report = classification_report(y_test, pred_heuristic, target_names=labels_un
 print(he_report)
 # saving confusion matrix
 save_plot(cm_fig,figure_path+"/Heuristic_classification_phase"+fig_final_folder,"CM_heuristic_test"+plot_last_name)
+
+
+
+
 
 # %% Showing correct results
 show_single_example(x_train, Fs,103, 'MAP A correctly classified as MAP A') 

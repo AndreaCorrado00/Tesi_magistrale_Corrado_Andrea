@@ -1,4 +1,4 @@
-def evaluate_confusion_matrix(y_pred,y_true,labels_unique,cm_suptitle=None,cm_title=None,save=False, path=None):
+def evaluate_confusion_matrix(y_pred,y_true,labels_unique,cm_suptitle=None,cm_title=None,save=False, path=None,saving_name=None):
     from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
     from sklearn.metrics import classification_report
     import sys
@@ -19,4 +19,4 @@ def evaluate_confusion_matrix(y_pred,y_true,labels_unique,cm_suptitle=None,cm_ti
     print(he_report)
     # saving confusion matrix
     if save:
-        save_plot(cm_fig,path)
+        save_plot(cm_fig,path,saving_name)
