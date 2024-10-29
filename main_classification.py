@@ -23,6 +23,7 @@ from tune_prominence_mult_factor import tune_prominence_mult_factor
 from tune_his_th import tune_his_th
 from tune_his_th_on_f1 import tune_his_th_on_f1
 from evaluate_confusion_matrix import evaluate_confusion_matrix
+from draw_his_boundaries import draw_his_boundaries
 # Exporting figures
 figure_path="D:/Desktop/ANDREA/Universita/Magistrale/Anno Accademico 2023-2024/TESI/Tesi_magistrale/Figure"
 
@@ -68,8 +69,6 @@ tune_prominence_mult_factor(x_train,y_train,np.array(np.arange(1,15,1)))
 
 save_plot(plt.gcf(),figure_path+"/Heuristic_classification_phase/other_figs","mult_factor_tuning")
 
-
-
 # %%  Heuristic classifier: train
 dims=x_train.shape
 pred_heuristic=np.empty(dims[0], dtype=object)
@@ -112,27 +111,33 @@ evaluate_confusion_matrix(pred_heuristic,y_test,labels_unique,cm_suptitle=cm_sup
 
 # %% Showing correct results
 show_single_example(x_test, Fs,6, 'MAP A correctly classified as MAP A') 
+draw_his_boundaries(0.38,0.42) 
 fig=plt.gcf()
 save_plot(fig,figure_path+"/Heuristic_classification_phase/other_figs","ex_correct_class_1")
 
 show_single_example(x_test, Fs,144, 'MAP B correctly classified as MAP B') 
+draw_his_boundaries(0.38,0.42) 
 fig=plt.gcf()
 save_plot(fig,figure_path+"/Heuristic_classification_phase/other_figs","ex_correct_class_2")
 
 show_single_example(x_test, Fs, 26, 'MAP C correctly classified as MAP C') 
+draw_his_boundaries(0.38,0.42) 
 fig=plt.gcf()
 save_plot(fig,figure_path+"/Heuristic_classification_phase/other_figs","ex_correct_class_3")
 
 # %% Showing some unclear results
 show_single_example(x_test, Fs,0, 'MAP A classified as MAP B') 
+draw_his_boundaries(0.38,0.42) 
 fig=plt.gcf()
 save_plot(fig,figure_path+"/Heuristic_classification_phase/other_figs","ex_misclass_1")
 
 show_single_example(x_test, Fs,200, 'MAP C classified as MAP B') 
+draw_his_boundaries(0.38,0.42) 
 fig=plt.gcf()
 save_plot(fig,figure_path+"/Heuristic_classification_phase/other_figs","ex_misclass_2")
 
-show_single_example(x_test, Fs, 94, 'MAP C classified as MAP A') 
+show_single_example(x_test, Fs, 94, 'MAP C classified as MAP A')
+draw_his_boundaries(0.38,0.42) 
 fig=plt.gcf()
 save_plot(fig,figure_path+"/Heuristic_classification_phase/other_figs","ex_misclass_3")
 
@@ -191,27 +196,33 @@ evaluate_confusion_matrix(pred_heuristic,y_test,labels_unique,cm_suptitle=cm_sup
 
 #%% Showing correct results
 show_single_example(x_test, Fs,2, 'MAP A correctly classified as MAP A, strategy B') 
+draw_his_boundaries(0.38,0.42,th_his)
 fig=plt.gcf()
 save_plot(fig,figure_path+"/Heuristic_classification_phase/other_figs","ex_correct_class_1_B")
 
 show_single_example(x_test, Fs,38, 'MAP B correctly classified as MAP B, strategy B') 
+draw_his_boundaries(0.38,0.42,th_his)
 fig=plt.gcf()
 save_plot(fig,figure_path+"/Heuristic_classification_phase/other_figs","ex_correct_class_2_B")
 
 show_single_example(x_test, Fs, 40, 'MAP C correctly classified as MAP C, strategy B') 
+draw_his_boundaries(0.38,0.42,th_his)
 fig=plt.gcf()
 save_plot(fig,figure_path+"/Heuristic_classification_phase/other_figs","ex_correct_class_3_B")
 
 # %% Showing some unclear results
 show_single_example(x_test, Fs,1, 'MAP A classified as MAP B, strategy B') 
+draw_his_boundaries(0.38,0.42,th_his)
 fig=plt.gcf()
 save_plot(fig,figure_path+"/Heuristic_classification_phase/other_figs","ex_misclass_1_B")
 
 show_single_example(x_test, Fs,24, 'MAP C classified as MAP B, strategy B') 
+draw_his_boundaries(0.38,0.42,th_his)
 fig=plt.gcf()
 save_plot(fig,figure_path+"/Heuristic_classification_phase/other_figs","ex_misclass_2_B")
 
 show_single_example(x_test, Fs, 290, 'MAP C classified as MAP A,, strategy B') 
+draw_his_boundaries(0.38,0.42,th_his)
 fig=plt.gcf()
 save_plot(fig,figure_path+"/Heuristic_classification_phase/other_figs","ex_misclass_3_B")
 

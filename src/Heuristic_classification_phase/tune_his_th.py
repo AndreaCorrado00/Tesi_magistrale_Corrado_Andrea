@@ -20,7 +20,7 @@ def tune_his_th(x_train, t_atr, t_ven, Q_perc, boxplot):
         plt.boxplot(max_peaks)
         plt.axhline(y=percentile_value, color='black', linestyle=':', label=f'{Q_perc}th Percentile: {percentile_value:.2f}')
         plt.title("His Bundle maxima values")
-        plt.ylim([0.0, 0.5])
+        plt.ylim([0.0, 0.2])
     
 
     return np.percentile(max_peaks, Q_perc)

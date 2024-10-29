@@ -27,7 +27,7 @@ def heuristic_classifier_B(record,Fs,his_bundle_th):
     if not(np.isnan(his_peak)):
         pred_class="MAP_C"
         
-    elif atr_peak>=vent_peak or np.isnan(vent_peak):
+    elif atr_peak>=vent_peak:
         pred_class="MAP_A"
         
     else:
