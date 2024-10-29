@@ -1,4 +1,4 @@
-def tune_prominence_mult_factor(signals,y_true,interval):
+def tune_prominence_mult_factor(signals,y_true,interval,plot=False):
     import matplotlib.pyplot as plt
     from sklearn.metrics import f1_score
     import numpy as np
@@ -21,13 +21,18 @@ def tune_prominence_mult_factor(signals,y_true,interval):
         
     
     # plot
-    plt.figure()
-    plt.plot(interval,f1_scores[:,0],label="MAP A")
-    plt.plot(interval,f1_scores[:,1],label="MAP B")
-    plt.plot(interval,f1_scores[:,2],label="MAP C")
-    plt.xticks(interval)
-    plt.xlabel("Multiply factor")
-    plt.ylabel("F1-score")
-    plt.title("F1-score per class")
-    plt.legend()
+    if plot:
+        plt.figure()
+        plt.plot(interval,f1_scores[:,0],label="MAP A")
+        plt.plot(interval,f1_scores[:,1],label="MAP B")
+        plt.plot(interval,f1_scores[:,2],label="MAP C")
+        plt.xticks(interval)
+        plt.xlabel("Multiply factor")
+        plt.ylabel("F1-score")
+        plt.title("F1-score per class")
+        plt.legend()
+        
+    # Finding mult_factor which maximise MAP_C f1_score
+    max_f1_C_th=interval[f1_scores[:,2]==np.max(f1_scores[:,2])]
     
+    return max_f1_C_th[0]

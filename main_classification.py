@@ -30,27 +30,27 @@ figure_path="D:/Desktop/ANDREA/Universita/Magistrale/Anno Accademico 2023-2024/T
 
 
 #%% Loading data
-use_filt_data=True;
+use_filt_data=False;
 # Handling two parralel paths: filtered and not filtered dataset
-data,y_true,labels_unique,Fs,plot_last_name,fig_final_folder,subtitle_plots= handle_filtered_data(use_filt_data)
+whole_dataset,signals,y_true,labels_unique,Fs,plot_last_name,fig_final_folder,subtitle_plots= handle_filtered_data(use_filt_data)
 
 #%% Checking data
-display_data_summary(data,labels_unique)
+display_data_summary(signals,labels_unique)
 
 # other types of EDA have been made previously
 
 #%% Shoving an example of data series
-show_examples(data, Fs, 429,800,960)
+show_examples(signals, Fs, 429,800,960)
 
 
 # %% Stratified train/test split
 # Maps proportions 
 show_class_proportions(y_true,labels_unique)
 # array index
-indices = np.arange(data.shape[0])
+indices = np.arange(signals.shape[0])
 
 # Split on index
-x_train, x_test, y_train, y_test = train_test_split(data,y_true, test_size=0.3, stratify=y_true, random_state=42)
+x_train, x_test, y_train, y_test = train_test_split(signals,y_true, test_size=0.3, stratify=y_true, random_state=42)
 
 # check if the train/test split is correctly stratified
 print("\n---- After stratified train/test split----")
@@ -65,8 +65,8 @@ show_class_proportions(y_test,labels_unique)
 ##############################################################################
 #%% STRATEGY A
 # %% Tuning prominence multiply factor 
-tune_prominence_mult_factor(x_train,y_train,np.array(np.arange(1,15,1)))
-
+mult_factor=tune_prominence_mult_factor(x_train,y_train,np.array(np.arange(1,15,1)), True)
+# %%
 save_plot(plt.gcf(),figure_path+"/Heuristic_classification_phase/other_figs","mult_factor_tuning")
 
 # %%  Heuristic classifier: train
@@ -75,7 +75,7 @@ pred_heuristic=np.empty(dims[0], dtype=object)
 
 signal_peaks_and_class_train=[];
 for i in range(0,dims[0]):
-    atr_peak,his_peak,vent_peak,pred=heuristic_classifier(x_train.iloc[i],Fs,5)
+    atr_peak,his_peak,vent_peak,pred=heuristic_classifier(x_train.iloc[i],Fs,mult_factor)
     pred_heuristic[i]=pred
     signal_peaks_and_class_train.append([atr_peak,his_peak,vent_peak,pred])
     
@@ -97,7 +97,7 @@ pred_heuristic=np.empty(dims[0], dtype=object)
 
 signal_peaks_and_class_test=[];
 for i in range(0,dims[0]):
-    atr_peak,his_peak,vent_peak,pred=heuristic_classifier(x_test.iloc[i],Fs,5)
+    atr_peak,his_peak,vent_peak,pred=heuristic_classifier(x_test.iloc[i],Fs,mult_factor)
     pred_heuristic[i]=pred
     signal_peaks_and_class_test.append([atr_peak,his_peak,vent_peak,pred])
     
@@ -147,11 +147,11 @@ save_plot(fig,figure_path+"/Heuristic_classification_phase/other_figs","ex_miscl
 # %% STRATEGY B
 # %% Tuning of His Threshold value for strategy B
 # F1 score is used to tune the best percentile to be used as threshold
-tune_his_th_on_f1(x_train,y_train,np.arange(0,100,5),t_atr=0.38,t_ven=0.42)
+th_his=tune_his_th_on_f1(x_train,y_train,np.arange(0,100,5),t_atr=0.38,t_ven=0.42,plot=True)
 save_plot(plt.gcf(),figure_path+"/Heuristic_classification_phase/other_figs","his_th_tuning")
 
 #%%  then the threshold is fixed
-th_his=tune_his_th(x_train,t_atr=0.38,t_ven=0.42,Q_perc=75,boxplot=True)
+tune_his_th(x_train,t_atr=0.38,t_ven=0.42,Q_perc=75,boxplot=True);
 save_plot(plt.gcf(),figure_path+"/Heuristic_classification_phase/other_figs","his_th_tuning_boxplot")
 # %%  Heuristic classifier: train
 dims=x_train.shape
@@ -225,4 +225,37 @@ show_single_example(x_test, Fs, 290, 'MAP C classified as MAP A,, strategy B')
 draw_his_boundaries(0.38,0.42,th_his)
 fig=plt.gcf()
 save_plot(fig,figure_path+"/Heuristic_classification_phase/other_figs","ex_misclass_3_B")
+
+
+#%%############################################################################
+#### LOPO CV 
+
+# STRATEGY A
+from LOPOCV_heuristic_A import LOPOCV_heuristic_A
+
+y_true_LOPOCV,y_pred_LOPOCV,signal_peaks_and_class_train=LOPOCV_heuristic_A(whole_dataset)
+
+# %% CM 
+# Fixed saving names
+cm_suptitle="Confusion Matrix: Heuristic classifier"
+cm_saving_path=figure_path+"/Heuristic_classification_phase"+fig_final_folder
+# Variable saving names
+cm_saving_name="CM_heuristic_LOPOCV"+plot_last_name
+cm_title=subtitle_plots+" LOPOCV, heuristic A" 
+evaluate_confusion_matrix(y_pred_LOPOCV,y_true_LOPOCV,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=False, path=cm_saving_path,saving_name=cm_saving_name)
+
+# %% STRATEGY B
+from LOPOCV_heuristic_B import LOPOCV_heuristic_B
+
+y_true_LOPOCV,y_pred_LOPOCV,signal_peaks_and_class_train=LOPOCV_heuristic_B(whole_dataset)
+
+# %% CM 
+# Fixed saving names
+cm_suptitle="Confusion Matrix: Heuristic classifier"
+cm_saving_path=figure_path+"/Heuristic_classification_phase"+fig_final_folder
+# Variable saving names
+cm_saving_name="CM_heuristic_LOPOCV"+plot_last_name
+cm_title=subtitle_plots+" LOPOCV, heuristic B" 
+evaluate_confusion_matrix(y_pred_LOPOCV,y_true_LOPOCV,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=False, path=cm_saving_path,saving_name=cm_saving_name)
+
 

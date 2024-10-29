@@ -243,16 +243,9 @@ Aligned_DB.MAP_A=rmfield(Aligned_DB.MAP_A, 'MAP_A5');
 Aligned_DB.MAP_B=rmfield(Aligned_DB.MAP_B, 'MAP_B5');
 Aligned_DB.MAP_C=rmfield(Aligned_DB.MAP_C, 'MAP_C5');
 
-save("D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed\aligned_subjects_DB.mat", 'Aligned_DB');
-load(processed_data_path+'\aligned_subjects_DB.mat');
-
 
 %% 8.7 Building the new dataset
 POP_DB_aligned=build_pop_dataset_after_alignment(Aligned_DB);
-
-save("D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed\dataset_pop_aligned.mat", 'POP_DB_aligned');
-
-
 
 
 %%                           ---------- ALIGNED DATASET ANALYSIS ---------- 
@@ -266,7 +259,8 @@ figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\T
 addpath(src_path)
 
 % Loading previusly made data
-load(processed_data_path+'\dataset_pop_aligned.mat');
+load(processed_data_path+'\dataset_pop_aligned_no_filt.mat');
+load(processed_data_path+'\aligned_subjects_DB_no_filt.mat');
 fc=2035;
 
 %% 9.1 Single record visualization 
@@ -282,9 +276,8 @@ compare_maps_between_signals(POP_DB_aligned,fc,figure_path)
 
 
 %% 9.4 Saving the dataset as single table of signals
-db_table = build_table_dataset(POP_DB_aligned);
+% db_table = build_table_dataset(POP_DB_aligned);
+% writetable(db_table,processed_data_path+"\AVNRT_DB.csv")
 
-writetable(db_table,processed_data_path+"\AVNRT_DB.csv")
-
-
-
+db_table = build_table_dataset_with_subs(Aligned_DB);
+writetable(db_table,processed_data_path+"\AVNRT_DB_no_filt.csv")
