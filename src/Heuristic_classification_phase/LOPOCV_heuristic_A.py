@@ -8,6 +8,7 @@ def LOPOCV_heuristic_A(df):
     
     all_y_true = []
     all_y_pred = []
+    all_signal_peaks_and_class_train = []
     participant_ids = df['id'].unique()
     
     
@@ -29,10 +30,12 @@ def LOPOCV_heuristic_A(df):
         for i in range(0,dims[0]):
             atr_peak,his_peak,vent_peak,pred=heuristic_classifier(x_test.iloc[i],2035,mult_factor)
             pred_heuristic[i]=pred
-            signal_peaks_and_class_train.append([participant,atr_peak,his_peak,vent_peak,pred])
+            
+            original_index = test_data.index[i] 
+            signal_peaks_and_class_train.append([original_index.item(), participant.item(), atr_peak, his_peak, vent_peak, pred])
         
         all_y_true.extend(y_test)
         all_y_pred.extend(pred_heuristic)
+        all_signal_peaks_and_class_train.extend(signal_peaks_and_class_train)
         
-        
-    return all_y_true,all_y_pred,signal_peaks_and_class_train
+    return all_y_true,all_y_pred,all_signal_peaks_and_class_train

@@ -14,6 +14,10 @@ sys.path.append("D:/Desktop/ANDREA/Universita/Magistrale/Anno Accademico 2023-20
 from save_plot import save_plot
 from heuristic_classifier import heuristic_classifier
 from heuristic_classifier_B import heuristic_classifier_B
+from heuristic_classifier_C import heuristic_classifier_C
+from LOPOCV_heuristic_A import LOPOCV_heuristic_A
+from LOPOCV_heuristic_B import LOPOCV_heuristic_B
+from LOPOCV_heuristic_C import LOPOCV_heuristic_C
 from show_examples import show_examples
 from show_single_example import show_single_example
 from handle_filtered_data import handle_filtered_data
@@ -24,7 +28,7 @@ from tune_his_th import tune_his_th
 from tune_his_th_on_f1 import tune_his_th_on_f1
 from evaluate_confusion_matrix import evaluate_confusion_matrix
 from draw_his_boundaries import draw_his_boundaries
-# Exporting figures
+# Exporting plt.gcf()ures
 figure_path="D:/Desktop/ANDREA/Universita/Magistrale/Anno Accademico 2023-2024/TESI/Tesi_magistrale/Figure"
 
 
@@ -41,6 +45,7 @@ display_data_summary(signals,labels_unique)
 
 #%% Shoving an example of data series
 show_examples(signals, Fs, 429,800,960)
+
 
 
 # %% Stratified train/test split
@@ -112,36 +117,38 @@ evaluate_confusion_matrix(pred_heuristic,y_test,labels_unique,cm_suptitle=cm_sup
 # %% Showing correct results
 show_single_example(x_test, Fs,6, 'MAP A correctly classified as MAP A') 
 draw_his_boundaries(0.38,0.42,disp_atr_vent_boxes=False) 
-fig=plt.gcf()
-save_plot(fig,figure_path+"/Heuristic_classification_phase/other_figs","ex_correct_class_1")
+
+save_plot(plt.gcf(),figure_path+"/Heuristic_classification_phase/other_figs","ex_correct_class_1")
 
 show_single_example(x_test, Fs,144, 'MAP B correctly classified as MAP B') 
 draw_his_boundaries(0.38,0.42,disp_atr_vent_boxes=False) 
-fig=plt.gcf()
-save_plot(fig,figure_path+"/Heuristic_classification_phase/other_figs","ex_correct_class_2")
+
+save_plot(plt.gcf(),figure_path+"/Heuristic_classification_phase/other_figs","ex_correct_class_2")
 
 show_single_example(x_test, Fs, 26, 'MAP C correctly classified as MAP C') 
 draw_his_boundaries(0.38,0.42,disp_atr_vent_boxes=False) 
-fig=plt.gcf()
-save_plot(fig,figure_path+"/Heuristic_classification_phase/other_figs","ex_correct_class_3")
+
+save_plot(plt.gcf(),figure_path+"/Heuristic_classification_phase/other_figs","ex_correct_class_3")
 
 # %% Showing some unclear results
 show_single_example(x_test, Fs,0, 'MAP A classified as MAP B') 
 draw_his_boundaries(0.38,0.42,disp_atr_vent_boxes=False) 
-fig=plt.gcf()
-save_plot(fig,figure_path+"/Heuristic_classification_phase/other_figs","ex_misclass_1")
+
+save_plot(plt.gcf(),figure_path+"/Heuristic_classification_phase/other_figs","ex_misclass_1")
 
 show_single_example(x_test, Fs,200, 'MAP C classified as MAP B') 
 draw_his_boundaries(0.38,0.42,disp_atr_vent_boxes=False) 
-fig=plt.gcf()
-save_plot(fig,figure_path+"/Heuristic_classification_phase/other_figs","ex_misclass_2")
+
+save_plot(plt.gcf(),figure_path+"/Heuristic_classification_phase/other_figs","ex_misclass_2")
 
 show_single_example(x_test, Fs, 94, 'MAP C classified as MAP A')
 draw_his_boundaries(0.38,0.42,disp_atr_vent_boxes=False) 
-fig=plt.gcf()
-save_plot(fig,figure_path+"/Heuristic_classification_phase/other_figs","ex_misclass_3")
+
+save_plot(plt.gcf(),figure_path+"/Heuristic_classification_phase/other_figs","ex_misclass_3")
 
 
+
+###############################################################################
 
 
 # %% STRATEGY B
@@ -195,44 +202,117 @@ evaluate_confusion_matrix(pred_heuristic,y_test,labels_unique,cm_suptitle=cm_sup
 
 #%% Showing correct results
 show_single_example(x_test, Fs,2, 'MAP A correctly classified as MAP A, strategy B') 
-draw_his_boundaries(0.38,0.42,th_his,disp_atr_vent_boxes=False)
-fig=plt.gcf()
-save_plot(fig,figure_path+"/Heuristic_classification_phase/other_figs","ex_correct_class_1_B")
+draw_his_boundaries(0.35,0.45,th_his,disp_atr_vent_boxes=False)
+
+save_plot(plt.gcf(),figure_path+"/Heuristic_classification_phase/other_figs","ex_correct_class_1_B")
 
 show_single_example(x_test, Fs,38, 'MAP B correctly classified as MAP B, strategy B') 
-draw_his_boundaries(0.38,0.42,th_his,disp_atr_vent_boxes=False)
-fig=plt.gcf()
-save_plot(fig,figure_path+"/Heuristic_classification_phase/other_figs","ex_correct_class_2_B")
+draw_his_boundaries(0.35,0.45,th_his,disp_atr_vent_boxes=False)
+
+save_plot(plt.gcf(),figure_path+"/Heuristic_classification_phase/other_figs","ex_correct_class_2_B")
 
 show_single_example(x_test, Fs, 40, 'MAP C correctly classified as MAP C, strategy B') 
-draw_his_boundaries(0.38,0.42,th_his,disp_atr_vent_boxes=False)
-fig=plt.gcf()
-save_plot(fig,figure_path+"/Heuristic_classification_phase/other_figs","ex_correct_class_3_B")
+draw_his_boundaries(0.35,0.45,th_his,disp_atr_vent_boxes=False)
+
+save_plot(plt.gcf(),figure_path+"/Heuristic_classification_phase/other_figs","ex_correct_class_3_B")
 
 # %% Showing some unclear results
 show_single_example(x_test, Fs,1, 'MAP A classified as MAP B, strategy B') 
-draw_his_boundaries(0.38,0.42,th_his,disp_atr_vent_boxes=False)
-fig=plt.gcf()
-save_plot(fig,figure_path+"/Heuristic_classification_phase/other_figs","ex_misclass_1_B")
+draw_his_boundaries(0.35,0.45,th_his,disp_atr_vent_boxes=False)
+save_plot(plt.gcf(),figure_path+"/Heuristic_classification_phase/other_figs","ex_misclass_1_B")
 
 show_single_example(x_test, Fs,24, 'MAP C classified as MAP B, strategy B') 
-draw_his_boundaries(0.38,0.42,th_his,disp_atr_vent_boxes=False)
-fig=plt.gcf()
-save_plot(fig,figure_path+"/Heuristic_classification_phase/other_figs","ex_misclass_2_B")
+draw_his_boundaries(0.35,0.45,th_his,disp_atr_vent_boxes=False)
+save_plot(plt.gcf(),figure_path+"/Heuristic_classification_phase/other_figs","ex_misclass_2_B")
 
 show_single_example(x_test, Fs, 290, 'MAP C classified as MAP A, strategy B') 
-draw_his_boundaries(0.38,0.42,th_his,disp_atr_vent_boxes=False)
-fig=plt.gcf()
-save_plot(fig,figure_path+"/Heuristic_classification_phase/other_figs","ex_misclass_3_B")
+draw_his_boundaries(0.35,0.45,th_his,disp_atr_vent_boxes=False)
+save_plot(plt.gcf(),figure_path+"/Heuristic_classification_phase/other_figs","ex_misclass_3_B")
+
+
+
+###############################################################################
+
+
+# %% STRATEGY C
+# %% Tuning of His Threshold value is the same as strategy B
+
+# %%  Heuristic classifier: train
+dims=x_train.shape
+pred_heuristic=np.empty(dims[0], dtype=object)
+
+signal_peaks_and_class_train=[];
+for i in range(0,dims[0]):
+    atr_peak,his_peak,vent_peak,pred=heuristic_classifier_C(x_train.iloc[i],Fs,th_his)
+    pred_heuristic[i]=pred
+    signal_peaks_and_class_train.append([atr_peak,his_peak,vent_peak,pred])
+    
+    
+# %% Performance of the heuristic classifier: train 
+# Fixed saving names
+cm_suptitle="Confusion Matrix: Heuristic classifier"
+cm_saving_path=figure_path+"/Heuristic_classification_phase"+fig_final_folder
+# Variable saving names
+cm_saving_name="CM_heuristic_train_C"+plot_last_name
+cm_title=subtitle_plots+" train set C" 
+#confusion matrix
+evaluate_confusion_matrix(pred_heuristic,y_train,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
+
+
+# %% Heuristic classifier: test 
+dims=x_test.shape
+pred_heuristic=np.empty(dims[0], dtype=object)
+
+signal_peaks_and_class_test=[];
+for i in range(0,dims[0]):
+    atr_peak,his_peak,vent_peak,pred=heuristic_classifier_C(x_test.iloc[i],Fs,th_his)
+    pred_heuristic[i]=pred
+    signal_peaks_and_class_test.append([atr_peak,his_peak,vent_peak,pred])
+    
+    
+# %% Performance of the heuristic classifier: train 
+cm_saving_name="CM_heuristic_test_C"+plot_last_name
+cm_title=subtitle_plots+" test set C" 
+#confusion matrix
+evaluate_confusion_matrix(pred_heuristic,y_test,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
+
+
+
+#%% Showing correct results
+show_single_example(signals, Fs,19, 'MAP A correctly classified as MAP A, strategy C') 
+draw_his_boundaries(0.38,0.42,th_his,disp_atr_vent_boxes=True)
+save_plot(plt.gcf(),figure_path+"/Heuristic_classification_phase/other_figs","ex_correct_class_1_C")
+
+show_single_example(signals, Fs,809, 'MAP B correctly classified as MAP B, strategy C') 
+draw_his_boundaries(0.38,0.42,th_his,disp_atr_vent_boxes=True)
+save_plot(plt.gcf(),figure_path+"/Heuristic_classification_phase/other_figs","ex_correct_class_2_C")
+
+show_single_example(signals, Fs, 936, 'MAP C correctly classified as MAP C, strategy C') 
+draw_his_boundaries(0.38,0.42,th_his,disp_atr_vent_boxes=True)
+save_plot(plt.gcf(),figure_path+"/Heuristic_classification_phase/other_figs","ex_correct_class_3_C")
+
+# %% Showing some unclear results
+show_single_example(signals, Fs,107, 'MAP A classified as MAP B, strategy C') 
+draw_his_boundaries(0.38,0.42,th_his,disp_atr_vent_boxes=True)
+save_plot(plt.gcf(),figure_path+"/Heuristic_classification_phase/other_figs","ex_misclass_1_C")
+
+show_single_example(signals, Fs,937, 'MAP C classified as MAP B, strategy C') 
+draw_his_boundaries(0.38,0.42,th_his,disp_atr_vent_boxes=True)
+save_plot(plt.gcf(),figure_path+"/Heuristic_classification_phase/other_figs","ex_misclass_2_C")
+
+show_single_example(signals, Fs, 928, 'MAP C classified as MAP A, strategy C') 
+draw_his_boundaries(0.38,0.42,th_his,disp_atr_vent_boxes=True)
+save_plot(plt.gcf(),figure_path+"/Heuristic_classification_phase/other_figs","ex_misclass_3_C")
+
+
 
 
 #%%############################################################################
-#### LOPO CV 
+######## Heuristic classifier: Leave One Patient Out Cross validation #########
+###############################################################################
 
 # STRATEGY A
-from LOPOCV_heuristic_A import LOPOCV_heuristic_A
-
-y_true_LOPOCV,y_pred_LOPOCV,signal_peaks_and_class_train=LOPOCV_heuristic_A(whole_dataset)
+y_true_LOPOCV,y_pred_LOPOCV,signal_peaks_and_class_train_LOPOCV=LOPOCV_heuristic_A(whole_dataset)
 
 # %% CM 
 # Fixed saving names
@@ -243,10 +323,36 @@ cm_saving_name="CM_heuristic_LOPOCV"+plot_last_name
 cm_title=subtitle_plots+" LOPOCV, heuristic A" 
 evaluate_confusion_matrix(y_pred_LOPOCV,y_true_LOPOCV,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=False, path=cm_saving_path,saving_name=cm_saving_name)
 
-# %% STRATEGY B
-from LOPOCV_heuristic_B import LOPOCV_heuristic_B
+#%% Showing correct results
+show_single_example(signals, Fs,169, 'MAP A correctly classified as MAP A, LOPOCV A') 
+draw_his_boundaries(0.35,0.45,disp_atr_vent_boxes=True)
+save_plot(plt.gcf(),figure_path+"/Heuristic_classification_phase/other_figs","ex_LOPOCV_correct_class_1_A")
 
-y_true_LOPOCV,y_pred_LOPOCV,signal_peaks_and_class_train=LOPOCV_heuristic_B(whole_dataset)
+show_single_example(signals, Fs,130, 'MAP B correctly classified as MAP B, LOPOCV A') 
+draw_his_boundaries(0.35,0.45,disp_atr_vent_boxes=True)
+save_plot(plt.gcf(),figure_path+"/Heuristic_classification_phase/other_figs","ex_LOPOCV_correct_class_2_A")
+
+show_single_example(signals, Fs, 229, 'MAP C correctly classified as MAP C, LOPOCV A') 
+draw_his_boundaries(0.35,0.45,disp_atr_vent_boxes=True)
+save_plot(plt.gcf(),figure_path+"/Heuristic_classification_phase/other_figs","ex_LOPOCV_correct_class_3_A")
+
+# %% Showing some unclear results
+show_single_example(signals, Fs,1, 'MAP A classified as MAP B, LOPOCV A') 
+draw_his_boundaries(0.35,0.45,disp_atr_vent_boxes=True)
+save_plot(plt.gcf(),figure_path+"/Heuristic_classification_phase/other_figs","ex_LOPOCV_misclass_1_A")
+
+show_single_example(signals, Fs,937, 'MAP C classified as MAP B, LOPOCV A') 
+draw_his_boundaries(0.35,0.45,disp_atr_vent_boxes=True)
+save_plot(plt.gcf(),figure_path+"/Heuristic_classification_phase/other_figs","ex_LOPOCV_misclass_2_A")
+
+show_single_example(signals, Fs, 961, 'MAP C classified as MAP A, LOPOCV A') 
+draw_his_boundaries(0.35,0.45,disp_atr_vent_boxes=True)
+save_plot(plt.gcf(),figure_path+"/Heuristic_classification_phase/other_figs","ex_LOPOCV_misclass_3_A")
+###############################################################################
+
+
+# %% STRATEGY B
+y_true_LOPOCV,y_pred_LOPOCV,signal_peaks_and_class_train_LOPOCV=LOPOCV_heuristic_B(whole_dataset)
 
 # %% CM 
 # Fixed saving names
@@ -257,9 +363,36 @@ cm_saving_name="CM_heuristic_LOPOCV"+plot_last_name
 cm_title=subtitle_plots+" LOPOCV, heuristic B" 
 evaluate_confusion_matrix(y_pred_LOPOCV,y_true_LOPOCV,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=False, path=cm_saving_path,saving_name=cm_saving_name)
 
+#%% Showing correct results
+show_single_example(signals, Fs,19, 'MAP A correctly classified as MAP A, LOPOCV B') 
+draw_his_boundaries(0.38,0.42,signal_peaks_and_class_train_LOPOCV[19][6],disp_atr_vent_boxes=False)
+save_plot(plt.gcf(),figure_path+"/Heuristic_classification_phase/other_figs","ex_LOPOCV_correct_class_1_B")
+
+show_single_example(signals, Fs,809, 'MAP B correctly classified as MAP B, LOPOCV B') 
+draw_his_boundaries(0.38,0.42,signal_peaks_and_class_train_LOPOCV[809][6],disp_atr_vent_boxes=False)
+save_plot(plt.gcf(),figure_path+"/Heuristic_classification_phase/other_figs","ex_LOPOCV_correct_class_2_B")
+
+show_single_example(signals, Fs, 936, 'MAP C correctly classified as MAP C, LOPOCV B') 
+draw_his_boundaries(0.38,0.42,signal_peaks_and_class_train_LOPOCV[936][6],disp_atr_vent_boxes=False)
+save_plot(plt.gcf(),figure_path+"/Heuristic_classification_phase/other_figs","ex_LOPOCV_correct_class_3_B")
+
+# %% Showing some unclear results
+show_single_example(signals, Fs,107, 'MAP A classified as MAP B, LOPOCV B') 
+draw_his_boundaries(0.38,0.42,signal_peaks_and_class_train_LOPOCV[19][6],disp_atr_vent_boxes=False)
+save_plot(plt.gcf(),figure_path+"/Heuristic_classification_phase/other_figs","ex_LOPOCV_misclass_1_B")
+
+show_single_example(signals, Fs,937, 'MAP C classified as MAP B, LOPOCV C') 
+draw_his_boundaries(0.38,0.42,signal_peaks_and_class_train_LOPOCV[19][6],disp_atr_vent_boxes=False)
+save_plot(plt.gcf(),figure_path+"/Heuristic_classification_phase/other_figs","ex_LOPOCV_misclass_2_B")
+
+show_single_example(signals, Fs, 928, 'MAP C classified as MAP A, LOPOCV B') 
+draw_his_boundaries(0.38,0.42,signal_peaks_and_class_train_LOPOCV[19][6],disp_atr_vent_boxes=False)
+save_plot(plt.gcf(),figure_path+"/Heuristic_classification_phase/other_figs","ex_LOPOCV_misclass_3_B")
+###############################################################################
+
 
 # %% STRATEGY C
-from LOPOCV_heuristic_C import LOPOCV_heuristic_C
+
 
 y_true_LOPOCV,y_pred_LOPOCV,signal_peaks_and_class_train_LOPOCV=LOPOCV_heuristic_C(whole_dataset)
 
@@ -273,34 +406,35 @@ cm_title=subtitle_plots+" LOPOCV, heuristic C"
 evaluate_confusion_matrix(y_pred_LOPOCV,y_true_LOPOCV,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=False, path=cm_saving_path,saving_name=cm_saving_name)
 
 #%% Showing correct results
-show_single_example(signals, Fs,19, 'MAP A correctly classified as MAP A, strategy C') 
+show_single_example(signals, Fs,19, 'MAP A correctly classified as MAP A, LOPOCV C') 
 draw_his_boundaries(0.38,0.42,signal_peaks_and_class_train_LOPOCV[19][6],disp_atr_vent_boxes=True)
-fig=plt.gcf()
-save_plot(fig,figure_path+"/Heuristic_classification_phase/other_figs","ex_correct_class_1_C")
+save_plot(plt.gcf(),figure_path+"/Heuristic_classification_phase/other_figs","ex_LOPOCV_correct_class_1_C")
 
-show_single_example(signals, Fs,809, 'MAP B correctly classified as MAP B, strategy C') 
+show_single_example(signals, Fs,809, 'MAP B correctly classified as MAP B, LOPOCV C') 
 draw_his_boundaries(0.38,0.42,signal_peaks_and_class_train_LOPOCV[809][6],disp_atr_vent_boxes=True)
-fig=plt.gcf()
-save_plot(fig,figure_path+"/Heuristic_classification_phase/other_figs","ex_correct_class_2_C")
+save_plot(plt.gcf(),figure_path+"/Heuristic_classification_phase/other_figs","ex_LOPOCV_correct_class_2_C")
 
-show_single_example(signals, Fs, 936, 'MAP C correctly classified as MAP C, strategy C') 
+show_single_example(signals, Fs, 936, 'MAP C correctly classified as MAP C, LOPOCV C') 
 draw_his_boundaries(0.38,0.42,signal_peaks_and_class_train_LOPOCV[936][6],disp_atr_vent_boxes=True)
-fig=plt.gcf()
-save_plot(fig,figure_path+"/Heuristic_classification_phase/other_figs","ex_correct_class_3_C")
+save_plot(plt.gcf(),figure_path+"/Heuristic_classification_phase/other_figs","ex_LOPOCV_correct_class_3_C")
 
 # %% Showing some unclear results
-show_single_example(signals, Fs,107, 'MAP A classified as MAP B, strategy C') 
+show_single_example(signals, Fs,107, 'MAP A classified as MAP B, LOPOCV C') 
 draw_his_boundaries(0.38,0.42,signal_peaks_and_class_train_LOPOCV[107][6],disp_atr_vent_boxes=True)
-fig=plt.gcf()
-save_plot(fig,figure_path+"/Heuristic_classification_phase/other_figs","ex_misclass_1_C")
+save_plot(plt.gcf(),figure_path+"/Heuristic_classification_phase/other_figs","ex_LOPOCV_misclass_1_C")
 
-show_single_example(signals, Fs,937, 'MAP C classified as MAP B, strategy C') 
+show_single_example(signals, Fs,937, 'MAP C classified as MAP B, LOPOCV C') 
 draw_his_boundaries(0.38,0.42,signal_peaks_and_class_train_LOPOCV[937][6],disp_atr_vent_boxes=True)
-fig=plt.gcf()
-save_plot(fig,figure_path+"/Heuristic_classification_phase/other_figs","ex_misclass_2_C")
+save_plot(plt.gcf(),figure_path+"/Heuristic_classification_phase/other_figs","ex_LOPOCV_misclass_2_C")
 
-show_single_example(signals, Fs, 928, 'MAP C classified as MAP A, strategy C') 
+show_single_example(signals, Fs, 928, 'MAP C classified as MAP A, LOPOCV C') 
 draw_his_boundaries(0.38,0.42,signal_peaks_and_class_train_LOPOCV[928][6],disp_atr_vent_boxes=True)
-fig=plt.gcf()
-save_plot(fig,figure_path+"/Heuristic_classification_phase/other_figs","ex_misclass_3_C")
+save_plot(plt.gcf(),figure_path+"/Heuristic_classification_phase/other_figs","ex_LOPOCV_misclass_3_C")
 
+# SE E' GIUSTO, AGGIORNA LE LOPOCV FUNCTIONS DELLE ALTRE STRATEGIE
+
+# %%
+show_single_example(signals, Fs,49, 'MAP A classified as MAP A without using atrial th') 
+draw_his_boundaries(0.38,0.42,signal_peaks_and_class_train_LOPOCV[49][6],disp_atr_vent_boxes=True)
+
+save_plot(plt.gcf(),figure_path+"/Heuristic_classification_phase/other_figs","ex_no_atr_th_LOPOCV_C")
