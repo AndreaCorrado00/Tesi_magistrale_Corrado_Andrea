@@ -1,8 +1,11 @@
-def show_single_example(data,Fs, idx,title_plot):
+def show_single_example(data,Fs, idx,title_plot, use_iloc=True):
     
     import numpy as np
     import matplotlib.pyplot as plt
-    example=np.array(data.iloc[idx])
+    if use_iloc:
+        example=np.array(data.iloc[idx])
+    else:
+        example=np.array(data.loc[idx])
     
     t=np.arange(0,len(example)/Fs,1/Fs)
     

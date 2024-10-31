@@ -336,29 +336,31 @@ evaluate_confusion_matrix(y_pred_LOPOCV,y_true_LOPOCV,labels_unique,cm_suptitle=
 miss_class_summary= misclassification_summary(whole_dataset,y_pred_LOPOCV, labels_unique)
 #%% Showing correct results
 # with sub 2: 169, 130, 229
-# without sub 2:  26 CONTINUARE
-show_single_example(signals, Fs,26, 'MAP A correctly classified as MAP A, LOPOCV A') 
+# without sub 2:  26 860 991 use_iloc=False
+show_single_example(signals, Fs,26, 'MAP A correctly classified as MAP A, LOPOCV A',use_iloc=False) 
 draw_his_boundaries(0.35,0.45,disp_atr_vent_boxes=True)
 save_plot(plt.gcf(),other_fig_path,"ex_LOPOCV_correct_class_1_A")
 
-show_single_example(signals, Fs,831, 'MAP B correctly classified as MAP B, LOPOCV A') 
+show_single_example(signals, Fs,860, 'MAP B correctly classified as MAP B, LOPOCV A',use_iloc=False) 
 draw_his_boundaries(0.35,0.45,disp_atr_vent_boxes=True)
 save_plot(plt.gcf(),other_fig_path,"ex_LOPOCV_correct_class_2_A")
 
-show_single_example(signals, Fs, 229, 'MAP C correctly classified as MAP C, LOPOCV A') 
+show_single_example(signals, Fs, 991, 'MAP C correctly classified as MAP C, LOPOCV A',use_iloc=False) 
 draw_his_boundaries(0.35,0.45,disp_atr_vent_boxes=True)
 save_plot(plt.gcf(),other_fig_path,"ex_LOPOCV_correct_class_3_A")
 
 # %% Showing some unclear results
-show_single_example(signals, Fs,1, 'MAP A classified as MAP B, LOPOCV A') 
+# with sub 2: 1, 937,961
+# without sub 2: 1,1008, 704 use_iloc=False
+show_single_example(signals, Fs,1, 'MAP A classified as MAP B, LOPOCV A',use_iloc=False) 
 draw_his_boundaries(0.35,0.45,disp_atr_vent_boxes=True)
 save_plot(plt.gcf(),other_fig_path,"ex_LOPOCV_misclass_1_A")
 
-show_single_example(signals, Fs,937, 'MAP C classified as MAP B, LOPOCV A') 
+show_single_example(signals, Fs,1008, 'MAP C classified as MAP B, LOPOCV A',use_iloc=False) 
 draw_his_boundaries(0.35,0.45,disp_atr_vent_boxes=True)
 save_plot(plt.gcf(),other_fig_path,"ex_LOPOCV_misclass_2_A")
 
-show_single_example(signals, Fs, 961, 'MAP C classified as MAP A, LOPOCV A') 
+show_single_example(signals, Fs, 704, 'MAP C classified as MAP A, LOPOCV A',use_iloc=False) 
 draw_his_boundaries(0.35,0.45,disp_atr_vent_boxes=True)
 save_plot(plt.gcf(),other_fig_path,"ex_LOPOCV_misclass_3_A")
 ###############################################################################
@@ -378,29 +380,33 @@ evaluate_confusion_matrix(y_pred_LOPOCV,y_true_LOPOCV,labels_unique,cm_suptitle=
 
 miss_class_summary= misclassification_summary(whole_dataset,y_pred_LOPOCV, labels_unique)
 #%% Showing correct results
-show_single_example(signals, Fs,19, 'MAP A correctly classified as MAP A, LOPOCV B') 
-draw_his_boundaries(0.38,0.42,signal_peaks_and_class_train_LOPOCV[19][6],disp_atr_vent_boxes=False)
+# with sub 2: 19, 809, 936
+# without sub 2: (53,53)(800,101,933,936)()
+show_single_example(signals, Fs,53, 'MAP A correctly classified as MAP A, LOPOCV B',use_iloc=False) 
+draw_his_boundaries(0.38,0.42,signal_peaks_and_class_train_LOPOCV[53][6],disp_atr_vent_boxes=False)
 save_plot(plt.gcf(),other_fig_path,"ex_LOPOCV_correct_class_1_B")
 
-show_single_example(signals, Fs,809, 'MAP B correctly classified as MAP B, LOPOCV B') 
-draw_his_boundaries(0.38,0.42,signal_peaks_and_class_train_LOPOCV[809][6],disp_atr_vent_boxes=False)
+show_single_example(signals, Fs,800, 'MAP B correctly classified as MAP B, LOPOCV B',use_iloc=False) 
+draw_his_boundaries(0.38,0.42,signal_peaks_and_class_train_LOPOCV[101][6],disp_atr_vent_boxes=False)
 save_plot(plt.gcf(),other_fig_path,"ex_LOPOCV_correct_class_2_B")
 
-show_single_example(signals, Fs, 936, 'MAP C correctly classified as MAP C, LOPOCV B') 
+show_single_example(signals, Fs, 933, 'MAP C correctly classified as MAP C, LOPOCV B',use_iloc=False) 
 draw_his_boundaries(0.38,0.42,signal_peaks_and_class_train_LOPOCV[936][6],disp_atr_vent_boxes=False)
 save_plot(plt.gcf(),other_fig_path,"ex_LOPOCV_correct_class_3_B")
 
 # %% Showing some unclear results
-show_single_example(signals, Fs,107, 'MAP A classified as MAP B, LOPOCV B') 
-draw_his_boundaries(0.38,0.42,signal_peaks_and_class_train_LOPOCV[19][6],disp_atr_vent_boxes=False)
+# with sub 2: 107, 937, 928
+# without sub 2: (0,0) (999,813)(961,461)
+show_single_example(signals, Fs,0, 'MAP A classified as MAP B, LOPOCV B',use_iloc=False) 
+draw_his_boundaries(0.38,0.42,signal_peaks_and_class_train_LOPOCV[0][6],disp_atr_vent_boxes=False)
 save_plot(plt.gcf(),other_fig_path,"ex_LOPOCV_misclass_1_B")
 
-show_single_example(signals, Fs,937, 'MAP C classified as MAP B, LOPOCV C') 
-draw_his_boundaries(0.38,0.42,signal_peaks_and_class_train_LOPOCV[19][6],disp_atr_vent_boxes=False)
+show_single_example(signals, Fs,999, 'MAP C classified as MAP B, LOPOCV C',use_iloc=False) 
+draw_his_boundaries(0.38,0.42,signal_peaks_and_class_train_LOPOCV[813][6],disp_atr_vent_boxes=False)
 save_plot(plt.gcf(),other_fig_path,"ex_LOPOCV_misclass_2_B")
 
-show_single_example(signals, Fs, 928, 'MAP C classified as MAP A, LOPOCV B') 
-draw_his_boundaries(0.38,0.42,signal_peaks_and_class_train_LOPOCV[19][6],disp_atr_vent_boxes=False)
+show_single_example(signals, Fs, 961, 'MAP C classified as MAP A, LOPOCV B',use_iloc=False) 
+draw_his_boundaries(0.38,0.42,signal_peaks_and_class_train_LOPOCV[461][6],disp_atr_vent_boxes=False)
 save_plot(plt.gcf(),other_fig_path,"ex_LOPOCV_misclass_3_B")
 ###############################################################################
 
@@ -421,29 +427,33 @@ evaluate_confusion_matrix(y_pred_LOPOCV,y_true_LOPOCV,labels_unique,cm_suptitle=
 
 miss_class_summary= misclassification_summary(whole_dataset,y_pred_LOPOCV, labels_unique)
 #%% Showing correct results
-show_single_example(signals, Fs,19, 'MAP A correctly classified as MAP A, LOPOCV C') 
+# with sub 2: 19, 809, 936
+# without sub 2: (19,19) (841,432) (968, 468) 
+show_single_example(signals, Fs,19, 'MAP A correctly classified as MAP A, LOPOCV C',use_iloc=False) 
 draw_his_boundaries(0.38,0.42,signal_peaks_and_class_train_LOPOCV[19][6],disp_atr_vent_boxes=True)
 save_plot(plt.gcf(),other_fig_path,"ex_LOPOCV_correct_class_1_C")
 
-show_single_example(signals, Fs,809, 'MAP B correctly classified as MAP B, LOPOCV C') 
-draw_his_boundaries(0.38,0.42,signal_peaks_and_class_train_LOPOCV[809][6],disp_atr_vent_boxes=True)
+show_single_example(signals, Fs,841, 'MAP B correctly classified as MAP B, LOPOCV C',use_iloc=False) 
+draw_his_boundaries(0.38,0.42,signal_peaks_and_class_train_LOPOCV[432][6],disp_atr_vent_boxes=True)
 save_plot(plt.gcf(),other_fig_path,"ex_LOPOCV_correct_class_2_C")
 
-show_single_example(signals, Fs, 936, 'MAP C correctly classified as MAP C, LOPOCV C') 
-draw_his_boundaries(0.38,0.42,signal_peaks_and_class_train_LOPOCV[936][6],disp_atr_vent_boxes=True)
+show_single_example(signals, Fs, 968, 'MAP C correctly classified as MAP C, LOPOCV C',use_iloc=False) 
+draw_his_boundaries(0.38,0.42,signal_peaks_and_class_train_LOPOCV[468][6],disp_atr_vent_boxes=True)
 save_plot(plt.gcf(),other_fig_path,"ex_LOPOCV_correct_class_3_C")
 
 # %% Showing some unclear results
-show_single_example(signals, Fs,107, 'MAP A classified as MAP B, LOPOCV C') 
-draw_his_boundaries(0.38,0.42,signal_peaks_and_class_train_LOPOCV[107][6],disp_atr_vent_boxes=True)
+# with sub 2: 107, 937, 928
+# without sub 2: 
+show_single_example(signals, Fs,0, 'MAP A classified as MAP B, LOPOCV C',use_iloc=False) 
+draw_his_boundaries(0.38,0.42,signal_peaks_and_class_train_LOPOCV[0][6],disp_atr_vent_boxes=True)
 save_plot(plt.gcf(),other_fig_path,"ex_LOPOCV_misclass_1_C")
 
-show_single_example(signals, Fs,937, 'MAP C classified as MAP B, LOPOCV C') 
-draw_his_boundaries(0.38,0.42,signal_peaks_and_class_train_LOPOCV[937][6],disp_atr_vent_boxes=True)
+show_single_example(signals, Fs,833, 'MAP C classified as MAP B, LOPOCV C',use_iloc=False) 
+draw_his_boundaries(0.38,0.42,signal_peaks_and_class_train_LOPOCV[214][6],disp_atr_vent_boxes=True)
 save_plot(plt.gcf(),other_fig_path,"ex_LOPOCV_misclass_2_C")
 
-show_single_example(signals, Fs, 928, 'MAP C classified as MAP A, LOPOCV C') 
-draw_his_boundaries(0.38,0.42,signal_peaks_and_class_train_LOPOCV[928][6],disp_atr_vent_boxes=True)
+show_single_example(signals, Fs, 938, 'MAP C classified as MAP A, LOPOCV C',use_iloc=False) 
+draw_his_boundaries(0.38,0.42,signal_peaks_and_class_train_LOPOCV[225][6],disp_atr_vent_boxes=True)
 save_plot(plt.gcf(),other_fig_path,"ex_LOPOCV_misclass_3_C")
 
 # SE E' GIUSTO, AGGIORNA LE LOPOCV FUNCTIONS DELLE ALTRE STRATEGIE

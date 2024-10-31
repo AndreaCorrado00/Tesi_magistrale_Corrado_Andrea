@@ -11,7 +11,6 @@ def LOPOCV_heuristic_A(df):
     all_signal_peaks_and_class_train = []
     participant_ids = df['id'].unique()
     
-    
     for participant in participant_ids:
         train_data = df[df['id'] != participant]
         test_data = df[df['id'] == participant]
