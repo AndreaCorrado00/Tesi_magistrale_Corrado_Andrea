@@ -2,9 +2,9 @@ def show_examples(data,Fs, map_A_idx,map_B_idx,map_C_idx):
     
     import numpy as np
     import matplotlib.pyplot as plt
-    example_class_A=np.array(data.iloc[map_A_idx])
-    example_class_B=np.array(data.iloc[map_B_idx])
-    example_class_C=np.array(data.iloc[map_C_idx])
+    example_class_A=np.array(data.loc[map_A_idx])
+    example_class_B=np.array(data.loc[map_B_idx])
+    example_class_C=np.array(data.loc[map_C_idx])
     
     t=np.arange(0,len(example_class_A)/Fs,1/Fs)
     
