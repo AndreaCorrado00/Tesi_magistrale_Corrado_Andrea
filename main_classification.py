@@ -319,9 +319,9 @@ y_true_LOPOCV,y_pred_LOPOCV,signal_peaks_and_class_train_LOPOCV=LOPOCV_heuristic
 cm_suptitle="Confusion Matrix: Heuristic classifier"
 cm_saving_path=figure_path+"/Heuristic_classification_phase"+fig_final_folder
 # Variable saving names
-cm_saving_name="CM_heuristic_LOPOCV"+plot_last_name
+cm_saving_name="CM_heuristic_LOPOCV_A"+plot_last_name
 cm_title=subtitle_plots+" LOPOCV, heuristic A" 
-evaluate_confusion_matrix(y_pred_LOPOCV,y_true_LOPOCV,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=False, path=cm_saving_path,saving_name=cm_saving_name)
+evaluate_confusion_matrix(y_pred_LOPOCV,y_true_LOPOCV,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
 
 #%% Showing correct results
 show_single_example(signals, Fs,169, 'MAP A correctly classified as MAP A, LOPOCV A') 
@@ -359,9 +359,9 @@ y_true_LOPOCV,y_pred_LOPOCV,signal_peaks_and_class_train_LOPOCV=LOPOCV_heuristic
 cm_suptitle="Confusion Matrix: Heuristic classifier"
 cm_saving_path=figure_path+"/Heuristic_classification_phase"+fig_final_folder
 # Variable saving names
-cm_saving_name="CM_heuristic_LOPOCV"+plot_last_name
+cm_saving_name="CM_heuristic_LOPOCV_B"+plot_last_name
 cm_title=subtitle_plots+" LOPOCV, heuristic B" 
-evaluate_confusion_matrix(y_pred_LOPOCV,y_true_LOPOCV,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=False, path=cm_saving_path,saving_name=cm_saving_name)
+evaluate_confusion_matrix(y_pred_LOPOCV,y_true_LOPOCV,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
 
 #%% Showing correct results
 show_single_example(signals, Fs,19, 'MAP A correctly classified as MAP A, LOPOCV B') 
@@ -401,9 +401,9 @@ y_true_LOPOCV,y_pred_LOPOCV,signal_peaks_and_class_train_LOPOCV=LOPOCV_heuristic
 cm_suptitle="Confusion Matrix: Heuristic classifier"
 cm_saving_path=figure_path+"/Heuristic_classification_phase"+fig_final_folder
 # Variable saving names
-cm_saving_name="CM_heuristic_LOPOCV"+plot_last_name
+cm_saving_name="CM_heuristic_LOPOCV_C"+plot_last_name
 cm_title=subtitle_plots+" LOPOCV, heuristic C" 
-evaluate_confusion_matrix(y_pred_LOPOCV,y_true_LOPOCV,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=False, path=cm_saving_path,saving_name=cm_saving_name)
+evaluate_confusion_matrix(y_pred_LOPOCV,y_true_LOPOCV,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
 
 #%% Showing correct results
 show_single_example(signals, Fs,19, 'MAP A correctly classified as MAP A, LOPOCV C') 
