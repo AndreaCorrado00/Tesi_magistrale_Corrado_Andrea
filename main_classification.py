@@ -36,7 +36,7 @@ figure_path="D:/Desktop/ANDREA/Universita/Magistrale/Anno Accademico 2023-2024/T
 
 
 #%% Loading data
-use_filt_data=False;
+use_filt_data=True;
 # Handling two parralel paths: filtered and not filtered dataset
 whole_dataset,signals,y_true,labels_unique,Fs,plot_last_name,fig_final_folder,subtitle_plots= handle_filtered_data(use_filt_data)
 
@@ -456,10 +456,3 @@ show_single_example(signals, Fs, 938, 'MAP C classified as MAP A, LOPOCV C',use_
 draw_his_boundaries(0.38,0.42,signal_peaks_and_class_train_LOPOCV[225][6],disp_atr_vent_boxes=True)
 save_plot(plt.gcf(),other_fig_path,"ex_LOPOCV_misclass_3_C")
 
-# SE E' GIUSTO, AGGIORNA LE LOPOCV FUNCTIONS DELLE ALTRE STRATEGIE
-
-# %%
-show_single_example(signals, Fs,49, 'MAP A classified as MAP A without using atrial th') 
-draw_his_boundaries(0.38,0.42,signal_peaks_and_class_train_LOPOCV[49][6],disp_atr_vent_boxes=True)
-
-save_plot(plt.gcf(),other_fig_path,"ex_no_atr_th_LOPOCV_C")
