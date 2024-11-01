@@ -37,11 +37,11 @@ function newData = find_guide_trace_and_filter(data, Fc, filter)
                     spare3 = data.(mapName).(subjectName).spare3_trace{:, k} - mean(data.(mapName).(subjectName).spare3_trace{:, k});
 
                     % Apply the denoise filter to each trace
-                    rov_filtered(:, k) = handable_denoise_ecg_BP(rov, Fc, 3, 60);
-                    ref_filtered(:, k) = handable_denoise_ecg_BP(ref, Fc, 3, 60);
-                    spare1_filtered(:, k) = handable_denoise_ecg_BP(spare1, Fc, 3, 60);
-                    spare2_filtered(:, k) = handable_denoise_ecg_BP(spare2, Fc, 3, 60);
-                    spare3_filtered(:, k) = handable_denoise_ecg_BP(spare3, Fc, 3, 60);
+                    rov_filtered(:, k) = handable_denoise_ecg_BP(rov, Fc, 2, 100);
+                    ref_filtered(:, k) = handable_denoise_ecg_BP(ref, Fc, 2, 100);
+                    spare1_filtered(:, k) = handable_denoise_ecg_BP(spare1, Fc, 2, 60);
+                    spare2_filtered(:, k) = handable_denoise_ecg_BP(spare2, Fc, 2, 60);
+                    spare3_filtered(:, k) = handable_denoise_ecg_BP(spare3, Fc, 2, 60);
                 end
 
                 % Store filtered data in newData as tables
