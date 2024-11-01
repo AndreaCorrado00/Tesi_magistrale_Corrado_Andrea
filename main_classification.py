@@ -30,6 +30,7 @@ from tune_his_th_on_f1 import tune_his_th_on_f1
 from evaluate_confusion_matrix import evaluate_confusion_matrix
 from draw_his_boundaries import draw_his_boundaries
 from misclassification_summary import misclassification_summary
+from plot_dataframe_as_plain_image import plot_dataframe_as_plain_image
 # Exporting plt.gcf()ures
 figure_path="D:/Desktop/ANDREA/Universita/Magistrale/Anno Accademico 2023-2024/TESI/Tesi_magistrale/Figure"
 
@@ -97,9 +98,9 @@ cm_saving_path=figure_path+"/Heuristic_classification_phase"+fig_final_folder
 cm_saving_name="CM_heuristic_train"+plot_last_name
 cm_title=subtitle_plots+" train set" 
 #confusion matrix
-evaluate_confusion_matrix(pred_heuristic,y_train,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
+he_report=evaluate_confusion_matrix(pred_heuristic,y_train,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
 
-
+plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="report_train_A")
 # %% Heuristic classifier: test 
 dims=x_test.shape
 pred_heuristic=np.empty(dims[0], dtype=object)
@@ -115,9 +116,9 @@ for i in range(0,dims[0]):
 cm_saving_name="CM_heuristic_test"+plot_last_name
 cm_title=subtitle_plots+" test set" 
 #confusion matrix
-evaluate_confusion_matrix(pred_heuristic,y_test,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
+he_report=evaluate_confusion_matrix(pred_heuristic,y_test,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
 
-
+plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="report_test_A")
 # %% Showing correct results
 # with sub 2: 6,144,26
 # without sub : 0, 188, 116
@@ -182,9 +183,9 @@ cm_saving_path=figure_path+"/Heuristic_classification_phase"+fig_final_folder
 cm_saving_name="CM_heuristic_train_B"+plot_last_name
 cm_title=subtitle_plots+" train set B" 
 #confusion matrix
-evaluate_confusion_matrix(pred_heuristic,y_train,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
+he_report=evaluate_confusion_matrix(pred_heuristic,y_train,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
 
-
+plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="report_train_B")
 # %% Heuristic classifier: test 
 dims=x_test.shape
 pred_heuristic=np.empty(dims[0], dtype=object)
@@ -200,9 +201,9 @@ for i in range(0,dims[0]):
 cm_saving_name="CM_heuristic_test_B"+plot_last_name
 cm_title=subtitle_plots+" test set B" 
 #confusion matrix
-evaluate_confusion_matrix(pred_heuristic,y_test,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
+he_report=evaluate_confusion_matrix(pred_heuristic,y_test,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
 
-
+plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="report_test_B")
 
 #%% Showing correct results
 # with sub 2: 2 38 40
@@ -261,8 +262,8 @@ cm_saving_path=figure_path+"/Heuristic_classification_phase"+fig_final_folder
 cm_saving_name="CM_heuristic_train_C"+plot_last_name
 cm_title=subtitle_plots+" train set C" 
 #confusion matrix
-evaluate_confusion_matrix(pred_heuristic,y_train,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
-
+he_report=evaluate_confusion_matrix(pred_heuristic,y_train,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
+plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="report_train_C")
 
 # %% Heuristic classifier: test 
 dims=x_test.shape
@@ -279,9 +280,9 @@ for i in range(0,dims[0]):
 cm_saving_name="CM_heuristic_test_C"+plot_last_name
 cm_title=subtitle_plots+" test set C" 
 #confusion matrix
-evaluate_confusion_matrix(pred_heuristic,y_test,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
+he_report=evaluate_confusion_matrix(pred_heuristic,y_test,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
 
-
+plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="report_test_C")
 
 #%% Showing correct results
 # with sub 2: 19,809,936
@@ -331,9 +332,13 @@ cm_saving_path=figure_path+"/Heuristic_classification_phase"+fig_final_folder
 # Variable saving names
 cm_saving_name="CM_heuristic_LOPOCV_A"+plot_last_name
 cm_title=subtitle_plots+" LOPOCV, heuristic A" 
-evaluate_confusion_matrix(y_pred_LOPOCV,y_true_LOPOCV,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
+he_report=evaluate_confusion_matrix(y_pred_LOPOCV,y_true_LOPOCV,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
+plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="report_LOPOCV_A")
 
+# misclassified per class
 miss_class_summary= misclassification_summary(whole_dataset,y_pred_LOPOCV, labels_unique)
+plot_dataframe_as_plain_image(miss_class_summary, figsize=(8,5),scale=(1.7,1.7),title_plot=cm_title,path=other_fig_path,saving_name="Misclass_LOPOCV_A")
+
 #%% Showing correct results
 # with sub 2: 169, 130, 229
 # without sub 2:  26 860 991 use_iloc=False
@@ -376,9 +381,12 @@ cm_saving_path=figure_path+"/Heuristic_classification_phase"+fig_final_folder
 # Variable saving names
 cm_saving_name="CM_heuristic_LOPOCV_B"+plot_last_name
 cm_title=subtitle_plots+" LOPOCV, heuristic B" 
-evaluate_confusion_matrix(y_pred_LOPOCV,y_true_LOPOCV,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
+he_report=evaluate_confusion_matrix(y_pred_LOPOCV,y_true_LOPOCV,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
+plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="report_LOPOCV_B")
 
+# misclassified per class
 miss_class_summary= misclassification_summary(whole_dataset,y_pred_LOPOCV, labels_unique)
+plot_dataframe_as_plain_image(miss_class_summary, figsize=(8,5),scale=(1.7,1.7),title_plot=cm_title,path=other_fig_path,saving_name="Misclass_LOPOCV_B")
 #%% Showing correct results
 # with sub 2: 19, 809, 936
 # without sub 2: (53,53)(800,101,933,936)()
@@ -423,9 +431,13 @@ cm_saving_path=figure_path+"/Heuristic_classification_phase"+fig_final_folder
 # Variable saving names
 cm_saving_name="CM_heuristic_LOPOCV_C"+plot_last_name
 cm_title=subtitle_plots+" LOPOCV, heuristic C" 
-evaluate_confusion_matrix(y_pred_LOPOCV,y_true_LOPOCV,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
+he_report=evaluate_confusion_matrix(y_pred_LOPOCV,y_true_LOPOCV,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
+plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="report_LOPOCV_C")
 
+# misclassified per class
 miss_class_summary= misclassification_summary(whole_dataset,y_pred_LOPOCV, labels_unique)
+plot_dataframe_as_plain_image(miss_class_summary, figsize=(8,5),scale=(1.7,1.7),title_plot=cm_title,path=other_fig_path,saving_name="Misclass_LOPOCV_C")
+
 #%% Showing correct results
 # with sub 2: 19, 809, 936
 # without sub 2: (19,19) (841,432) (968, 468) 
@@ -443,7 +455,7 @@ save_plot(plt.gcf(),other_fig_path,"ex_LOPOCV_correct_class_3_C")
 
 # %% Showing some unclear results
 # with sub 2: 107, 937, 928
-# without sub 2: 
+# without sub 2: (0,0)(833,214)(938,225)
 show_single_example(signals, Fs,0, 'MAP A classified as MAP B, LOPOCV C',use_iloc=False) 
 draw_his_boundaries(0.38,0.42,signal_peaks_and_class_train_LOPOCV[0][6],disp_atr_vent_boxes=True)
 save_plot(plt.gcf(),other_fig_path,"ex_LOPOCV_misclass_1_C")

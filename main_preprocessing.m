@@ -223,7 +223,7 @@ show_DB_reduction(data)
 
 %% 8.3  Data alignment 
 % For each set of signals the R-peak is found
-filter_flag=false;
+filter_flag=true;
 data = find_guide_trace_and_filter(data, fc,filter_flag);
 % Then R peak is used to align each set os singals to have ventricular
 % conduction around 0.5 seconds
@@ -259,8 +259,8 @@ figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\T
 addpath(src_path)
 
 % Loading previusly made data
-load(processed_data_path+'\dataset_pop_aligned_no_filt.mat');
-load(processed_data_path+'\aligned_subjects_DB_no_filt.mat');
+load(processed_data_path+'\dataset_pop_aligned_filt.mat');
+load(processed_data_path+'\aligned_subjects_DB_filt.mat');
 fc=2035;
 
 %% 9.1 Single record visualization 
@@ -280,4 +280,4 @@ compare_maps_between_signals(POP_DB_aligned,fc,figure_path)
 % writetable(db_table,processed_data_path+"\AVNRT_DB.csv")
 
 db_table = build_table_dataset_with_subs(Aligned_DB);
-writetable(db_table,processed_data_path+"\AVNRT_DB_no_filt.csv")
+writetable(db_table,processed_data_path+"\AVNRT_DB_filt.csv")

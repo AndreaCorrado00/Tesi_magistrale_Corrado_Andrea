@@ -1,8 +1,7 @@
-def save_plot(fig, figure_path, file_name="plot"):
-    import matplotlib.pyplot as plt
+def save_plot(fig, figure_path, file_name="plot", dpi=300):
     import os
     name_file_complete = f"{file_name}.png"
     full_path = os.path.join(figure_path, name_file_complete)
     
-    fig.savefig(full_path)
+    fig.savefig(full_path,dpi=dpi,bbox_inches="tight")
     
