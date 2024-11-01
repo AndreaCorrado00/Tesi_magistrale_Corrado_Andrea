@@ -284,7 +284,7 @@ he_report=evaluate_confusion_matrix(pred_heuristic,y_test,labels_unique,cm_supti
 plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="report_test_C")
 
 #%% Showing correct results
-# with sub 2: 19,809,936
+# with sub 2: 2,38, DA FINIRE
 # without sub 2: 19, 188, 195
 show_single_example(x_test, Fs,2, 'MAP A correctly classified as MAP A, strategy C') 
 draw_his_boundaries(0.38,0.42,th_his,disp_atr_vent_boxes=True)
@@ -294,22 +294,22 @@ show_single_example(x_test, Fs,38, 'MAP B correctly classified as MAP B, strateg
 draw_his_boundaries(0.38,0.42,th_his,disp_atr_vent_boxes=True)
 save_plot(plt.gcf(),other_fig_path,"ex_correct_class_2_C")
 
-show_single_example(x_test, Fs, 50, 'MAP C correctly classified as MAP C, strategy C') 
+show_single_example(x_test, Fs, 3, 'MAP C correctly classified as MAP C, strategy C') 
 draw_his_boundaries(0.38,0.42,th_his,disp_atr_vent_boxes=True)
 save_plot(plt.gcf(),other_fig_path,"ex_correct_class_3_C")
 
 # %% Showing some unclear results
-# with sub 2: 107, 937,928
+# with sub 2: 0, 13, 
 # without sub 2: 5, 113, 252
-show_single_example(x_test, Fs,107, 'MAP A classified as MAP B, strategy C') 
+show_single_example(x_test, Fs, 0, 'MAP A classified as MAP B, strategy C') 
 draw_his_boundaries(0.38,0.42,th_his,disp_atr_vent_boxes=True)
 save_plot(plt.gcf(),other_fig_path,"ex_misclass_1_C")
 
-show_single_example(x_test, Fs,937, 'MAP C classified as MAP B, strategy C') 
+show_single_example(x_test, Fs,13, 'MAP C classified as MAP B, strategy C') 
 draw_his_boundaries(0.38,0.42,th_his,disp_atr_vent_boxes=True)
 save_plot(plt.gcf(),other_fig_path,"ex_misclass_2_C")
 
-show_single_example(x_test, Fs, 928, 'MAP C classified as MAP A, strategy C') 
+show_single_example(x_test, Fs,134 , 'MAP C classified as MAP A, strategy C') 
 draw_his_boundaries(0.38,0.42,th_his,disp_atr_vent_boxes=True)
 save_plot(plt.gcf(),other_fig_path,"ex_misclass_3_C")
 
@@ -408,7 +408,7 @@ show_single_example(signals, Fs,107, 'MAP A classified as MAP B, LOPOCV B',use_i
 draw_his_boundaries(0.38,0.42,signal_peaks_and_class_train_LOPOCV[107][6],disp_atr_vent_boxes=False)
 save_plot(plt.gcf(),other_fig_path,"ex_LOPOCV_misclass_1_B")
 
-show_single_example(signals, Fs,937, 'MAP C classified as MAP B, LOPOCV C',use_iloc=False) 
+show_single_example(signals, Fs,937, 'MAP C classified as MAP B, LOPOCV B',use_iloc=False) 
 draw_his_boundaries(0.38,0.42,signal_peaks_and_class_train_LOPOCV[937][6],disp_atr_vent_boxes=False)
 save_plot(plt.gcf(),other_fig_path,"ex_LOPOCV_misclass_2_B")
 
