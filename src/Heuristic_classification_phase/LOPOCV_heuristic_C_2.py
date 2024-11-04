@@ -28,9 +28,9 @@ def LOPOCV_heuristic_C_2(df):
         for i in range(0, dims[0]):
             atr_peak, his_peak, vent_peak, pred = heuristic_classifier_C_2(x_test.iloc[i], 2035, th_his)
             pred_heuristic[i] = pred
-            
+            amplitude=np.nanmax(x_test.iloc[i])-np.nanmin(x_test.iloc[i])
             original_index = test_data.index[i] 
-            signal_peaks_and_class_train.append([original_index.item(), participant.item(), atr_peak.item(), his_peak.item(), vent_peak.item(), pred, th_his.item()])
+            signal_peaks_and_class_train.append([original_index.item(), participant.item(), atr_peak.item(), his_peak.item(), vent_peak.item(), pred, th_his.item()*amplitude.item()])
         
         all_y_true.extend(y_test)
         all_y_pred.extend(pred_heuristic)

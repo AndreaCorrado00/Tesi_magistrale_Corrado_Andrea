@@ -35,6 +35,6 @@ def heuristic_classifier_C_2(record,Fs,his_bundle_th):
         else:
             pred_class="MAP_B"
 
-    return atr_peak,his_peak,vent_peak,pred_class
+    return atr_peak,his_peak*amplitude,vent_peak,pred_class
 
 
