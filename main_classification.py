@@ -47,7 +47,7 @@ use_filt_data=False;
 # Handling two parralel paths: filtered and not filtered dataset
 whole_dataset,signals,y_true,labels_unique,Fs,plot_last_name,fig_final_folder,subtitle_plots= handle_filtered_data(use_filt_data)
 
-#whole_dataset,y_true,signals,fig_final_folder,subtitle_plots=drop_one_sub(2, whole_dataset,fig_final_folder,subtitle_plots)
+whole_dataset,y_true,signals,fig_final_folder,subtitle_plots=drop_one_sub(2, whole_dataset,fig_final_folder,subtitle_plots)
 #%% Checking data
 display_data_summary(signals,labels_unique)
 
