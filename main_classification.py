@@ -33,7 +33,8 @@ figure_path="D:/Desktop/ANDREA/Universita/Magistrale/Anno Accademico 2023-2024/T
 
 #%% Loading data
 dataset_path = "D:/Desktop/ANDREA/Universita/Magistrale/Anno Accademico 2023-2024/TESI/Tesi_magistrale/Data/Processed/data_aligned" 
-dataset_name = "dataset_1"  # E.g., dataset_1, 2, 3
+db_number=3
+dataset_name = "dataset_"+str(db_number)  # E.g., dataset_1, 2, 3
 whole_dataset,signals,y_true,labels_unique,Fs,plot_last_name,fig_final_folder,subtitle_plots = load_dataset(dataset_path, dataset_name)
 
 #%% Checking data
@@ -65,6 +66,24 @@ show_class_proportions(y_test,labels_unique)
 ################# BUILDING AN HEURISTIC CLASSIFIER PHASE #####################
 ##############################################################################
 other_fig_path=figure_path+"/Heuristic_classification_phase/"+fig_final_folder+"/other_figs"
+
+# %% Example signals positions
+import pandas as pd
+train_test_examples=pd.DataFrame({
+    "db 1 c" : [96,106,164],
+    "db 1 m": [0,13, 198],
+    "db 2 c" : [3,40,13],
+    "db 2 m": [1,130, 42],
+    "db 3 c" : [0,53,169],
+    "db 3 m": [1, 56, 145]
+    })
+
+LOPOCV_examples=pd.DataFrame({
+    "db 1 c" : [(0,0),(0,0),(0,0)],
+    "db 1 m": [(0,0),(0,0), (0,0)],
+    "db 2 c" : [(0,0),(0,0),(0,0)],
+    "db 3 m": [(0,0),(0,0), (0,0)]
+    })
 
 # %% Tuning of His Threshold value for strategy B
 # F1 score is used to tune the best percentile to be used as threshold
@@ -117,30 +136,32 @@ he_report=evaluate_confusion_matrix(pred_heuristic,y_test,labels_unique,cm_supti
 plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="report_test_C")
 
 #%% Showing correct results
-# show_single_example(x_test, Fs,2, 'MAP A correctly classified as MAP A, strategy C') 
-# draw_his_boundaries(0.38,0.42,th_his,disp_atr_vent_boxes=True)
-# save_plot(plt.gcf(),other_fig_path,"ex_correct_class_1_C")
+col=f"db {db_number} c"
+show_single_example(x_test, Fs,train_test_examples[col][0], 'MAP A correctly classified as MAP A, strategy C') 
+draw_his_boundaries(0.38,0.42,th_his,disp_atr_vent_boxes=True)
+save_plot(plt.gcf(),other_fig_path,"ex_correct_class_1_C")
 
-# show_single_example(x_test, Fs,38, 'MAP B correctly classified as MAP B, strategy C') 
-# draw_his_boundaries(0.38,0.42,th_his,disp_atr_vent_boxes=True)
-# save_plot(plt.gcf(),other_fig_path,"ex_correct_class_2_C")
+show_single_example(x_test, Fs,train_test_examples[col][1], 'MAP B correctly classified as MAP B, strategy C') 
+draw_his_boundaries(0.38,0.42,th_his,disp_atr_vent_boxes=True)
+save_plot(plt.gcf(),other_fig_path,"ex_correct_class_2_C")
 
-# show_single_example(x_test, Fs, 3, 'MAP C correctly classified as MAP C, strategy C') 
-# draw_his_boundaries(0.38,0.42,th_his,disp_atr_vent_boxes=True)
-# save_plot(plt.gcf(),other_fig_path,"ex_correct_class_3_C")
+show_single_example(x_test, Fs, train_test_examples[col][2], 'MAP C correctly classified as MAP C, strategy C') 
+draw_his_boundaries(0.38,0.42,th_his,disp_atr_vent_boxes=True)
+save_plot(plt.gcf(),other_fig_path,"ex_correct_class_3_C")
 
-# # %% Showing some unclear results
-# show_single_example(x_test, Fs, 0, 'MAP A classified as MAP B, strategy C') 
-# draw_his_boundaries(0.38,0.42,th_his,disp_atr_vent_boxes=True)
-# save_plot(plt.gcf(),other_fig_path,"ex_misclass_1_C")
+# %% Showing some unclear results
+col=f"db {db_number} m"
+show_single_example(x_test, Fs, train_test_examples[col][0], 'MAP A classified as MAP B, strategy C') 
+draw_his_boundaries(0.38,0.42,th_his,disp_atr_vent_boxes=True)
+save_plot(plt.gcf(),other_fig_path,"ex_misclass_1_C")
 
-# show_single_example(x_test, Fs,13, 'MAP C classified as MAP B, strategy C') 
-# draw_his_boundaries(0.38,0.42,th_his,disp_atr_vent_boxes=True)
-# save_plot(plt.gcf(),other_fig_path,"ex_misclass_2_C")
+show_single_example(x_test, Fs,train_test_examples[col][1], 'MAP C classified as MAP B, strategy C') 
+draw_his_boundaries(0.38,0.42,th_his,disp_atr_vent_boxes=True)
+save_plot(plt.gcf(),other_fig_path,"ex_misclass_2_C")
 
-# show_single_example(x_test, Fs,222 , 'MAP C classified as MAP A, strategy C') 
-# draw_his_boundaries(0.38,0.42,th_his,disp_atr_vent_boxes=True)
-# save_plot(plt.gcf(),other_fig_path,"ex_misclass_3_C")
+show_single_example(x_test, Fs,train_test_examples[col][2] , 'MAP C classified as MAP A, strategy C') 
+draw_his_boundaries(0.38,0.42,th_his,disp_atr_vent_boxes=True)
+save_plot(plt.gcf(),other_fig_path,"ex_misclass_3_C")
 
 
 
@@ -168,28 +189,28 @@ if dataset_name!="dataset_3":
     plot_dataframe_as_plain_image(miss_class_summary, figsize=(8,5),scale=(1.7,1.7),title_plot=cm_title,path=other_fig_path,saving_name="Misclass_LOPOCV_C")
     
     # #%% Showing correct results
-    # show_single_example(signals, Fs,19, 'MAP A correctly classified as MAP A, LOPOCV C',use_iloc=False) 
-    # draw_his_boundaries(0.38,0.42,signal_peaks_and_class_train_LOPOCV[19][6],disp_atr_vent_boxes=True)
-    # save_plot(plt.gcf(),other_fig_path,"ex_LOPOCV_correct_class_1_C")
+    show_single_example(signals, Fs,19, 'MAP A correctly classified as MAP A, LOPOCV C',use_iloc=False) 
+    draw_his_boundaries(0.38,0.42,signal_peaks_and_class_train_LOPOCV[19][6],disp_atr_vent_boxes=True)
+    save_plot(plt.gcf(),other_fig_path,"ex_LOPOCV_correct_class_1_C")
     
-    # show_single_example(signals, Fs,809, 'MAP B correctly classified as MAP B, LOPOCV C',use_iloc=False) 
-    # draw_his_boundaries(0.38,0.42,signal_peaks_and_class_train_LOPOCV[193][6],disp_atr_vent_boxes=True)
-    # save_plot(plt.gcf(),other_fig_path,"ex_LOPOCV_correct_class_2_C")
+    show_single_example(signals, Fs,809, 'MAP B correctly classified as MAP B, LOPOCV C',use_iloc=False) 
+    draw_his_boundaries(0.38,0.42,signal_peaks_and_class_train_LOPOCV[193][6],disp_atr_vent_boxes=True)
+    save_plot(plt.gcf(),other_fig_path,"ex_LOPOCV_correct_class_2_C")
     
-    # show_single_example(signals, Fs, 313, 'MAP C correctly classified as MAP C, LOPOCV C',use_iloc=False) 
-    # draw_his_boundaries(0.38,0.42,signal_peaks_and_class_train_LOPOCV[936][6],disp_atr_vent_boxes=True)
-    # save_plot(plt.gcf(),other_fig_path,"ex_LOPOCV_correct_class_3_C")
+    show_single_example(signals, Fs, 313, 'MAP C correctly classified as MAP C, LOPOCV C',use_iloc=False) 
+    draw_his_boundaries(0.38,0.42,signal_peaks_and_class_train_LOPOCV[936][6],disp_atr_vent_boxes=True)
+    save_plot(plt.gcf(),other_fig_path,"ex_LOPOCV_correct_class_3_C")
     
-    # # %% Showing some unclear results
-    # show_single_example(signals, Fs,107, 'MAP A classified as MAP B, LOPOCV C',use_iloc=False) 
-    # draw_his_boundaries(0.38,0.42,signal_peaks_and_class_train_LOPOCV[123][6],disp_atr_vent_boxes=True)
-    # save_plot(plt.gcf(),other_fig_path,"ex_LOPOCV_misclass_1_C")
+    # %% Showing some unclear results
+    show_single_example(signals, Fs,107, 'MAP A classified as MAP B, LOPOCV C',use_iloc=False) 
+    draw_his_boundaries(0.38,0.42,signal_peaks_and_class_train_LOPOCV[123][6],disp_atr_vent_boxes=True)
+    save_plot(plt.gcf(),other_fig_path,"ex_LOPOCV_misclass_1_C")
     
-    # show_single_example(signals, Fs,937, 'MAP C classified as MAP B, LOPOCV C',use_iloc=False) 
-    # draw_his_boundaries(0.38,0.42,signal_peaks_and_class_train_LOPOCV[314][6],disp_atr_vent_boxes=True)
-    # save_plot(plt.gcf(),other_fig_path,"ex_LOPOCV_misclass_2_C")
+    show_single_example(signals, Fs,937, 'MAP C classified as MAP B, LOPOCV C',use_iloc=False) 
+    draw_his_boundaries(0.38,0.42,signal_peaks_and_class_train_LOPOCV[314][6],disp_atr_vent_boxes=True)
+    save_plot(plt.gcf(),other_fig_path,"ex_LOPOCV_misclass_2_C")
     
-    # show_single_example(signals, Fs, 928, 'MAP C classified as MAP A, LOPOCV C',use_iloc=False) 
-    # draw_his_boundaries(0.38,0.42,signal_peaks_and_class_train_LOPOCV[305][6],disp_atr_vent_boxes=True)
-    # save_plot(plt.gcf(),other_fig_path,"ex_LOPOCV_misclass_3_C")
+    show_single_example(signals, Fs, 928, 'MAP C classified as MAP A, LOPOCV C',use_iloc=False) 
+    draw_his_boundaries(0.38,0.42,signal_peaks_and_class_train_LOPOCV[305][6],disp_atr_vent_boxes=True)
+    save_plot(plt.gcf(),other_fig_path,"ex_LOPOCV_misclass_3_C")
 else:print("Unable to perform LOPOCV")
