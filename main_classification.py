@@ -260,7 +260,8 @@ signal_peaks_and_class_train=[];
 for i in range(0,dims[0]):
     atr_peak,his_peak,vent_peak,pred=heuristic_classifier_B_2(x_train.iloc[i],Fs,th_his)
     pred_heuristic[i]=pred
-    signal_peaks_and_class_train.append([atr_peak,his_peak,vent_peak,pred])
+    his_th=(np.nanmax(x_train.iloc[i])-np.nanmin(x_train.iloc[i]))*th_his
+    signal_peaks_and_class_test.append([atr_peak,his_peak,vent_peak,pred,his_th])
     
     
 # %% Performance of the heuristic classifier: train 
@@ -282,7 +283,8 @@ signal_peaks_and_class_test=[];
 for i in range(0,dims[0]):
     atr_peak,his_peak,vent_peak,pred=heuristic_classifier_B_2(x_test.iloc[i],Fs,th_his)
     pred_heuristic[i]=pred
-    signal_peaks_and_class_test.append([atr_peak,his_peak,vent_peak,pred])
+    his_th=(np.nanmax(x_test.iloc[i])-np.nanmin(x_test.iloc[i]))*th_his
+    signal_peaks_and_class_test.append([atr_peak,his_peak,vent_peak,pred,his_th])
     
     
 # %% Performance of the heuristic classifier: train 
@@ -292,6 +294,40 @@ cm_title=subtitle_plots+" test set B 2"
 he_report=evaluate_confusion_matrix(pred_heuristic,y_test,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
 
 plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="report_test_B_2")
+
+
+
+#%% Showing correct results
+# with sub 2: 2 38 40
+# without sub 2: 0, 188,230
+show_single_example(x_test, Fs,0, 'MAP A correctly classified as MAP A, strategy B 2') 
+draw_his_boundaries(0.38,0.42, signal_peaks_and_class_test[0][4],disp_atr_vent_boxes=False)
+save_plot(plt.gcf(),other_fig_path,"ex_correct_class_1_B_2")
+
+show_single_example(x_test, Fs,188, 'MAP B correctly classified as MAP B, strategy B 2') 
+draw_his_boundaries(0.38,0.42, signal_peaks_and_class_test[188][4],disp_atr_vent_boxes=False)
+save_plot(plt.gcf(),other_fig_path,"ex_correct_class_2_B_2")
+
+show_single_example(x_test, Fs, 230, 'MAP C correctly classified as MAP C, strategy B 2') 
+draw_his_boundaries(0.38,0.42, signal_peaks_and_class_test[230][4],disp_atr_vent_boxes=False)
+save_plot(plt.gcf(),other_fig_path,"ex_correct_class_3_B_2")
+
+# %% Showing some unclear results
+# with sub 2: 1, 117, 290
+# without sub 2: 5, 113, 252
+show_single_example(x_test, Fs,5, 'MAP A classified as MAP B, strategy B 2') 
+draw_his_boundaries(0.38,0.42, signal_peaks_and_class_test[5][4],disp_atr_vent_boxes=False)
+save_plot(plt.gcf(),other_fig_path,"ex_misclass_1_B_2")
+
+show_single_example(x_test, Fs,113, 'MAP C classified as MAP B, strategy B 2') 
+draw_his_boundaries(0.38,0.42, signal_peaks_and_class_test[113][4],disp_atr_vent_boxes=False)
+save_plot(plt.gcf(),other_fig_path,"ex_misclass_2_B_2")
+
+show_single_example(x_test, Fs, 252, 'MAP C classified as MAP A, strategy B 2') 
+draw_his_boundaries(0.38,0.42, signal_peaks_and_class_test[252][4],disp_atr_vent_boxes=False)
+save_plot(plt.gcf(),other_fig_path,"ex_misclass_3_B_2")
+
+
 
 
 # %% STRATEGY C
@@ -377,7 +413,8 @@ signal_peaks_and_class_train=[];
 for i in range(0,dims[0]):
     atr_peak,his_peak,vent_peak,pred=heuristic_classifier_C_2(x_train.iloc[i],Fs,th_his)
     pred_heuristic[i]=pred
-    signal_peaks_and_class_train.append([atr_peak,his_peak,vent_peak,pred])
+    his_th=(np.nanmax(x_train.iloc[i])-np.nanmin(x_train.iloc[i]))*th_his
+    signal_peaks_and_class_train.append([atr_peak,his_peak,vent_peak,pred,his_th])
     
     
 
@@ -400,7 +437,8 @@ signal_peaks_and_class_test=[];
 for i in range(0,dims[0]):
     atr_peak,his_peak,vent_peak,pred=heuristic_classifier_C_2(x_test.iloc[i],Fs,th_his)
     pred_heuristic[i]=pred
-    signal_peaks_and_class_test.append([atr_peak,his_peak,vent_peak,pred])
+    his_th=(np.nanmax(x_test.iloc[i])-np.nanmin(x_test.iloc[i]))*th_his
+    signal_peaks_and_class_test.append([atr_peak,his_peak,vent_peak,pred,his_th])
     
     
 # %% Performance of the heuristic classifier: train 
@@ -410,6 +448,41 @@ cm_title=subtitle_plots+" test set C 2"
 he_report=evaluate_confusion_matrix(pred_heuristic,y_test,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
 
 plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="report_test_C_2")
+
+
+#%% Showing correct results
+# with sub 2: 2,38, 3
+# without sub 2: 19, 188, 195
+show_single_example(x_test, Fs,19, 'MAP A correctly classified as MAP A, strategy C 2') 
+draw_his_boundaries(0.38,0.42,signal_peaks_and_class_test[19][4],disp_atr_vent_boxes=True)
+save_plot(plt.gcf(),other_fig_path,"ex_correct_class_1_C_2")
+
+show_single_example(x_test, Fs,188, 'MAP B correctly classified as MAP B, strategy C 2') 
+draw_his_boundaries(0.38,0.42,signal_peaks_and_class_test[188][4],disp_atr_vent_boxes=True)
+save_plot(plt.gcf(),other_fig_path,"ex_correct_class_2_C_2")
+
+show_single_example(x_test, Fs, 195, 'MAP C correctly classified as MAP C, strategy C 2') 
+draw_his_boundaries(0.38,0.42,signal_peaks_and_class_test[195][4],disp_atr_vent_boxes=True)
+save_plot(plt.gcf(),other_fig_path,"ex_correct_class_3_C_2")
+
+# %% Showing some unclear results
+# with sub 2: 0, 13, 
+# without sub 2: 5, 113, 252
+show_single_example(x_test, Fs, 5, 'MAP A classified as MAP B, strategy C 2') 
+draw_his_boundaries(0.38,0.42,signal_peaks_and_class_test[5][4],disp_atr_vent_boxes=True)
+save_plot(plt.gcf(),other_fig_path,"ex_misclass_1_C_2")
+
+show_single_example(x_test, Fs,113, 'MAP C classified as MAP B, strategy C 2') 
+draw_his_boundaries(0.38,0.42,signal_peaks_and_class_test[113][4],disp_atr_vent_boxes=True)
+save_plot(plt.gcf(),other_fig_path,"ex_misclass_2_C_2")
+
+show_single_example(x_test, Fs,252 , 'MAP C classified as MAP A, strategy C 2') 
+draw_his_boundaries(0.38,0.42,signal_peaks_and_class_test[252][4],disp_atr_vent_boxes=True)
+save_plot(plt.gcf(),other_fig_path,"ex_misclass_3_C_2")
+
+
+
+
 
 
 
@@ -636,7 +709,7 @@ plot_dataframe_as_plain_image(miss_class_summary, figsize=(8,5),scale=(1.7,1.7),
 
 #%% Showing correct results
 # with sub 2: 19, (809 193), (936 313)
-# without sub 2: (19,19) (841,432) (968, 468) 
+# without sub 2: (19,19) (841,432) (966, 466) 
 show_single_example(signals, Fs,19, 'MAP A correctly classified as MAP A, LOPOCV C 2',use_iloc=False) 
 draw_his_boundaries(0.38,0.42,signal_peaks_and_class_train_LOPOCV[19][6],disp_atr_vent_boxes=True)
 save_plot(plt.gcf(),other_fig_path,"ex_LOPOCV_correct_class_1_C_2")
