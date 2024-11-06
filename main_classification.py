@@ -1,6 +1,7 @@
 #%% Loading  libraries
 import os
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 import sys
 from sklearn.model_selection import train_test_split
@@ -33,7 +34,7 @@ figure_path="D:/Desktop/ANDREA/Universita/Magistrale/Anno Accademico 2023-2024/T
 
 #%% Loading data
 dataset_path = "D:/Desktop/ANDREA/Universita/Magistrale/Anno Accademico 2023-2024/TESI/Tesi_magistrale/Data/Processed/data_aligned" 
-db_number=2
+db_number=3
 dataset_name = "dataset_"+str(db_number)  # E.g., dataset_1, 2, 3
 whole_dataset,signals,y_true,labels_unique,Fs,plot_last_name,fig_final_folder,subtitle_plots = load_dataset(dataset_path, dataset_name)
 
@@ -68,7 +69,6 @@ show_class_proportions(y_test,labels_unique)
 other_fig_path=figure_path+"/Heuristic_classification_phase/"+fig_final_folder+"/other_figs"
 
 # %% Example signals positions
-import pandas as pd
 train_test_examples=pd.DataFrame({
     "db 1 c" : [96,106,164],
     "db 1 m": [0,13, 198],
@@ -79,11 +79,11 @@ train_test_examples=pd.DataFrame({
     })
 
 LOPOCV_examples=pd.DataFrame({
-    "db 1 c" : [(0,0),(0,0),(0,0)],
-    "db 1 m": [(0,0),(0,0), (0,0)],
-    "db 2 c" : [(0,0),(0,0),(0,0)],
-    "db 3 m": [(0,0),(0,0), (0,0)]
-    })
+        "db 1 c" : [56,227,293],
+        "db 1 m": [2,296,297],
+        "db 2 c" : [56,193,228],
+        "db 2 m": [2,881,444]
+        })
 
 # %% Tuning of His Threshold value for strategy B
 # F1 score is used to tune the best percentile to be used as threshold
@@ -187,13 +187,7 @@ if dataset_name!="dataset_3":
     # misclassified per class
     miss_class_summary= misclassification_summary(whole_dataset,y_pred_LOPOCV, labels_unique)
     plot_dataframe_as_plain_image(miss_class_summary, figsize=(8,5),scale=(1.7,1.7),title_plot=cm_title,path=other_fig_path,saving_name="Misclass_LOPOCV_C")
-    #%%
-    LOPOCV_examples=pd.DataFrame({
-        "db 1 c" : [56,227,293],
-        "db 1 m": [2,296,297],
-        "db 2 c" : [56,193,228],
-        "db 2 m": [2,881,444]
-        })
+
     #%% Showing correct results
     col=f"db {db_number} c"
     show_single_example(signals, Fs,LOPOCV_examples[col][0], 'MAP A correctly classified as MAP A, LOPOCV C',use_iloc=False) 
@@ -223,3 +217,5 @@ if dataset_name!="dataset_3":
     save_plot(plt.gcf(),other_fig_path,"ex_LOPOCV_misclass_3_C")
     #%%
 else:print("Unable to perform LOPOCV")
+
+#%%
