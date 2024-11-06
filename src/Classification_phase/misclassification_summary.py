@@ -22,11 +22,11 @@ def misclassification_summary(whole_dataset, y_pred, classes):
                     
                     # Calculate the percentage of misclassifications
                     if true_positives[true_class] > 0:
-                        percentage = (count / true_positives[true_class]) * 100
+                        percentage = f"{count} / {true_positives[true_class]}"
                     else:
-                        percentage = 0.0  # To handle the case of no true positives
+                        percentage = "-"  # To handle the case of no true positives
 
-                    misclass_dict[f"{true_class}->{pred_class} [%]"] = percentage
+                    misclass_dict[f"{true_class}->{pred_class}"] = percentage
         
         results.append(misclass_dict)
 
