@@ -283,19 +283,33 @@ db_table = build_table_dataset_with_subs(Aligned_DB);
 writetable(db_table,processed_data_path+"\AVNRT_DB_filt.csv")
 
 
-
-%%                           ---------- FINAL DATASET EXPLORATION ---------- 
+%%                           ---------- ALIGNED DATASET ANALYSIS ---------- 
 clc;clear;close;
 % Ppopulation plots are done to summarize. They not intend to be a complete
 % and deep representation, but just a quick overview on the data we have.
 
-processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed";
-src_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\DB_aligned_population_analysis_phase";
-figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\DB_aligned_population_analysis_phase";
+processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed\data_aligned";
+src_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\Sub_alignment_analysis_phase";
+figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\Sub_alignment_analysis\final_dataset";
 addpath(src_path)
 
 % Loading previusly made data
-load(processed_data_path+'\dataset_pop_aligned_filt.mat');
-load(processed_data_path+'\aligned_subjects_DB_filt.mat');
+load(processed_data_path+'\dataset_1.mat');
 fc=2035;
 
+%% 
+spaghetti_confidence_signals(final_data_by_sub,fc,figure_path)
+
+%% 
+traces_subplots_by_sub(final_data_by_sub, fc, figure_path + "\single_records") 
+
+%%
+final_data_pop=build_pop_dataset_after_alignment(final_data_by_sub);
+
+%% 
+src_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\DB_aligned_population_analysis_phase";
+figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\DB_aligned_population_analysis_phase\final_dataset";
+addpath(src_path)
+
+%%
+spaghetti_confidence_signals(final_data_pop,fc,figure_path)
