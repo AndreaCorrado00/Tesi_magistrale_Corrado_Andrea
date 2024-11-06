@@ -34,7 +34,7 @@ figure_path="D:/Desktop/ANDREA/Universita/Magistrale/Anno Accademico 2023-2024/T
 
 #%% Loading data
 dataset_path = "D:/Desktop/ANDREA/Universita/Magistrale/Anno Accademico 2023-2024/TESI/Tesi_magistrale/Data/Processed/data_aligned" 
-db_number=3
+db_number=1
 dataset_name = "dataset_"+str(db_number)  # E.g., dataset_1, 2, 3
 whole_dataset,signals,y_true,labels_unique,Fs,plot_last_name,fig_final_folder,subtitle_plots = load_dataset(dataset_path, dataset_name)
 
@@ -69,7 +69,7 @@ show_class_proportions(y_test,labels_unique)
 other_fig_path=figure_path+"/Heuristic_classification_phase/"+fig_final_folder+"/other_figs"
 
 # %% Example signals positions
-train_test_examples=pd.DataFrame({
+train_test_examples= pd.DataFrame({
     "db 1 c" : [96,106,164],
     "db 1 m": [0,13, 198],
     "db 2 c" : [3,40,13],
@@ -79,10 +79,10 @@ train_test_examples=pd.DataFrame({
     })
 
 LOPOCV_examples=pd.DataFrame({
-        "db 1 c" : [56,227,293],
-        "db 1 m": [2,296,297],
-        "db 2 c" : [56,193,228],
-        "db 2 m": [2,881,444]
+        "db 1 c" : [56,227,293,0,0],
+        "db 1 m": [2,296,297,890,872],
+        "db 2 c" : [56,193,228,0,0],
+        "db 2 m": [2,881,444,817,801]
         })
 
 # %% Tuning of His Threshold value for strategy B
@@ -159,11 +159,17 @@ show_single_example(x_test, Fs,train_test_examples[col][1], 'MAP C classified as
 draw_his_boundaries(0.38,0.42,th_his,disp_atr_vent_boxes=True)
 save_plot(plt.gcf(),other_fig_path,"ex_misclass_2_C")
 
-show_single_example(x_test, Fs,train_test_examples[col][2] , 'MAP C classified as MAP A, strategy C') 
+show_single_example(x_test, Fs,train_test_examples[col][2], 'MAP C classified as MAP A, strategy C') 
 draw_his_boundaries(0.38,0.42,th_his,disp_atr_vent_boxes=True)
 save_plot(plt.gcf(),other_fig_path,"ex_misclass_3_C")
 
+# show_single_example(x_test, Fs,train_test_examples[col][3], 'MAP B classified as MAP C, strategy C') 
+# draw_his_boundaries(0.38,0.42,th_his,disp_atr_vent_boxes=True)
+# save_plot(plt.gcf(),other_fig_path,"ex_misclass_2_C")
 
+# show_single_example(x_test, Fs,train_test_examples[col][4] , 'MAP A classified as MAP C, strategy C') 
+# draw_his_boundaries(0.38,0.42,th_his,disp_atr_vent_boxes=True)
+# save_plot(plt.gcf(),other_fig_path,"ex_misclass_3_C")
 
 
 #%%############################################################################
@@ -215,7 +221,40 @@ if dataset_name!="dataset_3":
     show_single_example(signals, Fs, LOPOCV_examples[col][2], 'MAP C classified as MAP A, LOPOCV C',use_iloc=False) 
     draw_his_boundaries(0.38,0.42,signal_peaks_and_class_train_LOPOCV[LOPOCV_examples[col][2]][6],disp_atr_vent_boxes=True)
     save_plot(plt.gcf(),other_fig_path,"ex_LOPOCV_misclass_3_C")
+    
+    show_single_example(signals, Fs, LOPOCV_examples[col][3], 'MAP B classified as MAP C, LOPOCV C',use_iloc=False) 
+    draw_his_boundaries(0.38,0.42,signal_peaks_and_class_train_LOPOCV[LOPOCV_examples[col][3]][6],disp_atr_vent_boxes=True)
+    save_plot(plt.gcf(),other_fig_path,"ex_LOPOCV_misclass_4_C")
+    
+    show_single_example(signals, Fs, LOPOCV_examples[col][4], 'MAP A classified as MAP C, LOPOCV C',use_iloc=False) 
+    draw_his_boundaries(0.38,0.42,signal_peaks_and_class_train_LOPOCV[LOPOCV_examples[col][4]][4],disp_atr_vent_boxes=True)
+    save_plot(plt.gcf(),other_fig_path,"ex_LOPOCV_misclass_5_C")
+    
+    
     #%%
 else:print("Unable to perform LOPOCV")
 
-#%%
+#%% Peaks distribution: are they discriminative?
+# NB:
+atrial_peaks=[]
+his_peaks=[]
+vent_peaks=[]
+
+for i in range(0,len(signal_peaks_and_class_train_LOPOCV)):
+    atrial_peaks.append(signal_peaks_and_class_train_LOPOCV[i][2])
+    his_peaks.append(signal_peaks_and_class_train_LOPOCV[i][3])
+    vent_peaks.append(signal_peaks_and_class_train_LOPOCV[i][4])
+    
+    
+signals_peaks=pd.DataFrame({
+    "atrial_peaks": atrial_peaks,
+    "his_peaks": his_peaks,
+    "vent_peaks": vent_peaks,
+    "class": y_true_LOPOCV
+    })
+
+from compare_feature_by_classes import compare_feature_by_classes
+
+compare_feature_by_classes(signals_peaks,"atrial_peaks")
+compare_feature_by_classes(signals_peaks,"his_peaks")
+compare_feature_by_classes(signals_peaks,"vent_peaks")
