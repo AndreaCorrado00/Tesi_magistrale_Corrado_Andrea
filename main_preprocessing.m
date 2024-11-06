@@ -313,3 +313,5 @@ addpath(src_path)
 
 %%
 spaghetti_confidence_signals(final_data_pop,fc,figure_path)
+%%
+traces_subplots_by_sub(final_data_pop, fc, figure_path + "\single_records")
