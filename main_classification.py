@@ -34,7 +34,7 @@ figure_path="D:/Desktop/ANDREA/Universita/Magistrale/Anno Accademico 2023-2024/T
 
 #%% Loading data
 dataset_path = "D:/Desktop/ANDREA/Universita/Magistrale/Anno Accademico 2023-2024/TESI/Tesi_magistrale/Data/Processed/data_aligned" 
-db_number=3
+db_number=2
 dataset_name = "dataset_"+str(db_number)  # E.g., dataset_1, 2, 3
 whole_dataset,signals,y_true,labels_unique,Fs,plot_last_name,fig_final_folder,subtitle_plots = load_dataset(dataset_path, dataset_name)
 
@@ -250,16 +250,19 @@ for i in range(0,len(signal_peaks_and_class_test)):
     atrial_peaks.append(signal_peaks_and_class_test[i][0])
     his_peaks.append(signal_peaks_and_class_test[i][1])
     vent_peaks.append(signal_peaks_and_class_test[i][2])
+
+atr_vent_ratio=np.array(atrial_peaks)/np.array(vent_peaks)
     
 signals_peaks=pd.DataFrame({
     "atrial_peaks": atrial_peaks,
     "his_peaks": his_peaks,
     "vent_peaks": vent_peaks,
+    "atr_vent_ratio":atr_vent_ratio,
     "class": np.concatenate((y_train,y_test), axis=0)
     })
 
 from compare_feature_by_classes import compare_feature_by_classes
-
+# %%
 compare_feature_by_classes(signals_peaks,"atrial_peaks")
 save_plot(plt.gcf(),other_fig_path,"atrial_peaks_boxplots")
 
@@ -268,3 +271,7 @@ save_plot(plt.gcf(),other_fig_path,"his_peaks_boxplots")
 
 compare_feature_by_classes(signals_peaks,"vent_peaks")
 save_plot(plt.gcf(),other_fig_path,"vent_peaks_boxplots")
+
+#%% 
+compare_feature_by_classes(signals_peaks,"atr_vent_ratio")
+save_plot(plt.gcf(),other_fig_path,"atr_vent_ratio_boxplots")

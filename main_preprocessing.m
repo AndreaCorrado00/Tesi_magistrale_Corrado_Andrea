@@ -281,3 +281,21 @@ compare_maps_between_signals(POP_DB_aligned,fc,figure_path)
 
 db_table = build_table_dataset_with_subs(Aligned_DB);
 writetable(db_table,processed_data_path+"\AVNRT_DB_filt.csv")
+
+
+
+%%                           ---------- FINAL DATASET EXPLORATION ---------- 
+clc;clear;close;
+% Ppopulation plots are done to summarize. They not intend to be a complete
+% and deep representation, but just a quick overview on the data we have.
+
+processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed";
+src_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\DB_aligned_population_analysis_phase";
+figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\DB_aligned_population_analysis_phase";
+addpath(src_path)
+
+% Loading previusly made data
+load(processed_data_path+'\dataset_pop_aligned_filt.mat');
+load(processed_data_path+'\aligned_subjects_DB_filt.mat');
+fc=2035;
+
