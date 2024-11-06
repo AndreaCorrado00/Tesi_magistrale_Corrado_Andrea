@@ -283,35 +283,34 @@ db_table = build_table_dataset_with_subs(Aligned_DB);
 writetable(db_table,processed_data_path+"\AVNRT_DB_filt.csv")
 
 
-%%                           ---------- ALIGNED DATASET ANALYSIS ---------- 
+%%                          ---------- FINAL DATASET ANALYSIS ---------- 
 clc;clear;close;
-% Ppopulation plots are done to summarize. They not intend to be a complete
-% and deep representation, but just a quick overview on the data we have.
+dataset="dataset_3";
 
 processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed\data_aligned";
 src_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\Sub_alignment_analysis_phase";
-figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\Sub_alignment_analysis\final_dataset";
+figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\Sub_alignment_analysis\final_dataset\"+dataset;
 addpath(src_path)
 
 % Loading previusly made data
-load(processed_data_path+'\dataset_1.mat');
+load(processed_data_path+'\'+dataset+'.mat');
 fc=2035;
 
-%% 
+%% Spaghetti plot by subjects
 spaghetti_confidence_signals(final_data_by_sub,fc,figure_path)
 
-%% 
+%% subplot by subjects
 traces_subplots_by_sub(final_data_by_sub, fc, figure_path + "\single_records") 
 
-%%
+%% "population" dataset
 final_data_pop=build_pop_dataset_after_alignment(final_data_by_sub);
 
-%% 
+%% Population dataset
 src_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\DB_aligned_population_analysis_phase";
-figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\DB_aligned_population_analysis_phase\final_dataset";
+figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\DB_aligned_population_analysis_phase\final_dataset\"+dataset;
 addpath(src_path)
 
-%%
+%% Spaghetti plot whole dataset
 spaghetti_confidence_signals(final_data_pop,fc,figure_path)
 %%
 traces_subplots_by_sub(final_data_pop, fc, figure_path + "\single_records")
