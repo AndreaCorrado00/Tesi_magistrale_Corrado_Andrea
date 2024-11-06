@@ -30,7 +30,7 @@ function spaghetti_confidence_signals(data, fc, figure_path)
             
             % Loop through each subject
             for j = 1:length(subjects)
-                sub = map + num2str(j);
+                sub = subjects{i};
                 traces = fieldnames(data.(string(map)).(string(sub)));
                 
                 % Loop through each trace type

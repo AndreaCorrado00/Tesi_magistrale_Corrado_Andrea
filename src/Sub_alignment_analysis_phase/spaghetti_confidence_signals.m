@@ -30,13 +30,17 @@ function spaghetti_confidence_signals(data, fc, figure_path)
             
             % Loop through each subject
             for j = 1:length(subjects)
-                sub = map + num2str(j);
+                sub = subjects{j};
                 traces = fieldnames(data.(string(map)).(string(sub)));
                 
                 % Loop through each trace type
                 for k = ["rov", "ref", "spare1", "spare2", "spare3"]
                     trace = k + '_trace';
-                    title_plot = 'MAP:' + i + ' (' + get_name_of_map(i) + ') sub:'+num2str(j)+ ', trace: ' + k;
+                    sub_num=split(sub,'_');
+                    sub_num=split(sub_num{2},i);
+                    sub_num=sub_num{end};
+
+                    title_plot = 'MAP:' + i + ' (' + get_name_of_map(i) + ') sub:'+sub_num+ ', trace: ' + k;
                     
                     % Create a new figure
                     fig = figure(1);
@@ -49,7 +53,8 @@ function spaghetti_confidence_signals(data, fc, figure_path)
                     fig = gcf;
                     
                     % Save the plot
-                    file_name="MAP_"+i+"_sub_"+num2str(j)+"_trace_"+k+"_";
+                   
+                    file_name="MAP_"+i+"_sub_"+sub_num+"_trace_"+k+"_";
                     save_plot(file_name, type_plots(l), figure_path + "\data_visual", fig, true);
                 end
             end

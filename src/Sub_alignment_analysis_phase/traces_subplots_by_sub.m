@@ -12,7 +12,7 @@ for i = ["A", "B", "C"]
 
     % Loop through each subject
     for j =  1:length(subjects)
-        sub = map + num2str(j);
+        sub = subjects{j};
        
 
 
@@ -24,9 +24,12 @@ for i = ["A", "B", "C"]
             traces_names=["rov", "ref", "spare1", "spare2", "spare3"];
             % Loop through each trace type and plot comparisons
             for k = 1:5
+                sub_num=split(sub,'_');
+                sub_num=split(sub_num{2},i);
+                sub_num=sub_num{end};
                 subplot(5,1,k)
                 trace = traces_names(k) + "_trace";
-                title_plot = 'MAP:' + i + ' (' + get_name_of_map(i) + '), sub:' + num2str(j) +', '+ traces_names(k)+' trace, record: '+num2str(h);
+                title_plot = 'MAP:' + i + ' (' + get_name_of_map(i) + '), sub:' + sub_num +', '+ traces_names(k)+' trace, record: '+num2str(h);
                 signals=table2array(data.(map).(sub).(trace));
 
                 x = [0:1/fc:1-1/fc]';
@@ -42,7 +45,7 @@ for i = ["A", "B", "C"]
 
             end
             % Save the plot
-            file_name="MAP_"+i+"_sub_"+num2str(j)+'_record_'+num2str(h)+'_';
+            file_name="MAP_"+i+"_sub_"+sub_num+'_record_'+num2str(h)+'_';
             save_plot(file_name, type_plots(1), figure_path, fig, true);
         end
     end
