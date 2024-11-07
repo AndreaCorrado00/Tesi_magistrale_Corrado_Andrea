@@ -5,12 +5,14 @@ def heuristic_classifier_C(record,Fs,his_bundle_th):
     
     t_atr=0.38
     t_ven=0.42
+    t_end=0.6
     
     atr_ind=round(t_atr*Fs)
     ven_ind=round(t_ven*Fs)
+    end_ind=round(t_end*Fs)
     
     atrial_phase=np.abs(record[0:atr_ind])
-    vent_phase=np.abs(record[ven_ind:])
+    vent_phase=np.abs(record[ven_ind:end_ind])
     his_phase=np.abs(record[atr_ind:ven_ind])
     
     # finding peaks

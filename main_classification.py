@@ -34,7 +34,7 @@ figure_path="D:/Desktop/ANDREA/Universita/Magistrale/Anno Accademico 2023-2024/T
 
 #%% Loading data
 dataset_path = "D:/Desktop/ANDREA/Universita/Magistrale/Anno Accademico 2023-2024/TESI/Tesi_magistrale/Data/Processed/data_aligned" 
-db_number=2
+db_number=3
 dataset_name = "dataset_"+str(db_number)  # E.g., dataset_1, 2, 3
 whole_dataset,signals,y_true,labels_unique,Fs,plot_last_name,fig_final_folder,subtitle_plots = load_dataset(dataset_path, dataset_name)
 
@@ -163,13 +163,6 @@ show_single_example(x_test, Fs,train_test_examples[col][2], 'MAP C classified as
 draw_his_boundaries(0.38,0.42,th_his,disp_atr_vent_boxes=True)
 save_plot(plt.gcf(),other_fig_path,"ex_misclass_3_C")
 
-# show_single_example(x_test, Fs,train_test_examples[col][3], 'MAP B classified as MAP C, strategy C') 
-# draw_his_boundaries(0.38,0.42,th_his,disp_atr_vent_boxes=True)
-# save_plot(plt.gcf(),other_fig_path,"ex_misclass_2_C")
-
-# show_single_example(x_test, Fs,train_test_examples[col][4] , 'MAP A classified as MAP C, strategy C') 
-# draw_his_boundaries(0.38,0.42,th_his,disp_atr_vent_boxes=True)
-# save_plot(plt.gcf(),other_fig_path,"ex_misclass_3_C")
 
 
 #%%############################################################################
