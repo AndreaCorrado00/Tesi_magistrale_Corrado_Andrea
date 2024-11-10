@@ -62,6 +62,12 @@ show_class_proportions(y_train,labels_unique)
 print("Test set")
 show_class_proportions(y_test,labels_unique)
 
+#%% For now, train test set are merged
+# x_train=signals
+# y_train=y_true
+
+# x_test=signals
+# y_test=y_true
 
 #%%###########################################################################
 ################# BUILDING AN HEURISTIC CLASSIFIER PHASE #####################
@@ -85,22 +91,25 @@ LOPOCV_examples=pd.DataFrame({
         "db 2 m": [2,881,444,817,801]
         })
 
-# %% Tuning of His Threshold value for strategy B
+
+
+# %% STRATEGY C
+use_ratio=True
+
+# %% Tuning of His Threshold
 # F1 score is used to tune the best percentile to be used as threshold
 th_his=tune_his_th_on_f1(x_train,y_train,np.arange(0,100,5),t_atr=0.38,t_ven=0.42,plot=True)
 save_plot(plt.gcf(),other_fig_path,"his_th_tuning")
 
 tune_his_th(x_train,t_atr=0.38,t_ven=0.42,Q_perc=75,boxplot=True);
 save_plot(plt.gcf(),other_fig_path,"his_th_tuning_boxplot")
-
-# %% STRATEGY C
 # %%  Heuristic classifier: train
 dims=x_train.shape
 pred_heuristic=np.empty(dims[0], dtype=object)
 
 signal_peaks_and_class_train=[];
 for i in range(0,dims[0]):
-    atr_peak,his_peak,vent_peak,pred=heuristic_classifier_C(x_train.iloc[i],Fs,th_his)
+    atr_peak,his_peak,vent_peak,pred=heuristic_classifier_C(x_train.iloc[i],Fs,th_his,use_ratio)
     pred_heuristic[i]=pred
     signal_peaks_and_class_train.append([atr_peak,his_peak,vent_peak,pred])
     
@@ -112,6 +121,7 @@ cm_saving_path=os.path.join(figure_path+"/Heuristic_classification_phase",fig_fi
 # Variable saving names
 cm_saving_name="CM_heuristic_train"+plot_last_name
 cm_title=subtitle_plots+" train set" 
+cm_title=subtitle_plots+" whole dataset" 
 #confusion matrix
 he_report=evaluate_confusion_matrix(pred_heuristic,y_train,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
 plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="report_train_C")
@@ -122,14 +132,15 @@ pred_heuristic=np.empty(dims[0], dtype=object)
 
 signal_peaks_and_class_test=[];
 for i in range(0,dims[0]):
-    atr_peak,his_peak,vent_peak,pred=heuristic_classifier_C(x_test.iloc[i],Fs,th_his)
+    atr_peak,his_peak,vent_peak,pred=heuristic_classifier_C(x_test.iloc[i],Fs,th_his,use_ratio)
     pred_heuristic[i]=pred
     signal_peaks_and_class_test.append([atr_peak,his_peak,vent_peak,pred])
     
     
 # %% Performance of the heuristic classifier: train 
 cm_saving_name="CM_heuristic_test"+plot_last_name
-cm_title=subtitle_plots+" test set" 
+cm_title=subtitle_plots+" test set"
+cm_title=subtitle_plots+" whole dataset" 
 #confusion matrix
 he_report=evaluate_confusion_matrix(pred_heuristic,y_test,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
 
@@ -171,7 +182,7 @@ save_plot(plt.gcf(),other_fig_path,"ex_misclass_3_C")
 
 # %% STRATEGY C
 if dataset_name!="dataset_3":
-    y_true_LOPOCV,y_pred_LOPOCV,signal_peaks_and_class_train_LOPOCV=LOPOCV_heuristic_C(whole_dataset)
+    y_true_LOPOCV,y_pred_LOPOCV,signal_peaks_and_class_train_LOPOCV=LOPOCV_heuristic_C(whole_dataset,use_ratio)
     
     # %% CM 
     # Fixed saving names
@@ -268,3 +279,13 @@ save_plot(plt.gcf(),other_fig_path,"vent_peaks_boxplots")
 #%% 
 compare_feature_by_classes(signals_peaks,"atr_vent_ratio")
 save_plot(plt.gcf(),other_fig_path,"atr_vent_ratio_boxplots")
+
+# #%% Saving strategy results 
+# ratio_results_pred=pred_heuristic
+# #%% peak thresholding VS peak ratio
+# col=f"db {db_number} c"
+# show_single_example(x_test, Fs,75, 'MAP A: Example correct with ratio, misclass with atr th') 
+# draw_his_boundaries(0.38,0.42,th_his,disp_atr_vent_boxes=True)
+
+
+

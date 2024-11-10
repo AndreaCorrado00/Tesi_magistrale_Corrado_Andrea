@@ -1,4 +1,4 @@
-def LOPOCV_heuristic_C(df):
+def LOPOCV_heuristic_C(df,use_ratio=False):
     import sys
     import numpy as np
     
@@ -26,7 +26,7 @@ def LOPOCV_heuristic_C(df):
         th_his = tune_his_th_on_f1(x_train, y_train, np.arange(0, 100, 5), t_atr=0.38, t_ven=0.42, plot=False)
         
         for i in range(0, dims[0]):
-            atr_peak, his_peak, vent_peak, pred = heuristic_classifier_C(x_test.iloc[i], 2035, th_his)
+            atr_peak, his_peak, vent_peak, pred = heuristic_classifier_C(x_test.iloc[i], 2035, th_his,use_ratio)
             pred_heuristic[i] = pred
             
             original_index = test_data.index[i] 

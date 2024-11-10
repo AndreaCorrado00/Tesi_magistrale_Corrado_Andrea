@@ -1,11 +1,11 @@
-def tune_his_th_on_f1(signals, y_true,interval,t_atr, t_ven, plot=False):
+def tune_his_th_on_f1(signals, y_true,interval,t_atr, t_ven, plot=False,use_ratio=False):
     import matplotlib.pyplot as plt
     from sklearn.metrics import f1_score
     import numpy as np
     import sys
     
     sys.path.append("D:/Desktop/ANDREA/Universita/Magistrale/Anno Accademico 2023-2024/TESI/Tesi_magistrale/src/Heuristic_classification_phase")
-    from heuristic_classifier_B import heuristic_classifier_B
+    from heuristic_classifier_C import heuristic_classifier_C
     from tune_his_th import tune_his_th
     
     f1_scores = np.zeros((len(interval), 3))
@@ -18,7 +18,7 @@ def tune_his_th_on_f1(signals, y_true,interval,t_atr, t_ven, plot=False):
         his_bundle_th=tune_his_th(signals, t_atr, t_ven, Q_perc,False)
         
         for i in range(dims[0]):
-            _, _, _, pred = heuristic_classifier_B(signals.iloc[i], 2035, his_bundle_th)
+            _, _, _, pred = heuristic_classifier_C(signals.iloc[i], 2035, his_bundle_th,use_ratio)
             pred_heuristic[i] = pred
         
         f1_scores[idx, :] = f1_score(y_true, pred_heuristic, average=None)

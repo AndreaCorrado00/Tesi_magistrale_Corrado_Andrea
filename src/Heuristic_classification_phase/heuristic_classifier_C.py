@@ -1,4 +1,4 @@
-def heuristic_classifier_C(record,Fs,his_bundle_th):
+def heuristic_classifier_C(record,Fs,his_bundle_th, use_ratio=False):
     import numpy as np
     
     record=np.array(record)
@@ -21,21 +21,26 @@ def heuristic_classifier_C(record,Fs,his_bundle_th):
     his_peak = np.nanmax(his_phase)
     
     # peaks values
-    
-    if his_peak>his_bundle_th:
-        pred_class="MAP_C"
-    else:
-        # atrial and ventricular thresholds 
-        if atr_peak>0.5: 
-            pred_class="MAP_A"
-        elif 0.1<atr_peak<0.3: 
-            pred_class="MAP_B"
-            # if thresholds aren't satisfied, peaks are compared
-        elif atr_peak>vent_peak: 
-            pred_class="MAP_A"
+    if use_ratio:
+        if his_peak>his_bundle_th:
+            pred_class="MAP_C"
         else:
-            pred_class="MAP_B"
-
+            # atrial and ventricular thresholds 
+            if atr_peak/vent_peak>1: 
+                pred_class="MAP_A"
+            else:
+                pred_class="MAP_B"
+    else: 
+        if his_peak>his_bundle_th:
+            pred_class="MAP_C"
+        else:
+            # atrial and ventricular thresholds 
+            if atr_peak>0.3: 
+                pred_class="MAP_A"
+            else:
+                pred_class="MAP_B"
+            
+            
     return atr_peak,his_peak,vent_peak,pred_class
 
 

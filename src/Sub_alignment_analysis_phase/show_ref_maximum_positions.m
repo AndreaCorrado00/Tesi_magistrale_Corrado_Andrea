@@ -8,7 +8,7 @@ function show_ref_maximum_positions(data, Fc)
 
     % Initialize figures
     % figure1 = figure('Name', 'Max positions per subject', 'WindowState', 'maximized');
-    figure2 = figure('Name', 'Boxplot of max positions for all subjects', 'WindowState', 'maximized');
+    figure2 = figure('Name', 'Boxplot of max positions for all subjects');
 
     % Collect all peak positions for all subjects for the second plot
     all_peaks_pos_ref = [];
@@ -66,6 +66,7 @@ function show_ref_maximum_positions(data, Fc)
     title('Boxplot of maximum peak position of reference traces for all subjects and maps');
     xlabel('All Signals');
     ylabel('Time position of maximum peak');
-    ylim([0,1])
+    ylim([0.46,0.56])
+    % ylim([0,1])
 
 end

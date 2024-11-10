@@ -7,7 +7,7 @@ close
 
 %% 1. Data refactoring 
 original_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Original";
-processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed";
+processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed\Old_data";
 src_pre_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\Preprocessing_phase";
 addpath(src_pre_path)
 
@@ -23,7 +23,7 @@ clc;clear;close;
 % Adding paths
 src_pre_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\Preprocessing_phase";
 figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\Preprocessing_phase";
-processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed";
+processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed\Old_data";
 addpath(src_pre_path)
 
 % Loading data 
@@ -96,7 +96,7 @@ show_filter_pipeline_didactical("Low_frequency_ecg")
 % Adding path
 src_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\Spectrum_comparison_phase";
 addpath(src_path)
-processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed";
+processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed\Old_data";
 % Loading previusly made data
 load(processed_data_path+'\dataset.mat');
 fc=2035;
@@ -158,7 +158,7 @@ show_scalogram_evaluation_pipeline("high_frequency_ecg")
 % "high_frequency_ecg" "Low_frequency_ecg" "PhysioNet_healthy" "PhysioNet_Pathological"
 
 %% 7.1 Algorthm application on AVNRT data
-processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed";
+processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed\Old_data";
 % Loading previusly made data
 load(processed_data_path+'\dataset.mat');
 fc=2035;
@@ -198,7 +198,7 @@ show_scalogram_AVNRT_data(MAP_C1_example,'Example MAP C, sub 7',filtering,log_sc
 clc;clear;close;
 
 % Adding paths
-processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed";
+processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed\Old_data";
 src_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\Sub_alignment_analysis_phase";
 figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\Sub_alignment_analysis";
 addpath(src_path)
@@ -207,7 +207,7 @@ addpath(src_path)
 load(processed_data_path+'\dataset.mat');
 fc=2035;
 
-%% 8.1 Demonstrating that reference traces have the main oeaks aligned
+%% 8.1 Demonstrating that reference traces have the main peaks aligned
 show_ref_maximum_positions(data, fc)
 
 %% 8.2 Does have sense align traces?
@@ -253,7 +253,7 @@ clc;clear;close;
 % Ppopulation plots are done to summarize. They not intend to be a complete
 % and deep representation, but just a quick overview on the data we have.
 
-processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed";
+processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed\Old_data";
 src_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\DB_aligned_population_analysis_phase";
 figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\DB_aligned_population_analysis_phase";
 addpath(src_path)
@@ -269,6 +269,7 @@ traces_subplots_by_sub(POP_DB_aligned, fc, figure_path + "\single_records")
 %% 9.2 Data visualization as they are 
 spaghetti_confidence_signals(POP_DB_aligned,fc,figure_path)
 
+
 %% 9.3 Signals direct comparisons 
 
 % comparison between maps within subjects and traces
@@ -283,6 +284,8 @@ db_table = build_table_dataset_with_subs(Aligned_DB);
 writetable(db_table,processed_data_path+"\AVNRT_DB_filt.csv")
 
 
+
+
 %%                          ---------- FINAL DATASET ANALYSIS ---------- 
 clc;clear;close;
 dataset="dataset_1";
@@ -295,6 +298,9 @@ addpath(src_path)
 % Loading previusly made data
 load(processed_data_path+'\'+dataset+'.mat');
 fc=2035;
+
+%% Showing some examples
+show_final_dataset_examples(final_data_by_sub,fc)
 
 %% Spaghetti plot by subjects
 spaghetti_confidence_signals(final_data_by_sub,fc,figure_path)
