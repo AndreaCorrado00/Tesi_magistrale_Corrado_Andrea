@@ -280,11 +280,12 @@ save_plot(plt.gcf(),other_fig_path,"vent_peaks_boxplots")
 compare_feature_by_classes(signals_peaks,"atr_vent_ratio")
 save_plot(plt.gcf(),other_fig_path,"atr_vent_ratio_boxplots")
 
-# #%% Saving strategy results 
-# ratio_results_pred=pred_heuristic
-# #%% peak thresholding VS peak ratio
-# col=f"db {db_number} c"
-# show_single_example(x_test, Fs,75, 'MAP A: Example correct with ratio, misclass with atr th') 
+#%% Saving strategy results 
+ratio_results_pred=pred_heuristic
+
+#%% peak thresholding VS peak ratio
+col=f"db {db_number} c"
+show_single_example(x_test, Fs,169, 'Signal Example') 
 # draw_his_boundaries(0.38,0.42,th_his,disp_atr_vent_boxes=True)
 
 
