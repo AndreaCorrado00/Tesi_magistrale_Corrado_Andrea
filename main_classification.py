@@ -34,7 +34,7 @@ figure_path="D:/Desktop/ANDREA/Universita/Magistrale/Anno Accademico 2023-2024/T
 
 #%% Loading data
 dataset_path = "D:/Desktop/ANDREA/Universita/Magistrale/Anno Accademico 2023-2024/TESI/Tesi_magistrale/Data/Processed/data_aligned" 
-db_number=3
+db_number=2
 dataset_name = "dataset_"+str(db_number)  # E.g., dataset_1, 2, 3
 whole_dataset,signals,y_true,labels_unique,Fs,plot_last_name,fig_final_folder,subtitle_plots = load_dataset(dataset_path, dataset_name)
 
@@ -63,11 +63,11 @@ print("Test set")
 show_class_proportions(y_test,labels_unique)
 
 #%% For now, train test set are merged
-# x_train=signals
-# y_train=y_true
+x_train=signals
+y_train=y_true
 
-# x_test=signals
-# y_test=y_true
+x_test=signals
+y_test=y_true
 
 #%%###########################################################################
 ################# BUILDING AN HEURISTIC CLASSIFIER PHASE #####################
@@ -281,12 +281,12 @@ compare_feature_by_classes(signals_peaks,"atr_vent_ratio")
 save_plot(plt.gcf(),other_fig_path,"atr_vent_ratio_boxplots")
 
 #%% Saving strategy results 
-ratio_results_pred=pred_heuristic
+#ratio_results_pred=pred_heuristic
 
 #%% peak thresholding VS peak ratio
 col=f"db {db_number} c"
-show_single_example(x_test, Fs,169, 'Signal Example') 
-# draw_his_boundaries(0.38,0.42,th_his,disp_atr_vent_boxes=True)
+show_single_example(x_test, Fs,75,  'MAP A: Example correct with ratio, misclass with atr th') 
+draw_his_boundaries(0.38,0.42,th_his,disp_atr_vent_boxes=True)
 
 
 
