@@ -336,110 +336,79 @@ load(processed_data_path+'\'+dataset+'.mat');
 fc=2035;
 
 %% Building an envelope into a robust way
+% Signal example
+x = final_data_by_sub.MAP_C.MAP_C7.rov_trace{:,1};
+t=0:1/fc:1-1/fc;
+
 % Using a moving average filter on the rectified signal introduce a certain
 % shift due to the usage of an unilateral window
 % so envelope(x) is chosen.
 % Moreover, between all possibilities, rms seems to be the easier one which
 % provides a "smooth" envelope. The aim is finding active peaks of the
 % signal
-% if rms is used, has no sense computing the rectified signal. In fact rms
-% can be seen as a moving average of the squared signal.
 
-show_envelope_eval(final_data_by_sub,fc)
+N=30; 
+% Moving average filter
+x_rectified=abs(x);
+b = ones(1, N) / N;
 
-%% sistematic application of RMS envelope on signals
-env_dataset=evaluate_envelope_on_dataset(final_data_by_sub,30,"rms");
+env_mov_avg = filter(b, 1,x_rectified);
 
-%% Showing results
-spaghetti_confidence_signals(env_dataset,fc,figure_path+"\Envelope", "envelops")
-
-%% Envelope peaks analysis
-env_example = env_dataset.MAP_C.MAP_C8.rov_trace{:, 1};
-
-thresholds = movmean(env_example, 100);
-
-env_example_th = env_example;
-env_example_th(env_example_th <= thresholds) = NaN;
+[yupper, ~] = envelope(x, N, "rms");
 
 figure;
-subplot(311)
-plot(env_example, 'k:');
-hold on;
-plot(thresholds, 'r');
-plot(env_example_th, 'b');
-hold off;
+plot(t,x,"k:")
+hold on
+plot(t,x_rectified,"b:")
+plot(t,yupper,LineWidth=1.2)
+plot(t,env_mov_avg,LineWidth=1.2)
+legend('original signal','rectified signal','envelope rms','moving average')
 
-% Parametri
-T = 17;  % Durata minima in millisecondi
-T2 = 20;  % Durata minima di unione fra intervalli in millisecondi
-sampling_rate = 2035;  % Frequenza di campionamento (Hz)
-min_samples = ceil((T / 1000) * sampling_rate);  % Minimo numero di campioni sopra la soglia
-min_samples_merge = ceil((T2 / 1000) * sampling_rate);  % Minimo numero di campioni per unire gli intervalli
+title('Moving average VS rms method')
 
-% Identifica le zone attive sopra la soglia
-active_parts = ones(length(env_example_th), 1);  % Inizializza a 1 (attivo)
-active_parts(env_example <= thresholds) = 0;  % Sostituisci con 0 i punti sotto la soglia
+% if rms is used, has no senso computing the rectified signal. In fact rms
+% can be seen as a moving average of the squared signal
 
-% Individua gli intervalli di attivazione sopra la soglia
-active_intervals = [];  % Vettore per memorizzare gli intervalli attivi
-start_idx = NaN;  % Indice di inizio dell'intervallo attivo
-for i = 1:length(active_parts)
-    if active_parts(i) == 1 && isnan(start_idx)  % Se inizia un intervallo
-        start_idx = i;
-    elseif active_parts(i) == 0 && ~isnan(start_idx)  % Se termina un intervallo
-        if i - start_idx >= min_samples  % Se l'intervallo è abbastanza lungo
-            active_intervals = [active_intervals; start_idx, i - 1];  % Salva l'intervallo
-        end
-        start_idx = NaN;  % Resetta l'indice di inizio
-    end
+figure;
+plot(t, x, 'k:') 
+hold on
+N_values = [10, 20, 50, 100, 200];
+legend_item={};
+legend_item{1}="Original signal";
+
+for i = 1:length(N_values)
+    N = N_values(i);
+   
+    [yupper, ~] = envelope(x, N, "rms");
+    plot(t,yupper, 'LineWidth', 1.5) 
+    
+    % Impostazioni del grafico
+    legend_item{i+1}="N = "+num2str(N);
+    ylabel('Amplitude [mV]')
+    xlabel('time [s]')
+    title("RMS envelope varying N")
 end
+legend(legend_item)
 
-% Aggiungi l'ultimo intervallo se il segnale finisce sopra la soglia
-if ~isnan(start_idx) && length(env_example) - start_idx + 1 >= min_samples
-    active_intervals = [active_intervals; start_idx, length(env_example)];
-end
+hold off
 
-% Unisci intervalli se la distanza tra loro è inferiore a min_samples_merge
-merged_intervals = [];
-if ~isempty(active_intervals)
-    current_interval = active_intervals(1, :);  % Inizia con il primo intervallo
-    for i = 2:size(active_intervals, 1)
-        if active_intervals(i, 1) - current_interval(2) <= min_samples_merge
-            % Se gli intervalli sono ravvicinati, uniscili
-            current_interval(2) = active_intervals(i, 2);
-        else
-            % Se non sono ravvicinati, non aggiungere il precedente intervallo
-            merged_intervals = [merged_intervals; current_interval];
-            current_interval = active_intervals(i, :);  % Nuovo intervallo
-        end
-    end
-    % Aggiungi l'ultimo intervallo
-    merged_intervals = [merged_intervals; current_interval];
-end
 
-% Visualizzazione dei risultati
-subplot(312)
-% Visualizzazione delle zone attive (1 per attivo, 0 per inattivo)
-active_parts_final = zeros(size(active_parts));
-for i = 1:size(active_intervals, 1)
-    active_parts_final(active_intervals(i, 1):active_intervals(i, 2)) = 1;
-end
-plot(active_parts_final, 'b');
-title('Zone attive dopo il filtro temporale');
-xlabel('Tempo (campioni)');
-ylabel('Attività');
 
-% Visualizzazione dei risultati dopo unione degli intervalli
-subplot(313)
-% Visualizzazione delle zone attive (1 per attivo, 0 per inattivo)
-active_parts_final = zeros(size(active_parts));
-for i = 1:size(merged_intervals, 1)
-    active_parts_final(merged_intervals(i, 1):merged_intervals(i, 2)) = 1;
-end
-plot(active_parts_final, 'b');
-title('Zone attive dopo il filtro temporale e unione degli intervalli');
-xlabel('Tempo (campioni)');
-ylabel('Attività');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
