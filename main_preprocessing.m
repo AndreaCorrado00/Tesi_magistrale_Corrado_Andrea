@@ -320,3 +320,67 @@ addpath(src_path)
 spaghetti_confidence_signals(final_data_pop,fc,figure_path)
 %%
 traces_subplots_by_sub(final_data_pop, fc, figure_path + "\single_records")
+
+
+%% ENVELOPE, TEMPLATE MATCHING AND STFT 
+clc;clear;close;
+dataset="dataset_1";
+
+processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed\data_aligned";
+src_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\Enevelope_template_STFT_phase";
+figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\Enevelope_template_STFT_phase";
+addpath(src_path)
+
+% Loading previusly made data
+load(processed_data_path+'\'+dataset+'.mat');
+fc=2035;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
