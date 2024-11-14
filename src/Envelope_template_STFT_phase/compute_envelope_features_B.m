@@ -1,12 +1,14 @@
 function [n_peaks,peak1_pos,peak2_pos,peak3_pos,peak1_val,peak2_val,peak3_val,...
-    duration,silent_phase,silent_rateo,major_peaks_rateo,n_peaks_duration_rateo]=compute_envelope_features(example_env,fc)
+    duration,silent_phase,silent_rateo,major_peaks_rateo,n_peaks_duration_rateo]=compute_envelope_features_B(example_env,fc)
+% original envelope
 original_example=example_env;
+
+% cleaning
 example_env(round(0.6*fc):end)=nan;
 example_env(1:round(0.15*fc))=nan;
 % Builting an iterative pipeline to find peaks in order
 are_peaks=true;
-significance_th=0.005;
-step=50;
+step=20;
 
 % map of peaks presence
 map_peaks=zeros(length(example_env),1);
@@ -14,100 +16,97 @@ map_peaks=zeros(length(example_env),1);
 % features initialization
 peaks_pos_val=nan(3,2);
 iter=1;
+
+% Absolute minimum
+abs_min=abs(min(example_env,[],"omitnan"));
+
 while are_peaks
     [candidate,candidate_pos]=max(example_env,[],"omitnan");
     region=zeros(length(example_env),1);
 
-    
-
     % region growing initialization
     is_significant=true;
+    grow_steps=0;
     % positions
     sx_lim=candidate_pos;
     dx_lim=candidate_pos;
-    % start
-    sx_lim_value=candidate;
-    dx_lim_value=candidate;
+
+    sx_pos_candidate=candidate_pos;
+    dx_pos_candidate=candidate_pos;
+    candidate_sx=candidate;
+    candidate_dx=candidate;
 
     map_peak=zeros(length(example_env),1);
 
-    growing_steps=0;
     while is_significant
 
-        % new point on the left
-        if sx_lim> step
-            sx_pos_candidate=sx_lim-step;
-            candidate_sx=example_env(sx_pos_candidate);
-        else
-            sx_pos_candidate=step;
-            candidate_sx=example_env(sx_pos_candidate);
-        end
+        % Is the candidate far from the absolute minimum?
+        next_candidate_sx=example_env(max([0,sx_pos_candidate-step]));
+        next_candidate_dx=example_env(min([length(example_env),dx_pos_candidate+step]));
 
-        % new point on the right
-        if dx_lim<length(example_env)-step
-            dx_pos_candidate=dx_lim+step;
-            candidate_dx=example_env(dx_pos_candidate);
-        else
-            dx_pos_candidate=length(example_env);
-            candidate_dx=example_env(dx_pos_candidate);
-        end
+        candidate_sx_absmin_dist=abs(candidate_sx-abs_min);
+        candidate_dx_absmin_dist=abs(candidate_dx-abs_min);
 
-        % computing distances
-        distance_sx=sx_lim_value-candidate_sx;
-        distance_dx=dx_lim_value-candidate_dx;
+        next_candidate_sx_absmin_dist=abs(next_candidate_sx-abs_min);
+        next_candidate_dx_absmin_dist=abs(next_candidate_dx-abs_min);
 
-        more_sx=distance_sx>significance_th;
+        more_sx=candidate_sx_absmin_dist>next_candidate_sx_absmin_dist;
+
         if more_sx
             % region can grow
-            sx_lim=sx_pos_candidate;
-            
-            sx_lim_value=candidate_sx;
-            growing_steps=growing_steps+1;
+            sx_lim=max([0,sx_pos_candidate-step]);
+            grow_steps=grow_steps+1;
+
+            candidate_sx=next_candidate_sx;
+            sx_pos_candidate=sx_lim;
         end
 
-        more_dx=distance_dx>significance_th ;
-        if more_dx
+        more_dx=candidate_dx_absmin_dist>next_candidate_dx_absmin_dist;
+        if more_dx 
             % region can grow
-            dx_lim=dx_pos_candidate;
-           
-            dx_lim_value=candidate_dx;
-            growing_steps=growing_steps+1;
+            dx_lim=min([length(example_env),dx_pos_candidate+step]);
+            grow_steps=grow_steps+1;
+
+            candidate_dx=next_candidate_dx;
+            dx_pos_candidate=dx_lim;
         end
 
         % continue growing?
         if more_sx || more_dx
             is_significant=true;
-            
         else
             is_significant=false;
         end
 
-        pause(2)
         figure;
         plot(example_env,'k')
         hold on
         plot(sx_pos_candidate,candidate_sx,'bo')
+        plot(candidate_pos,candidate,'ro')
         plot(dx_pos_candidate,candidate_dx,'ro')
-        plot(candidate_pos,candidate,'mo')
+        pause(1)
+
+        
     end
 
     region(sx_lim:dx_lim)=example_env(sx_lim:dx_lim);
     example_env=example_env-region;
+    % example_env(example_env==0)=nan;
 
     map_peak(region~=0)=1;
     map_peaks=map_peaks+map_peak;
-
+    
     next_candidate=max(example_env,[],"omitnan");
+    disp(["candidate: ",candidate])
+    disp(["Next candidate: ", next_candidate])
 
-    % if abs(candidate-next_candidate)<significance_th*0.2
-    %     are_peaks=false;
-    %     % disp("are peaks = false")
-    %     break
-    % end
-    if growing_steps==0
-        % disp("are peaks = false")
+    if grow_steps==0
+        are_peaks=false;
+        disp("are peaks = false")
         break
     end
+
+
     % saving first three peaks positions and values
     if iter<=3
         peaks_pos_val(iter,1)=candidate_pos;

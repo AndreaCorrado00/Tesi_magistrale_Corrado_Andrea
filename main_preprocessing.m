@@ -348,7 +348,7 @@ fc=2035;
 show_envelope_eval(final_data_by_sub,fc)
 
 %% sistematic application of RMS envelope on signals
-env_dataset=evaluate_envelope_on_dataset(final_data_by_sub,20,"rms");
+env_dataset=evaluate_envelope_on_dataset(final_data_by_sub,100,"rms");
 
 %% Showing results
 spaghetti_confidence_signals(env_dataset,fc,figure_path+"\Envelope", "envelops")
