@@ -327,8 +327,8 @@ clc;clear;close;
 dataset="dataset_1";
 
 processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed\data_aligned";
-src_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\Enevelope_template_STFT_phase";
-figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\Enevelope_template_STFT_phase";
+src_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\Envelope_template_STFT_phase";
+figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\Envelope_template_STFT_phase";
 addpath(src_path)
 
 % Loading previusly made data
@@ -354,3 +354,8 @@ env_dataset=evaluate_envelope_on_dataset(final_data_by_sub,20,"rms");
 spaghetti_confidence_signals(env_dataset,fc,figure_path+"\Envelope", "envelops")
 
 %% Envelope peaks analysis
+% Region growing?
+envelope_features=envelope_analysis(env_dataset,fc);
+
+%% Are these features discriminative?
+plot_feature_boxplots(envelope_features(:,1:end-1), envelope_features(:,end),"major_peaks_rateo")
