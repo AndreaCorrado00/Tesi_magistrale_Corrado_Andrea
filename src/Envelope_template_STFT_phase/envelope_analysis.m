@@ -14,7 +14,7 @@ function envelope_features = envelope_analysis(env_dataset, fc)
             rov_traces = env_dataset.(map).(sub).rov_trace;  % Extract rov_trace signals
             [M, N] = size(rov_traces);
 
-            for k = 1:10 %1:N
+            for k = 1 %1:N
                 rov_trace = rov_traces{:, k};
                 
                 % Compute envelope features using compute_envelope_features
