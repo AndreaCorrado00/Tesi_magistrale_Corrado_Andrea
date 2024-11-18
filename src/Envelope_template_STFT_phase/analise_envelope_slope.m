@@ -25,13 +25,14 @@ th_lower=th_lower+mult_factor*th_lower;
 map_upper=d_env>th_upper;
 map_lower=d_env<th_lower;
 
- 
-% map cleaning to find true peaks starts and ends
-perc_pos=50;
+% map merge
+[map_upper,map_lower]=merge_runs(map_upper,map_lower);
+
+% % map cleaning to find true peaks starts and ends
+perc_pos=60;
 percentile_value = prctile(example_env, perc_pos, "all");
 [map_upper, map_lower] = clean_false_peaks(map_upper, map_lower, example_env, perc_pos);
-% [map_upper,map_lower]=merge_runs(map_upper,map_lower);
-
+% 
 % figure;
 % histogram(example_env, 50,'NumBins',50); 
 % hold on;
