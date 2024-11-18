@@ -1,17 +1,15 @@
-function show_envelope_eval(final_data_by_sub,fc)
+function show_envelope_eval(final_data_by_sub,fc,N_points)
 % Signal example
 x = final_data_by_sub.MAP_C.MAP_C7.rov_trace{:,1};
 t=0:1/fc:1-1/fc;
 
-
-N=30; 
 % Moving average filter
 x_rectified=abs(x);
-b = ones(1, N) / N;
+b = ones(1, N_points) / N_points;
 
 env_mov_avg = filter(b, 1,x_rectified);
 
-[yupper, ~] = envelope(x, N, "rms");
+[yupper, ~] = envelope(x, N_points, "rms");
 
 figure;
 plot(t,x,"k:")
@@ -35,7 +33,7 @@ legend_item{1}="Original signal";
 for i = 1:length(N_values)
     N = N_values(i);
    
-    [yupper, ~] = envelope(x, N, "rms");
+    [yupper, ~] = envelope(x,N, "rms");
     plot(t,yupper, 'LineWidth', 1.5) 
     
     % Impostazioni del grafico

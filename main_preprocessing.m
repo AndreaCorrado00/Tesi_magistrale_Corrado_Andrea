@@ -322,6 +322,9 @@ spaghetti_confidence_signals(final_data_pop,fc,figure_path)
 traces_subplots_by_sub(final_data_pop, fc, figure_path + "\single_records")
 
 
+
+
+
 %% ENVELOPE, TEMPLATE MATCHING AND STFT 
 clc;clear;close;
 dataset="dataset_1";
@@ -345,17 +348,44 @@ fc=2035;
 % if rms is used, has no sense computing the rectified signal. In fact rms
 % can be seen as a moving average of the squared signal.
 
-show_envelope_eval(final_data_by_sub,fc)
+show_envelope_eval(final_data_by_sub,fc,30)
 
 %% sistematic application of RMS envelope on signals
-env_dataset=evaluate_envelope_on_dataset(final_data_by_sub,100,"rms");
+env_dataset=evaluate_envelope_on_dataset(final_data_by_sub,30,"rms");
 
 %% Showing results
 spaghetti_confidence_signals(env_dataset,fc,figure_path+"\Envelope", "envelops")
 
-%% Envelope peaks analysis
-% Region growing?
-envelope_features=envelope_analysis(env_dataset,fc);
+% Single signal and envelope
+traces_subplots_by_sub(final_data_by_sub,env_dataset, fc,'Rov signal and envelope',figure_path+"\Envelope\Single_traces")
 
-%% Are these features discriminative?
-plot_feature_boxplots(envelope_features(:,1:end-1), envelope_features(:,end),"major_peaks_rateo")
+%% Showing envelope analysis pipeline
+record_id=["A",1,1]; 
+show_envelope_analysis(final_data_by_sub,env_dataset,fc,record_id,figure_path+"\Envelope\slope_analysis\algorithm_explanation")
+
+%% Plotting results
+plot_traces_active_areas(final_data_by_sub,env_dataset,fc,"ActiveArea",'Rov signal and envelope:slope analysis',figure_path+"\Envelope\slope_analysis")
+
+%%
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,64 @@
+function [map_upper, map_lower] = merge_runs(map_upper, map_lower)
+    % Ensure map_upper and map_lower have the same length
+    if length(map_upper) ~= length(map_lower)
+        error('map_upper and map_lower must have the same length.');
+    end
+
+    % Ensure the combined map starts with a run in map_upper
+    first_upper = find(map_upper, 1, 'first');
+    first_lower = find(map_lower, 1, 'first');
+    
+    if isempty(first_upper) || (~isempty(first_lower) && first_lower < first_upper)
+        % If map_lower starts before map_upper, set map_lower to 0 before the first map_upper
+        map_lower(1:first_upper-1) = 0;
+    end
+    
+    % Ensure the combined map ends with a run in map_lower
+    last_lower = find(map_lower, 1, 'last');
+    last_upper = find(map_upper, 1, 'last');
+    
+    if isempty(last_lower) || (~isempty(last_upper) && last_upper > last_lower)
+        % If map_upper ends after map_lower, set map_upper to 0 after the last map_lower
+        map_upper(last_lower+1:end) = 0;
+    end
+
+    % Identify runs of 1s in the logical vectors
+    upper_regions = regionprops(map_upper, 'PixelIdxList');
+    lower_regions = regionprops(map_lower, 'PixelIdxList');
+    
+    % Merge consecutive runs of map_upper that are not followed by runs in map_lower
+    i = 1;
+    while i < numel(upper_regions)
+        % End of the current run and start of the next run in map_upper
+        end_current = upper_regions(i).PixelIdxList(end);
+        start_next = upper_regions(i+1).PixelIdxList(1);
+        
+        % Check if there is no overlap with map_lower
+        if all(~map_lower(end_current:start_next)) % no 1s in map_lower
+            % Merge the two runs
+            map_upper(upper_regions(i).PixelIdxList(1):upper_regions(i+1).PixelIdxList(end)) = 1;
+            % Remove the second run from the list
+            upper_regions(i+1) = [];
+        else
+            i = i + 1;
+        end
+    end
+
+    % Merge consecutive runs of map_lower that are not followed by runs in map_upper
+    i = 1;
+    while i < numel(lower_regions)
+        % End of the current run and start of the next run in map_lower
+        end_current = lower_regions(i).PixelIdxList(end);
+        start_next = lower_regions(i+1).PixelIdxList(1);
+        
+        % Check if there is no overlap with map_upper
+        if all(~map_upper(end_current:start_next)) % no 1s in map_upper
+            % Merge the two runs
+            map_lower(lower_regions(i).PixelIdxList(1):lower_regions(i+1).PixelIdxList(end)) = 1;
+            % Remove the second run from the list
+            lower_regions(i+1) = [];
+        else
+            i = i + 1;
+        end
+    end
+end
