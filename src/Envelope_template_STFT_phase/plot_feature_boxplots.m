@@ -5,7 +5,7 @@ function plot_feature_boxplots(data, class, feature_name)
 
     % Extract class column and convert it to a categorical array
     class_data = class{:, 1};         % Extract the class data from the table
-    class_data = categorical(class_data); % Convert to categorical
+    class_data = categorical(cellstr(class_data)); % Convert to categorical
 
     % Create a new figure with the specified feature name as title
     figure;
@@ -17,13 +17,13 @@ function plot_feature_boxplots(data, class, feature_name)
 
     % Generate boxplots by class, hiding outliers with 'Symbol' option
     boxplot(feature, class_data, 'Symbol', '');
-    ylim([lower_bound, upper_bound]);   % Adjust y-limits to exclude outliers
+    % ylim([lower_bound, upper_bound]);   % Adjust y-limits to exclude outliers
     % Label the axes
     xlabel('Class');
     ylabel(formatted_feature_name);
 
     % Set the title
-    title('Boxplots for '+ formatted_feature_name + ' by Class',"FontSize",14);
+    title("Boxplots for "+ formatted_feature_name + " by Class","FontSize",14);
 
     
 

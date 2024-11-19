@@ -372,15 +372,20 @@ envelope_features = build_envelope_features_set(final_data_by_sub, env_dataset, 
 %% Features analysis
 feature_names=envelope_features.Properties.VariableNames;
 
-classes=envelope_features(:,feature_names(end));
+classes=envelope_features(feature_names(end));
 feature_names=feature_names(1:end-1);
 
 for i = 1:length(feature_names)
     % Get the feature name
     feature_name = feature_names{i};
+
+    
+
     % Call the plot_feature_boxplots function for each feature
     plot_feature_boxplots(envelope_features, classes, feature_name);
-    save_plot(feature_name,"_boxplot",figure_path+"\Envelope\features_boxplots",gcf,true)
+
+    save_plot(feature_name,"boxplot",figure_path+"\Envelope\features_boxplots",gcf,true)
+
 end
 
 
