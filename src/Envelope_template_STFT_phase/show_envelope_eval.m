@@ -26,7 +26,7 @@ title('Moving average VS rms method (N=30)')
 figure;
 plot(t, x, 'k:') 
 hold on
-N_values = [10, 20, 50, 100, 200];
+N_values = [10, 30, 50, 100, 200];
 legend_item={};
 legend_item{1}="Original signal";
 

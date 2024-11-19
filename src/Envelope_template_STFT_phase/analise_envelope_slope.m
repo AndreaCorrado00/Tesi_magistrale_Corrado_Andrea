@@ -14,12 +14,16 @@ d_env=d_env-mean(d_env,"omitnan");
 d_env=d_env*max(example_rov,[],"omitnan")/max(d_env);
 
 
-% threshold definition
-th_upper=abs(min(abs(d_env),[],"omitnan"));
-th_upper=th_upper+mult_factor*th_upper;
-th_lower=-abs(min(abs(d_env),[],"omitnan"));
-th_lower=th_lower+mult_factor*th_lower;
+% % threshold definition
+% th_upper=abs(min(abs(d_env),[],"omitnan"));
+% th_upper=th_upper+mult_factor*th_upper;
+% th_lower=-abs(min(abs(d_env),[],"omitnan"));
+% th_lower=th_lower+mult_factor*th_lower;
 
+th_upper=abs(max(abs(d_env),[],"omitnan"));
+th_upper=th_upper*mult_factor;
+th_lower=-abs(max(abs(d_env),[],"omitnan"));
+th_lower=th_lower*mult_factor;
 
 % map creation 
 map_upper=d_env>th_upper;

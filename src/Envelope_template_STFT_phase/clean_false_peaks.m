@@ -12,29 +12,34 @@ function [map_upper, map_lower] = clean_false_peaks(map_upper, map_lower, exampl
                 run_end = run_end + 1;
             end
             
-            % Get the minimum value of the envelope in this run
-            run_min = min(example_env(i:run_end-1));
+            % Check if this is the last run_lower
+            is_last_run = all(map_lower(run_end:end) == 0);
             
-            % If the run's minimum is greater than the threshold, eliminate the peak
-            if  run_min>percentile_value
-                % Eliminate the corresponding run_upper (after the descent)
-                j = run_end;  % Start from the first point after the run_lower
+            if ~is_last_run
+                % Get the minimum value of the envelope in this run
+                run_min = min(example_env(i:run_end-1));
                 
-                % Find the first valid '1' in map_upper after run_end
-                while j <= length(map_upper) && map_upper(j) == 0
-                    j = j + 1;
-                end
-                
-                % If a valid '1' is found in map_upper, start eliminating it
-                if j <= length(map_upper) && map_upper(j) == 1
-                    while j <= length(map_upper) && map_upper(j) == 1
-                        map_upper(j) = 0;  % Eliminate the run_upper
+                % If the run's minimum is greater than the threshold, eliminate the peak
+                if run_min > max(example_env) * 0.1
+                    % Eliminate the corresponding run_upper (after the descent)
+                    j = run_end;  % Start from the first point after the run_lower
+                    
+                    % Find the first valid '1' in map_upper after run_end
+                    while j <= length(map_upper) && map_upper(j) == 0
                         j = j + 1;
                     end
+                    
+                    % If a valid '1' is found in map_upper, start eliminating it
+                    if j <= length(map_upper) && map_upper(j) == 1
+                        while j <= length(map_upper) && map_upper(j) == 1
+                            map_upper(j) = 0;  % Eliminate the run_upper
+                            j = j + 1;
+                        end
+                    end
+                    
+                    % Eliminate the current run_lower
+                    map_lower(i:run_end-1) = 0;
                 end
-                
-                % Eliminate the current run_lower
-                map_lower(i:run_end-1) = 0;
             end
             % Move to the next run after the current one
             i = run_end;

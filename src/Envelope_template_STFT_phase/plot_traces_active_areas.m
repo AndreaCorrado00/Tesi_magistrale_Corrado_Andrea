@@ -24,7 +24,7 @@ for i =  ["A", "B", "C"]
 
 
 
-            [map_upper,map_lower] = analise_envelope_slope(signal, envelope, 1000, fc);
+            [map_upper,map_lower] = analise_envelope_slope(signal, envelope, 0.05, fc);
             switch bound_type
                 case "ActiveArea"
                     % Create a new figure
@@ -79,7 +79,7 @@ for i =  ["A", "B", "C"]
 
                 case "PipelineAnalysis"
                     show_envelope_analysis(data,env_data,fc,[i,sub_num,h],figure_path)
-                    fig=gcf;
+                   
             end
 
 
