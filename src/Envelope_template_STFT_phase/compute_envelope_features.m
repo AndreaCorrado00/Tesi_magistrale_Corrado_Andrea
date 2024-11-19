@@ -11,7 +11,7 @@ time_th = define_time_th(map_upper, map_lower);
 peaks_val_pos=nan(N,2);
 for i=1:N
     [max_env,max_pos]=max(example_env(time_th(i,1):time_th(i,2)),[],"omitnan");
-    peaks_val_pos(i,:)=[max_env,max_pos];
+    peaks_val_pos(i,:)=[max_env,max_pos+time_th(i,1)];
 end
 
 % three peaks are considered
