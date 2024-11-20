@@ -24,11 +24,11 @@ sgtitle(["Example of envelope slope analysis for: MAP "+record_id(1)+", sub: "+s
 %% computing derivation
 % derivative operation
     % improving envelope
-example_env=movmean(example_env,30);
+example_env=movmean(example_env,20);
 
 d_env=diff(example_env);
 d_env=[d_env;nan];
-d_env=movmean(d_env,100);
+d_env=movmean(d_env,120);
 
     % removing edges
 d_env(1:round(0.15*fc))=nan;
@@ -50,7 +50,7 @@ xlabel('time [s]')
 ylabel('Amplitude [mV]')
 %% Map definition
 % threshold definition
-mult_factor=0.01;
+mult_factor=0.005;
 th_upper=abs(max(d_env,[],"omitnan"));
 th_upper=th_upper*mult_factor;
 th_lower=-abs(min(d_env,[],"omitnan"));

@@ -20,10 +20,11 @@ function [lower_bound, upper_bound] = calculate_y_limits_boxplots(feature, class
     end
 
     % Determine the y-axis bounds by finding the min and max whiskers
-    if min(lower_whiskers)>0
-        lower_bound = min(lower_whiskers) - 0.1*abs(min(lower_whiskers));
-    else
-        lower_bound = min(lower_whiskers) + 0.1*abs(min(lower_whiskers));
-    end
+    % if min(lower_whiskers)>1
+    %     lower_bound = min(lower_whiskers) - 0.2*abs(min(lower_whiskers));
+    % else
+    %     lower_bound = min(lower_whiskers) + 0.2*abs(min(lower_whiskers));
+    % end
+    lower_bound = min(lower_whiskers) - 0.5*abs(min(lower_whiskers));
     upper_bound = max(upper_whiskers) + 0.05* max(upper_whiskers);
 end

@@ -1,5 +1,5 @@
 function [n_e_peaks,peak1_pos,peak2_pos,peak3_pos,peak1_val,peak2_val,peak3_val,...
-    duration,silent_phase,silent_rateo,atrial_ventricular_ratio,atrial_ventricular_time_ratio,third_major_ratio,n_peaks_duration_ratio]=compute_envelope_features(example_env,example_rov,fc)
+    duration,silent_phase,silent_rateo,atrial_ventricular_ratio,atrial_ventricular_time_ratio,third_major_ratio,third_second_ratio,n_peaks_duration_ratio]=compute_envelope_features(example_env,example_rov,fc)
 
 [map_upper,map_lower]=analise_envelope_slope(example_env,0.005,fc);
 
@@ -36,11 +36,17 @@ peak1_val=final_peaks_val_pos(1,1);
 peak2_val=final_peaks_val_pos(2,1);
 peak3_val=final_peaks_val_pos(3,1);
 
-% computing duration 
-duration=(time_th(N,M)-time_th(1,1))/fc;
+
 
 % computing silent phase
-silent_phase=sum(active_phase(time_th(1,1):time_th(N,M))==0)/fc;
+active_area=map_upper|map_lower;
+start_active=min(final_peaks_val_pos(:,2),[],"omitnan");
+end_active=max(final_peaks_val_pos(:,2),[],"omitnan");
+
+silent_phase=sum(active_area(start_active:end_active)==0)/fc;
+
+% computing duration 
+duration=length(active_area(start_active:end_active))/fc;
 
 % derivate features
 silent_rateo=silent_phase/duration;
@@ -62,14 +68,16 @@ else
 end
 
 if n_e_peaks ==3
-    % Find the leftmost and rightmost peaks
-    [~, major_pos] = max(final_peaks_val_pos(:,2));
-    third_major_ratio = final_peaks_val_pos(3,1) / final_peaks_val_pos(major_pos,1);
+    third_major_ratio = final_peaks_val_pos(3,1) / final_peaks_val_pos(1,1);
 else
     third_major_ratio = nan; % Not enough peaks to compute the ratio
 end
 
-
+if n_e_peaks ==3
+    third_second_ratio = final_peaks_val_pos(3,1) / final_peaks_val_pos(2,1);
+else
+    third_second_ratio = nan; % Not enough peaks to compute the ratio
+end
 
 end
 
