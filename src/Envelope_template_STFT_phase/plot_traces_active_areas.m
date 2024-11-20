@@ -4,7 +4,7 @@ function plot_traces_active_areas(data,env_data,fc,bound_type,sg_title,figure_pa
 type_plots = ["single_record"];
 
 % Loop through each map type: A, B, C
-for i ="A" % ["A", "B", "C"]
+for i = ["A", "B", "C"]
     map = 'MAP_' + i;
     subjects = fieldnames(data.(map));
 

@@ -348,10 +348,10 @@ fc=2035;
 % if rms is used, has no sense computing the rectified signal. In fact rms
 % can be seen as a moving average of the squared signal.
 
-show_envelope_eval(final_data_by_sub,fc,30)
+show_envelope_eval(final_data_by_sub,fc,20)
 
 %% sistematic application of RMS envelope on signals
-env_dataset=evaluate_envelope_on_dataset(final_data_by_sub,30,"rms");
+env_dataset=evaluate_envelope_on_dataset(final_data_by_sub,20,"rms");
 
 %% Showing results
 spaghetti_confidence_signals(env_dataset,fc,figure_path+"\Envelope", "envelops")
