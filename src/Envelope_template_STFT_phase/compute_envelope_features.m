@@ -1,7 +1,7 @@
 function [n_e_peaks,peak1_pos,peak2_pos,peak3_pos,peak1_val,peak2_val,peak3_val,...
     duration,silent_phase,silent_rateo,atrial_ventricular_ratio,n_peaks_duration_rateo]=compute_envelope_features(example_env,example_rov,fc)
 
-[map_upper,map_lower]=analise_envelope_slope(example_rov,example_env,0.05,fc);
+[map_upper,map_lower]=analise_envelope_slope(example_env,0.05,fc);
 
 active_phase=map_upper+map_lower;
 

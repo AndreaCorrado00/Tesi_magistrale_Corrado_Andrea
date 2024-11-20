@@ -24,7 +24,7 @@ for i =  ["A", "B", "C"]
 
 
 
-            [map_upper,map_lower] = analise_envelope_slope(envelope, 0.05, fc);
+            [map_upper,map_lower] = analise_envelope_slope(envelope, 0.01, fc);
             switch bound_type
                 case "ActiveArea"
                     % Create a new figure

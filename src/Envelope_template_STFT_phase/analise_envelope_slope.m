@@ -1,7 +1,7 @@
 function [map_upper,map_lower]=analise_envelope_slope(example_env,mult_factor,fc)
 % derivative operation
     % improving envelope
-example_env=movmean(example_env,50);
+example_env=movmean(example_env,100);
 
 % derivative computation
 d_env=diff(example_env);
