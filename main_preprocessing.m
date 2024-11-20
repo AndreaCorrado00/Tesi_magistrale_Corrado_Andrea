@@ -348,10 +348,10 @@ fc=2035;
 % if rms is used, has no sense computing the rectified signal. In fact rms
 % can be seen as a moving average of the squared signal.
 
-show_envelope_eval(final_data_by_sub,fc,20)
+show_envelope_eval(final_data_by_sub,fc,30)
 
 %% sistematic application of RMS envelope on signals
-env_dataset=evaluate_envelope_on_dataset(final_data_by_sub,20,"rms");
+env_dataset=evaluate_envelope_on_dataset(final_data_by_sub,30,"rms");
 
 %% Showing results
 spaghetti_confidence_signals(env_dataset,fc,figure_path+"\Envelope", "envelops")
@@ -420,60 +420,9 @@ for i = 1:height(unique_classes) % Assuming 'classes' corresponds to the map typ
 end
 
 %% 
-% 
-% % extracting signal
-% map="MAP_C";
-% sub=map+num2str(1);
-% h=4;
-% signal = final_data_by_sub.(map).(sub).rov_trace{:,h};
-% example_env = env_dataset.(map).(sub).rov_trace{:,h};
-% 
-% % plot elements
-% x = [0:1/fc:1-1/fc]';
-% 
-% % template definition 
-% % Gaussian template
-% sigma = 0.01; 
-% mu = mean(x(round(0.15*fc):round(0.6*fc)))
-% template_gauss = exp(-((x-mu).^2)/(2*sigma^2));
-% template_gauss = template_gauss* max(template_gauss)/max(example_env);
-% 
-% % figure;
-% % plot(template_gauss)
-% 
-% % Create a new figure   
-% fig = figure;
-% fig.WindowState = "maximized";
-% % screenSize = get(0, 'ScreenSize');
-% % fig = figure('Visible', 'off');   
-% % fig.Position = [0, 0, screenSize(3), screenSize(4)];
-% % sgtitle(["Example of envelope xcorr analysis for: MAP "+record_id(1)+", sub: "+sub_num+", record: "+num2str(h)])
-% 
-%     % improving envelope
-% example_env=movmean(example_env,50);
-% 
-% [correlation, lags] = xcorr(example_env, template_gauss);
-% [~, maxLagIdx] = max(abs(correlation));
-% maxLag = lags(maxLagIdx);
-% 
-% shiftedEnv = circshift(example_env, -maxLagIdx + centerIdx); 
-% centerIdx = ceil(length(lags)/2); % Indice centrale
-% % correlation = correlation(centerIdx:centerIdx+length(example_env)-1);
-% 
-% subplot(2,2,1)
-% plot(x, signal, "LineWidth", 0.8, "Color", "#4DBEEE")
-% hold on
-% plot(x, shiftedEnv * max(signal,[], "omitnan") / max(example_env), "LineWidth", 1.5, "Color", "#0072BD")
-% plot(lags * 1/fc, correlation, "LineWidth", 1.5, "Color", "#7E2F8E")
-% title('Step 1: Envelope cross correlation')
-% legend(["Signal", "Envelope", "Xcorr"])
-% xlabel('time [s]')
-% ylabel('Amplitude [mV]')
+% allora
+    % bisogna fare un tuning accorto dei parametri: l'inviluppo deve essere
+    % smooth, la derivata pure, la soglia deve essere sensibile ai piccoli
+    % picchi
 
-
-
-
-
-
-
-
+    % devi massimizzare l'accuratezza sulla mappa C!

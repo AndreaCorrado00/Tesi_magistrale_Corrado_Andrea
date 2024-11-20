@@ -24,19 +24,24 @@ sgtitle(["Example of envelope slope analysis for: MAP "+record_id(1)+", sub: "+s
 %% computing derivation
 % derivative operation
     % improving envelope
-example_env=movmean(example_env,20);
+example_env=movmean(example_env,50);
 
 d_env=diff(example_env);
 d_env=[d_env;nan];
-d_env=movmean(d_env,120);
+d_env=movmean(d_env,100);
 
     % removing edges
-d_env(1:round(0.15*fc))=nan;
+d_env(1:round(0.17*fc))=nan;
 d_env(round(0.6*fc):end)=nan;
 
 d_env=d_env-mean(d_env,"omitnan");
 
-
+% threshold definition
+mult_factor=0.002;
+th_upper=abs(max(d_env,[],"omitnan"));
+th_upper=th_upper*mult_factor;
+th_lower=min(d_env,[],"omitnan");
+th_lower=th_lower*mult_factor*50;
 
 
 subplot(2,2,1)
@@ -44,17 +49,14 @@ plot(x,signal,"LineWidth",0.8,"Color","#4DBEEE")
 hold on
 plot(x,example_env*max(signal,[],"omitnan")/max(example_env),"LineWidth",1.5,"Color","#0072BD")
 plot(x,d_env*max(signal,[],"omitnan")/max(d_env),"LineWidth",1.5,"Color","#7E2F8E")
+plot(x,th_upper*max(signal,[],"omitnan")/max(d_env)*ones(length(x),1),"r","LineWidth",1)
+plot(x,th_lower*max(signal,[],"omitnan")/max(d_env)*ones(length(x),1),"r","LineWidth",1)
 title('Step 1: Envelope derivative')
 legend(["Signal","Envelope","d_{env}/dt"])
 xlabel('time [s]')
 ylabel('Amplitude [mV]')
 %% Map definition
-% threshold definition
-mult_factor=0.005;
-th_upper=abs(max(d_env,[],"omitnan"));
-th_upper=th_upper*mult_factor;
-th_lower=-abs(min(d_env,[],"omitnan"));
-th_lower=th_lower*mult_factor;
+
 
 % map creation 
 map_upper=d_env>th_upper;
@@ -67,6 +69,7 @@ hold on
 plot(x,example_env*max(signal,[],"omitnan")/max(example_env),"LineWidth",1.5,"Color","#0072BD")
 plot(x, map_upper * min([1, 1/max(signal, [], "omitnan"), max(signal, [], "omitnan")]), "LineWidth", 1.2, "Color", "#A2142F")
 plot(x, -map_lower * abs(max([-1, 1/min(signal, [], "omitnan"), min(signal, [], "omitnan")])), "LineWidth", 1.2, "Color", "#7E2F8E")
+
 title('Step 2: derivative thresholding')
 legend(["Signal","Envelope","d_{env}/dt >0","d_{env}/dt <0"])
 xlabel('time [s]')
