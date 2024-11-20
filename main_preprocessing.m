@@ -359,14 +359,14 @@ spaghetti_confidence_signals(env_dataset,fc,figure_path+"\Envelope", "envelops")
 % Single signal and envelope
 traces_subplots_by_sub(final_data_by_sub,env_dataset, fc,'Rov signal and envelope',figure_path+"\Envelope\Single_traces")
 
-%% Showing envelope analysis pipeline
+%% Showing envelope slope analysis pipeline
 record_id=["C",1,4]; 
-show_envelope_analysis(final_data_by_sub,env_dataset,fc,record_id,figure_path+"\Envelope\slope_analysis\algorithm_explanation")
+show_envelope_slope_analysis(final_data_by_sub,env_dataset,fc,record_id,figure_path+"\Envelope\slope_analysis\algorithm_explanation")
 
-%% Plotting results
-plot_traces_active_areas(final_data_by_sub,env_dataset,fc,"PipelineAnalysis",'Rov signal and envelope:slope analysis',figure_path+"\Envelope\slope_analysis")
+    %% Plotting results
+plot_traces_active_areas(final_data_by_sub,env_dataset,fc,"Slope_Analysis",'Rov signal and envelope:slope analysis',figure_path+"\Envelope\slope_analysis")
       
-%% Envelope features
+%% Envelope "slope" features
 envelope_features = build_envelope_features_set(final_data_by_sub, env_dataset, fc);
 
 %% Features analysis
@@ -418,10 +418,56 @@ for i = 1:height(unique_classes) % Assuming 'classes' corresponds to the map typ
     
 end
 
-
-
-
-
+%% 
+% 
+% % extracting signal
+% map="MAP_C";
+% sub=map+num2str(1);
+% h=4;
+% signal = final_data_by_sub.(map).(sub).rov_trace{:,h};
+% example_env = env_dataset.(map).(sub).rov_trace{:,h};
+% 
+% % plot elements
+% x = [0:1/fc:1-1/fc]';
+% 
+% % template definition 
+% % Gaussian template
+% sigma = 0.01; 
+% mu = mean(x(round(0.15*fc):round(0.6*fc)))
+% template_gauss = exp(-((x-mu).^2)/(2*sigma^2));
+% template_gauss = template_gauss* max(template_gauss)/max(example_env);
+% 
+% % figure;
+% % plot(template_gauss)
+% 
+% % Create a new figure   
+% fig = figure;
+% fig.WindowState = "maximized";
+% % screenSize = get(0, 'ScreenSize');
+% % fig = figure('Visible', 'off');   
+% % fig.Position = [0, 0, screenSize(3), screenSize(4)];
+% % sgtitle(["Example of envelope xcorr analysis for: MAP "+record_id(1)+", sub: "+sub_num+", record: "+num2str(h)])
+% 
+%     % improving envelope
+% example_env=movmean(example_env,50);
+% 
+% [correlation, lags] = xcorr(example_env, template_gauss);
+% [~, maxLagIdx] = max(abs(correlation));
+% maxLag = lags(maxLagIdx);
+% 
+% shiftedEnv = circshift(example_env, -maxLagIdx + centerIdx); 
+% centerIdx = ceil(length(lags)/2); % Indice centrale
+% % correlation = correlation(centerIdx:centerIdx+length(example_env)-1);
+% 
+% subplot(2,2,1)
+% plot(x, signal, "LineWidth", 0.8, "Color", "#4DBEEE")
+% hold on
+% plot(x, shiftedEnv * max(signal,[], "omitnan") / max(example_env), "LineWidth", 1.5, "Color", "#0072BD")
+% plot(lags * 1/fc, correlation, "LineWidth", 1.5, "Color", "#7E2F8E")
+% title('Step 1: Envelope cross correlation')
+% legend(["Signal", "Envelope", "Xcorr"])
+% xlabel('time [s]')
+% ylabel('Amplitude [mV]')
 
 
 

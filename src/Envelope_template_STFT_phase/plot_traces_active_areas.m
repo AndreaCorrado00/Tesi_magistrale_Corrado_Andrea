@@ -4,12 +4,12 @@ function plot_traces_active_areas(data,env_data,fc,bound_type,sg_title,figure_pa
 type_plots = ["single_record"];
 
 % Loop through each map type: A, B, C
-for i =  ["A", "B", "C"]
+for i ="A" % ["A", "B", "C"]
     map = 'MAP_' + i;
     subjects = fieldnames(data.(map));
 
     % Loop through each subject
-    for j =1:length(subjects)
+    for j = 1:length(subjects)
         sub = subjects{j};
 
         [~, N] = size(data.(map).(sub).rov_trace);
@@ -77,8 +77,8 @@ for i =  ["A", "B", "C"]
                     file_name = "MAP_" + i + "_sub_" + sub_num + '_record_' + num2str(h) + '_';
                     save_plot(file_name, type_plots(1), figure_path, fig, true);
 
-                case "PipelineAnalysis"
-                    show_envelope_analysis(data,env_data,fc,[i,sub_num,h],figure_path)
+                case "Slope_Analysis"
+                    show_envelope_slope_analysis(data,env_data,fc,[i,sub_num,h],figure_path)
                    
             end
 
