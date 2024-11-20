@@ -26,7 +26,7 @@ function [map_upper, map_lower] = merge_runs(map_upper, map_lower)
     upper_regions = regionprops(map_upper, 'PixelIdxList');
     lower_regions = regionprops(map_lower, 'PixelIdxList');
     
-    % Merge consecutive runs of map_upper that are not followed by runs in map_lower
+    % Adjust map_lower to match the length of preceding map_upper runs
     i = 1;
     while i < numel(upper_regions)
         % End of the current run and start of the next run in map_upper
@@ -35,8 +35,11 @@ function [map_upper, map_lower] = merge_runs(map_upper, map_lower)
         
         % Check if there is no overlap with map_lower
         if all(~map_lower(end_current:start_next)) % no 1s in map_lower
-            % Merge the two runs
-            map_upper(upper_regions(i).PixelIdxList(1):upper_regions(i+1).PixelIdxList(end)) = 1;
+            % Adjust the run length in map_lower
+            run_length = numel(upper_regions(i).PixelIdxList); % Length of the current map_upper run
+            half_width = end_current + round((start_next - end_current) / 2);
+            map_lower(half_width:half_width + run_length - 1) = 1;
+
             % Remove the second run from the list
             upper_regions(i+1) = [];
         else
@@ -44,7 +47,7 @@ function [map_upper, map_lower] = merge_runs(map_upper, map_lower)
         end
     end
 
-    % Merge consecutive runs of map_lower that are not followed by runs in map_upper
+    % Adjust map_upper to match the length of succeeding map_lower runs
     i = 1;
     while i < numel(lower_regions)
         % End of the current run and start of the next run in map_lower
@@ -53,8 +56,11 @@ function [map_upper, map_lower] = merge_runs(map_upper, map_lower)
         
         % Check if there is no overlap with map_upper
         if all(~map_upper(end_current:start_next)) % no 1s in map_upper
-            % Merge the two runs
-            map_lower(lower_regions(i).PixelIdxList(1):lower_regions(i+1).PixelIdxList(end)) = 1;
+            % Adjust the run length in map_upper
+            run_length = numel(lower_regions(i).PixelIdxList); % Length of the current map_lower run
+            half_width = end_current + round((start_next - end_current) / 2);
+            map_upper(half_width - run_length + 1:half_width) = 1;
+
             % Remove the second run from the list
             lower_regions(i+1) = [];
         else

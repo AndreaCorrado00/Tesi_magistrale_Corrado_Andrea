@@ -360,12 +360,12 @@ spaghetti_confidence_signals(env_dataset,fc,figure_path+"\Envelope", "envelops")
 traces_subplots_by_sub(final_data_by_sub,env_dataset, fc,'Rov signal and envelope',figure_path+"\Envelope\Single_traces")
 
 %% Showing envelope analysis pipeline
-record_id=["A",1,1]; 
+record_id=["B",4,7]; 
 show_envelope_analysis(final_data_by_sub,env_dataset,fc,record_id,figure_path+"\Envelope\slope_analysis\algorithm_explanation")
 
 %% Plotting results
 plot_traces_active_areas(final_data_by_sub,env_dataset,fc,"PipelineAnalysis",'Rov signal and envelope:slope analysis',figure_path+"\Envelope\slope_analysis")
-
+    
 %% Envelope features
 envelope_features = build_envelope_features_set(final_data_by_sub, env_dataset, fc);
 
