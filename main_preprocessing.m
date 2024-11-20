@@ -383,6 +383,7 @@ for i = 1:length(feature_names)
     save_plot(feature_name,"_boxplot",figure_path+"\Envelope\features_boxplots",gcf,true)
 end
 
+
 % Loop through each class (MAP_A, MAP_B, MAP_C)
 unique_classes=unique(classes);
 for i = 1:height(unique_classes) % Assuming 'classes' corresponds to the map types

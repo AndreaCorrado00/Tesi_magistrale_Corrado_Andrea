@@ -1,12 +1,12 @@
 function [map_upper,map_lower]=analise_envelope_slope(example_env,mult_factor,fc)
 % derivative operation
     % improving envelope
-example_env=movmean(example_env,30);
+example_env=movmean(example_env,100);
 
 % derivative computation
 d_env=diff(example_env);
 d_env=[d_env;nan];
-d_env=movmean(d_env,100);
+d_env=movmean(d_env,20);
 
     % removing edges
 d_env(1:round(0.15*fc))=nan;

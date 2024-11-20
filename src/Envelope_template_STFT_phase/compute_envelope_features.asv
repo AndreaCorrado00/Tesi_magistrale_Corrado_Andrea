@@ -1,5 +1,5 @@
 function [n_e_peaks,peak1_pos,peak2_pos,peak3_pos,peak1_val,peak2_val,peak3_val,...
-    duration,silent_phase,silent_rateo,atrial_ventricular_ratio,atrial_ventricular_time_ratio,third_major_ratio,n_peaks_duration_ratio]=compute_envelope_features(example_env,example_rov,fc)
+    duration,silent_phase,silent_rateo,atrial_ventricular_ratio,atrial_ventricular_time_ratio,n_peaks_duration_ratio]=compute_envelope_features(example_env,example_rov,fc)
 
 [map_upper,map_lower]=analise_envelope_slope(example_env,0.005,fc);
 
@@ -61,12 +61,17 @@ else
     atrial_ventricular_time_ratio=nan;
 end
 
+% peaks rateo: assumption - atrial peak is the one to the far left, vent
+% peak on the right
 if n_e_peaks ==3
     % Find the leftmost and rightmost peaks
-    [~, major_pos] = max(final_peaks_val_pos(:,2));
-    third_major_ratio = final_peaks_val_pos(3,1) / final_peaks_val_pos(major_pos,1);
+    [~, major_pos] = min(final_peaks_val_pos(:,2));
+    [~, rightmost_idx] = max(final_peaks_val_pos(:,2));
+    atrial_ventricular_ratio = final_peaks_val_pos(leftmost_idx,1) / final_peaks_val_pos(rightmost_idx,1);
+    atrial_ventricular_time_ratio=final_peaks_val_pos(leftmost_idx,2) / final_peaks_val_pos(rightmost_idx,2);
 else
-    third_major_ratio = nan; % Not enough peaks to compute the ratio
+    atrial_ventricular_ratio = nan; % Not enough peaks to compute the ratio
+    atrial_ventricular_time_ratio=nan;
 end
 
 
