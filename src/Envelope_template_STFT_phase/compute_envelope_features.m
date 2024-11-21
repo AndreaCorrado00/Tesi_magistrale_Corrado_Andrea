@@ -14,7 +14,7 @@ for i=1:N
     [max_env,max_pos]=max(example_env(time_th(i,1):time_th(i,2)),[],"omitnan");
     env_peaks_val_pos(i,:)=[max_env,max_pos+time_th(i,1)];
 
-    [max_env,max_pos]=max(example_rov(time_th(i,1):time_th(i,2)),[],"omitnan");
+    [max_env,max_pos]=max(abs(example_rov(time_th(i,1):time_th(i,2))),[],"omitnan");
     rov_peaks_val_pos(i,:)=[max_env,max_pos+time_th(i,1)];
 
 end

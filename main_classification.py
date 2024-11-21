@@ -25,6 +25,7 @@ from misclassification_summary import misclassification_summary
 from plot_dataframe_as_plain_image import plot_dataframe_as_plain_image
 from load_feature_dataset import load_feature_dataset
 from improved_KB_classifier import improved_KB_classifier
+from LOPOCV_KB_improved import LOPOCV_KB_improved
 # Exporting figures
 figure_path="D:/Desktop/ANDREA/Universita/Magistrale/Anno Accademico 2023-2024/TESI/Tesi_magistrale/Figure"
 
@@ -76,6 +77,7 @@ if show_heuristic:
 
 
 #%% IMPROVING KNOWLEDGE BASED CLASSIFIER
+
     # 1. two main aspects were critic into the first heuristic classifier:
         # a. time threshold definition
         # b. his peak value
@@ -86,7 +88,7 @@ if show_heuristic:
 feature_dataset_name="feature_"+dataset_name
 whole_feature_db,feature_db=load_feature_dataset(dataset_path,feature_dataset_name)
 
-
+other_fig_path=figure_path+"/Improved_KB_classifier_phase/"+fig_final_folder+"/other_figs"
 #%% KB classifier will still be based on peaks values, ratios and positions
 use_ratio=False
 # whole dataset
@@ -109,5 +111,18 @@ cm_title=subtitle_plots+" whole dataset"
 #confusion matrix
 he_report=evaluate_confusion_matrix(pred_KB_improved,y_true,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
 plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="CM_whole_KB_improved")
+
+#%% LOPOCV validation 
+y_true_LOPOCV,y_pred_LOPOCV,signal_peaks_and_class_KB_improved_LOPOCV=LOPOCV_KB_improved(whole_feature_db)
+# %% CM 
+# Variable saving names
+cm_saving_name="CM_heuristic_LOPOCV"+plot_last_name
+cm_title=subtitle_plots+" LOPOCV KB improved" 
+he_report=evaluate_confusion_matrix(y_pred_LOPOCV,y_true_LOPOCV,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
+plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="CM_LOPOCV_KB_improved")
+
+# misclassified per class
+miss_class_summary= misclassification_summary(whole_feature_db,y_pred_LOPOCV, labels_unique)
+plot_dataframe_as_plain_image(miss_class_summary, figsize=(8,5),scale=(1.7,1.7),title_plot=cm_title,path=other_fig_path,saving_name="Misclass_LOPOCV_KB_improved")
 
 
