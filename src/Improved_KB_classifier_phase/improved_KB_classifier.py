@@ -25,4 +25,4 @@ def improved_KB_classifier(record,use_ratio=False):
             
         return np.array(record["peak1_pos"]),np.array(record["peak3_pos"]),pred_class
 
-
+   

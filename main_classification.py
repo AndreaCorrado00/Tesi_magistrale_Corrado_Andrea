@@ -93,11 +93,11 @@ use_ratio=False
 dims=feature_db.shape
 pred_KB_improved=np.empty(dims[0], dtype=object)
 
-signal_peaks_and_class_train=[];
+signal_peaks_and_class_KB_improved=[];
 for i in range(0,dims[0]):
     feature_1_val,peak_3_val,pred=improved_KB_classifier(feature_db.iloc[i],use_ratio)
     pred_KB_improved[i]=pred
-    signal_peaks_and_class_train.append([feature_1_val.item(),peak_3_val.item(),pred])
+    signal_peaks_and_class_KB_improved.append([feature_1_val.item(),peak_3_val.item(),pred])
     
 # %% Performance of the heuristic classifier: train 
 # Fixed saving names
@@ -107,7 +107,7 @@ cm_saving_path=os.path.join(figure_path+"/Improved_KB_classifier_phase",fig_fina
 cm_saving_name="CM_KB_whole"+plot_last_name
 cm_title=subtitle_plots+" whole dataset" 
 #confusion matrix
-he_report=evaluate_confusion_matrix(pred_KB_improved,y_true,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=False, path=cm_saving_path,saving_name=cm_saving_name)
-plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name=None)
+he_report=evaluate_confusion_matrix(pred_KB_improved,y_true,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
+plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="CM_whole_KB_improved")
 
-# %% Heuristic classifier: test 
+
