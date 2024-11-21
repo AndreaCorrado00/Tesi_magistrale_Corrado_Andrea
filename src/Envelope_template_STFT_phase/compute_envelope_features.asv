@@ -102,6 +102,6 @@ peak3_pos=final_rov_peaks_val_pos(3,2)/fc;
 
 peak1_val=final_rov_peaks_val_pos(1,1);
 peak2_val=final_rov_peaks_val_pos(2,1);
-peak3_val=final_rov_peaks_val_pos(3,1);
+peak3_val=rov_final_peaks_val_pos(3,1);
 end
 

@@ -330,7 +330,7 @@ traces_subplots_by_sub(final_data_pop, fc, figure_path + "\single_records")
 
 %% ENVELOPE, TEMPLATE MATCHING AND STFT 
 clc;clear;close;
-dataset="dataset_1";
+dataset="dataset_2";
 
 processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed\data_aligned";
 src_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\Envelope_template_STFT_phase";
@@ -400,7 +400,7 @@ for i = 1:height(unique_classes) % Assuming 'classes' corresponds to the map typ
     
     % Loop through the signals in the class and count the number of peaks
     for j = 1:height(class_data)
-        % Get the number of peaks for the current signal (using the 'N_peaks' feature)
+        % Get the number of peaks for the current signal (using the 'n_peaks' feature)
         n_peaks = class_data.N_peaks(j);
         
         % Count how many peaks are there
@@ -422,4 +422,14 @@ for i = 1:height(unique_classes) % Assuming 'classes' corresponds to the map typ
     
 end
 
-%% 
+%%
+
+%% Showing results
+spaghetti_confidence_signals(env_dataset,fc,figure_path+"\Envelope", "envelops")
+
+% Single signal and envelope
+traces_subplots_by_sub(final_data_by_sub,env_dataset, fc,'Rov signal and envelope',figure_path+"\Envelope\Single_traces")
+
+    % Plotting results
+plot_traces_active_areas(final_data_by_sub,env_dataset,fc,"Slope_Analysis",'Rov signal and envelope:slope analysis',figure_path+"\Envelope\slope_analysis")
+      
