@@ -2,7 +2,7 @@ import os
 import numpy as np
 import pandas as pd
 
-def load_dataset(dataset_path, dataset_name):
+def load_signal_dataset(dataset_path, dataset_name):
     # initialization
     subject_ids = []
     signal_data = []

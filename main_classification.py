@@ -13,7 +13,7 @@ sys.path.append("D:/Desktop/ANDREA/Universita/Magistrale/Anno Accademico 2023-20
 sys.path.append("D:/Desktop/ANDREA/Universita/Magistrale/Anno Accademico 2023-2024/TESI/Tesi_magistrale/src/Classification_phase")
 
 # Functions
-from load_dataset import load_dataset
+from load_signal_dataset import load_signal_dataset
 from save_plot import save_plot
 from heuristic_classifier_C import heuristic_classifier_C
 from LOPOCV_heuristic_C import LOPOCV_heuristic_C
@@ -36,7 +36,7 @@ figure_path="D:/Desktop/ANDREA/Universita/Magistrale/Anno Accademico 2023-2024/T
 dataset_path = "D:/Desktop/ANDREA/Universita/Magistrale/Anno Accademico 2023-2024/TESI/Tesi_magistrale/Data/Processed/data_aligned" 
 db_number=2
 dataset_name = "dataset_"+str(db_number)  # E.g., dataset_1, 2, 3
-whole_dataset,signals,y_true,labels_unique,Fs,plot_last_name,fig_final_folder,subtitle_plots = load_dataset(dataset_path, dataset_name)
+whole_dataset,signals,y_true,labels_unique,Fs,plot_last_name,fig_final_folder,subtitle_plots = load_signal_dataset(dataset_path, dataset_name)
 
 #%% Checking data
 display_data_summary(whole_dataset,labels_unique)
@@ -62,15 +62,24 @@ show_class_proportions(y_test,labels_unique)
 #%%############################################################################
 ############## KNOWLEDGE BASED CLASSIFIER: first evaluations ##################
 ###############################################################################
-from show_knowledgeBased_on_whole_dataset import show_knowledgeBased_on_whole_dataset
-show_knowledgeBased_on_whole_dataset(db_number=2,use_ratio=True)
+show_heuristic=False
+if show_heuristic:
+    from show_knowledgeBased_on_whole_dataset import show_knowledgeBased_on_whole_dataset
+    show_knowledgeBased_on_whole_dataset(db_number=2,use_ratio=True)
 
 # this function shows knowledge-based classifier results on dataset with sub 2 
 # dropped and using atrial/vventricular ratio
 
+# Results can be seen into Figure\Heuristic_classification_phase\Final He V2(recap)
+
 # From now on, once collected these results, two main paths will be followed:
     # 1. Improving knowledge based classifier
     # 2. Building a ML model from scratch 
-    
+
+
+#%% Improving Heuristic classifier
+    # 1. 
+
+
 
     

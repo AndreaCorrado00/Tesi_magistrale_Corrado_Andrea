@@ -13,7 +13,7 @@ def show_knowledgeBased_on_whole_dataset(db_number,use_ratio):
     sys.path.append("D:/Desktop/ANDREA/Universita/Magistrale/Anno Accademico 2023-2024/TESI/Tesi_magistrale/src/Classification_phase")
 
     # Functions
-    from load_dataset import load_dataset
+    from load_signal_dataset import load_signal_dataset
     from save_plot import save_plot
     from heuristic_classifier_C import heuristic_classifier_C
     from LOPOCV_heuristic_C import LOPOCV_heuristic_C
@@ -32,7 +32,7 @@ def show_knowledgeBased_on_whole_dataset(db_number,use_ratio):
     #%% Loading data
     dataset_path = "D:/Desktop/ANDREA/Universita/Magistrale/Anno Accademico 2023-2024/TESI/Tesi_magistrale/Data/Processed/data_aligned" 
     dataset_name = "dataset_"+str(db_number)  # E.g., dataset_1, 2, 3
-    whole_dataset,signals,y_true,labels_unique,Fs,plot_last_name,fig_final_folder,subtitle_plots = load_dataset(dataset_path, dataset_name)
+    whole_dataset,signals,y_true,labels_unique,Fs,plot_last_name,fig_final_folder,subtitle_plots = load_signal_dataset(dataset_path, dataset_name)
 
     
     #%% For now, train test set are merged
