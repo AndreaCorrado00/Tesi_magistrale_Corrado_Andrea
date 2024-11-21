@@ -420,9 +420,3 @@ for i = 1:height(unique_classes) % Assuming 'classes' corresponds to the map typ
 end
 
 %% 
-% allora
-    % bisogna fare un tuning accorto dei parametri: l'inviluppo deve essere
-    % smooth, la derivata pure, la soglia deve essere sensibile ai piccoli
-    % picchi
-
-    % devi massimizzare l'accuratezza sulla mappa C!
