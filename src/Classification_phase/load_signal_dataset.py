@@ -3,10 +3,6 @@ import numpy as np
 import pandas as pd
 
 def load_signal_dataset(dataset_path, dataset_name):
-    # initialization
-    subject_ids = []
-    signal_data = []
-    y_true = []
     
     Fs = 2035
     
@@ -26,38 +22,11 @@ def load_signal_dataset(dataset_path, dataset_name):
         print("No dataset found")
         return []
     
-    # Directory of the dataset requested
-    dataset_dir = os.path.join(dataset_path, dataset_name)
-    for subj_folder in sorted(os.listdir(dataset_dir)):
-        if subj_folder.startswith("pat"):
-            subject_id = int(subj_folder[3:])
-            subject_dir = os.path.join(dataset_dir, subj_folder)
-            
-            # looking for rov_MAPY.txt
-            for map_type in ["A", "B", "C"]:
-                file_name = f"rov_MAP{map_type}.txt"
-                file_path = os.path.join(subject_dir, file_name)
-                print(file_path)
-                
-                # Does the table exist?
-                if os.path.exists(file_path):
-                    # table loading
-                    table = pd.read_csv(file_path, header=None)
-                    print(table.shape)
-                    # Iterate through columns as separate signals
-                    for col in table.columns:
-                        signal_data.append(table[col].values)  # Each column (signal) is appended as a row
-                        subject_ids.append(subject_id)
-                        y_true.append(f"MAP_{map_type}")
+    full_name=os.path.join(dataset_path, dataset_name+".txt")
+    table= pd.read_csv(full_name, delimiter=',')
 
-    # Final dataset
-    data = pd.DataFrame(signal_data)
-    data.insert(0, 'id', subject_ids)  # First column: subject ID
-    data['class'] = y_true  # Last column: class (MAP_Y)
+    y_true_no_duplicates = table["class"]  
 
-    # Remove duplicate signals (columns) in the 'data' DataFrame
-    data_no_duplicates = data.T.drop_duplicates(keep='first').T  # Transpose, drop duplicates, then transpose back
-    y_true_no_duplicates = data_no_duplicates["class"]  
 
     # Return the cleaned dataset, signals without duplicates, y_true without duplicates
-    return data_no_duplicates, data_no_duplicates.iloc[:, 1:-1], y_true_no_duplicates, np.unique(y_true_no_duplicates), Fs, plot_last_name, fig_final_folder, subtitle_plots  # signals extracted as a DataFrame slice
+    return table, table.iloc[:, 1:-1], y_true_no_duplicates, np.unique(y_true_no_duplicates), Fs, plot_last_name, fig_final_folder, subtitle_plots  # signals extracted as a DataFrame slice

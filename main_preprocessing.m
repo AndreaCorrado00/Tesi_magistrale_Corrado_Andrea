@@ -298,9 +298,10 @@ addpath(src_path)
 % Loading previusly made data
 load(processed_data_path+'\'+dataset+'.mat');
 fc=2035;
-% Cleaning dataset from duplicate signals
-% final_data_by_sub=remove_repeated_signals(final_data_by_sub);
-% done one time at all
+% % Cleaning dataset from duplicate signals
+% [final_data_by_sub,final_table]=remove_repeated_signals(final_data_by_sub);
+% writetable(final_table, processed_data_path+'\'+dataset+'.txt', 'Delimiter', ',', 'WriteVariableNames', true);
+% % done one time at all
 
 %% Showing some examples
 show_final_dataset_examples(final_data_by_sub,fc)

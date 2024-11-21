@@ -15,18 +15,14 @@ sys.path.append("D:/Desktop/ANDREA/Universita/Magistrale/Anno Accademico 2023-20
 # Functions
 from load_signal_dataset import load_signal_dataset
 from save_plot import save_plot
-from heuristic_classifier_C import heuristic_classifier_C
-from LOPOCV_heuristic_C import LOPOCV_heuristic_C
-from show_examples import show_examples
 from show_single_example import show_single_example
 from display_data_summary import display_data_summary
 from show_class_proportions import show_class_proportions
-from tune_his_th import tune_his_th
-from tune_his_th_on_f1 import tune_his_th_on_f1
 from evaluate_confusion_matrix import evaluate_confusion_matrix
 from draw_his_boundaries import draw_his_boundaries
 from misclassification_summary import misclassification_summary
 from plot_dataframe_as_plain_image import plot_dataframe_as_plain_image
+from load_feature_dataset import load_feature_dataset
 # Exporting figures
 figure_path="D:/Desktop/ANDREA/Universita/Magistrale/Anno Accademico 2023-2024/TESI/Tesi_magistrale/Figure"
 
@@ -78,8 +74,14 @@ if show_heuristic:
 
 
 #%% Improving Heuristic classifier
-    # 1. 
+    # 1. two main aspects were critic into the first heuristic classifier:
+        # a. time threshold definition
+        # b. his peak value
+    # 2. feature set will have peaks value and positions. Moreover. by looking at
+    #    boxplots, a more robust threshold definition could be done. 
+    # 3. the problem is that into this dataset atrial and ventricular phases 
+    #    are not explicitly present. 
+feature_dataset_name="feature_"+dataset_name
+whole_feature_db,feature_db=load_feature_dataset(dataset_path,feature_dataset_name)
 
 
-
-    
