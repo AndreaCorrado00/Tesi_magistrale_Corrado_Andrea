@@ -26,7 +26,7 @@ def heuristic_classifier_C(record,Fs,his_bundle_th, use_ratio=False):
             pred_class="MAP_C"
         else:
             # atrial and ventricular thresholds 
-            if atr_peak/vent_peak>1: 
+            if atr_peak/vent_peak>0.5: 
                 pred_class="MAP_A"
             else:
                 pred_class="MAP_B"

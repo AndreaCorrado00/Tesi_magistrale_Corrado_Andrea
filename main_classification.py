@@ -11,6 +11,7 @@ from sklearn.model_selection import train_test_split
 # Path src
 sys.path.append("D:/Desktop/ANDREA/Universita/Magistrale/Anno Accademico 2023-2024/TESI/Tesi_magistrale/src/Heuristic_classification_phase")
 sys.path.append("D:/Desktop/ANDREA/Universita/Magistrale/Anno Accademico 2023-2024/TESI/Tesi_magistrale/src/Classification_phase")
+sys.path.append("D:/Desktop/ANDREA/Universita/Magistrale/Anno Accademico 2023-2024/TESI/Tesi_magistrale/src/Improved_KB_classifier_phase")
 
 # Functions
 from load_signal_dataset import load_signal_dataset
@@ -23,6 +24,7 @@ from draw_his_boundaries import draw_his_boundaries
 from misclassification_summary import misclassification_summary
 from plot_dataframe_as_plain_image import plot_dataframe_as_plain_image
 from load_feature_dataset import load_feature_dataset
+from improved_KB_classifier import improved_KB_classifier
 # Exporting figures
 figure_path="D:/Desktop/ANDREA/Universita/Magistrale/Anno Accademico 2023-2024/TESI/Tesi_magistrale/Figure"
 
@@ -45,15 +47,15 @@ show_class_proportions(y_true,labels_unique)
 # array index
 indices = np.arange(signals.shape[0])
 
-# Split on index
-x_train, x_test, y_train, y_test = train_test_split(signals,y_true, test_size=0.3, stratify=y_true, random_state=42)
+# # Split on index
+# x_train, x_test, y_train, y_test = train_test_split(signals,y_true, test_size=0.3, stratify=y_true, random_state=42)
 
-# check if the train/test split is correctly stratified
-print("\n---- After stratified train/test split----")
-print("Training set")
-show_class_proportions(y_train,labels_unique)
-print("Test set")
-show_class_proportions(y_test,labels_unique)
+# # check if the train/test split is correctly stratified
+# print("\n---- After stratified train/test split----")
+# print("Training set")
+# show_class_proportions(y_train,labels_unique)
+# print("Test set")
+# show_class_proportions(y_test,labels_unique)
 
 #%%############################################################################
 ############## KNOWLEDGE BASED CLASSIFIER: first evaluations ##################
@@ -73,7 +75,7 @@ if show_heuristic:
     # 2. Building a ML model from scratch 
 
 
-#%% Improving Heuristic classifier
+#%% IMPROVING KNOWLEDGE BASED CLASSIFIER
     # 1. two main aspects were critic into the first heuristic classifier:
         # a. time threshold definition
         # b. his peak value
@@ -85,3 +87,27 @@ feature_dataset_name="feature_"+dataset_name
 whole_feature_db,feature_db=load_feature_dataset(dataset_path,feature_dataset_name)
 
 
+#%% KB classifier will still be based on peaks values, ratios and positions
+use_ratio=False
+# whole dataset
+dims=feature_db.shape
+pred_KB_improved=np.empty(dims[0], dtype=object)
+
+signal_peaks_and_class_train=[];
+for i in range(0,dims[0]):
+    feature_1_val,peak_3_val,pred=improved_KB_classifier(feature_db.iloc[i],use_ratio)
+    pred_KB_improved[i]=pred
+    signal_peaks_and_class_train.append([feature_1_val.item(),peak_3_val.item(),pred])
+    
+# %% Performance of the heuristic classifier: train 
+# Fixed saving names
+cm_suptitle="Confusion Matrix: improved KB classifier"
+cm_saving_path=os.path.join(figure_path+"/Improved_KB_classifier_phase",fig_final_folder)
+# Variable saving names
+cm_saving_name="CM_KB_whole"+plot_last_name
+cm_title=subtitle_plots+" whole dataset" 
+#confusion matrix
+he_report=evaluate_confusion_matrix(pred_KB_improved,y_true,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=False, path=cm_saving_path,saving_name=cm_saving_name)
+plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name=None)
+
+# %% Heuristic classifier: test 
