@@ -52,7 +52,7 @@ def show_knowledgeBased_on_whole_dataset(db_number,use_ratio):
         "db 1 c" : [96,106,164],
         "db 1 m": [0,13, 198],
         "db 2 c" : [3,40,13],
-        "db 2 m": [1,130, 42],
+        "db 2 m": [1,42, 130],
         "db 3 c" : [0,53,169],
         "db 3 m": [1, 56, 145]
         })

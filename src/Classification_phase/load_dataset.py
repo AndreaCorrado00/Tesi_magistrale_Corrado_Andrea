@@ -8,20 +8,20 @@ def load_dataset(dataset_path, dataset_name):
     signal_data = []
     y_true = []
     
-    Fs=2035
+    Fs = 2035
     
-    if dataset_name=="dataset_1":
-        plot_last_name='_whole'
-        fig_final_folder="No_filtered"
-        subtitle_plots="processed data"
-    elif dataset_name=="dataset_2":
-        plot_last_name="_no_sub2"
-        fig_final_folder="No_filtered_no_2"
-        subtitle_plots="processed data, no sub 2"
-    elif dataset_name=="dataset_3":
-        plot_last_name="_2mapC"
-        fig_final_folder="No_filtered_2mapC"
-        subtitle_plots= "MAP C of subject 2 maintained" 
+    if dataset_name == "dataset_1":
+        plot_last_name = '_whole'
+        fig_final_folder = "No_filtered"
+        subtitle_plots = "processed data"
+    elif dataset_name == "dataset_2":
+        plot_last_name = "_no_sub2"
+        fig_final_folder = "No_filtered_no_2"
+        subtitle_plots = "processed data, no sub 2"
+    elif dataset_name == "dataset_3":
+        plot_last_name = "_2mapC"
+        fig_final_folder = "No_filtered_2mapC"
+        subtitle_plots = "MAP C of subject 2 maintained"
     else: 
         print("No dataset found")
         return []
@@ -54,6 +54,10 @@ def load_dataset(dataset_path, dataset_name):
     data = pd.DataFrame(signal_data)
     data.insert(0, 'id', subject_ids)  # First column: subject ID
     data['class'] = y_true  # Last column: class (MAP_Y)
-    
-    return data, data.iloc[:, 1:-1], np.array(y_true),np.unique(np.array(y_true)),Fs,plot_last_name,fig_final_folder,subtitle_plots  # signals extracted as a DataFrame slice
 
+    # Remove duplicate signals (columns) in the 'data' DataFrame
+    data_no_duplicates = data.T.drop_duplicates(keep='first').T  # Transpose, drop duplicates, then transpose back
+    y_true_no_duplicates = data_no_duplicates["class"]  
+
+    # Return the cleaned dataset, signals without duplicates, y_true without duplicates
+    return data_no_duplicates, data_no_duplicates.iloc[:, 1:-1], y_true_no_duplicates, np.unique(y_true_no_duplicates), Fs, plot_last_name, fig_final_folder, subtitle_plots  # signals extracted as a DataFrame slice

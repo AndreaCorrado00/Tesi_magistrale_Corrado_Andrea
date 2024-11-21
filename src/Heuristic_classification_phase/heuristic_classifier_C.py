@@ -41,6 +41,6 @@ def heuristic_classifier_C(record,Fs,his_bundle_th, use_ratio=False):
                 pred_class="MAP_B"
             
             
-    return atr_peak,his_peak,vent_peak,pred_class
+    return np.array(atr_peak),np.array(his_peak),np.array(vent_peak),pred_class
 
 

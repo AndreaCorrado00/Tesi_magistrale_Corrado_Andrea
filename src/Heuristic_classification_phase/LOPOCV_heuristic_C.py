@@ -30,7 +30,7 @@ def LOPOCV_heuristic_C(df,use_ratio=False):
             pred_heuristic[i] = pred
             
             original_index = test_data.index[i] 
-            signal_peaks_and_class_train.append([original_index.item(), participant.item(), atr_peak.item(), his_peak.item(), vent_peak.item(), pred, th_his.item()])
+            signal_peaks_and_class_train.append([original_index, participant, atr_peak.item(), his_peak.item(), vent_peak.item(), pred, th_his.item()])
         
         all_y_true.extend(y_test)
         all_y_pred.extend(pred_heuristic)
