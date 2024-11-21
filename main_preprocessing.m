@@ -288,7 +288,7 @@ writetable(db_table,processed_data_path+"\AVNRT_DB_filt.csv")
 
 %%                          ---------- FINAL DATASET ANALYSIS ---------- 
 clc;clear;close;
-dataset="dataset_1";
+dataset="dataset_3";
 
 processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed\data_aligned";
 src_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\Sub_alignment_analysis_phase";
@@ -298,6 +298,9 @@ addpath(src_path)
 % Loading previusly made data
 load(processed_data_path+'\'+dataset+'.mat');
 fc=2035;
+% Cleaning dataset from duplicate signals
+% final_data_by_sub=remove_repeated_signals(final_data_by_sub);
+% done one time at all
 
 %% Showing some examples
 show_final_dataset_examples(final_data_by_sub,fc)
