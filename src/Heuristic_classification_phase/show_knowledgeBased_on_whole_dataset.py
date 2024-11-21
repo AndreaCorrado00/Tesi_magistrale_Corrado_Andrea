@@ -85,7 +85,7 @@ def show_knowledgeBased_on_whole_dataset(db_number,use_ratio):
         
     # %% Performance of the heuristic classifier: train 
     # Fixed saving names
-    cm_suptitle="Confusion Matrix: Heuristic classifier"
+    cm_suptitle="Confusion Matrix: Knowledge based classifier"
     cm_saving_path=os.path.join(figure_path+"/Heuristic_classification_phase",fig_final_folder)
     # Variable saving names
     cm_saving_name="CM_heuristic_train"+plot_last_name
@@ -155,7 +155,7 @@ def show_knowledgeBased_on_whole_dataset(db_number,use_ratio):
         
         # %% CM 
         # Fixed saving names
-        cm_suptitle="Confusion Matrix: Heuristic classifier"
+        cm_suptitle="Confusion Matrix: Knowledge based classifier"
         cm_saving_path=os.path.join(figure_path+"/Heuristic_classification_phase",fig_final_folder)
         # Variable saving names
         cm_saving_name="CM_heuristic_LOPOCV"+plot_last_name
