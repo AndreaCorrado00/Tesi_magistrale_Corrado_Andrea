@@ -92,8 +92,8 @@ def show_knowledgeBased_on_whole_dataset(db_number,use_ratio):
     cm_title=subtitle_plots+" train set" 
     cm_title=subtitle_plots+" whole dataset" 
     #confusion matrix
-    he_report=evaluate_confusion_matrix(pred_heuristic,y_train,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=False, path=cm_saving_path,saving_name=cm_saving_name)
-    plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name=None)
+    he_report=evaluate_confusion_matrix(pred_heuristic,y_train,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
+    plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="report_whole_C")
 
     # %% Heuristic classifier: test 
     dims=x_test.shape
@@ -111,9 +111,9 @@ def show_knowledgeBased_on_whole_dataset(db_number,use_ratio):
     cm_title=subtitle_plots+" test set"
     cm_title=subtitle_plots+" whole dataset" 
     #confusion matrix
-    he_report=evaluate_confusion_matrix(pred_heuristic,y_test,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=False, path=cm_saving_path,saving_name=cm_saving_name)
+    he_report=evaluate_confusion_matrix(pred_heuristic,y_test,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
 
-    plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name=None)
+    plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="report_whole_C")
 
     #%% Showing correct results
     col=f"db {db_number} c"
@@ -160,8 +160,8 @@ def show_knowledgeBased_on_whole_dataset(db_number,use_ratio):
         # Variable saving names
         cm_saving_name="CM_heuristic_LOPOCV"+plot_last_name
         cm_title=subtitle_plots+" LOPOCV, heuristic" 
-        he_report=evaluate_confusion_matrix(y_pred_LOPOCV,y_true_LOPOCV,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=False, path=cm_saving_path,saving_name=cm_saving_name)
-        plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name=None)
+        he_report=evaluate_confusion_matrix(y_pred_LOPOCV,y_true_LOPOCV,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
+        plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="report_LOPOCV_C")
         
         # misclassified per class
         miss_class_summary= misclassification_summary(whole_dataset,y_pred_LOPOCV, labels_unique)
