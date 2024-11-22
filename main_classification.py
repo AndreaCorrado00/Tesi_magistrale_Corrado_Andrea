@@ -113,7 +113,7 @@ he_report=evaluate_confusion_matrix(pred_KB_improved,y_true,labels_unique,cm_sup
 plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="CM_whole_KB_improved")
 
 #%% LOPOCV validation 
-y_true_LOPOCV,y_pred_LOPOCV,signal_peaks_and_class_KB_improved_LOPOCV=LOPOCV_KB_improved(whole_feature_db)
+y_true_LOPOCV,y_pred_LOPOCV,signal_peaks_and_class_KB_improved_LOPOCV=LOPOCV_KB_improved(whole_feature_db,use_ratio)
 # %% CM 
 # Variable saving names
 cm_saving_name="CM_heuristic_LOPOCV"+plot_last_name

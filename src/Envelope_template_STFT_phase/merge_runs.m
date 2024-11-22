@@ -4,23 +4,23 @@ function [map_upper, map_lower] = merge_runs(map_upper, map_lower)
         error('map_upper and map_lower must have the same length.');
     end
 
-    % Ensure the combined map starts with a run in map_upper
-    first_upper = find(map_upper, 1, 'first');
-    first_lower = find(map_lower, 1, 'first');
-    
-    if isempty(first_upper) || (~isempty(first_lower) && first_lower < first_upper)
-        % If map_lower starts before map_upper, set map_lower to 0 before the first map_upper
-        map_lower(1:first_upper-1) = 0;
-    end
-    
-    % Ensure the combined map ends with a run in map_lower
-    last_lower = find(map_lower, 1, 'last');
-    last_upper = find(map_upper, 1, 'last');
-    
-    if isempty(last_lower) || (~isempty(last_upper) && last_upper > last_lower)
-        % If map_upper ends after map_lower, set map_upper to 0 after the last map_lower
-        map_upper(last_lower+1:end) = 0;
-    end
+    % % Ensure the combined map starts with a run in map_upper
+    % first_upper = find(map_upper, 1, 'first');
+    % first_lower = find(map_lower, 1, 'first');
+    % 
+    % if isempty(first_upper) || (~isempty(first_lower) && first_lower < first_upper)
+    %     % If map_lower starts before map_upper, set map_lower to 0 before the first map_upper
+    %     map_lower(1:first_upper-1) = 0;
+    % end
+    % 
+    % % Ensure the combined map ends with a run in map_lower
+    % last_lower = find(map_lower, 1, 'last');
+    % last_upper = find(map_upper, 1, 'last');
+    % 
+    % if isempty(last_lower) || (~isempty(last_upper) && last_upper > last_lower)
+    %     % If map_upper ends after map_lower, set map_upper to 0 after the last map_lower
+    %     map_upper(last_lower+1:end) = 0;
+    % end
 
     % Identify runs of 1s in the logical vectors
     upper_regions = regionprops(map_upper, 'PixelIdxList');
@@ -85,6 +85,4 @@ function [map_upper, map_lower] = merge_runs(map_upper, map_lower)
         % If map_upper ends after map_lower, set map_upper to 0 after the last map_lower
         map_upper(last_lower+1:end) = 0;
     end
-
-
 end

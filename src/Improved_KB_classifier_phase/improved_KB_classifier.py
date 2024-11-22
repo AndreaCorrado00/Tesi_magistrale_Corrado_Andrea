@@ -7,7 +7,7 @@ def improved_KB_classifier(record,use_ratio=False):
             pred_class="MAP_C"
         else:
             # atrial and ventricular thresholds 
-            if record["atrial_ventricular_ratio"]>0.2: 
+            if record["atrial_ventricular_ratio"]>0.10: 
                 pred_class="MAP_A"
             else:
                 pred_class="MAP_B"

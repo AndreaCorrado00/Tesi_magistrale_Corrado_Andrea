@@ -364,7 +364,7 @@ spaghetti_confidence_signals(env_dataset,fc,figure_path+"\Envelope", "envelops")
 traces_subplots_by_sub(final_data_by_sub,env_dataset, fc,'Rov signal and envelope',figure_path+"\Envelope\Single_traces")
 
 %% Showing envelope slope analysis pipeline
-record_id=["C",1,4]; 
+record_id=["A",11,8]; 
 show_envelope_slope_analysis(final_data_by_sub,env_dataset,fc,record_id,figure_path+"\Envelope\slope_analysis\algorithm_explanation")
 
     %% Plotting results
@@ -375,7 +375,7 @@ plot_traces_active_areas(final_data_by_sub,env_dataset,fc,"Slope_Analysis",'Rov 
 envelope_features = build_envelope_features_set(final_data_by_sub, env_dataset, fc);
 
     %% Features analysis
-show_features_statistics(envelope_features,true,figure_path+"\Envelope\features_boxplots")
+show_features_statistics(envelope_features,false,figure_path+"\Envelope\features_boxplots")
 
     %% Saving features
 writetable(envelope_features, processed_data_path+'\'+'feature_'+dataset+'.txt', 'Delimiter', ',', 'WriteVariableNames', true);

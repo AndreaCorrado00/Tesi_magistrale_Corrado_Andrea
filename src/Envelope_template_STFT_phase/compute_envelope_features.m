@@ -72,13 +72,24 @@ n_peaks_duration_ratio=n_e_peaks/duration;
 % peak on the right
 if n_e_peaks >= 2
     % Find the leftmost and rightmost peaks
-    [~, leftmost_idx] = min(final_rov_peaks_val_pos(:,2));
-    [~, rightmost_idx] = max(final_rov_peaks_val_pos(:,2));
+    [~, leftmost_idx] = min(final_rov_peaks_val_pos(:,2),[],"omitnan");
+    [~, rightmost_idx] = max(final_rov_peaks_val_pos(:,2),[],"omitnan");
     atrial_ventricular_ratio = final_rov_peaks_val_pos(leftmost_idx,1) / final_rov_peaks_val_pos(rightmost_idx,1);
     atrial_ventricular_time_ratio=final_rov_peaks_val_pos(leftmost_idx,2) / final_rov_peaks_val_pos(rightmost_idx,2);
 else
-    atrial_ventricular_ratio = nan; % Not enough peaks to compute the ratio
-    atrial_ventricular_time_ratio=nan;
+    if max(final_rov_peaks_val_pos(:,2),[],"omitnan")/fc>0.4 %forcing peak evaluation
+        % detected peak is into the ventricular phase
+        [atrial_peak,atrial_pos]=max(abs(example_rov(round(0.17*fc):round(0.4*fc))));
+        vent_peak=max(final_rov_peaks_val_pos(:,1),[],"omitnan");
+        atrial_ventricular_ratio=atrial_peak/vent_peak;
+        atrial_ventricular_time_ratio=(atrial_pos+round(0.17*fc))/max(final_rov_peaks_val_pos(:,2),[],"omitnan");
+
+    else
+        [vent_peak,vent_pos]=max(abs(example_rov(round(0.4*fc):round(0.6*fc))));
+        atrial_peak=max(final_rov_peaks_val_pos(:,1),[],"omitnan");
+        atrial_ventricular_ratio=atrial_peak/vent_peak;
+        atrial_ventricular_time_ratio=max(final_rov_peaks_val_pos(:,2),[],"omitnan")/(vent_pos+round(0.4*fc));
+    end
 end
 
 if n_e_peaks ==3
