@@ -59,15 +59,15 @@ upper_regions = regionprops(map_upper, 'PixelIdxList');
 lower_regions = regionprops(map_lower, 'PixelIdxList');
 
 % Add a positive run at the start if needed
-if length(fieldnames(lower_regions))>1 && lower_regions(1).PixelIdxList(1) > signal_start
+if numel(lower_regions)>1 && lower_regions(1).PixelIdxList(1) < upper_regions(1).PixelIdxList(end) && lower_regions(1).PixelIdxList(1)>signal_start
     % Add a positive run before the first negative run
-    map_upper(round((lower_regions(1).PixelIdxList(1)-signal_start)/2):lower_regions(1).PixelIdxList(1) - 1) = 1;
+    map_upper(signal_start+round((lower_regions(1).PixelIdxList(1)-signal_start)/2):lower_regions(1).PixelIdxList(1) - 1) = 1;
 end
 
 % Add a negative run at the end if needed
-if length(fieldnames(upper_regions))>1 && upper_regions(end).PixelIdxList(end) < signal_end
+if numel(upper_regions)>1 && upper_regions(end).PixelIdxList(end) > lower_regions(end).PixelIdxList(end) && upper_regions(end).PixelIdxList(end)<signal_end
     % Add a negative run after the last positive run
-    map_lower(upper_regions(end).PixelIdxList(end) + 1:round((signal_end-upper_regions(end).PixelIdxList(end))/2)) = 1;
+    map_lower(upper_regions(end).PixelIdxList(end) + 1:upper_regions(end).PixelIdxList(end)+round((signal_end-upper_regions(end).PixelIdxList(end)+1)/2)) = 1;
 end
 
 % Ensure the combined map starts with a run in map_upper

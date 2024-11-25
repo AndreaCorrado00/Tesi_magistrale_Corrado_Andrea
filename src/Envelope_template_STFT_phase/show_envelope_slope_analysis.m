@@ -14,11 +14,11 @@ sub_num = split(sub_num{2},record_id(1));
 sub_num = sub_num{end};
 
 % % Create a new figure
-% fig = figure;
-% fig.WindowState = "maximized";
-screenSize = get(0, 'ScreenSize');
-fig = figure('Visible', 'off');   
-fig.Position = [0, 0, screenSize(3), screenSize(4)];
+fig = figure;
+fig.WindowState = "maximized";
+% screenSize = get(0, 'ScreenSize');
+% fig = figure('Visible', 'off');   
+% fig.Position = [0, 0, screenSize(3), screenSize(4)];
 sgtitle(["Example of envelope slope analysis for: MAP "+record_id(1)+", sub: "+sub_num+", record: "+num2str(h)])
 
 %% computing derivation
@@ -132,4 +132,4 @@ ylabel('Amplitude [mV]')
 %% possible saving plot
 % % Save the plot
 file_name = sub+ '_record_' + num2str(h) + '_';
-save_plot(file_name,"example_analysis", figure_path, fig, true);
+% save_plot(file_name,"example_analysis", figure_path, fig, true);

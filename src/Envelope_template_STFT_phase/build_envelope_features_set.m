@@ -23,6 +23,8 @@ for i = ["A", "B", "C"]
             example_rov = data.(map).(sub).rov_trace{:,h};
             example_env = env_data.(map).(sub).rov_trace{:,h};
 
+            disp([sub+"-"+num2str(h)])
+
             % Compute features using the compute_envelope_features function
             % disp([sub+"-"+num2str(h)])
             [n_peaks,env_peak1_pos,env_peak2_pos,env_peak3_pos,env_peak1_val,env_peak2_val,env_peak3_val,...
