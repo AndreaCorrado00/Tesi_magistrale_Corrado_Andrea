@@ -90,7 +90,7 @@ whole_feature_db,feature_db=load_feature_dataset(dataset_path,feature_dataset_na
 other_fig_path=figure_path+"/Improved_KB_classifier_phase/"+fig_final_folder+"/other_figs"
 
 #%% KB classifier will still be based on peaks values, ratios and positions
-use_ratio=False
+use_ratio=True
 # whole dataset
 dims=feature_db.shape
 pred_KB_improved=np.empty(dims[0], dtype=object)
@@ -179,7 +179,7 @@ plot_dataframe_as_plain_image(miss_class_summary, figsize=(8,5),scale=(1.7,1.7),
 
 
 #%% Second classifier: otimal subset of features
-selected_features=['id','env_peak3_val','peak1_pos','peak2_pos','duration','atrial_ventricular_ratio','class']
+selected_features=['id','peak3_val','peak1_pos','peak2_pos','n_peaks_duration_rateo','class']
 
 max_depth=tune_tree_depth_lopocv(whole_feature_db,selected_features,np.arange(1,15,dtype=int))
 print(f"-> Maximum depth for the tree: {max_depth}")
