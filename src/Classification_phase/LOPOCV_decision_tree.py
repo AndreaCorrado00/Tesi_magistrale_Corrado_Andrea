@@ -1,14 +1,18 @@
 from sklearn.tree import DecisionTreeClassifier
+from sklearn.tree import export_text
+from sklearn.tree import plot_tree
+import matplotlib.pyplot as plt
 
-def LOPOCV_decision_tree(whole_feature_db, selected_features):
+def LOPOCV_decision_tree(whole_feature_db, selected_features,max_depth):
+    
     # Model and metrics
-    classifier = DecisionTreeClassifier(criterion="gini", random_state=42)
+    classifier = DecisionTreeClassifier(criterion="entropy", random_state=42,max_depth=max_depth)
     
     # Initialize lists to store the results
     all_y_true = []
     all_y_pred = []
     all_predictions_by_subs = []  # Will store predictions in the format: [id, y_true, y_pred]
-    
+
     participant_ids = whole_feature_db['id'].unique()
     
     # Select only the relevant features
@@ -34,6 +38,12 @@ def LOPOCV_decision_tree(whole_feature_db, selected_features):
         # Append the true labels and predictions to the overall lists
         all_y_true.extend(y_test)
         all_y_pred.extend(y_pred)
+
+        
+        # plt.figure(figsize=(20, 10))
+        # plot_tree(classifier, feature_names=selected_whole_feature_db.columns.tolist(), class_names=classifier.classes_, filled=True)
+        # plt.title(f"Decision Tree for subject {participant}")
+        # plt.show() 
         
         # Append each patient's predictions and true values to the list in the requested format
         for idx in range(len(y_test)):

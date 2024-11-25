@@ -133,69 +133,123 @@ plot_dataframe_as_plain_image(miss_class_summary, figsize=(8,5),scale=(1.7,1.7),
 #%%############################################################################
 ###################     TREE CLASSIFIER WITH LOPOCV     #######################
 ###############################################################################
+other_fig_path=figure_path+"/Classification_phase/"+fig_final_folder+"/other_figs"
 
 from LOPOCV_decision_tree import LOPOCV_decision_tree
+from sklearn.metrics import f1_score
+from tune_tree_depth_lopocv import tune_tree_depth_lopocv
+
+
+# first classifier: whole dataset
 selected_features=whole_feature_db.columns.tolist()
 
-classifier,all_y_pred, all_y_true, all_predictions_by_subs, selected_feature_db=LOPOCV_decision_tree(whole_feature_db, selected_features)
+max_depth=tune_tree_depth_lopocv(whole_feature_db,selected_features,np.arange(3,15,dtype=int))
+print(f"-> Maximum depth for the tree: {max_depth}")
+classifier,all_y_pred, all_y_true, all_predictions_by_subs, selected_feature_db=LOPOCV_decision_tree(whole_feature_db, selected_features,max_depth=max_depth)
 
-cm_suptitle="Confusion Matrix: Tree classifier"
+# PERFORMANCE
+cm_suptitle=f"Confusion Matrix: Tree classifier, depth {max_depth}"
 cm_saving_path=os.path.join(figure_path+"/Classification_phase",fig_final_folder)
 # Variable saving names
-cm_saving_name="CM_tree_LOPOCV"+plot_last_name
+cm_saving_name="CM_whole_tree_LOPOCV"+plot_last_name
 cm_title=subtitle_plots+", LOPOCV" 
 
 #confusion matrix
-he_report=evaluate_confusion_matrix(all_y_pred,all_y_true,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=False, path=cm_saving_path,saving_name=cm_saving_name)
-#plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="report_whole_C")
+he_report=evaluate_confusion_matrix(all_y_pred,all_y_true,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
+plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="report_LOPOCV_tree")
 
-# Features importance
-from sklearn.metrics import f1_score
+# Features importance: best model tuning
 feature_importances = classifier.feature_importances_
 feature_names = feature_db.columns.tolist()
 
+importance_fig,ax=plt.subplots()
 plt.barh(feature_names, feature_importances, color="skyblue")
 plt.xlabel("Importance")
 plt.title("Feature Importance")
 plt.show()
+save_plot(importance_fig, other_fig_path,file_name='whole tree features importance')
 
 f1_macro = f1_score(all_y_pred,all_y_true, average="weighted")
 print(f"Global F1-Score (Weighted): {f1_macro:.4f}")
 
+# Summary of misclassification errors
+miss_class_summary= misclassification_summary(whole_feature_db[selected_features],all_y_pred, labels_unique)
+plot_dataframe_as_plain_image(miss_class_summary, figsize=(8,5),scale=(1.7,1.7),title_plot=cm_title,path=other_fig_path,saving_name="Misclass_LOPOCV_whole_tree")
 
 
 
-
-#%% SUBSET OF FEATURES
-
-from LOPOCV_decision_tree import LOPOCV_decision_tree
+#%% Second classifier: otimal subset of features
 selected_features=['id','env_peak3_val','peak1_pos','peak2_pos','duration','atrial_ventricular_ratio','class']
 
-classifier,all_y_pred, all_y_true, all_predictions_by_subs, selected_feature_db=LOPOCV_decision_tree(whole_feature_db, selected_features)
+max_depth=tune_tree_depth_lopocv(whole_feature_db,selected_features,np.arange(1,15,dtype=int))
+print(f"-> Maximum depth for the tree: {max_depth}")
+# lopocv training
+classifier,all_y_pred, all_y_true, all_predictions_by_subs, selected_feature_db=LOPOCV_decision_tree(whole_feature_db, selected_features,max_depth=max_depth)
 
-cm_suptitle="Confusion Matrix: Tree classifier"
+# PERFORMANCE
+cm_suptitle=f"Confusion Matrix: Tree classifier,depth {max_depth} on feature subset"
 cm_saving_path=os.path.join(figure_path+"/Classification_phase",fig_final_folder)
 # Variable saving names
-cm_saving_name="CM_tree_LOPOCV"+plot_last_name
+cm_saving_name="CM_opt_tree_LOPOCV_feature_subset"+plot_last_name
 cm_title=subtitle_plots+", LOPOCV" 
 
 #confusion matrix
-he_report=evaluate_confusion_matrix(all_y_pred,all_y_true,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=False, path=cm_saving_path,saving_name=cm_saving_name)
-#plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="report_whole_C")
-
+he_report=evaluate_confusion_matrix(all_y_pred,all_y_true,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
+plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="report_LOPOCV_tree_subset")
 
 # Features importance
 feature_importances = classifier.feature_importances_
 feature_names = selected_feature_db.columns.tolist()
 
+importance_fig,ax=plt.subplots()
 plt.barh(feature_names, feature_importances, color="skyblue")
 plt.xlabel("Importance")
 plt.title("Feature Importance")
 plt.show()
+save_plot(importance_fig, other_fig_path,file_name='optimised tree features importance')
 
 f1_macro = f1_score(all_y_pred,all_y_true, average="weighted")
 print(f"Global F1-Score (Weighted): {f1_macro:.4f}")
 
-#miss_class_summary= misclassification_summary(selected_feature_db,all_y_pred, labels_unique)
-#plot_dataframe_as_plain_image(miss_class_summary, figsize=(8,5),scale=(1.7,1.7),title_plot=cm_title,path=other_fig_path,saving_name="Misclass_LOPOCV_C")
+# Summary of misclassification errors
+miss_class_summary= misclassification_summary(whole_feature_db[selected_features],all_y_pred, labels_unique)
+plot_dataframe_as_plain_image(miss_class_summary, figsize=(8,5),scale=(1.7,1.7),title_plot=cm_title+", optimised model",path=other_fig_path,saving_name="Misclass_LOPOCV_tree_feature_subset")
+
+#%% Proving that subs 1,3,4,6 worsen the anlysis
+selected_features=['id','env_peak3_val','peak1_pos','peak2_pos','duration','atrial_ventricular_ratio','class']
+sub_feature_db=whole_feature_db[whole_feature_db['id'].isin([7,8,9,10,11,12])]
+
+max_depth=tune_tree_depth_lopocv(whole_feature_db,selected_features,np.arange(1,15,dtype=int))
+print(f"-> Maximum depth for the tree: {max_depth}")
+# lopocv training
+classifier,all_y_pred, all_y_true, all_predictions_by_subs, selected_feature_db=LOPOCV_decision_tree(sub_feature_db, selected_features,max_depth=max_depth)
+
+# PERFORMANCE
+cm_suptitle=f"Confusion Matrix: Tree classifier,depth {max_depth} on feature subset and DB subset"
+cm_saving_path=os.path.join(figure_path+"/Classification_phase",fig_final_folder)
+# Variable saving names
+cm_saving_name="CM_opt_tree_LOPOCV_feature_and_DB_subset"+plot_last_name
+cm_title=subtitle_plots+", LOPOCV, subs 7->12" 
+
+#confusion matrix
+he_report=evaluate_confusion_matrix(all_y_pred,all_y_true,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
+plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="report_LOPOCV_tree_subset")
+
+# Features importance
+feature_importances = classifier.feature_importances_
+feature_names = selected_feature_db.columns.tolist()
+
+importance_fig,ax=plt.subplots()
+plt.barh(feature_names, feature_importances, color="skyblue")
+plt.xlabel("Importance")
+plt.title("Feature Importance")
+plt.show()
+save_plot(importance_fig, other_fig_path,file_name='optimised tree features importance reduced db')
+
+f1_macro = f1_score(all_y_pred,all_y_true, average="weighted")
+print(f"Global F1-Score (Weighted): {f1_macro:.4f}")
+
+# Summary of misclassification errors
+miss_class_summary= misclassification_summary(sub_feature_db[selected_features],all_y_pred, labels_unique)
+plot_dataframe_as_plain_image(miss_class_summary, figsize=(8,5),scale=(1.7,1.7),title_plot=cm_title+", optimised model",path=other_fig_path,saving_name="Misclass_LOPOCV_tree_feature_subset")
 
