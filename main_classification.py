@@ -16,11 +16,9 @@ sys.path.append("D:/Desktop/ANDREA/Universita/Magistrale/Anno Accademico 2023-20
 # Functions
 from load_signal_dataset import load_signal_dataset
 from save_plot import save_plot
-from show_single_example import show_single_example
 from display_data_summary import display_data_summary
 from show_class_proportions import show_class_proportions
 from evaluate_confusion_matrix import evaluate_confusion_matrix
-from draw_his_boundaries import draw_his_boundaries
 from misclassification_summary import misclassification_summary
 from plot_dataframe_as_plain_image import plot_dataframe_as_plain_image
 from load_feature_dataset import load_feature_dataset
@@ -76,8 +74,9 @@ if show_heuristic:
     # 2. Building a ML model from scratch 
 
 
-#%% IMPROVING KNOWLEDGE BASED CLASSIFIER
-
+#%%############################################################################
+################## IMPROVING KNOWLEDGE BASED CLASSIFIER #######################
+###############################################################################
     # 1. two main aspects were critic into the first heuristic classifier:
         # a. time threshold definition
         # b. his peak value
@@ -89,8 +88,9 @@ feature_dataset_name="feature_"+dataset_name
 whole_feature_db,feature_db=load_feature_dataset(dataset_path,feature_dataset_name)
 
 other_fig_path=figure_path+"/Improved_KB_classifier_phase/"+fig_final_folder+"/other_figs"
+
 #%% KB classifier will still be based on peaks values, ratios and positions
-use_ratio=True
+use_ratio=False
 # whole dataset
 dims=feature_db.shape
 pred_KB_improved=np.empty(dims[0], dtype=object)
@@ -101,7 +101,7 @@ for i in range(0,dims[0]):
     pred_KB_improved[i]=pred
     signal_peaks_and_class_KB_improved.append([feature_1_val.item(),peak_3_val.item(),pred])
     
-# %% Performance of the heuristic classifier: train 
+# %% Performance of the heuristic classifier on the whole dataset
 # Fixed saving names
 cm_suptitle="Confusion Matrix: improved KB classifier"
 cm_saving_path=os.path.join(figure_path+"/Improved_KB_classifier_phase",fig_final_folder)
@@ -111,6 +111,7 @@ cm_title=subtitle_plots+" whole dataset"
 #confusion matrix
 he_report=evaluate_confusion_matrix(pred_KB_improved,y_true,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
 plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="CM_whole_KB_improved")
+
 
 #%% LOPOCV validation 
 y_true_LOPOCV,y_pred_LOPOCV,signal_peaks_and_class_KB_improved_LOPOCV=LOPOCV_KB_improved(whole_feature_db,use_ratio)
@@ -125,4 +126,76 @@ plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plo
 miss_class_summary= misclassification_summary(whole_feature_db,y_pred_LOPOCV, labels_unique)
 plot_dataframe_as_plain_image(miss_class_summary, figsize=(8,5),scale=(1.7,1.7),title_plot=cm_title,path=other_fig_path,saving_name="Misclass_LOPOCV_KB_improved")
 
+
+
+
+
+#%%############################################################################
+###################     TREE CLASSIFIER WITH LOPOCV     #######################
+###############################################################################
+
+from LOPOCV_decision_tree import LOPOCV_decision_tree
+selected_features=whole_feature_db.columns.tolist()
+
+classifier,all_y_pred, all_y_true, all_predictions_by_subs, selected_feature_db=LOPOCV_decision_tree(whole_feature_db, selected_features)
+
+cm_suptitle="Confusion Matrix: Tree classifier"
+cm_saving_path=os.path.join(figure_path+"/Classification_phase",fig_final_folder)
+# Variable saving names
+cm_saving_name="CM_tree_LOPOCV"+plot_last_name
+cm_title=subtitle_plots+", LOPOCV" 
+
+#confusion matrix
+he_report=evaluate_confusion_matrix(all_y_pred,all_y_true,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=False, path=cm_saving_path,saving_name=cm_saving_name)
+#plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="report_whole_C")
+
+# Features importance
+from sklearn.metrics import f1_score
+feature_importances = classifier.feature_importances_
+feature_names = feature_db.columns.tolist()
+
+plt.barh(feature_names, feature_importances, color="skyblue")
+plt.xlabel("Importance")
+plt.title("Feature Importance")
+plt.show()
+
+f1_macro = f1_score(all_y_pred,all_y_true, average="weighted")
+print(f"Global F1-Score (Weighted): {f1_macro:.4f}")
+
+
+
+
+
+#%% SUBSET OF FEATURES
+
+from LOPOCV_decision_tree import LOPOCV_decision_tree
+selected_features=['id','env_peak3_val','peak1_pos','peak2_pos','duration','atrial_ventricular_ratio','class']
+
+classifier,all_y_pred, all_y_true, all_predictions_by_subs, selected_feature_db=LOPOCV_decision_tree(whole_feature_db, selected_features)
+
+cm_suptitle="Confusion Matrix: Tree classifier"
+cm_saving_path=os.path.join(figure_path+"/Classification_phase",fig_final_folder)
+# Variable saving names
+cm_saving_name="CM_tree_LOPOCV"+plot_last_name
+cm_title=subtitle_plots+", LOPOCV" 
+
+#confusion matrix
+he_report=evaluate_confusion_matrix(all_y_pred,all_y_true,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=False, path=cm_saving_path,saving_name=cm_saving_name)
+#plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="report_whole_C")
+
+
+# Features importance
+feature_importances = classifier.feature_importances_
+feature_names = selected_feature_db.columns.tolist()
+
+plt.barh(feature_names, feature_importances, color="skyblue")
+plt.xlabel("Importance")
+plt.title("Feature Importance")
+plt.show()
+
+f1_macro = f1_score(all_y_pred,all_y_true, average="weighted")
+print(f"Global F1-Score (Weighted): {f1_macro:.4f}")
+
+#miss_class_summary= misclassification_summary(selected_feature_db,all_y_pred, labels_unique)
+#plot_dataframe_as_plain_image(miss_class_summary, figsize=(8,5),scale=(1.7,1.7),title_plot=cm_title,path=other_fig_path,saving_name="Misclass_LOPOCV_C")
 
