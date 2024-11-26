@@ -40,7 +40,7 @@ for i = ["A", "B", "C"]
             title_plot = 'MAP:' + i + ' (' + get_name_of_map(i) + '), sub:' + sub_num +' trace, record: '+num2str(h);
             full_title={string(sg_title);string(title_plot)};
             xlim([0, x(end)])
-            ylim([min(signal,[],"omitnan") - 0.2 * abs(min(signal,[],"omitnan")), max(signal,[],"omitnan") + 0.2 * abs(max(signal,[],"omitnan"))]);
+            ylim([min([min(signal,[],"omitnan"),min(envelope,[],"omitnan")]) - 0.2 * abs(min([min(signal,[],"omitnan"),min(envelope,[],"omitnan")])), max([max(signal,[],"omitnan"),max(envelope,[],"omitnan")]) + 0.2 * abs(max([max(signal,[],"omitnan"),max(envelope,[],"omitnan")]))]);
 
             xlabel('time [s]')
             ylabel('Voltage [mV]')
