@@ -379,83 +379,17 @@ plot_traces_active_areas(final_data_by_sub,env_dataset,fc,"Slope_Analysis",'Rov 
       
 
 %% Envelope "slope" features
-envelope_features = build_envelope_features_set(final_data_by_sub, env_dataset, fc);
+feature_set = build_features_set(final_data_by_sub, env_dataset, fc);
+
 
     %% Features analysis
-show_features_statistics(envelope_features,true,figure_path+"\Envelope\features_boxplots")
+show_features_statistics(feature_set,true,figure_path+"\features_boxplots")
 
     %% Saving features
-writetable(envelope_features, processed_data_path+'\'+'feature_'+dataset+'.txt', 'Delimiter', ',', 'WriteVariableNames', true);
+writetable(feature_set, processed_data_path+'\'+'feature_'+dataset+'.txt', 'Delimiter', ',', 'WriteVariableNames', true);
 
 
-%% Template matching
-% Example signal (you can replace this with your actual signal data)
-fs=fc;  % Sampling frequency (Hz)
-t_signal = 0:1/fs:1-1/fs;  % Time vector (2 seconds of data)
-signal_example = final_data_by_sub.MAP_A.MAP_A3.rov_trace{:,13};
-corr_example=TM_dataset.MAP_A.MAP_A7.rov_trace{:,2};
-
-% 1. Define the template (biphasic)
-T = 0.02;  % Duration of template in seconds 
-N = round(T * fs);  % Number of samples in the template
+%% STFT
 
 
-t_template = linspace(0, T, N); 
-amplitude = max(abs(signal_example)); 
-template = amplitude* sin(2 * pi * 1/T * t_template); % Biphasic siusoid template
 
-
-% 2. Cross-correlation between the signal and the template
-% We use 'same' to ensure that the output has the same length as the signal
-corr = conv(signal_example, flip(template), 'same');  % Convolution (cross-correlation)
-% Normalization factors
-norm_signal = sqrt(sum(signal_example.^2));  % Norm of the signal
-norm_template = sqrt(sum(template.^2));  % Norm of the template
-corr_example = corr / (norm_signal * norm_template);
-% corr_example=movmean(corr_example,50);
-
-[maxCorr, idxMax] = max(corr_example);  % Find the maximum value in the correlation
-lagMax = idxMax;  % Index of the peak correlation (in samples)
-
-% 3. Calculate the time corresponding to the peak of the cross-correlation
-t_max = (idxMax - 1) / fs;  % Time of the maximum correlation (converted from samples to seconds)
-
-% Template plotting
-tmp_plot=zeros(length(t_signal),1);
-tmp_plot(100:100+length(t_template)-1)=template;
-% 4. Plot the signal and its cross-correlation
-figure;
-
-% Plot the signal
-subplot(3, 1, 1);
-plot(t_signal,signal_example );
-title('Signal Example');
-xlabel('Time (seconds)');
-ylabel('Amplitude')
-
-subplot(3,1,2)
-plot(t_signal,tmp_plot)
-title('template')
-
-% Plot the normalized cross-correlation (to match the scale of the signal)
-subplot(3, 1, 3);
-% plot(t_signal, corr / max(corr), 'r');  % Normalize cross-correlation for visibility
-
-plot(t_signal, signal_example, 'b');  % Normalize signal for visibility
-hold on;
-plot(t_signal, corr_example, 'r');
-title('Cross-Correlation and Signal Overlay');
-xlabel('Time (seconds)');
-ylabel('Amplitude');
-legend('Cross-Correlation', 'Signal');
-
-% 5. Indicate the maximum correlation point on the plot
-hold on;
-plot(t_max, corr_example(lagMax), 'ko');
-% text(t_max, corr(lagMax) / max(corr), sprintf('Peak at %.3f s', t_max), 'VerticalAlignment', 'bottom', 'HorizontalAlignment', 'right');
-
-% CAPIRE BENE COSA FA QUESTA PIPELINE
-% definire l'ampiezza del template ottimale
-% sogliatura o picco della cross correlazione
-% possibili features
-% POSSIBILE TEMPLATE MULTISCALA
