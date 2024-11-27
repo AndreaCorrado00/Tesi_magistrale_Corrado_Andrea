@@ -390,6 +390,36 @@ writetable(feature_set, processed_data_path+'\'+'feature_'+dataset+'.txt', 'Deli
 
 
 %% STFT
+% Visualizzazione dello spettrogramma
+figure;
+
+% Spettrogramma
+ax1 = subplot(3, 3, 1:6); % Associa il subplot a una variabile
+[S, F, T, P] = spectrogram(signal, window, hop_size, nfft, fc); % Calcola lo spettrogramma
+imagesc(T, F, 10*log10(P)); % Visualizza lo spettrogramma manualmente
+axis tight;
+set(gca, 'YDir', 'normal'); % Corregge l'orientamento dell'asse Y
+title('Signal Spectrogram');
+xlabel('Time [s]');
+ylabel('Frequency [Hz]');
+ylim([0,400])
+
+% Aggiungi la colorbar sotto al grafico
+hColorbar = colorbar('southoutside'); % Colorbar posizionata sotto il grafico
+ylabel(hColorbar, 'Power/Frequency [dB/Hz]'); % Etichetta della colorbar
+
+% Segnale originale
+subplot(3, 3, 7:9);
+plot(t_signal, signal, 'b');
+title('Original Signal');
+xlabel('Time [s]');
+ylabel('Amplitude [mV]');
+grid on;
+
+% Allinea gli assi temporali
+linkaxes(findall(gcf, 'Type', 'axes'), 'x');
+
+
 
 
 
