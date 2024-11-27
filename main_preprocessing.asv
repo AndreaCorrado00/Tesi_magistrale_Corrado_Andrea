@@ -357,28 +357,36 @@ show_envelope_eval(final_data_by_sub,fc,30)
 %% sistematic application of RMS envelope on signals
 env_dataset=evaluate_envelope_on_dataset(final_data_by_sub,30,"rms");
 
-%% sistematic application of TM
-TM_dataset=evaluate_TM_on_dataset(final_data_by_sub,0.01,fc);
-
-%% Showing results
+    %% Showing comulative results
 spaghetti_confidence_signals(env_dataset,fc,figure_path+"\Envelope", "envelops")
 
+%% sistematic application of TM
+TM_dataset=evaluate_TM_on_dataset(final_data_by_sub,0.05,fc);
+
+    %% Showing comulative results
+spaghetti_confidence_signals(TM_dataset,fc,figure_path+"\Template_Matching", "TM records")
+
+
 %% Single signal and envelope
-traces_subplots_by_sub(final_data_by_sub,env_dataset, fc,'Rov signal and envelope',figure_path+"\Envelope\Single_traces")
+rov_trace_plots_by_sub(final_data_by_sub,env_dataset, fc,"envelope_or_cross",'Rov signal and envelope',figure_path+"\Envelope\Single_traces")
 
 %% single signal and TM
-traces_subplots_by_sub(final_data_by_sub,TM_dataset, fc,'Rov signal and cross correlation signal',figure_path+"\Template_Matching\Single_traces")
+rov_trace_plots_by_sub(final_data_by_sub,TM_dataset, fc,"envelope_or_cross",'Rov signal and cross correlation signal',figure_path+"\Template_Matching\Single_traces")
+
+%% single signal and STFT
+rov_trace_plots_by_sub(final_data_by_sub,TM_dataset, fc,"STFT",'Rov signal STFT',figure_path+"\STFT\Single_traces")
+
 
 
 %% Showing envelope slope analysis pipeline
-record_id=["A",10,8]; 
+record_id=["C",6,3]; 
 show_envelope_slope_analysis(final_data_by_sub,env_dataset,fc,record_id,figure_path+"\Envelope\slope_analysis\algorithm_explanation")
 
     %% Plotting results
 plot_traces_active_areas(final_data_by_sub,env_dataset,fc,"Slope_Analysis",'Rov signal and envelope:slope analysis',figure_path+"\Envelope\slope_analysis")
       
 
-%% Envelope "slope" features
+%% Feature extraction
 feature_set = build_features_set(final_data_by_sub, env_dataset, fc);
 
 
@@ -389,32 +397,211 @@ show_features_statistics(feature_set,true,figure_path+"\features_boxplots")
 writetable(feature_set, processed_data_path+'\'+'feature_'+dataset+'.txt', 'Delimiter', ',', 'WriteVariableNames', true);
 
 
-%% STFT
-% Parametri
-fc = 2035; % Frequenza di campionamento in Hz
-signal = final_data_by_sub.MAP_A.MAP_A1.rov_trace{:,1}; % Segnale di input
-n = length(signal); % Lunghezza del segnale
+%% TEMPLATE MATCHING ANALYSIS
+TM_dataset=evaluate_TM_on_dataset(final_data_by_sub,0.05,fc);
 
-% Definizione dei parametri per la STFT
-win_length = 64; % Lunghezza della finestra (in punti)
-hop_size = win_length / 3; % Sovrapposizione 50%
-window = hamming(win_length, 'periodic'); % Finestra di Hamming
-nfft = 1048; % Numero di punti FFT
+% extracting signal
+record_id=["A",1,1];
 
-% Calcolo della STFT
-[stft_matrix, f, t] = stft(signal, fc, ...
-    'Window', window, ...
-    'OverlapLength', hop_size, ...
-    'FFTLength', nfft);
+map="MAP_"+record_id(1);
+sub=map+num2str(record_id(2));
+h=double(record_id(3));
+signal = final_data_by_sub.(map).(sub).rov_trace{:,h};
+example_env = env_dataset.(map).(sub).rov_trace{:,h};
+example_corr=TM_dataset.(map).(sub).rov_trace{:,h};
 
-% Visualizzazione dello spettrogramma
-figure;
-spectrogram(signal, window, hop_size, nfft, fc, 'yaxis');
-title('Spettrogramma del segnale');
-xlabel('Tempo (s)');
-ylabel('Frequenza (Hz)');
-colorbar;
+% plot elements
+
+sub_num = split(sub,'_');
+sub_num = split(sub_num{2},record_id(1));
+sub_num = sub_num{end};
+
+% % Create a new figure
+fig = figure;
+fig.WindowState = "maximized";
+% screenSize = get(0, 'ScreenSize');
+% fig = figure('Visible', 'off');   
+% fig.Position = [0, 0, screenSize(3), screenSize(4)];
+sgtitle(["Example of TM slope analysis for: MAP "+record_id(1)+", sub: "+sub_num+", record: "+num2str(h)])
+
+% 1: finding the atrial peak using the envelope
+[map_upper,map_lower]=analise_envelope_slope(example_env,0.002,fc);
+time_th = define_time_th(map_upper, map_lower);
+t_i=round(0.17*fc);
+t_vent=round(0.4*fc);
+i=1;
+atr_peak=0;
+t_atr_start=nan;
+t_atr_end=nan;
+
+while t_i<t_vent && time_th(1,2)<t_vent
+    t_s=time_th(i,1);
+    t_e=time_th(i,2);
+    candidate_atr_peak=max(signal(t_s:t_e));
+
+    if candidate_atr_peak>atr_peak
+        atr_peak=candidate_atr_peak;
+        t_atr_start=t_s;
+        t_atr_end=t_e;
+    end
+    i=i+1;
+    t_i=time_th(i,1);
+
+end
+
+x = [0:1/fc:1-1/fc]';
+subplot(2,2,1)
+plot(x,signal,"LineWidth",0.8,"Color","#4DBEEE")
+hold on
+
+% Plot vertical dashed lines for atrial phase
+for k = 1
+    % Convert index positions to time
+    start_time = t_atr_start / fc; % Start index converted to time
+    end_time = t_atr_end / fc;   % End index converted to time
+
+    % Plot vertical dashed line for the start of the peak (green)
+    plot([start_time, start_time], ylim, '--', 'LineWidth', 0.2, 'Color', [0, 0.5, 0]);
+    % Plot vertical dashed line for the end of the peak (red)
+    plot([end_time, end_time], ylim, '--', 'LineWidth', 0.2, 'Color', [0.5, 0, 0]);
+
+   
+end
+
+% Plotting of the corr signal windowed into atrial phase
+plot(x(t_atr_start:t_atr_end),example_corr(t_atr_start:t_atr_end),"LineWidth",1.2,"Color","#0072BD")
 
 
+% Derivative of the correlation signal: how many peaks into the atrial
+% phase? For a map A just one peak is expected.
+% computing derivation
+example_corr=movmean(example_corr,50);
+
+d_corr=diff(example_corr);
+d_corr=[d_corr;nan];
+d_corr=movmean(d_corr,100);
+
+    % removing edges
+d_corr(1:t_atr_start)=nan;
+d_corr(t_atr_end:end)=nan;
+
+d_corr=d_corr-mean(d_corr,"omitnan");
+
+% threshold definition
+mult_factor=0.08;
+th_upper=abs(max(d_corr,[],"omitnan"));
+th_upper=th_upper*mult_factor;
+th_lower=min(d_corr,[],"omitnan");
+th_lower=th_lower*mult_factor;
+
+% plotting
+plot(x,d_corr*max(signal,[],"omitnan")/max(d_corr),"LineWidth",1.5,"Color","#7E2F8E")
+plot(x(t_atr_start:t_atr_end),th_upper*max(signal,[],"omitnan")/max(d_corr)*ones(length(x(t_atr_start:t_atr_end)),1),"r","LineWidth",1)
+plot(x(t_atr_start:t_atr_end),th_lower*max(signal,[],"omitnan")/max(d_corr)*ones(length(x(t_atr_start:t_atr_end)),1),"r","LineWidth",1)
+title('Step 1: TM record derivative windowed')
+legend(["Signal","TM record","d_{TMrecord}/dt"])
+xlabel('time [s]')
+ylabel('Amplitude [mV]')
+
+
+% map creation 
+map_upper=d_corr>th_upper;
+map_lower=d_corr<th_lower;
+
+% Plotting
+subplot(2,2,2)
+plot(x,signal,"LineWidth",0.8,"Color","#4DBEEE")
+hold on
+plot(x(t_atr_start:t_atr_end),example_corr(t_atr_start:t_atr_end)*max(signal(t_atr_start:t_atr_end),[],"omitnan")/max(example_corr(t_atr_start:t_atr_end)),"LineWidth",1.5,"Color","#0072BD")
+plot(x, map_upper * min([1, 1/max(signal, [], "omitnan"), max(signal, [], "omitnan")]), "LineWidth", 1.2, "Color", "#A2142F")
+plot(x, -map_lower * abs(max([-1, 1/min(signal, [], "omitnan"), min(signal, [], "omitnan")])), "LineWidth", 1.2, "Color", "#7E2F8E")
+
+title('Step 2: derivative thresholding')
+legend(["Signal","TM record","d_{TMrecord}/dt >0","d_{TMrecord}/dt <0"])
+xlabel('time [s]')
+ylabel('Amplitude [mV]')
+
+% Map merge
+% Identify runs of 1s in the logical vectors
+% upper_regions = regionprops(map_upper, 'PixelIdxList');
+% lower_regions = regionprops(map_lower, 'PixelIdxList');
+
+% Ensure the combined map starts with a run in map_upper
+first_upper = find(map_upper, 1, 'first');
+first_lower = find(map_lower, 1, 'first');
+
+if isempty(first_upper) || (~isempty(first_lower) && first_lower < first_upper)
+    % If map_lower starts before map_upper, set map_lower to 0 before the first map_upper
+    map_lower(1:first_upper-1) = 0;
+end
+
+% Ensure the combined map ends with a run in map_lower
+last_lower = find(map_lower, 1, 'last');
+last_upper = find(map_upper, 1, 'last');
+
+if isempty(last_lower) || (~isempty(last_upper) && last_upper > last_lower)
+    % If map_upper ends after map_lower, set map_upper to 0 after the last map_lower
+    map_upper(last_lower+1:end) = 0;
+end
+
+% Plotting
+subplot(2,2,3)
+plot(x,signal,"LineWidth",0.8,"Color","#4DBEEE")
+hold on
+plot(x(t_atr_start:t_atr_end),example_corr(t_atr_start:t_atr_end)*max(signal(t_atr_start:t_atr_end),[],"omitnan")/max(example_corr(t_atr_start:t_atr_end)),"LineWidth",1.5,"Color","#0072BD")
+plot(x, map_upper * min([1, 1/max(signal, [], "omitnan"), max(signal, [], "omitnan")]), "LineWidth", 1.2, "Color", "#A2142F")
+plot(x, -map_lower * abs(max([-1, 1/min(signal, [], "omitnan"), min(signal, [], "omitnan")])), "LineWidth", 1.2, "Color", "#7E2F8E")
+title('Step 3: map correction')
+legend(["Signal","TM record","d_{TMrecord}/dt >0","d_{TMrecord}/dt <0"])
+xlabel('time [s]')
+ylabel('Amplitude [mV]')
+
+
+% Number of (positive) peaks into atrial phase
+N_positive_corr_peaks=numel(regionprops(map_upper, 'PixelIdxList'));
+
+% Plotting
+subplot(2,2,4)
+plot(x,signal,"LineWidth",0.8,"Color","#4DBEEE")
+hold on
+plot(x(t_atr_start:t_atr_end),example_corr(t_atr_start:t_atr_end)*max(signal(t_atr_start:t_atr_end),[],"omitnan")/max(example_corr(t_atr_start:t_atr_end)),"LineWidth",1.5,"Color","#0072BD")
+% Plot vertical dashed lines for atrial phase
+for k = 1
+    % Convert index positions to time
+    start_time = t_atr_start / fc; % Start index converted to time
+    end_time = t_atr_end / fc;   % End index converted to time
+
+    % Plot vertical dashed line for the start of the peak (green)
+    plot([start_time, start_time], ylim, '--', 'LineWidth', 0.2, 'Color', [0, 0.5, 0]);
+    % Plot vertical dashed line for the end of the peak (red)
+    plot([end_time, end_time], ylim, '--', 'LineWidth', 0.2, 'Color', [0.5, 0, 0]);
+end
+
+text(x(t_atr_start+2),2*max(signal(t_atr_start:t_atr_end)),"N_{peaks}: "+num2str(N_positive_corr_peaks))
+
+legend(["Signal","TM record","start atr phase","end atr phase"])
+xlabel('time [s]')
+ylabel('Amplitude [mV]')
+
+%% 
+% Time to build images
+    %% Showing comulative results
+spaghetti_confidence_signals(env_dataset,fc,figure_path+"\Envelope", "envelops")
+
+%% sistematic application of TM
+TM_dataset=evaluate_TM_on_dataset(final_data_by_sub,0.05,fc);
+
+    %% Showing comulative results
+spaghetti_confidence_signals(TM_dataset,fc,figure_path+"\Template_Matching", "TM records")
+
+
+%% Single signal and envelope
+rov_trace_plots_by_sub(final_data_by_sub,env_dataset, fc,"envelope_or_cross",'Rov signal and envelope',figure_path+"\Envelope\Single_traces")
+
+%% single signal and TM
+rov_trace_plots_by_sub(final_data_by_sub,TM_dataset, fc,"envelope_or_cross",'Rov signal and cross correlation signal',figure_path+"\Template_Matching\Single_traces")
+
+%% single signal and STFT
+rov_trace_plots_by_sub(final_data_by_sub,TM_dataset, fc,"STFT",'Rov signal STFT',figure_path+"\STFT\Single_traces")
 
 

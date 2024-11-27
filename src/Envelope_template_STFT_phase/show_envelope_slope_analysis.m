@@ -89,22 +89,6 @@ legend(["Signal","Envelope","d_{env}/dt >0","d_{env}/dt <0"])
 xlabel('time [s]')
 ylabel('Amplitude [mV]')
 
-% %% Map cleaning
-% perc_pos=60;
-% [map_upper, map_lower] = clean_false_peaks(map_upper, map_lower, example_env, perc_pos);
-% 
-% 
-% % Plotting
-% subplot(3,2,4)
-% plot(x,signal,"LineWidth",0.8,"Color","#4DBEEE")
-% hold on
-% plot(x,example_env*max(signal,[],"omitnan")/max(example_env),"LineWidth",1.5,"Color","#0072BD")
-% plot(x, map_upper * min([1, 1/max(signal, [], "omitnan"), max(signal, [], "omitnan")]), "LineWidth", 1.2, "Color", "#A2142F")
-% plot(x, -map_lower * abs(max([-1, 1/min(signal, [], "omitnan"), min(signal, [], "omitnan")])), "LineWidth", 1.2, "Color", "#7E2F8E")
-% title('Step 4: intermediate peaks removal')
-% legend(["Signal","Envelope","d_{env}/dt >0","d_{env}/dt <0"])
-% xlabel('time [s]')
-% ylabel('Amplitude [mV]')
 
 %% Time thresholds
 time_th = define_time_th(map_upper, map_lower);

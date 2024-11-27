@@ -24,9 +24,9 @@ for i = ["A", "B", "C"]
 
         for k=1:L
             signal_example=rov_signals{:,k};
-            signal_example=movmean(signal_example,50);
-            amplitude = max(abs(signal_example)); 
-            template = amplitude* sin(2 * pi * 1/T * t_template); % Biphasic siusoid template
+            % signal_example=movmean(signal_example,50);
+            % amplitude = max(abs(signal_example)); 
+            template =  sin(2 * pi * 1/T *t_template); % Biphasic siusoid template
             corr = conv(signal_example, flip(template), 'same');  % Convolution (cross-correlation)
             % Normalization factors
             norm_signal = sqrt(sum(signal_example.^2));  % Norm of the signal
