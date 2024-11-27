@@ -357,18 +357,25 @@ show_envelope_eval(final_data_by_sub,fc,30)
 %% sistematic application of RMS envelope on signals
 env_dataset=evaluate_envelope_on_dataset(final_data_by_sub,30,"rms");
 
+    %% Showing comulative results
+spaghetti_confidence_signals(env_dataset,fc,figure_path+"\Envelope", "envelops")
+
 %% sistematic application of TM
 TM_dataset=evaluate_TM_on_dataset(final_data_by_sub,0.01,fc);
 
-%% Showing results
-spaghetti_confidence_signals(env_dataset,fc,figure_path+"\Envelope", "envelops")
+    %% Showing comulative results
+spaghetti_confidence_signals(TM_dataset,fc,figure_path+"\Template_Matching", "TM records")
+
+
 
 %% Single signal and envelope
-traces_subplots_by_sub(final_data_by_sub,env_dataset, fc,'Rov signal and envelope',figure_path+"\Envelope\Single_traces")
+rov_trace_plots_by_sub(final_data_by_sub,env_dataset, fc,"envelope_or_cross",'Rov signal and envelope',figure_path+"\Envelope\Single_traces")
 
 %% single signal and TM
-traces_subplots_by_sub(final_data_by_sub,TM_dataset, fc,'Rov signal and cross correlation signal',figure_path+"\Template_Matching\Single_traces")
+rov_trace_plots_by_sub(final_data_by_sub,TM_dataset, fc,"envelope_or_cross",'Rov signal and cross correlation signal',figure_path+"\Template_Matching\Single_traces")
 
+%% single signal and STFT
+rov_trace_plots_by_sub(final_data_by_sub,TM_dataset, fc,"STFT",'Rov signal STFT',figure_path+"\STFT\Single_traces")
 
 %% Showing envelope slope analysis pipeline
 record_id=["A",10,8]; 
@@ -378,7 +385,7 @@ show_envelope_slope_analysis(final_data_by_sub,env_dataset,fc,record_id,figure_p
 plot_traces_active_areas(final_data_by_sub,env_dataset,fc,"Slope_Analysis",'Rov signal and envelope:slope analysis',figure_path+"\Envelope\slope_analysis")
       
 
-%% Envelope "slope" features
+%% Feature extraction
 feature_set = build_features_set(final_data_by_sub, env_dataset, fc);
 
 
@@ -390,34 +397,7 @@ writetable(feature_set, processed_data_path+'\'+'feature_'+dataset+'.txt', 'Deli
 
 
 %% STFT
-% Visualizzazione dello spettrogramma
-figure;
 
-% Spettrogramma
-ax1 = subplot(3, 3, 1:6); % Associa il subplot a una variabile
-[S, F, T, P] = spectrogram(signal, window, hop_size, nfft, fc); % Calcola lo spettrogramma
-imagesc(T, F, 10*log10(P)); % Visualizza lo spettrogramma manualmente
-axis tight;
-set(gca, 'YDir', 'normal'); % Corregge l'orientamento dell'asse Y
-title('Signal Spectrogram');
-xlabel('Time [s]');
-ylabel('Frequency [Hz]');
-ylim([0,400])
-
-% Aggiungi la colorbar sotto al grafico
-hColorbar = colorbar('southoutside'); % Colorbar posizionata sotto il grafico
-ylabel(hColorbar, 'Power/Frequency [dB/Hz]'); % Etichetta della colorbar
-
-% Segnale originale
-subplot(3, 3, 7:9);
-plot(t_signal, signal, 'b');
-title('Original Signal');
-xlabel('Time [s]');
-ylabel('Amplitude [mV]');
-grid on;
-
-% Allinea gli assi temporali
-linkaxes(findall(gcf, 'Type', 'axes'), 'x');
 
 
 
