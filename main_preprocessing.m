@@ -398,7 +398,14 @@ writetable(feature_set, processed_data_path+'\'+'feature_'+dataset+'.txt', 'Deli
 
 
 %% TEMPLATE MATCHING ANALYSIS
-TM_dataset=evaluate_TM_on_dataset(final_data_by_sub,0.05,fc);
+% problema dei nan se c'è un solo picco.
+% poi forse bisogna capire come confrontare i picchi in zona atriale per
+% capire se ci sono delle differenze (in particolare tra A e B)
+
+% Ricontrolla tutta la pipeline e poi procedi con gli spaghetti plot
+
+TM_dataset=evaluate_TM_on_dataset(final_data_by_sub,0.1,fc);
+env_dataset=evaluate_envelope_on_dataset(final_data_by_sub,30,"rms");
 
 % extracting signal
 record_id=["A",1,1];
@@ -475,7 +482,7 @@ plot(x(t_atr_start:t_atr_end),example_corr(t_atr_start:t_atr_end),"LineWidth",1.
 % Derivative of the correlation signal: how many peaks into the atrial
 % phase? For a map A just one peak is expected.
 % computing derivation
-example_corr=movmean(example_corr,50);
+example_corr=movmean(example_corr,70);
 
 d_corr=diff(example_corr);
 d_corr=[d_corr;nan];
