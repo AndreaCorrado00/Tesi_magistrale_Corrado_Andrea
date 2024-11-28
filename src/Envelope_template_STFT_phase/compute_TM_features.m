@@ -2,7 +2,7 @@ function [cross_peak,cross_peak_pos,corr_energy,...
     N_atr_corr_peaks,atr_cross_peak,atr_corr_energy,...
     N_vent_corr_peaks,vent_cross_peak,vent_corr_energy,...
     cross_atr_vent_ratio,cross_atr_abs_max_ratio,cross_vent_abs_max_ratio,...
-    energy_cross_atr_vent_ratio,energy_cross_atr_abs_max_ratio,energy_cross_vent_abs_max_ratio]=compute_TM_features(record_id,data,env_dataset,cross_example,T, fs)
+    energy_cross_atr_vent_ratio,energy_cross_atr_abs_max_ratio,energy_cross_vent_abs_max_ratio]=compute_TM_features(record_id,data,env_dataset,cross_example,T, fc)
 
 
 % atrial phase specific features
@@ -10,10 +10,14 @@ function [cross_peak,cross_peak_pos,corr_energy,...
 
 atr_cross_peak=max(atr_corr_signal,[],"omitnan");
 
-M=find(~isnan(atr_corr_signal),"last")-find(~isnan(atr_corr_signal),"first");
-atr_corr_energy=(sum(atr_corr_signal,"omitnan").^2)/M;
+M=find(~isnan(atr_corr_signal),1,"last")-find(~isnan(atr_corr_signal),1,"first");
+if isempty(M)
+    M=nan;
+end
 
-if atr_corr_energy==0
+atr_corr_energy=sum(atr_corr_signal.^2,"omitnan")/M;
+
+if isempty(atr_corr_energy)||atr_corr_energy==0
     atr_corr_energy=nan;
 end
 
@@ -22,20 +26,25 @@ end
 
 vent_cross_peak=max(vent_corr_signal,[],"omitnan");
 
-M=find(~isnan(vent_corr_signal),"last")-find(~isnan(vent_corr_signal),"first");
+M=find(~isnan(vent_corr_signal),1,"last")-find(~isnan(vent_corr_signal),1,"first");
+if isempty(M)
+    M=nan;
+end
+
 vent_corr_energy=(sum(vent_corr_signal,"omitnan").^2)/M;
-if vent_corr_energy==0
+
+if isempty(vent_corr_energy)||vent_corr_energy==0 
     vent_corr_energy=nan;
 end
 
 % Features of the whole cross-correlation signal
-start_idx=round(fs*0.17);
-end_idx=round(fs*0.6);
+start_idx=round(fc*0.17);
+end_idx=round(fc*0.6);
 [cross_peak,cross_peak_pos]=max(cross_example(start_idx:end_idx),[],"omitmissing");
-cross_peak_pos=(cross_peak_pos+start_idx)/fs;
+cross_peak_pos=(cross_peak_pos+start_idx)/fc;
 
-M=find(~isnan(cross_example),"last")-find(~isnan(cross_example),"first");
-corr_energy=(sum(cross_example,"omitnan").^2)/M;
+M=find(~isnan(cross_example),1,"last")-find(~isnan(cross_example),1,"first");
+corr_energy=sum(cross_example.^2,"omitnan")/M;
 
 % features ratio
 cross_atr_vent_ratio=atr_cross_peak/vent_cross_peak;
