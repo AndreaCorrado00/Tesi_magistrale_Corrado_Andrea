@@ -74,10 +74,10 @@ n_peaks_duration_ratio=n_e_peaks/duration;
 [start_end_areas]=find_atrial_ventricular_areas(example_rov,example_env,fc);
 
 
-if sum(sum(isnan(start_end_areas)))==0
+if n_e_peaks >= 2
     % Find the leftmost and rightmost peaks
-    [atr_peak,atr_peak_pos]=max(example_rov(start_end_areas(1,1):start_end_areas(1,2)),[],"omitnan");
-    [vent_peak,vent_peak_pos]=max(example_rov(start_end_areas(2,1):start_end_areas(2,2)),[],"omitnan");
+    [atr_peak,atr_peak_pos]=max(rov_signal(start_end_areas(1:1):start_end_areas(1,2)),[],"omitnan");
+    [vent_peak,vent_peak_pos]=max(rov_signal(start_end_areas(1:1):start_end_areas(1,2)),[],"omitnan");
     atrial_ventricular_ratio =atr_peak/vent_peak;
     atrial_ventricular_time_ratio=atr_peak_pos/vent_peak_pos;
 
