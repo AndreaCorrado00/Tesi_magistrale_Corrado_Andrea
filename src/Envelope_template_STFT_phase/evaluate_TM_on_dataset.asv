@@ -25,8 +25,8 @@ for i = ["A", "B", "C"]
         for k=1:L
             signal_example=rov_signals{:,k};
             norm_signal = sqrt(sum(signal_example.^2));
-            signal_example=signal_example/norm_signal;
-            signal_example=movmean(signal_example,50);
+            signal_exampl
+            % signal_example=movmean(signal_example,50);
             % amplitude = max(abs(signal_example)); 
             template =  sin(2 * pi * 1/T *t_template); % Biphasic siusoid template
             norm_template = sqrt(sum(template.^2));
@@ -35,7 +35,7 @@ for i = ["A", "B", "C"]
             % Normalization factors
               % Norm of the signal
               % Norm of the template
-            % corr = corr / (norm_signal * norm_template);
+            corr = corr / (norm_signal * norm_template);
             TM_signals(:,k)=movmean(corr,50);
             
         end
