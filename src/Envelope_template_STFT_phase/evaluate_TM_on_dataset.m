@@ -40,5 +40,7 @@ for i = ["A", "B", "C"]
             
         end
         TM_dataset.(map).(sub).rov_trace=array2table(TM_signals);
+        
     end
 end
+TM_dataset.T=T;

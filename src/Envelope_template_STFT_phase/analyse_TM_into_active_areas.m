@@ -43,7 +43,7 @@ else
     template=template/norm_template;
     corr = conv(signal_example, flip(template), 'same');  % Convolution (cross-correlation)
 
-    example_corr(t_atr_start:t_atr_end)=movmean(corr,50);
+    example_corr(t_start:t_end)=movmean(corr,50);
 
 
     %% 1. computing derivation
@@ -54,8 +54,8 @@ else
     d_corr=movmean(d_corr,100);
 
     % removing edges
-    d_corr(1:t_atr_start)=nan;
-    d_corr(t_atr_end:end)=nan;
+    % d_corr(1:t_start)=nan;
+    % d_corr(t_end:end)=nan;
 
     d_corr=d_corr-mean(d_corr,"omitnan");
 
@@ -128,7 +128,7 @@ else
 
 end
 %% 4. Number of (positive) peaks into active phase
-if atr_phase_presence
+if phase_presence
     N_positive_corr_peaks=numel(regionprops(map_upper, 'PixelIdxList'));
     signal_corr_active_area=example_corr;
 else

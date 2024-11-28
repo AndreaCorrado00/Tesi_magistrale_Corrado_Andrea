@@ -1,8 +1,6 @@
 function [cross_peak,cross_peak_pos,corr_energy,...
     N_atr_corr_peaks,atr_cross_peak,atr_corr_energy,...
-    N_vent_corr_peaks,vent_cross_peak,vent_corr_energy,...
-    cross_atr_vent_ratio,cross_atr_abs_max_ratio,cross_vent_abs_max_ratio,...
-    energy_cross_atr_vent_ratio,energy_cross_atr_abs_max_ratio,energy_cross_vent_abs_max_ratio]=compute_TM_features(record_id,data,env_dataset,cross_example,T, fs)
+    N_vent_corr_peaks,]=compute_TM_features(record_id,data,env_dataset,cross_example,T, fs)
 
 
 % atrial phase specific features
@@ -20,15 +18,16 @@ end
 % ventricular phase specific features
 [N_vent_corr_peaks,vent_corr_signal]=analyse_TM_into_active_areas(record_id,data,env_dataset,T,fc,"ventricular");
 
-vent_cross_peak=max(vent_corr_signal,[],"omitnan");
-
 M=find(~isnan(vent_corr_signal),"last")-find(~isnan(vent_corr_signal),"first");
 vent_corr_energy=(sum(vent_corr_signal,"omitnan").^2)/M;
+
+vent_cross_peak=max(vent_corr_signal,[],"omitnan");
+
 if vent_corr_energy==0
     vent_corr_energy=nan;
 end
 
-% Features of the whole cross-correlation signal
+% Features of the whole crosscorrelation signal
 start_idx=round(fs*0.17);
 end_idx=round(fs*0.6);
 [cross_peak,cross_peak_pos]=max(cross_example(start_idx:end_idx),[],"omitmissing");
@@ -37,11 +36,13 @@ cross_peak_pos=(cross_peak_pos+start_idx)/fs;
 M=find(~isnan(cross_example),"last")-find(~isnan(cross_example),"first");
 corr_energy=(sum(cross_example,"omitnan").^2)/M;
 
+
+
 % features ratio
 cross_atr_vent_ratio=atr_cross_peak/vent_cross_peak;
 cross_atr_abs_max_ratio=atr_cross_peak/cross_peak;
 cross_vent_abs_max_ratio=vent_cross_peak/cross_peak;
 
 energy_cross_atr_vent_ratio=atr_corr_energy/vent_corr_energy;
-energy_cross_atr_abs_max_ratio=atr_corr_energy/corr_energy;
-energy_cross_vent_abs_max_ratio=vent_corr_energy/corr_energy;
+cross_atr_abs_max_ratio=atr_corr_energy/corr_energy;
+cross_vent_abs_max_ratio=vent_corr_energy/corr_energy;

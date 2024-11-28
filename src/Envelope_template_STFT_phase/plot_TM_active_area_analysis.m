@@ -1,4 +1,4 @@
-function plot_TM_atrial_analysis(data,env_data,TM_data,fc,bound_type,sg_title,figure_path)
+function plot_TM_active_area_analysis(data,env_data,TM_data,fc,bound_type,sg_title,figure_path)
 
 
 % Loop through each map type: A, B, C
@@ -73,8 +73,13 @@ for i = ["A", "B", "C"]
                     % file_name = "MAP_" + i + "_sub_" + sub_num + '_record_' + num2str(h) + '_';
                     % save_plot(file_name, type_plots(1), figure_path, fig, true);
 
-                case "TM_atr_analysis"
-                    show_TM_analysis([i,sub_num,h],data,env_data,TM_data,fc,true,figure_path)
+                case "TM_active_area_analysis"
+                    analysis=["atrial","ventricular"];
+                    for m=2:2
+                        area=analysis(m);
+                        show_TM_analysis([i,sub_num,h],data,env_data,TM_data,fc,area,true,figure_path)
+                    end
+
                
             end
         end

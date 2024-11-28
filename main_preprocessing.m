@@ -385,9 +385,16 @@ show_envelope_slope_analysis(final_data_by_sub,env_dataset,fc,record_id,false,fi
     %% Plotting results
 plot_traces_active_areas(final_data_by_sub,env_dataset,fc,"Slope_Analysis",'Rov signal and envelope:slope analysis',figure_path+"\Envelope\slope_analysis")
       
+%% Showing TM selective analysis
+record_id=["A",1,2];
+area="atrial";
+show_TM_analysis(record_id,final_data_by_sub,env_dataset,TM_dataset,fc,area,false,figure_path)
+
+    %% Plotting results
+plot_TM_active_area_analysis(final_data_by_sub,env_dataset,TM_dataset,fc,"TM_active_area_analysis","",figure_path+"\Template_Matching\TM_active_area_analysis")
 
 %% Feature extraction
-feature_set = build_features_set(final_data_by_sub, env_dataset, fc);
+feature_set = build_features_set(final_data_by_sub, env_dataset, TM_dataset,fc);
 
 
     %% Features analysis
@@ -396,15 +403,6 @@ show_features_statistics(feature_set,true,figure_path+"\features_boxplots")
     %% Saving features
 writetable(feature_set, processed_data_path+'\'+'feature_'+dataset+'.txt', 'Delimiter', ',', 'WriteVariableNames', true);
 
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% TEMPLATE MATCHING ACTIVE AREAS ANALYSIS
-record_id=["A",1,2];
-show_TM_analysis(record_id,final_data_by_sub,env_dataset,TM_dataset,fc,false,figure_path)
-%%
-plot_TM_atrial_analysis(final_data_by_sub,env_dataset,TM_dataset,fc,"TM_atr_analysis","",figure_path+"\Template_Matching\TM_atrial_analysis")
 
 
 

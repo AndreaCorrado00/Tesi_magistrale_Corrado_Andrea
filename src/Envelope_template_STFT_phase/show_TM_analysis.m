@@ -1,4 +1,4 @@
-function show_TM_analysis(record_id,data,env_dataset,TM_dataset,fc,saving_plot,figure_path)
+function show_TM_analysis(record_id,data,env_dataset,TM_dataset,fc,area,saving_plot,figure_path)
 
 %% Data informations
 map="MAP_"+record_id(1);
@@ -26,13 +26,20 @@ else
     fig.WindowState = "maximized";
 end
 
-sgtitle(["Example of TM analysis for: MAP "+record_id(1)+", sub: "+sub_num+", record: "+num2str(h)])
+
 
 %% 0: finding the atrial peak using the envelope
 [start_end_areas]=find_atrial_ventricular_areas(signal,example_env,fc);
 
-t_atr_start=start_end_areas(1,1);
-t_atr_end=start_end_areas(1,2);
+if area=="atrial"
+    t_atr_start=start_end_areas(1,1);
+    t_atr_end=start_end_areas(1,2);
+else
+    t_atr_start=start_end_areas(2,1);
+    t_atr_end=start_end_areas(2,2);
+end
+
+sgtitle(["Example of TM "+area+" phase analysis for: MAP "+record_id(1)+", sub: "+sub_num+", record: "+num2str(h)])
 
 atr_phase_presence=true;
 if isnan(t_atr_start) || isnan(t_atr_end)
@@ -253,6 +260,6 @@ ylabel('Amplitude [mV]')
 %% possible saving plot
 % Save the plot
 if saving_plot
-    file_name = sub+ '_record_' + num2str(h) + '_';
+    file_name = sub+ '_record_' + num2str(h) + '_'+area+'_';
     save_plot(file_name,"example_analysis", figure_path, fig, true);
 end
