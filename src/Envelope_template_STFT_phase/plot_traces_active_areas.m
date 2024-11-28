@@ -78,7 +78,7 @@ for i = ["A", "B", "C"]
                     save_plot(file_name, type_plots(1), figure_path, fig, true);
 
                 case "Slope_Analysis"
-                    show_envelope_slope_analysis(data,env_data,fc,[i,sub_num,h],figure_path)
+                    show_envelope_slope_analysis(data,env_data,fc,true,[i,sub_num,h],figure_path)
                    
             end
 
