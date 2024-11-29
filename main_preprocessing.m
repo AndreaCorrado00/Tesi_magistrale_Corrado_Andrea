@@ -95,16 +95,17 @@ show_filter_pipeline_didactical("Low_frequency_ecg")
 %%               ---------- PREPROCESSING ALGORITHM ON AVNRT DATA----------
 % Adding path
 src_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\Spectrum_comparison_phase";
+figure_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Figure\Spectrum_investigation_phase";
 addpath(src_path)
-processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed\Old_data";
+processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed\data_aligned";
 % Loading previusly made data
-load(processed_data_path+'\dataset.mat');
+load(processed_data_path+'\dataset_2.mat');
 fc=2035;
 %% 5.1 Preprocessing and Spectrum evaluation algorithm on AVNRT data
 % Building examples
-MAP_A7_example=data.MAP_A.MAP_A7;
-MAP_B7_example=data.MAP_B.MAP_B7;
-MAP_C7_example=data.MAP_C.MAP_C7;
+MAP_A7_example=final_data_by_sub.MAP_A.MAP_A7;
+MAP_B7_example=final_data_by_sub.MAP_B.MAP_B7;
+MAP_C7_example=final_data_by_sub.MAP_C.MAP_C7;
     
 % Evaluating filtering performance
 close all;
@@ -113,6 +114,10 @@ close all;
     show_pipeline_performances(MAP_C7_example)
 
 
+%% Showing whole dataset analysis   
+show_traces_filtering_pipeline(final_data_by_sub,fc,"rov_trace_filtering","Roving trace" ,figure_path+"\AVNRT results\single_records")
+
+show_traces_filtering_pipeline(final_data_by_sub,fc,"whole_signal_set","Whole set of signal for:" ,figure_path+"\AVNRT results\set_of_traces")
 
 %%                        ---------- SPECTRUM EVALUATION PIPELINE----------
 % Adding path
