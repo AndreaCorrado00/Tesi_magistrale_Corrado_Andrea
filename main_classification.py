@@ -139,8 +139,40 @@ from LOPOCV_decision_tree import LOPOCV_decision_tree
 from sklearn.metrics import f1_score
 from tune_tree_depth_lopocv import tune_tree_depth_lopocv
 
+#%% CORRELATION ANALYSIS on features
+df_corr_analysis=whole_feature_db.drop(["id","class"],axis=1)
 
-# first classifier: whole dataset
+categorical_features = [col for col in df_corr_analysis.columns if df_corr_analysis[col].nunique() <=3]
+print(f"Categorical features names: {categorical_features}")
+df_corr_analysis=df_corr_analysis.drop(categorical_features,axis=1)
+
+# Compute the correlation matrix
+correlation_matrix = df_corr_analysis.corr()
+
+# Plot the correlation matrix as a heatmap
+import seaborn as sns
+cross_features, ax = plt.subplots(figsize=(50, 40))
+sns.heatmap(correlation_matrix, annot=True, fmt=".2f", cmap="coolwarm", 
+            xticklabels=df_corr_analysis.columns, 
+            yticklabels=df_corr_analysis.columns,annot_kws={"size": 25})  
+plt.xticks(fontsize=25)
+plt.yticks(fontsize=25)
+plt.title("Feature Cross-Correlation Matrix")
+plt.show()
+
+save_plot(cross_features, other_fig_path,file_name='features_cross_corretion_matrix',dpi=500)
+
+# correlated features removal
+correlated_features=['env_peak1_pos','env_peak2_pos','env_peak3_pos',
+                     'env_peak1_val','env_peak2_val','env_peak3_val','silent_rateo',
+                     'cross_peak','cross_peak_pos','corr_energy','vent_corr_energy',
+                     'energy_cross_atr_vent_ratio','energy_cross_atr_abs_max_ratio'];
+
+final_column_names = [col for col in whole_feature_db.columns.tolist() if col not in correlated_features]
+whole_feature_db=whole_feature_db.drop(correlated_features,axis=1)
+
+
+# %% FIRST CLASSIFIER: whole dataset
 selected_features=whole_feature_db.columns.tolist()
 
 max_depth=tune_tree_depth_lopocv(whole_feature_db,selected_features,np.arange(3,15,dtype=int))
@@ -160,12 +192,14 @@ plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plo
 
 # Features importance: best model tuning
 feature_importances = classifier.feature_importances_
-feature_names = feature_db.columns.tolist()
+feature_names = selected_feature_db.columns.tolist()
 
-importance_fig,ax=plt.subplots()
+importance_fig,ax=plt.subplots(figsize=(30, 20))
 plt.barh(feature_names, feature_importances, color="skyblue")
 plt.xlabel("Importance")
 plt.title("Feature Importance")
+plt.xticks(fontsize=20)
+plt.yticks(fontsize=20)
 plt.show()
 save_plot(importance_fig, other_fig_path,file_name='whole tree features importance')
 
@@ -179,7 +213,7 @@ plot_dataframe_as_plain_image(miss_class_summary, figsize=(8,5),scale=(1.7,1.7),
 
 
 #%% Second classifier: otimal subset of features
-selected_features=['id','peak3_val','peak1_pos','peak2_pos','n_peaks_duration_rateo','class']
+selected_features=['id','peak3_val','peak1_pos','peak2_pos','n_peaks_duration_rateo','cross_vent_abs_max_ratio','cross_atr_vent_ratio','class']
 
 max_depth=tune_tree_depth_lopocv(whole_feature_db,selected_features,np.arange(1,15,dtype=int))
 print(f"-> Maximum depth for the tree: {max_depth}")
@@ -215,8 +249,10 @@ print(f"Global F1-Score (Weighted): {f1_macro:.4f}")
 miss_class_summary= misclassification_summary(whole_feature_db[selected_features],all_y_pred, labels_unique)
 plot_dataframe_as_plain_image(miss_class_summary, figsize=(8,5),scale=(1.7,1.7),title_plot=cm_title+", optimised model",path=other_fig_path,saving_name="Misclass_LOPOCV_tree_feature_subset")
 
+
+
 #%% Proving that subs 1,3,4,6 worsen the anlysis
-selected_features=['id','env_peak3_val','peak1_pos','peak2_pos','duration','atrial_ventricular_ratio','class']
+selected_features=['id','peak3_val','peak1_pos','peak2_pos','n_peaks_duration_rateo','cross_vent_abs_max_ratio','cross_atr_vent_ratio','class']
 sub_feature_db=whole_feature_db[whole_feature_db['id'].isin([7,8,9,10,11,12])]
 
 max_depth=tune_tree_depth_lopocv(whole_feature_db,selected_features,np.arange(1,15,dtype=int))

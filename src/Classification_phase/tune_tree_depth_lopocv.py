@@ -42,7 +42,7 @@ def tune_tree_depth_lopocv(whole_feature_db, selected_features, depths):
             classifier.fit(X_train, y_train)
             
             y_pred = classifier.predict(X_test)
-            score = f1_score(y_test, y_pred,average="weighted")  # You can replace this with another metric
+            score = f1_score(y_test, y_pred,average="weighted")  
             
             if score > best_score:
                 best_score = score
