@@ -1,7 +1,4 @@
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.tree import export_text
-from sklearn.tree import plot_tree
-import matplotlib.pyplot as plt
 
 def LOPOCV_decision_tree(whole_feature_db, selected_features,max_depth):
     

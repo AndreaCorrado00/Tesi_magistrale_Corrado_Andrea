@@ -46,16 +46,6 @@ show_class_proportions(y_true,labels_unique)
 # array index
 indices = np.arange(signals.shape[0])
 
-# # Split on index
-# x_train, x_test, y_train, y_test = train_test_split(signals,y_true, test_size=0.3, stratify=y_true, random_state=42)
-
-# # check if the train/test split is correctly stratified
-# print("\n---- After stratified train/test split----")
-# print("Training set")
-# show_class_proportions(y_train,labels_unique)
-# print("Test set")
-# show_class_proportions(y_test,labels_unique)
-
 #%%############################################################################
 ############## KNOWLEDGE BASED CLASSIFIER: first evaluations ##################
 ###############################################################################
@@ -288,4 +278,50 @@ print(f"Global F1-Score (Weighted): {f1_macro:.4f}")
 # Summary of misclassification errors
 miss_class_summary= misclassification_summary(sub_feature_db[selected_features],all_y_pred, labels_unique)
 plot_dataframe_as_plain_image(miss_class_summary, figsize=(8,5),scale=(1.7,1.7),title_plot=cm_title+", optimised model",path=other_fig_path,saving_name="Misclass_LOPOCV_tree_feature_and_DB_subset")
+
+
+
+#%%############################################################################
+################## TRAIN-TEST SPLIT IMPROVES GENERALIZATION? ################## 
+###############################################################################
+from sklearn.tree import DecisionTreeClassifier
+
+selected_features=['peak3_val','peak1_pos','peak2_pos','n_peaks_duration_rateo','cross_vent_abs_max_ratio','cross_atr_vent_ratio']
+sub_feature_db=whole_feature_db[whole_feature_db['id'].isin([7,8,9,10,11,12])]
+
+y_true_sub=sub_feature_db["class"]
+
+sub_feature_db=sub_feature_db.drop(["id","class"],axis=1)
+
+# Split 70-30%
+x_train, x_test, y_train, y_test = train_test_split(sub_feature_db[selected_features],y_true_sub, test_size=0.3, stratify=y_true_sub, random_state=42)
+
+# check if the train/test split is correctly stratified
+print("\n---- After stratified train/test split----")
+print("Training set")
+show_class_proportions(y_train,labels_unique)
+print("Test set")
+show_class_proportions(y_test,labels_unique)
+
+# model evaluation
+classifier = DecisionTreeClassifier(criterion="entropy", random_state=42,max_depth=3)
+
+# Train the model on the training data
+classifier.fit(x_train, y_train)
+
+# Predict on the test data
+y_pred = classifier.predict(x_test)
+
+# PERFORMANCE
+cm_suptitle="Confusion Matrix: Tree classifier"
+cm_saving_path=os.path.join(figure_path+"/Classification_phase",fig_final_folder)
+# Variable saving names
+cm_saving_name="CM_train_test_split"+plot_last_name
+cm_title=subtitle_plots+", train-test split, whole feature set" 
+
+#confusion matrix
+he_report=evaluate_confusion_matrix(y_pred,y_test,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=False, path=cm_saving_path,saving_name=cm_saving_name)
+#plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="report_LOPOCV_tree_subset_features_and_DB")
+
+
 
