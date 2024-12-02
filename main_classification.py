@@ -323,5 +323,5 @@ cm_title=subtitle_plots+", train-test split, whole feature set"
 he_report=evaluate_confusion_matrix(y_pred,y_test,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=False, path=cm_saving_path,saving_name=cm_saving_name)
 #plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="report_LOPOCV_tree_subset_features_and_DB")
 
-
+# the problem are the subjects!!
 
