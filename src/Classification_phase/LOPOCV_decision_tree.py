@@ -1,15 +1,19 @@
 from sklearn.tree import DecisionTreeClassifier
+import numpy as np
 
-def LOPOCV_decision_tree(whole_feature_db, selected_features,max_depth):
-    
+def LOPOCV_decision_tree(whole_feature_db, selected_features, max_depth):
     # Model and metrics
-    classifier = DecisionTreeClassifier(criterion="entropy", random_state=42,max_depth=max_depth)
+    classifier = DecisionTreeClassifier(criterion="entropy", random_state=42, max_depth=max_depth)
     
     # Initialize lists to store the results
     all_y_true = []
     all_y_pred = []
     all_predictions_by_subs = []  # Will store predictions in the format: [id, y_true, y_pred]
-
+    
+    # Prepare to store feature importance
+    num_features = len(selected_features) - 2  # Exclude 'id' and 'class'
+    feature_importances = np.zeros(num_features)
+    
     participant_ids = whole_feature_db['id'].unique()
     
     # Select only the relevant features
@@ -35,16 +39,16 @@ def LOPOCV_decision_tree(whole_feature_db, selected_features,max_depth):
         # Append the true labels and predictions to the overall lists
         all_y_true.extend(y_test)
         all_y_pred.extend(y_pred)
-
         
-        # plt.figure(figsize=(20, 10))
-        # plot_tree(classifier, feature_names=selected_whole_feature_db.columns.tolist(), class_names=classifier.classes_, filled=True)
-        # plt.title(f"Decision Tree for subject {participant}")
-        # plt.show() 
+        # Update feature importance
+        feature_importances += classifier.feature_importances_
         
         # Append each patient's predictions and true values to the list in the requested format
         for idx in range(len(y_test)):
             # Add the id, true label, and predicted label to the list for the current participant
             all_predictions_by_subs.append([participant, y_test.iloc[idx], y_pred[idx]])
-
-    return classifier,all_y_pred, all_y_true, all_predictions_by_subs, selected_feature_db
+    
+    # Average the feature importance across participants
+    feature_importances /= len(participant_ids)
+    
+    return classifier, all_y_pred, all_y_true, all_predictions_by_subs, selected_feature_db, feature_importances
