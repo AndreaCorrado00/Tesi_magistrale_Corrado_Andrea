@@ -322,3 +322,6 @@ he_report=evaluate_confusion_matrix(y_pred,y_test,labels_unique,cm_suptitle=cm_s
 
 # the problem are the subjects!!
 
+#%% Trying to define an hybrid class AB
+
+
