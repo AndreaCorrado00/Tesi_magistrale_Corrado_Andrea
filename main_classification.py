@@ -139,24 +139,22 @@ df_corr_analysis=df_corr_analysis.drop(categorical_features,axis=1)
 # Compute the correlation matrix
 correlation_matrix = df_corr_analysis.corr()
 
-# # Plot the correlation matrix as a heatmap
-# import seaborn as sns
-# cross_features, ax = plt.subplots(figsize=(50, 40))
-# sns.heatmap(correlation_matrix, annot=True, fmt=".2f", cmap="coolwarm", 
-#             xticklabels=df_corr_analysis.columns, 
-#             yticklabels=df_corr_analysis.columns,annot_kws={"size": 25})  
-# plt.xticks(fontsize=25)
-# plt.yticks(fontsize=25)
-# plt.title("Feature Cross-Correlation Matrix")
-# plt.show()
+# Plot the correlation matrix as a heatmap
+import seaborn as sns
+cross_features, ax = plt.subplots(figsize=(50, 40))
+sns.heatmap(correlation_matrix, annot=True, fmt=".2f", cmap="coolwarm", 
+            xticklabels=df_corr_analysis.columns, 
+            yticklabels=df_corr_analysis.columns,annot_kws={"size": 25})  
+plt.xticks(fontsize=25)
+plt.yticks(fontsize=25)
+plt.title("Feature Cross-Correlation Matrix")
+plt.show()
 
-# save_plot(cross_features, other_fig_path,file_name='features_cross_corretion_matrix',dpi=500)
+save_plot(cross_features, other_fig_path,file_name='features_cross_corretion_matrix',dpi=500)
 
-# correlated features removal
-correlated_features=['env_peak1_pos','env_peak2_pos','env_peak3_pos',
-                     'env_peak1_val','env_peak2_val','env_peak3_val','silent_rateo',
-                     'cross_peak','cross_peak_pos','corr_energy','vent_corr_energy',
-                     'energy_cross_atr_vent_ratio','energy_cross_atr_abs_max_ratio'];
+#%% correlated features removal
+correlated_features=['env_peak1_time','env_peak2_time','env_peak3_time',
+                     'env_peak1_val','env_peak2_val','env_peak3_val','silent_rateo','corr_energy'];
 
 final_column_names = [col for col in whole_feature_db.columns.tolist() if col not in correlated_features]
 whole_feature_db=whole_feature_db.drop(correlated_features,axis=1)
@@ -202,7 +200,9 @@ plot_dataframe_as_plain_image(miss_class_summary, figsize=(8,5),scale=(1.7,1.7),
 
 
 #%% Second classifier: otimal subset of features
-selected_features=['id','peak3_val','peak1_pos','peak2_pos','n_peaks_duration_rateo','atrial_ventricular_ratio','vent_cross_peak','class']
+selected_features=['id','peak3_val','peak1_time','peak2_time',
+                   'n_peaks_duration_rateo','atrial_ventricular_ratio','cross_peak',
+                   'class']
 
 max_depth=tune_tree_depth_lopocv(whole_feature_db,selected_features,np.arange(1,15,dtype=int))
 print(f"-> Maximum depth for the tree: {max_depth}")
@@ -240,7 +240,9 @@ plot_dataframe_as_plain_image(miss_class_summary, figsize=(8,5),scale=(1.7,1.7),
 
 
 #%% Proving that subs 1,3,4,6 worsen the anlysis
-selected_features=['id','peak3_val','peak1_pos','peak2_pos','n_peaks_duration_rateo','atrial_ventricular_ratio','vent_cross_peak','class']
+selected_features=['id','peak3_val','peak1_time','peak2_time',
+                   'n_peaks_duration_rateo','atrial_ventricular_ratio','cross_peak',
+                   'class']
 sub_feature_db=whole_feature_db[whole_feature_db['id'].isin([7,8,9,10,11,12])]
 
 max_depth=tune_tree_depth_lopocv(whole_feature_db,selected_features,np.arange(1,15,dtype=int))
@@ -283,7 +285,9 @@ plot_dataframe_as_plain_image(miss_class_summary, figsize=(8,5),scale=(1.7,1.7),
 ###############################################################################
 from sklearn.tree import DecisionTreeClassifier
 
-selected_features=['peak3_val','peak1_pos','peak2_pos','n_peaks_duration_rateo','cross_vent_abs_max_ratio','cross_atr_vent_ratio']
+selected_features=['peak3_val','peak1_time','peak2_time',
+                   'n_peaks_duration_rateo','atrial_ventricular_ratio' ]
+
 sub_feature_db=whole_feature_db[whole_feature_db['id'].isin([1,3,4,6,7,8,9,10,11,12])]
 
 y_true_sub=sub_feature_db["class"]
@@ -314,7 +318,7 @@ cm_suptitle="Confusion Matrix: Tree classifier"
 cm_saving_path=os.path.join(figure_path+"/Classification_phase",fig_final_folder)
 # Variable saving names
 cm_saving_name="CM_train_test_split"+plot_last_name
-cm_title=subtitle_plots+", train-test split, whole feature set" 
+cm_title=subtitle_plots+", train-test split, optimal feature set" 
 
 #confusion matrix
 he_report=evaluate_confusion_matrix(y_pred,y_test,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=False, path=cm_saving_path,saving_name=cm_saving_name)
