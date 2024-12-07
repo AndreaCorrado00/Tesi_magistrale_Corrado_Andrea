@@ -366,17 +366,19 @@ env_dataset=evaluate_envelope_on_dataset(final_data_by_sub,30,"rms");
 spaghetti_confidence_signals(env_dataset,fc,figure_path+"\Envelope", "envelops")
 
 %% sistematic application of TM
-TM_dataset=evaluate_TM_on_dataset(final_data_by_sub,0.05,fc);
+TM_1_dataset=evaluate_TM_1_on_dataset(final_data_by_sub,0.05,fc);
+TM_2_dataset=evaluate_TM_2_on_dataset(final_data_by_sub,0.05,fc);
 
     %% Showing comulative results
-spaghetti_confidence_signals(TM_dataset,fc,figure_path+"\Template_Matching", "TM records")
-
+spaghetti_confidence_signals(TM_1_dataset,fc,figure_path+"\Template_Matching\Template_1", "TM records")
+spaghetti_confidence_signals(TM_2_dataset,fc,figure_path+"\Template_Matching\Template_2", "TM records")
 
 %% Single signal and envelope
 rov_trace_plots_by_sub(final_data_by_sub,env_dataset, fc,"envelope_or_cross",'Rov signal and envelope',figure_path+"\Envelope\Single_traces")
 
 %% single signal and TM
-rov_trace_plots_by_sub(final_data_by_sub,TM_dataset, fc,"envelope_or_cross",'Rov signal and cross correlation signal',figure_path+"\Template_Matching\Single_traces")
+rov_trace_plots_by_sub(final_data_by_sub,TM_1_dataset, fc,"envelope_or_cross",'Rov signal and cross correlation signal',figure_path+"\Template_Matching\Template_1\Single_traces")
+rov_trace_plots_by_sub(final_data_by_sub,TM_2_dataset, fc,"envelope_or_cross",'Rov signal and cross correlation signal',figure_path+"\Template_Matching\Template_2\Single_traces")
 
 %% single signal and STFT
 rov_trace_plots_by_sub(final_data_by_sub,TM_dataset, fc,"STFT",'Rov signal STFT',figure_path+"\STFT\Single_traces")
