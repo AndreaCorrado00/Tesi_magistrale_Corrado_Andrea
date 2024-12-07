@@ -366,7 +366,7 @@ env_dataset=evaluate_envelope_on_dataset(final_data_by_sub,30,"rms");
 spaghetti_confidence_signals(env_dataset,fc,figure_path+"\Envelope", "envelops")
 
 %% sistematic application of TM
-TM_dataset=evaluate_TM_on_dataset(final_data_by_sub,0.05,fc);
+TM_dataset=evaluate_TM_1_on_dataset(final_data_by_sub,0.05,fc);
 
     %% Showing comulative results
 spaghetti_confidence_signals(TM_dataset,fc,figure_path+"\Template_Matching", "TM records")
@@ -397,7 +397,7 @@ plot_traces_active_areas(final_data_by_sub,env_dataset,fc,"Slope_Analysis",'Rov 
 % 
 %     %% Plotting results
 % plot_TM_active_area_analysis(final_data_by_sub,env_dataset,TM_dataset,fc,"TM_active_area_analysis","",figure_path+"\Template_Matching\TM_active_area_analysis")
-
+% 
 %% Feature extraction
 feature_set = build_features_set(final_data_by_sub, env_dataset, TM_dataset,fc);
 
