@@ -1,5 +1,5 @@
-function [n_e_peaks,env_peak1_pos,env_peak2_pos,env_peak3_pos,env_peak1_val,env_peak2_val,env_peak3_val,...
-    peak1_pos,peak2_pos,peak3_pos,peak1_val,peak2_val,peak3_val,...
+function [n_e_peaks,env_peak1_time,env_peak2_time,env_peak3_time,env_peak1_val,env_peak2_val,env_peak3_val,...
+    peak1_time,peak2_time,peak3_time,peak1_val,peak2_val,peak3_val,...
     duration,silent_phase,silent_rateo,atrial_ventricular_ratio,atrial_ventricular_time_ratio,third_major_ratio,third_second_ratio,n_peaks_duration_ratio]=compute_envelope_features(example_env,example_rov,fc)
 
 [map_upper,map_lower]=analise_envelope_slope(example_env,0.002,fc);
@@ -41,9 +41,9 @@ end
 % envelope peaks
 n_e_peaks=sum(~isnan(env_final_peaks_val_pos(:,1)));
 
-env_peak1_pos=env_final_peaks_val_pos(1,2)/fc;
-env_peak2_pos=env_final_peaks_val_pos(2,2)/fc;
-env_peak3_pos=env_final_peaks_val_pos(3,2)/fc;
+env_peak1_time=env_final_peaks_val_pos(1,2)/fc;
+env_peak2_time=env_final_peaks_val_pos(2,2)/fc;
+env_peak3_time=env_final_peaks_val_pos(3,2)/fc;
 
 env_peak1_val=env_final_peaks_val_pos(1,1);
 env_peak2_val=env_final_peaks_val_pos(2,1);
@@ -112,9 +112,9 @@ end
 
 % envelope peaks
 
-peak1_pos=final_rov_peaks_val_pos(1,2)/fc;
-peak2_pos=final_rov_peaks_val_pos(2,2)/fc;
-peak3_pos=final_rov_peaks_val_pos(3,2)/fc;
+peak1_time=final_rov_peaks_val_pos(1,2)/fc;
+peak2_time=final_rov_peaks_val_pos(2,2)/fc;
+peak3_time=final_rov_peaks_val_pos(3,2)/fc;
 
 peak1_val=final_rov_peaks_val_pos(1,1);
 peak2_val=final_rov_peaks_val_pos(2,1);

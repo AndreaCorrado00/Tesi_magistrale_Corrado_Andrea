@@ -334,7 +334,7 @@ traces_subplots_by_sub(final_data_pop, fc, figure_path + "\single_records")
 
 
 
-%% ENVELOPE, TEMPLATE MATCHING AND STFT 
+%% ---------------- ENVELOPE, TEMPLATE MATCHING AND STFT ---------------
 clc;clear;close;
 dataset="dataset_2";
 
@@ -390,14 +390,14 @@ show_envelope_slope_analysis(final_data_by_sub,env_dataset,fc,record_id,false,fi
     %% Plotting results
 plot_traces_active_areas(final_data_by_sub,env_dataset,fc,"Slope_Analysis",'Rov signal and envelope:slope analysis',figure_path+"\Envelope\slope_analysis")
       
-%% Showing TM selective analysis
-record_id=["A",1,2];
-area="atrial";
-show_TM_analysis(record_id,final_data_by_sub,env_dataset,TM_dataset,fc,area,false,figure_path)
-
-    %% Plotting results
-plot_TM_active_area_analysis(final_data_by_sub,env_dataset,TM_dataset,fc,"TM_active_area_analysis","",figure_path+"\Template_Matching\TM_active_area_analysis")
-
+% %% Showing TM selective analysis
+% record_id=["A",1,2];
+% area="atrial";
+% show_TM_analysis(record_id,final_data_by_sub,env_dataset,TM_dataset,fc,area,false,figure_path)
+% 
+%     %% Plotting results
+% plot_TM_active_area_analysis(final_data_by_sub,env_dataset,TM_dataset,fc,"TM_active_area_analysis","",figure_path+"\Template_Matching\TM_active_area_analysis")
+% 
 %% Feature extraction
 feature_set = build_features_set(final_data_by_sub, env_dataset, TM_dataset,fc);
 
