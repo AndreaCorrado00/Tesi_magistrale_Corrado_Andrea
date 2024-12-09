@@ -106,7 +106,7 @@ plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plo
 #%% LOPOCV validation 
 y_true_LOPOCV,y_pred_LOPOCV,signal_peaks_and_class_KB_improved_LOPOCV=LOPOCV_KB_improved(whole_feature_db,use_ratio)
 # %% CM 
-# Variable saving names
+# Variable saving 
 cm_saving_name="CM_heuristic_LOPOCV"+plot_last_name
 cm_title=subtitle_plots+" LOPOCV KB improved" 
 he_report=evaluate_confusion_matrix(y_pred_LOPOCV,y_true_LOPOCV,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
