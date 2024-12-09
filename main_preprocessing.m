@@ -367,7 +367,7 @@ spaghetti_confidence_signals(env_dataset,fc,figure_path+"\Envelope", "envelops")
 
 %% sistematic application of TM
 TM_1_dataset=evaluate_TM_1_on_dataset(final_data_by_sub,0.05,fc);
-TM_2_dataset=evaluate_TM_2_on_dataset(final_data_by_sub,0.05,fc);
+TM_2_dataset=evaluate_TM_2_on_dataset(final_data_by_sub,0.1,fc);
 
     %% Showing comulative results
 spaghetti_confidence_signals(TM_1_dataset,fc,figure_path+"\Template_Matching\Template_1", "TM records")

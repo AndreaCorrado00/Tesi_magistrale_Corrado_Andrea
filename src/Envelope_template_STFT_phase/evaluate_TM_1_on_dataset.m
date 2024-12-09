@@ -7,7 +7,7 @@ N = round(T * fs);  % Number of samples in the template
 
 
 t_template = linspace(0, T, N); 
-
+ 
 
 % Loop through each map type: A, B, C
 for i = ["A", "B", "C"]
