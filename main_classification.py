@@ -154,7 +154,7 @@ save_plot(cross_features, other_fig_path,file_name='features_cross_corretion_mat
 
 #%% correlated features removal
 correlated_features=['env_peak1_time','env_peak2_time','env_peak3_time',
-                     'env_peak1_val','env_peak2_val','env_peak3_val','silent_rateo','corr_energy'];
+                     'env_peak1_val','env_peak2_val','env_peak3_val','silent_rateo','cross_energy'];
 
 final_column_names = [col for col in whole_feature_db.columns.tolist() if col not in correlated_features]
 whole_feature_db=whole_feature_db.drop(correlated_features,axis=1)

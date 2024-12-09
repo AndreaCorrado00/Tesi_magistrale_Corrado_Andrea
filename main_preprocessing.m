@@ -401,7 +401,7 @@ plot_traces_active_areas(final_data_by_sub,env_dataset,fc,"Slope_Analysis",'Rov 
 % plot_TM_active_area_analysis(final_data_by_sub,env_dataset,TM_dataset,fc,"TM_active_area_analysis","",figure_path+"\Template_Matching\TM_active_area_analysis")
 
 %% Feature extraction
-feature_set = build_features_set(final_data_by_sub, env_dataset, TM_dataset,fc);
+feature_set = build_features_set(final_data_by_sub, env_dataset, TM_1_dataset,fc);
 
 
     %% Features analysis
