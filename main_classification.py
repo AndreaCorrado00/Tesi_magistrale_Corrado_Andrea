@@ -35,6 +35,8 @@ db_number=2
 dataset_name = "dataset_"+str(db_number)  # E.g., dataset_1, 2, 3
 whole_dataset,signals,y_true,labels_unique,Fs,plot_last_name,fig_final_folder,subtitle_plots = load_signal_dataset(dataset_path, dataset_name)
 
+feature_dataset_name="feature_"+dataset_name
+whole_feature_db,feature_db=load_feature_dataset(dataset_path,feature_dataset_name)
 #%% Checking data
 display_data_summary(whole_dataset,labels_unique)
 
@@ -74,8 +76,7 @@ if show_heuristic:
     #    boxplots, a more robust threshold definition could be done. 
     # 3. the problem is that into this dataset atrial and ventricular phases 
     #    are not explicitly present. 
-feature_dataset_name="feature_"+dataset_name
-whole_feature_db,feature_db=load_feature_dataset(dataset_path,feature_dataset_name)
+
 
 other_fig_path=figure_path+"/Improved_KB_classifier_phase/"+fig_final_folder+"/other_figs"
 
@@ -288,6 +289,9 @@ from sklearn.tree import DecisionTreeClassifier
 
 selected_features=['peak3_val','peak1_time','peak2_time',
                    'n_peaks_duration_rateo','atrial_ventricular_ratio' ]
+# selected_features=selected_features=whole_feature_db.columns.tolist()
+# selected_features.remove('id')
+# selected_features.remove('class')
 
 sub_feature_db=whole_feature_db[whole_feature_db['id'].isin([1,3,4,6,7,8,9,10,11,12])]
 
@@ -325,6 +329,46 @@ cm_title=subtitle_plots+", train-test split, optimal feature set"
 he_report=evaluate_confusion_matrix(y_pred,y_test,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=False, path=cm_saving_path,saving_name=cm_saving_name)
 #plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="report_LOPOCV_tree_subset_features_and_DB")
 
-# the problem are the subjects!!
+#%% SHAP PLOT
+import shap
+import matplotlib.pyplot as plt
+
+# Initialize the SHAP explainer for the DecisionTreeClassifier
+explainer = shap.Explainer(classifier, x_train)
+
+# Compute SHAP values for the test set
+shap_values = explainer(x_test)
+# Transpose the SHAP values to match (n_classes, n_samples, n_features)
+shap_values_transposed = shap_values.values.transpose(2, 0, 1)  # (n_classes, n_samples, n_features)
+
+
+
+for i in range(len(classifier.classes_)):  # Iterate over the number of classes
+    # Create a new figure manually
+    fig, ax = plt.subplots(figsize=(10, 6))
+    
+    # Call shap.summary_plot() with show=False to avoid automatic display
+    shap.summary_plot(shap_values_transposed[i], x_test, feature_names=selected_features, show=False)
+
+    # Set the title on the current axes after SHAP generates the plot
+    ax.set_title(f"SHAP Summary Plot: Class {classifier.classes_[i]}")
+
+    # Show the plot
+    plt.show()
+
+
+#%%
+# Optional: Plot SHAP values for a single prediction (local interpretability)
+# Example: Use the first instance in the test set
+plt.figure()
+shap.force_plot(explainer.expected_value[0], shap_values.values[0], x_test.iloc[0], feature_names=selected_features)
+plt.title("SHAP Force Plot: Single Prediction")
+plt.show()
+
+# Optional: Bar plot to show the average absolute SHAP value for each feature
+plt.figure()
+shap.summary_plot(shap_values, x_test, feature_names=selected_features, plot_type="bar")
+plt.title("SHAP Bar Plot: Average Absolute Feature Importance")
+plt.show()
 
 
