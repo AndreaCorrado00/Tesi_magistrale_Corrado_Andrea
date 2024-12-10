@@ -1,5 +1,4 @@
-function [cross_peak_1,cross_peak_pos_1,corr_energy_1,...
-            cross_peak_2,cross_peak_pos_2,corr_energy_2]=compute_TM_features(record_id,data,env_dataset,cross_example_TM_1,cross_example_TM_2,T, fc)
+function [cross_peak,cross_peak_pos,corr_energy]=compute_TM_features(record_id,data,env_dataset,cross_example_TM_1,cross_example_TM_2,T, fc)
 
 % Old features
 % N_atr_corr_peaks,atr_cross_peak,atr_corr_energy,...
