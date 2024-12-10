@@ -140,23 +140,23 @@ df_corr_analysis=df_corr_analysis.drop(categorical_features,axis=1)
 # Compute the correlation matrix
 correlation_matrix = df_corr_analysis.corr()
 
-# Plot the correlation matrix as a heatmap
-import seaborn as sns
-cross_features, ax = plt.subplots(figsize=(50, 40))
-sns.heatmap(correlation_matrix, annot=True, fmt=".2f", cmap="coolwarm", 
-            xticklabels=df_corr_analysis.columns, 
-            yticklabels=df_corr_analysis.columns,annot_kws={"size": 25})  
-plt.xticks(fontsize=25)
-plt.yticks(fontsize=25)
-plt.title("Feature Cross-Correlation Matrix")
-plt.show()
+# # Plot the correlation matrix as a heatmap
+# import seaborn as sns
+# cross_features, ax = plt.subplots(figsize=(50, 40))
+# sns.heatmap(correlation_matrix, annot=True, fmt=".2f", cmap="coolwarm", 
+#             xticklabels=df_corr_analysis.columns, 
+#             yticklabels=df_corr_analysis.columns,annot_kws={"size": 25})  
+# plt.xticks(fontsize=25)
+# plt.yticks(fontsize=25)
+# plt.title("Feature Cross-Correlation Matrix")
+# plt.show()
 
-save_plot(cross_features, other_fig_path,file_name='features_cross_corretion_matrix',dpi=500)
+# save_plot(cross_features, other_fig_path,file_name='features_cross_corretion_matrix',dpi=500)
 
 #%% correlated features removal
 correlated_features=['env_peak1_time','env_peak2_time','env_peak3_time',
                      'env_peak1_val','env_peak2_val','env_peak3_val',
-                     'silent_rateo','cross_energy'];
+                     'silent_rateo','cross_energy_1','cross_peak_2','cross_peak_time_2','cross_energy_2','ApEN'];
 
 final_column_names = [col for col in whole_feature_db.columns.tolist() if col not in correlated_features]
 whole_feature_db=whole_feature_db.drop(correlated_features,axis=1)
@@ -203,7 +203,7 @@ plot_dataframe_as_plain_image(miss_class_summary, figsize=(8,5),scale=(1.7,1.7),
 
 #%% Second classifier: otimal subset of features
 selected_features=['id','peak3_val','peak1_time','peak2_time',
-                   'n_peaks_duration_rateo','atrial_ventricular_ratio','cross_peak',
+                   'n_peaks_duration_rateo','atrial_ventricular_ratio','cross_peak_1',
                    'class']
 
 max_depth=tune_tree_depth_lopocv(whole_feature_db,selected_features,np.arange(1,15,dtype=int))
@@ -243,7 +243,7 @@ plot_dataframe_as_plain_image(miss_class_summary, figsize=(8,5),scale=(1.7,1.7),
 
 #%% Proving that subs 1,3,4,6 worsen the anlysis
 selected_features=['id','peak3_val','peak1_time','peak2_time',
-                   'n_peaks_duration_rateo','atrial_ventricular_ratio','cross_peak',
+                   'n_peaks_duration_rateo','atrial_ventricular_ratio','cross_peak_1',
                    'class']
 sub_feature_db=whole_feature_db[whole_feature_db['id'].isin([7,8,9,10,11,12])]
 
@@ -288,7 +288,8 @@ plot_dataframe_as_plain_image(miss_class_summary, figsize=(8,5),scale=(1.7,1.7),
 from sklearn.tree import DecisionTreeClassifier
 
 selected_features=['peak3_val','peak1_time','peak2_time',
-                   'n_peaks_duration_rateo','atrial_ventricular_ratio' ]
+                   'n_peaks_duration_rateo','atrial_ventricular_ratio','cross_peak_1',
+                   ]
 # selected_features=selected_features=whole_feature_db.columns.tolist()
 # selected_features.remove('id')
 # selected_features.remove('class')
@@ -357,18 +358,6 @@ for i in range(len(classifier.classes_)):  # Iterate over the number of classes
     plt.show()
 
 
-#%%
-# Optional: Plot SHAP values for a single prediction (local interpretability)
-# Example: Use the first instance in the test set
-plt.figure()
-shap.force_plot(explainer.expected_value[0], shap_values.values[0], x_test.iloc[0], feature_names=selected_features)
-plt.title("SHAP Force Plot: Single Prediction")
-plt.show()
 
-# Optional: Bar plot to show the average absolute SHAP value for each feature
-plt.figure()
-shap.summary_plot(shap_values, x_test, feature_names=selected_features, plot_type="bar")
-plt.title("SHAP Bar Plot: Average Absolute Feature Importance")
-plt.show()
 
 
