@@ -43,7 +43,8 @@ for i = ["A", "B", "C"]
                 cross_peak_2,cross_peak_pos_2,corr_energy_2]=compute_TM_features(record_id,data, env_data,example_corr_TM_1,example_corr_TM_2,T, fc);
 
             %% ApEN and MI
-            ApEN=ApEn(example_rov,3,0.3*std(example_rov,[],"omitnan"));
+            ApEN=ApEn(example_rov,3,0.38*std(example_rov,[],"omitnan"));
+            % MI=compute_MI(example_rov,fc);
 
             % Save the computed features as strings (to handle NaN values)
             feature_row = {
