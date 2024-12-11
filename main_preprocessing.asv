@@ -410,6 +410,58 @@ show_features_statistics(feature_set,true,figure_path+"\features_boxplots")
     %% Saving features
 writetable(feature_set, processed_data_path+'\'+'feature_'+dataset+'.txt', 'Delimiter', ',', 'WriteVariableNames', true);
 
+%%
+signal=final_data_by_sub.MAP_A.MAP_A1.rov_trace{:,1};
+fs=fc;
+% Step 1: Compute the Power Spectral Density (PSD) using periodogram
+[pxx, f] = periodogram(signal, [], [], fs);  % pxx is the PSD, f is the frequency axis
+
+% Step 2: Compute the total power up to 320 Hz
+max_freq = 320;  % Maximum frequency for total power computation
+total_power = trapz(f(f <= max_freq), pxx(f <= max_freq));
+
+% Step 3: Compute the relative power in each 20 Hz sub-band
+sub_band_width = 20;  % Sub-band width in Hz
+num_bands = floor(max_freq / sub_band_width);  % Number of sub-bands (up to 320 Hz)
+relative_power = zeros(1, num_bands);
+
+for i = 1:num_bands
+    band_start = (i - 1) * sub_band_width;
+    band_end = i * sub_band_width;
+    
+    % Get the power in the current sub-band
+    band_power = trapz(f(f >= band_start & f < band_end), pxx(f >= band_start & f < band_end)); % trapezoid as approximation of integration
+    
+    % Calculate the relative power 
+    relative_power(i) = (band_power / total_power);
+end
+
+% Step 4: Frequency-domain features
+
+% 4.1: Mean Frequency (MNF)
+mnf = trapz(f .* pxx) / trapz(pxx);
+
+% 4.2: Peak Frequency (PKF)
+[~, pkf_index] = max(pxx);
+pkf = f(pkf_index);
+
+% 4.3: Mean Spectral Power (MNP)
+mnp = trapz(f(f <= max_freq), pxx(f <= max_freq)) / max_freq;
+
+% 4.4: Power Spectrum Ratio (PSR) around the PKF
+delta_f = 10;  % Frequency window around PKF for PSR
+psr_band = f >= (pkf - delta_f) & f <= (pkf + delta_f);
+psr = trapz(f(psr_band), pxx(psr_band)) / total_power;
+
+% Display the results
+fprintf('Relative Power in 20 Hz Sub-bands (0-320 Hz):\n');
+disp(relative_power);
+
+fprintf('\nFrequency-domain Features:\n');
+fprintf('Mean Frequency (MNF): %.2f Hz\n', mnf);
+fprintf('Peak Frequency (PKF): %.2f Hz\n', pkf);
+fprintf('Mean Spectral Power (MNP): %.4f\n', mnp);
+fprintf('Power Spectrum Ratio (PSR) around PKF: %.2f\n', psr);
 
 
 
