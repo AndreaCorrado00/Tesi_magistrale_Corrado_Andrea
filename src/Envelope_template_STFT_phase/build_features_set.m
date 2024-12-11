@@ -44,8 +44,8 @@ for i = ["A", "B", "C"]
 
             %% Other features
             ApEN=ApEn(example_rov,3,0.38*std(example_rov,[],"omitnan")); % Doque et al.
-            Fragmentation=compute_fragmentation_value(example_rov,0.75,fc); % Baldazzi et al.
-            App=compute_pp_amplitude(example_rov,fc);
+            Fragmentation=compute_fragmentation_value(example_rov,0.750,fc); % Baldazzi et al.
+            App=compute_pp_amplitude(example_rov,fc); % Baldazzi et al. 
 
             % Save the computed features as strings (to handle NaN values)
             feature_row = {
