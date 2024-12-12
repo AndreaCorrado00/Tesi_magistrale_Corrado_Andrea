@@ -3,7 +3,7 @@ function [Pr20,Pr40,Pr60,Pr80,Pr100,Pr120,Pr140,Pr160,Pr180,Pr200,...
     mnf,pkf,mnp,psr] = compute_PSD_features(signal,fs)
 
 % Step 1: Compute the Power Spectral Density (PSD) using periodogram
-[pxx, f] = periodogram(signal, [], [], fs);  
+[pxx, f] = periodogram(signal-mean(signal,"omitnan"), [], [], fs);  
 
 % Step 2: Compute the total power up to 320 Hz
 max_freq = 320;  % Maximum frequency for total power computation

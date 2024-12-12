@@ -151,7 +151,7 @@ plt.yticks(fontsize=25)
 plt.title("Feature Cross-Correlation Matrix")
 plt.show()
 
-save_plot(cross_features, other_fig_path,file_name='features_cross_corretion_matrix',dpi=500)
+#save_plot(cross_features, other_fig_path,file_name='features_cross_corretion_matrix',dpi=500)
 
 #%% correlated features removal
 correlated_features=['env_peak1_time','env_peak2_time','env_peak3_time',
@@ -202,8 +202,8 @@ plot_dataframe_as_plain_image(miss_class_summary, figsize=(8,5),scale=(1.7,1.7),
 
 
 #%% Second classifier: otimal subset of features
-selected_features=['id','peak3_val','peak2_time','ApEN','peak1_time',
-                   'n_peaks_duration_rateo','atrial_ventricular_ratio','cross_peak_1',
+selected_features=['id','peak3_val','peak2_time','Pr100','Pr140','Pr180','peak1_time',
+                   'n_peaks_duration_rateo','atrial_ventricular_ratio','cross_peak_2',
                    'class']
 
 max_depth=tune_tree_depth_lopocv(whole_feature_db,selected_features,np.arange(1,15,dtype=int))
@@ -242,8 +242,8 @@ plot_dataframe_as_plain_image(miss_class_summary, figsize=(8,5),scale=(1.7,1.7),
 
 
 #%% Proving that subs 1,3,4,6 worsen the anlysis
-selected_features=['id','peak3_val','peak2_time','ApEN','peak1_time',
-                   'n_peaks_duration_rateo','atrial_ventricular_ratio','cross_peak_1',
+selected_features=['id','peak3_val','peak2_time','Pr100','Pr140','Pr180','peak1_time',
+                   'n_peaks_duration_rateo','atrial_ventricular_ratio','cross_peak_2',
                    'class']
 sub_feature_db=whole_feature_db[whole_feature_db['id'].isin([7,8,9,10,11,12])]
 
@@ -287,7 +287,7 @@ plot_dataframe_as_plain_image(miss_class_summary, figsize=(8,5),scale=(1.7,1.7),
 ###############################################################################
 from sklearn.tree import DecisionTreeClassifier
 
-selected_features=['peak3_val','peak2_time','ApEN','peak1_time',
+selected_features=['peak3_val','peak2_time','peak1_time',
                    'n_peaks_duration_rateo','atrial_ventricular_ratio','cross_peak_1'
                    ]
 # selected_features=selected_features=whole_feature_db.columns.tolist()
