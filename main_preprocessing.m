@@ -386,7 +386,7 @@ rov_trace_plots_by_sub(final_data_by_sub,TM_dataset, fc,"STFT",'Rov signal STFT'
 
 
 %% Showing envelope slope analysis pipeline
-record_id=["C",6,3]; 
+record_id=["C",12,17]; 
 show_envelope_slope_analysis(final_data_by_sub,env_dataset,fc,record_id,false,figure_path+"\Envelope\slope_analysis\algorithm_explanation")
 
     %% Plotting results

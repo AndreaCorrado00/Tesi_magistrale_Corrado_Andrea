@@ -95,6 +95,8 @@ ylabel('Amplitude [mV]')
 
 %% Time thresholds
 time_th = define_time_th(map_upper, map_lower);
+time_th=clean_time_thresholds(signal,time_th,fc,5);
+
 subplot(2,2,4)
 plot(x,signal,"LineWidth",0.8,"Color","#4DBEEE")
 hold on

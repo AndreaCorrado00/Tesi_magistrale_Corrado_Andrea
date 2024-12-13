@@ -6,7 +6,13 @@ function [n_e_peaks,env_peak1_time,env_peak2_time,env_peak3_time,env_peak1_val,e
 
 
 time_th = define_time_th(map_upper, map_lower);
+N_initial=size(time_th,1);
+time_th=clean_time_thresholds(example_rov,time_th,fc,4.5);
+N_cleaned=size(time_th,1);
 
+if N_cleaned>3
+    fprintf("WARNING --> Starting from %.d, ends with %.d active areas \n",N_initial,N_cleaned)
+end
 [N,M]=size(time_th);
 env_peaks_val_pos=nan(N,2);
 rov_peaks_val_pos=nan(N,2);
