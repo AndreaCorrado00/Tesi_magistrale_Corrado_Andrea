@@ -408,5 +408,3 @@ show_features_statistics(feature_set,true,figure_path+"\features_boxplots")
 
     %% Saving features
 writetable(feature_set, processed_data_path+'\'+'feature_'+dataset+'.txt', 'Delimiter', ',', 'WriteVariableNames', true);
-
-
