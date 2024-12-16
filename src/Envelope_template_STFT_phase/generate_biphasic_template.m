@@ -23,8 +23,7 @@ function template = generate_biphasic_template(Fs, duration, smoothing_window)
     % % Plot the template
     % time = (0:N-1) / Fs; % Time axis
     % figure;
-    % plot(time, template, '-o');
-    % title('Biphasic Template');
-    % xlabel('Time (s)');
-    % ylabel('Amplitude');
+    % plot(time, template, '-');
+    % title("Biphasic Template  of duration: "+ num2str(duration)+ " seconds");
+    % xlabel('Time [s]');
 end

@@ -39,7 +39,7 @@ function [cross_peak_1,cross_peak_pos_1,corr_energy_1,...
 %     vent_corr_energy=nan;
 % end
 
-% Features of the whole cross-correlation signal
+% Features of the whole cross-correlation signal: Template 1
 start_idx=round(fc*0.17);
 end_idx=round(fc*0.6);
 [cross_peak_1,cross_peak_pos_1]=max(cross_example_TM_1(start_idx:end_idx),[],"omitmissing");
@@ -48,7 +48,7 @@ cross_peak_pos_1=(cross_peak_pos_1+start_idx)/fc;
 M=find(~isnan(cross_example_TM_1),1,"last")-find(~isnan(cross_example_TM_1),1,"first");
 corr_energy_1=sum(cross_example_TM_1.^2,"omitnan")/M;
 
-% Features of the whole cross-correlation signal
+% Features of the whole cross-correlation signal: Template 2
 start_idx=round(fc*0.17);
 end_idx=round(fc*0.6);
 [cross_peak_2,cross_peak_pos_2]=max(cross_example_TM_2(start_idx:end_idx),[],"omitmissing");
@@ -61,7 +61,6 @@ corr_energy_2=sum(cross_example_TM_2.^2,"omitnan")/M;
 % cross_atr_vent_ratio=atr_cross_peak/vent_cross_peak;
 % cross_atr_abs_max_ratio=atr_cross_peak/cross_peak;
 % cross_vent_abs_max_ratio=vent_cross_peak/cross_peak;
-% 
 % energy_cross_atr_vent_ratio=atr_corr_energy/vent_corr_energy;
 % energy_cross_atr_abs_max_ratio=atr_corr_energy/corr_energy;
 % energy_cross_vent_abs_max_ratio=vent_corr_energy/corr_energy;

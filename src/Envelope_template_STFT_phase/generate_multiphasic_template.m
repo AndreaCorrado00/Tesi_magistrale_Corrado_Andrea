@@ -22,11 +22,10 @@ function template = generate_multiphasic_template(Fs, duration, smoothing_window
     % Smooth the edges
     template = smoothdata(template, 'gaussian', smoothing_window);
 
-    % % Plot the template
+    % Plot the template
     % time = (0:N-1) / Fs; % Time axis
     % figure;
-    % plot(time, template, '-o');
-    % title('Multiphasic Template');
-    % xlabel('Time (s)');
-    % ylabel('Amplitude');
+    % plot(time, template, '-');
+    % title("Multiphasic Template  of duration: "+ num2str(duration)+ " seconds");
+    % xlabel('Time [s]');
 end

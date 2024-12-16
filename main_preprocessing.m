@@ -366,7 +366,7 @@ env_dataset=evaluate_envelope_on_dataset(final_data_by_sub,30,"rms");
 spaghetti_confidence_signals(env_dataset,fc,figure_path+"\Envelope", "envelops")
 
 %% sistematic application of TM
-TM_1_dataset=evaluate_TM_1_on_dataset(final_data_by_sub,0.05,fc);
+% TM_1_dataset=evaluate_TM_1_on_dataset(final_data_by_sub,0.05,fc);
 TM_2_dataset=evaluate_TM_2_on_dataset(final_data_by_sub,0.1,fc);
 
     %% Showing comulative results
@@ -391,13 +391,6 @@ show_envelope_slope_analysis(final_data_by_sub,env_dataset,fc,record_id,false,fi
     %% Plotting results
 plot_traces_active_areas(final_data_by_sub,env_dataset,fc,"Slope_Analysis",'Rov signal and envelope:slope analysis',figure_path+"\Envelope\slope_analysis")
       
-% %% Showing TM selective analysis
-% record_id=["A",1,2];
-% area="atrial";
-% show_TM_analysis(record_id,final_data_by_sub,env_dataset,TM_dataset,fc,area,false,figure_path)
-% 
-%     %% Plotting results
-% plot_TM_active_area_analysis(final_data_by_sub,env_dataset,TM_dataset,fc,"TM_active_area_analysis","",figure_path+"\Template_Matching\TM_active_area_analysis")
 
 %% Feature extraction
 feature_set = build_features_set(final_data_by_sub, env_dataset, TM_1_dataset,TM_2_dataset,fc);

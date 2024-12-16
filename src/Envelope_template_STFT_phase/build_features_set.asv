@@ -45,13 +45,13 @@ for i = ["A", "B", "C"]
                 cross_peak_2,cross_peak_pos_2,corr_energy_2]=compute_TM_features(record_id,data, env_data,example_corr_TM_1,example_corr_TM_2,T, fc);
 
             %% Other features
-            % ApEN=ApEn(example_rov,3,0.38*std(example_rov,[],"omitnan")); % Doque et al.
-            % Fragmentation=compute_fragmentation_value(example_rov,0.750,fc); % Baldazzi et al.
-            % App=compute_pp_amplitude(example_rov,fc); % Baldazzi et al.
+            ApEN=ApEn(example_rov,3,0.38*std(example_rov,[],"omitnan")); % Doque et al.
+            Fragmentation=compute_fragmentation_value(example_rov,0.750,fc); % Baldazzi et al.
+            App=compute_pp_amplitude(example_rov,fc); % Baldazzi et al.
 
-            % [Pr20,Pr40,Pr60,Pr80,Pr100,Pr120,Pr140,Pr160,Pr180,Pr200,...
-            %     Pr220,Pr240,Pr260,Pr280,Pr300,Pr320,...
-            %     mnf,pkf,mnp,psr] = compute_PSD_features(example_rov,fc); % Baldazzi et al.
+            [Pr20,Pr40,Pr60,Pr80,Pr100,Pr120,Pr140,Pr160,Pr180,Pr200,...
+                Pr220,Pr240,Pr260,Pr280,Pr300,Pr320,...
+                mnf,pkf,mnp,psr] = compute_PSD_features(example_rov,fc); % Baldazzi et al.
 
             % % Save the computed features as strings (to handle NaN values)
             % feature_row = {
