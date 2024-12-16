@@ -119,26 +119,42 @@ if sum(sum(isnan(start_end_areas)))==0
     atrial_ventricular_time_ratio=atr_peak_pos/vent_peak_pos;
 
 else
-    if max(original_rov_peaks_val_pos(:,2),[],"omitnan")/fc>0.4 %forcing peak evaluation
-        % detected peak is into the ventricular phase, thus must be found
-        % the atrial one
+    if max(original(:,2),[],"omitnan")/fc>0.4 %forcing peak evaluation
+        % detected peak is into the ventricular phase
         [atrial_peak,atrial_pos]=max(abs(example_rov(round(0.17*fc):round(0.4*fc))));
-        vent_peak=max(original_rov_peaks_val_pos(:,1),[],"omitnan");
+        vent_peak=max(final_rov_peaks_val_pos(:,1),[],"omitnan");
         atrial_ventricular_ratio=atrial_peak/vent_peak;
-        atrial_ventricular_time_ratio=(atrial_pos+round(0.17*fc))/max(original_rov_peaks_val_pos(:,2),[],"omitnan");
+        atrial_ventricular_time_ratio=(atrial_pos+round(0.17*fc))/max(final_rov_peaks_val_pos(:,2),[],"omitnan");
 
     else
-        % viceversa
         [vent_peak,vent_pos]=max(abs(example_rov(round(0.4*fc):round(0.6*fc))));
-        atrial_peak=max(original_rov_peaks_val_pos(:,1),[],"omitnan");
+        atrial_peak=max(final_rov_peaks_val_pos(:,1),[],"omitnan");
         atrial_ventricular_ratio=atrial_peak/vent_peak;
-        atrial_ventricular_time_ratio=max(original_rov_peaks_val_pos(:,2),[],"omitnan")/(vent_pos+round(0.4*fc));
+        atrial_ventricular_time_ratio=max(final_rov_peaks_val_pos(:,2),[],"omitnan")/(vent_pos+round(0.4*fc));
     end
 end
 
-third_major_ratio=Third_peak/Major_peak;
-third_second_ratio=Third_peak/Second_peak;
+if n_e_peaks ==3
+    third_major_ratio = final_rov_peaks_val_pos(3,1) / final_rov_peaks_val_pos(1,1);
+else
+    third_major_ratio = nan; % Not enough peaks to compute the ratio
+end
+
+if n_e_peaks ==3
+    third_second_ratio = final_rov_peaks_val_pos(3,1) / final_rov_peaks_val_pos(2,1);
+else
+    third_second_ratio = nan; % Not enough peaks to compute the ratio
+end
 
 
+% envelope peaks
+
+peak1_time=final_rov_peaks_val_pos(1,2)/fc;
+peak2_time=final_rov_peaks_val_pos(2,2)/fc;
+peak3_time=final_rov_peaks_val_pos(3,2)/fc;
+
+peak1_val=final_rov_peaks_val_pos(1,1);
+peak2_val=final_rov_peaks_val_pos(2,1);
+peak3_val=final_rov_peaks_val_pos(3,1);
 end
 
