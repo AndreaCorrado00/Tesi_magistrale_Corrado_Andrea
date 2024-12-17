@@ -395,7 +395,6 @@ plot_traces_active_areas(final_data_by_sub,env_dataset,fc,"Slope_Analysis",'Rov 
 %% Feature extraction
 feature_set = build_features_set(final_data_by_sub, env_dataset, TM_1_dataset,TM_2_dataset,fc);
 
-
     %% Features analysis
 show_features_statistics(feature_set,true,figure_path+"\features_boxplots")
 
