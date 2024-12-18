@@ -1,9 +1,10 @@
 from sklearn.tree import DecisionTreeClassifier
 import numpy as np
+from tune_tree_depth_lopocv import tune_tree_depth_lopocv 
 
-def LOPOCV_decision_tree(whole_feature_db, selected_features, max_depth):
+def LOPOCV_decision_tree(whole_feature_db, selected_features):
     # Model and metrics
-    classifier = DecisionTreeClassifier(criterion="entropy", random_state=42, max_depth=max_depth,class_weight="balanced")
+   
     
     # Initialize lists to store the results
     all_y_true = []
@@ -29,6 +30,13 @@ def LOPOCV_decision_tree(whole_feature_db, selected_features, max_depth):
         # Split into features and target for train and test sets
         x_train, y_train = train_data.drop(['id', 'class'], axis=1), train_data['class']
         x_test, y_test = test_data.drop(['id', 'class'], axis=1), test_data['class']
+        
+        
+        # depth tuning 
+        max_depth=tune_tree_depth_lopocv(x_train,y_train,x_test,y_test,np.arange(1,15,dtype=int))
+        # classifier initialization
+        classifier = DecisionTreeClassifier(criterion="entropy", random_state=42, max_depth=max_depth,class_weight="balanced")
+
         
         # Train the model on the training data
         classifier.fit(x_train, y_train)
