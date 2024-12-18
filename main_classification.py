@@ -151,13 +151,16 @@ plt.yticks(fontsize=25)
 plt.title("Feature Cross-Correlation Matrix")
 plt.show()
 
-#%%
+
 save_plot(cross_features, other_fig_path,file_name='features_cross_corretion_matrix',dpi=500)
 
 #%% correlated features removal
-correlated_features=['env_peak1_time','env_peak2_time','env_peak3_time',
-                     'env_peak1_val','env_peak2_val','env_peak3_val',
-                     'silent_rateo','cross_energy_1','cross_peak_2','cross_peak_time_2','cross_energy_2'];
+correlated_features=['Dominant_peak_env', 'Dominant_peak_env_time', 'Subdominant_peak_env',
+'Subdominant_peak_env_time', 'Minor_peak_env', 'Minor_peak_env_time',
+'First_peak_env','First_peak_env_time', 'Second_peak_env', 'Second__peak_env_time',
+'Third_peak_env', 'Third_peak_env_time','Dominant_peak','silent_phase',
+'cross_energy_TM1','cross_peak_TM2', 'cross_peak_time_TM2', 'cross_energy_TM2',
+];
 
 final_column_names = [col for col in whole_feature_db.columns.tolist() if col not in correlated_features]
 whole_feature_db=whole_feature_db.drop(correlated_features,axis=1)
@@ -203,8 +206,10 @@ plot_dataframe_as_plain_image(miss_class_summary, figsize=(8,5),scale=(1.7,1.7),
 
 
 #%% Second classifier: otimal subset of features
-selected_features=['id','peak3_val','peak2_time','Pr100','Pr140','Pr180','peak1_time',
-                   'n_peaks_duration_rateo','atrial_ventricular_ratio','cross_peak_2',
+selected_features=['id',
+                   'Second_AvgPowLF','First_AvgPowMF','Subdominant_AvgPowMF',
+                   'cross_peak_time_TM1','cross_peak_TM1','n_active_areas_on_duration_ratio','atrial_ventricular_ratio',
+                   'Third_peak_time','Second_peak','Second_peak_time','Minor_peak','Subdominant_peak_time','Dominant_peak_time',
                    'class']
 
 max_depth=tune_tree_depth_lopocv(whole_feature_db,selected_features,np.arange(1,15,dtype=int))

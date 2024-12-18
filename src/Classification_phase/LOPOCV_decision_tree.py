@@ -3,7 +3,7 @@ import numpy as np
 
 def LOPOCV_decision_tree(whole_feature_db, selected_features, max_depth):
     # Model and metrics
-    classifier = DecisionTreeClassifier(criterion="entropy", random_state=42, max_depth=max_depth)
+    classifier = DecisionTreeClassifier(criterion="entropy", random_state=42, max_depth=max_depth,class_weight="balanced")
     
     # Initialize lists to store the results
     all_y_true = []
