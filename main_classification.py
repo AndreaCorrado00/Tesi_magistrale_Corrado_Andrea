@@ -38,7 +38,7 @@ whole_dataset,signals,y_true,labels_unique,Fs,plot_last_name,fig_final_folder,su
 feature_dataset_name="feature_"+dataset_name
 whole_feature_db,feature_db=load_feature_dataset(dataset_path,feature_dataset_name)
 #%% Checking data
-display_data_summary(whole_dataset,labels_unique)
+display_data_summary(whole_feature_db,labels_unique)
 
 # other types of EDA have been made previously
 
@@ -81,7 +81,7 @@ if show_heuristic:
 other_fig_path=figure_path+"/Improved_KB_classifier_phase/"+fig_final_folder+"/other_figs"
 
 #%% KB classifier will still be based on peaks values, ratios and positions
-use_ratio=True
+use_ratio=False
 # whole dataset
 dims=feature_db.shape
 pred_KB_improved=np.empty(dims[0], dtype=object)
@@ -133,7 +133,7 @@ from tune_tree_depth_lopocv import tune_tree_depth_lopocv
 #%% CORRELATION ANALYSIS on features
 df_corr_analysis=whole_feature_db.drop(["id","class"],axis=1)
 
-categorical_features = [col for col in df_corr_analysis.columns if df_corr_analysis[col].nunique() <=3]
+categorical_features = [col for col in df_corr_analysis.columns if df_corr_analysis[col].nunique() <=5]
 print(f"Categorical features names: {categorical_features}")
 df_corr_analysis=df_corr_analysis.drop(categorical_features,axis=1)
 
@@ -142,7 +142,7 @@ correlation_matrix = df_corr_analysis.corr()
 
 # Plot the correlation matrix as a heatmap
 import seaborn as sns
-cross_features, ax = plt.subplots(figsize=(50, 40))
+cross_features, ax = plt.subplots(figsize=(80, 60))
 sns.heatmap(correlation_matrix, annot=True, fmt=".2f", cmap="coolwarm", 
             xticklabels=df_corr_analysis.columns, 
             yticklabels=df_corr_analysis.columns,annot_kws={"size": 25})  
@@ -151,7 +151,8 @@ plt.yticks(fontsize=25)
 plt.title("Feature Cross-Correlation Matrix")
 plt.show()
 
-#save_plot(cross_features, other_fig_path,file_name='features_cross_corretion_matrix',dpi=500)
+#%%
+save_plot(cross_features, other_fig_path,file_name='features_cross_corretion_matrix',dpi=500)
 
 #%% correlated features removal
 correlated_features=['env_peak1_time','env_peak2_time','env_peak3_time',
