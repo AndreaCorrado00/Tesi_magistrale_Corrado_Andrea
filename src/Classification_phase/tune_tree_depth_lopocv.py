@@ -38,7 +38,7 @@ def tune_tree_depth_lopocv(whole_feature_db, selected_features, depths):
         
         # Tune the maximum depth
         for depth in depths:
-            classifier = DecisionTreeClassifier(criterion="entropy", max_depth=depth, random_state=42)
+            classifier = DecisionTreeClassifier(criterion="entropy", max_depth=depth, random_state=42,class_weight="balanced")
             classifier.fit(X_train, y_train)
             
             y_pred = classifier.predict(X_test)

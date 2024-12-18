@@ -175,7 +175,7 @@ whole_feature_db=whole_feature_db.drop(correlated_features,axis=1)
 # %% FIRST CLASSIFIER: whole dataset
 selected_features=whole_feature_db.columns.tolist()
 
-max_depth=tune_tree_depth_lopocv(whole_feature_db,selected_features,np.arange(3,15,dtype=int))
+max_depth=tune_tree_depth_lopocv(whole_feature_db,selected_features,np.arange(1,15,dtype=int))
 print(f"-> Maximum depth for the tree: {max_depth}")
 classifier,all_y_pred, all_y_true, all_predictions_by_subs, selected_feature_db,feature_importances=LOPOCV_decision_tree(whole_feature_db, selected_features,max_depth=max_depth)
 
@@ -213,7 +213,8 @@ plot_dataframe_as_plain_image(miss_class_summary, figsize=(8,5),scale=(1.7,1.7),
 
 #%% Second classifier: otimal subset of features
 selected_features=['id',
-                   'cross_peak_time_TM1','cross_peak_TM1','n_active_areas_on_duration_ratio',
+                   'minor_to_subdominant_ratio','Third_peak_time','Second_peak_time','First_peak','Minor_peak_time',
+                   'cross_peak_time_TM1','n_active_areas_on_duration_ratio',
                    'atrial_ventricular_ratio','Minor_peak','Subdominant_peak_time','Dominant_peak_time',
                    'class']
 
@@ -254,7 +255,8 @@ plot_dataframe_as_plain_image(miss_class_summary, figsize=(8,5),scale=(1.7,1.7),
 
 #%% Proving that subs 1,3,4,6 worsen the anlysis
 selected_features=['id',
-                   'cross_peak_time_TM1','cross_peak_TM1','n_active_areas_on_duration_ratio',
+                   'minor_to_subdominant_ratio','Third_peak_time','Second_peak_time','First_peak','Minor_peak_time',
+                   'cross_peak_time_TM1','n_active_areas_on_duration_ratio',
                    'atrial_ventricular_ratio','Minor_peak','Subdominant_peak_time','Dominant_peak_time',
                    'class']
 sub_feature_db=whole_feature_db[whole_feature_db['id'].isin([7,8,9,10,11,12])]
@@ -368,8 +370,4 @@ for i in range(len(classifier.classes_)):  # Iterate over the number of classes
 
     # Show the plot
     plt.show()
-
-
-
-
 
