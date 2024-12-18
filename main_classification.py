@@ -140,19 +140,19 @@ df_corr_analysis=df_corr_analysis.drop(categorical_features,axis=1)
 # Compute the correlation matrix
 correlation_matrix = df_corr_analysis.corr()
 
-# Plot the correlation matrix as a heatmap
-import seaborn as sns
-cross_features, ax = plt.subplots(figsize=(80, 60))
-sns.heatmap(correlation_matrix, annot=True, fmt=".2f", cmap="coolwarm", 
-            xticklabels=df_corr_analysis.columns, 
-            yticklabels=df_corr_analysis.columns,annot_kws={"size": 25})  
-plt.xticks(fontsize=25)
-plt.yticks(fontsize=25)
-plt.title("Feature Cross-Correlation Matrix")
-plt.show()
+# # Plot the correlation matrix as a heatmap
+# import seaborn as sns
+# cross_features, ax = plt.subplots(figsize=(80, 60))
+# sns.heatmap(correlation_matrix, annot=True, fmt=".2f", cmap="coolwarm", 
+#             xticklabels=df_corr_analysis.columns, 
+#             yticklabels=df_corr_analysis.columns,annot_kws={"size": 25})  
+# plt.xticks(fontsize=25)
+# plt.yticks(fontsize=25)
+# plt.title("Feature Cross-Correlation Matrix")
+# plt.show()
 
 
-save_plot(cross_features, other_fig_path,file_name='features_cross_corretion_matrix',dpi=500)
+# save_plot(cross_features, other_fig_path,file_name='features_cross_corretion_matrix',dpi=500)
 
 #%% correlated features removal
 correlated_features=['Dominant_peak_env', 'Dominant_peak_env_time', 'Subdominant_peak_env',
@@ -160,6 +160,12 @@ correlated_features=['Dominant_peak_env', 'Dominant_peak_env_time', 'Subdominant
 'First_peak_env','First_peak_env_time', 'Second_peak_env', 'Second__peak_env_time',
 'Third_peak_env', 'Third_peak_env_time','Dominant_peak','silent_phase',
 'cross_energy_TM1','cross_peak_TM2', 'cross_peak_time_TM2', 'cross_energy_TM2',
+'Dominant_AvgPowLF', 'Dominant_AvgPowMF', 'Dominant_AvgPowHF',
+'Subdominant_AvgPowLF', 'Subdominant_AvgPowMF', 'Subdominant_AvgPowHF',
+'Minor_AvgPowLF', 'Minor_AvgPowMF', 'First_AvgPowLF',
+'First_AvgPowMF', 'Second_AvgPowLF',
+'Second_AvgPowMF',  'Third_AvgPowLF',
+'Third_AvgPowMF',
 ];
 
 final_column_names = [col for col in whole_feature_db.columns.tolist() if col not in correlated_features]
@@ -207,9 +213,8 @@ plot_dataframe_as_plain_image(miss_class_summary, figsize=(8,5),scale=(1.7,1.7),
 
 #%% Second classifier: otimal subset of features
 selected_features=['id',
-                   'Second_AvgPowLF','First_AvgPowMF','Subdominant_AvgPowMF',
-                   'cross_peak_time_TM1','cross_peak_TM1','n_active_areas_on_duration_ratio','atrial_ventricular_ratio',
-                   'Third_peak_time','Second_peak','Second_peak_time','Minor_peak','Subdominant_peak_time','Dominant_peak_time',
+                   'cross_peak_time_TM1','cross_peak_TM1','n_active_areas_on_duration_ratio',
+                   'atrial_ventricular_ratio','Minor_peak','Subdominant_peak_time','Dominant_peak_time',
                    'class']
 
 max_depth=tune_tree_depth_lopocv(whole_feature_db,selected_features,np.arange(1,15,dtype=int))
@@ -248,8 +253,9 @@ plot_dataframe_as_plain_image(miss_class_summary, figsize=(8,5),scale=(1.7,1.7),
 
 
 #%% Proving that subs 1,3,4,6 worsen the anlysis
-selected_features=['id','peak3_val','peak2_time','Pr100','Pr140','Pr180','peak1_time',
-                   'n_peaks_duration_rateo','atrial_ventricular_ratio','cross_peak_2',
+selected_features=['id',
+                   'cross_peak_time_TM1','cross_peak_TM1','n_active_areas_on_duration_ratio',
+                   'atrial_ventricular_ratio','Minor_peak','Subdominant_peak_time','Dominant_peak_time',
                    'class']
 sub_feature_db=whole_feature_db[whole_feature_db['id'].isin([7,8,9,10,11,12])]
 
