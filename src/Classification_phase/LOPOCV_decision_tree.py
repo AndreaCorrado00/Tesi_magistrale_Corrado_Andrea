@@ -4,7 +4,6 @@ from tune_tree_depth_lopocv import tune_tree_depth_lopocv
 
 def LOPOCV_decision_tree(whole_feature_db, selected_features):
     # Model and metrics
-   
     
     # Initialize lists to store the results
     all_y_true = []
@@ -33,7 +32,8 @@ def LOPOCV_decision_tree(whole_feature_db, selected_features):
         
         
         # depth tuning 
-        max_depth=tune_tree_depth_lopocv(x_train,y_train,x_test,y_test,np.arange(1,15,dtype=int))
+        max_depth=tune_tree_depth_lopocv(x_train,y_train,x_test,y_test,np.arange(3,15,dtype=int))
+        print(f"tree depth for patient: {participant}: {max_depth}")
         # classifier initialization
         classifier = DecisionTreeClassifier(criterion="entropy", random_state=42, max_depth=max_depth,class_weight="balanced")
 

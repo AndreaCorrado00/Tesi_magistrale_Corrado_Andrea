@@ -24,6 +24,7 @@ from plot_dataframe_as_plain_image import plot_dataframe_as_plain_image
 from load_feature_dataset import load_feature_dataset
 from improved_KB_classifier import improved_KB_classifier
 from LOPOCV_KB_improved import LOPOCV_KB_improved
+from show_SHAP_analysis import show_SHAP_analysis
 # Exporting figures
 figure_path="D:/Desktop/ANDREA/Universita/Magistrale/Anno Accademico 2023-2024/TESI/Tesi_magistrale/Figure"
 
@@ -127,7 +128,6 @@ plot_dataframe_as_plain_image(miss_class_summary, figsize=(8,5),scale=(1.7,1.7),
 other_fig_path=figure_path+"/Classification_phase/"+fig_final_folder+"/other_figs"
 
 from LOPOCV_decision_tree import LOPOCV_decision_tree
-from sklearn.metrics import f1_score
 
 #%% CORRELATION ANALYSIS on features
 df_corr_analysis=whole_feature_db.drop(["id","class"],axis=1)
@@ -154,26 +154,20 @@ correlation_matrix = df_corr_analysis.corr()
 # save_plot(cross_features, other_fig_path,file_name='features_cross_corretion_matrix',dpi=500)
 
 #%% correlated features removal
-# correlated_features=['Dominant_peak_env', 'Dominant_peak_env_time', 'Subdominant_peak_env',
-# 'Subdominant_peak_env_time', 'Minor_peak_env', 'Minor_peak_env_time',
-# 'First_peak_env','First_peak_env_time', 'Second_peak_env', 'Second__peak_env_time',
-# 'Third_peak_env', 'Third_peak_env_time','Dominant_peak','silent_phase',
-# 'cross_energy_TM1','cross_peak_TM2', 'cross_peak_time_TM2', 'cross_energy_TM2',
-# 'Dominant_AvgPowLF', 'Dominant_AvgPowMF', 'Dominant_AvgPowHF',
-# 'Subdominant_AvgPowLF', 'Subdominant_AvgPowMF', 'Subdominant_AvgPowHF',
-# 'Minor_AvgPowLF', 'Minor_AvgPowMF', 'First_AvgPowLF',
-# 'First_AvgPowMF', 'Second_AvgPowLF',
-# 'Second_AvgPowMF',  'Third_AvgPowLF',
-# 'Third_AvgPowMF',
-# ];
 correlated_features=['Dominant_peak_env', 'Dominant_peak_env_time', 'Subdominant_peak_env',
 'Subdominant_peak_env_time', 'Minor_peak_env', 'Minor_peak_env_time',
 'First_peak_env','First_peak_env_time', 'Second_peak_env', 'Second__peak_env_time',
 'Third_peak_env', 'Third_peak_env_time','Dominant_peak','silent_phase',
 'cross_energy_TM1','cross_peak_TM2', 'cross_peak_time_TM2', 'cross_energy_TM2',
+ 'Dominant_AvgPowMF',
+ 'Subdominant_AvgPowLF','Subdominant_AvgPowMF',
+ 'Minor_AvgPowLF','Minor_AvgPowMF',
+ 'First_AvgPowLF', 'First_AvgPowMF',
+ 'Second_AvgPowLF', 'Second_AvgPowMF',
+ 'Third_AvgPowLF', 'Third_AvgPowMF',
 ];
 
-
+ 
 final_column_names = [col for col in whole_feature_db.columns.tolist() if col not in correlated_features]
 whole_feature_db=whole_feature_db.drop(correlated_features,axis=1)
 
@@ -181,8 +175,7 @@ whole_feature_db=whole_feature_db.drop(correlated_features,axis=1)
 # %% FIRST CLASSIFIER: whole dataset
 selected_features=whole_feature_db.columns.tolist()
 
-# max_depth=tune_tree_depth_lopocv(whole_feature_db,selected_features,np.arange(1,15,dtype=int))
-# print(f"-> Maximum depth for the tree: {max_depth}")
+
 classifier,all_y_pred, all_y_true, all_predictions_by_subs, selected_feature_db,feature_importances=LOPOCV_decision_tree(whole_feature_db, selected_features)
 
 # PERFORMANCE
@@ -196,9 +189,14 @@ cm_title=subtitle_plots+", LOPOCV"
 he_report=evaluate_confusion_matrix(all_y_pred,all_y_true,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
 plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="report_LOPOCV_whole_tree")
 
-# Features importance: best model tuning
+# Summary of misclassification errors
+miss_class_summary= misclassification_summary(whole_feature_db[selected_features],all_y_pred, labels_unique)
+plot_dataframe_as_plain_image(miss_class_summary, figsize=(8,5),scale=(1.7,1.7),title_plot=cm_title,path=other_fig_path,saving_name="Misclass_LOPOCV_whole_tree")
+
+#%% Features importance: best model tuning
 feature_names = selected_feature_db.columns.tolist()
 
+# Features importance
 importance_fig,ax=plt.subplots(figsize=(30, 20))
 plt.barh(feature_names, feature_importances, color="skyblue")
 plt.xlabel("Importance")
@@ -208,25 +206,22 @@ plt.yticks(fontsize=20)
 plt.show()
 save_plot(importance_fig, other_fig_path,file_name='whole tree features importance')
 
-f1_macro = f1_score(all_y_pred,all_y_true, average="weighted")
-print(f"Global F1-Score (Weighted): {f1_macro:.4f}")
+# SHAP analysis
+show_SHAP_analysis(whole_feature_db,selected_features,saving_path=other_fig_path,other_comments="whole_feature_set")
 
-# Summary of misclassification errors
-miss_class_summary= misclassification_summary(whole_feature_db[selected_features],all_y_pred, labels_unique)
-plot_dataframe_as_plain_image(miss_class_summary, figsize=(8,5),scale=(1.7,1.7),title_plot=cm_title,path=other_fig_path,saving_name="Misclass_LOPOCV_whole_tree")
-
-
-
-#%% Second classifier: otimal subset of features
+#%% SECOND CLASSIFIER: otimal subset of features
 selected_features=['id',
+                   'Dominant_peak_time','Subdominant_peak','Subdominant_peak_time',
+                   'Minor_peak','First_peak','First_peak_time',
+                   'Second_peak','Second_peak_time',
+                   'minor_to_subdominant_ratio',
+                   'n_active_areas_on_duration_ratio',
+                   'atrial_ventricular_ratio',
+                   'cross_peak_TM1','cross_peak_time_TM1',
+                   'Dominant_AvgPowLF','First_AvgPowHF',
                    'App',
-                   'Second_AvgPowLF','Dominant_AvgPowMF','Dominant_AvgPowLF',
-                   'cross_peak_time_TM1','cross_peak_TM1','n_active_areas_on_duration_ratio','atrial_ventricular_ratio',
-                   'Second_peak_time','First_peak_time','Minor_peak','Subdominant_peak_time','Dominant_peak_time',               
                    'class']
 
-# max_depth=tune_tree_depth_lopocv(whole_feature_db,selected_features,np.arange(1,15,dtype=int))
-# print(f"-> Maximum depth for the tree: {max_depth}")
 # lopocv training
 classifier,all_y_pred, all_y_true, all_predictions_by_subs, selected_feature_db,feature_importances=LOPOCV_decision_tree(whole_feature_db, selected_features)
 
@@ -241,7 +236,12 @@ cm_title=subtitle_plots+", LOPOCV"
 he_report=evaluate_confusion_matrix(all_y_pred,all_y_true,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
 plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="report_LOPOCV_tree_feature_subset")
 
-# Features importance
+# Summary of misclassification errors
+miss_class_summary= misclassification_summary(whole_feature_db[selected_features],all_y_pred, labels_unique)
+plot_dataframe_as_plain_image(miss_class_summary, figsize=(8,5),scale=(1.7,1.7),title_plot=cm_title+", optimised model",path=other_fig_path,saving_name="Misclass_LOPOCV_tree_feature_subset")
+
+
+#%% Features importance
 feature_names = selected_feature_db.columns.tolist()
 
 importance_fig,ax=plt.subplots()
@@ -251,128 +251,53 @@ plt.title("Feature Importance: optimal subset of features")
 plt.show()
 save_plot(importance_fig, other_fig_path,file_name='optimised tree features importance')
 
-f1_macro = f1_score(all_y_pred,all_y_true, average="weighted")
-print(f"Global F1-Score (Weighted): {f1_macro:.4f}")
-
-# Summary of misclassification errors
-miss_class_summary= misclassification_summary(whole_feature_db[selected_features],all_y_pred, labels_unique)
-plot_dataframe_as_plain_image(miss_class_summary, figsize=(8,5),scale=(1.7,1.7),title_plot=cm_title+", optimised model",path=other_fig_path,saving_name="Misclass_LOPOCV_tree_feature_subset")
-
+# SHAP analysis
+show_SHAP_analysis(whole_feature_db,selected_features,saving_path=other_fig_path,other_comments="optimal_feature_set")
 
 
 #%% Proving that subs 1,3,4,6 worsen the anlysis
-selected_features=['id',
-                   'App',
-                   'Second_AvgPowLF','Dominant_AvgPowMF','Dominant_AvgPowLF',
-                   'cross_peak_time_TM1','cross_peak_TM1','n_active_areas_on_duration_ratio','atrial_ventricular_ratio',
-                   'Second_peak_time','First_peak_time','Minor_peak','Subdominant_peak_time','Dominant_peak_time',               
-                   'class']
-sub_feature_db=whole_feature_db[whole_feature_db['id'].isin([7,8,9,10,11,12])]
+# selected_features=['id',
+#                    'Dominant_peak_time','Subdominant_peak','Subdominant_peak_time',
+#                    'Minor_peak','Minor_peak_time','First_peak','First_peak_time',
+#                    'Second_peak','Second_peak_time','Third_peak_time','duration',
+#                    'atrial_ventricular_time_ratio','minor_to_subdominant_ratio',
+#                    'n_active_areas_on_duration_ratio',
+#                    'cross_peak_TM1','cross_peak_time_TM1',
+#                    'Dominant_AvgPowLF','First_AvgPowHF',
+#                    'Fragmentation','App',
+#                    'class']
 
-# max_depth=tune_tree_depth_lopocv(whole_feature_db,selected_features,np.arange(1,15,dtype=int))
-# print(f"-> Maximum depth for the tree: {max_depth}")
-# lopocv training
-classifier,all_y_pred, all_y_true, all_predictions_by_subs, selected_feature_db,feature_importances=LOPOCV_decision_tree(sub_feature_db, selected_features)
+# sub_feature_db=whole_feature_db[whole_feature_db['id'].isin([7,8,9,10,11,12])]
 
-# PERFORMANCE
-cm_suptitle="Confusion Matrix: Tree classifier,optimal feature subset and DB subset"
-cm_saving_path=os.path.join(figure_path+"/Classification_phase",fig_final_folder)
-# Variable saving names
-cm_saving_name="CM_opt_tree_LOPOCV_feature_and_DB_subset"+plot_last_name
-cm_title=subtitle_plots+", LOPOCV, subs 7->12" 
+# # max_depth=tune_tree_depth_lopocv(whole_feature_db,selected_features,np.arange(1,15,dtype=int))
+# # print(f"-> Maximum depth for the tree: {max_depth}")
+# # lopocv training
+# classifier,all_y_pred, all_y_true, all_predictions_by_subs, selected_feature_db,feature_importances=LOPOCV_decision_tree(sub_feature_db, selected_features)
 
-#confusion matrix
-he_report=evaluate_confusion_matrix(all_y_pred,all_y_true,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
-plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="report_LOPOCV_tree_subset_features_and_DB")
+# # PERFORMANCE
+# cm_suptitle="Confusion Matrix: Tree classifier,optimal feature subset and DB subset"
+# cm_saving_path=os.path.join(figure_path+"/Classification_phase",fig_final_folder)
+# # Variable saving names
+# cm_saving_name="CM_opt_tree_LOPOCV_feature_and_DB_subset"+plot_last_name
+# cm_title=subtitle_plots+", LOPOCV, subs 7->12" 
 
-# Features importance
-feature_names = selected_feature_db.columns.tolist()
+# #confusion matrix
+# he_report=evaluate_confusion_matrix(all_y_pred,all_y_true,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
+# plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="report_LOPOCV_tree_subset_features_and_DB")
 
-importance_fig,ax=plt.subplots()
-plt.barh(feature_names, feature_importances, color="skyblue")
-plt.xlabel("Importance")
-plt.title("Feature Importance: subset of patients, optimal subset of features")
-plt.show()
-save_plot(importance_fig, other_fig_path,file_name='optimised tree features importance reduced db')
+# # Features importance
+# feature_names = selected_feature_db.columns.tolist()
 
-# Summary of misclassification errors
-miss_class_summary= misclassification_summary(sub_feature_db[selected_features],all_y_pred, labels_unique)
-plot_dataframe_as_plain_image(miss_class_summary, figsize=(8,5),scale=(1.7,1.7),title_plot=cm_title+", optimised model",path=other_fig_path,saving_name="Misclass_LOPOCV_tree_feature_and_DB_subset")
+# importance_fig,ax=plt.subplots()
+# plt.barh(feature_names, feature_importances, color="skyblue")
+# plt.xlabel("Importance")
+# plt.title("Feature Importance: subset of patients, optimal subset of features")
+# plt.show()
+# save_plot(importance_fig, other_fig_path,file_name='optimised tree features importance reduced db')
 
-
-
-#%%############################################################################
-################## TRAIN-TEST SPLIT IMPROVES GENERALIZATION? ################## 
-###############################################################################
-from sklearn.tree import DecisionTreeClassifier
-
-selected_features=['peak3_val','peak2_time','peak1_time',
-                   'n_peaks_duration_rateo','atrial_ventricular_ratio','cross_peak_1'
-                   ]
-# selected_features=selected_features=whole_feature_db.columns.tolist()
-# selected_features.remove('id')
-# selected_features.remove('class')
-
-sub_feature_db=whole_feature_db[whole_feature_db['id'].isin([1,3,4,6,7,8,9,10,11,12])]
-
-y_true_sub=sub_feature_db["class"]
-
-sub_feature_db=sub_feature_db.drop(["id","class"],axis=1)
-
-# Split 70-30%
-x_train, x_test, y_train, y_test = train_test_split(sub_feature_db[selected_features],y_true_sub, test_size=0.3, stratify=y_true_sub, random_state=42)
-
-# check if the train/test split is correctly stratified
-print("\n---- After stratified train/test split----")
-print("Training set")
-show_class_proportions(y_train,labels_unique)
-print("Test set")
-show_class_proportions(y_test,labels_unique)
-
-# model evaluation
-classifier = DecisionTreeClassifier(criterion="entropy", random_state=42,max_depth=3)
-
-# Train the model on the training data
-classifier.fit(x_train, y_train)
-
-# Predict on the test data
-y_pred = classifier.predict(x_test)
-
-# PERFORMANCE
-cm_suptitle="Confusion Matrix: Tree classifier"
-cm_saving_path=os.path.join(figure_path+"/Classification_phase",fig_final_folder)
-# Variable saving names
-cm_saving_name="CM_train_test_split"+plot_last_name
-cm_title=subtitle_plots+", train-test split, optimal feature set" 
-
-#confusion matrix
-he_report=evaluate_confusion_matrix(y_pred,y_test,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=False, path=cm_saving_path,saving_name=cm_saving_name)
-#plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="report_LOPOCV_tree_subset_features_and_DB")
-
-#%% SHAP PLOT
-import shap
-import matplotlib.pyplot as plt
-
-# Initialize the SHAP explainer for the DecisionTreeClassifier
-explainer = shap.Explainer(classifier, x_train)
-
-# Compute SHAP values for the test set
-shap_values = explainer(x_test)
-# Transpose the SHAP values to match (n_classes, n_samples, n_features)
-shap_values_transposed = shap_values.values.transpose(2, 0, 1)  # (n_classes, n_samples, n_features)
+# # Summary of misclassification errors
+# miss_class_summary= misclassification_summary(sub_feature_db[selected_features],all_y_pred, labels_unique)
+# plot_dataframe_as_plain_image(miss_class_summary, figsize=(8,5),scale=(1.7,1.7),title_plot=cm_title+", optimised model",path=other_fig_path,saving_name="Misclass_LOPOCV_tree_feature_and_DB_subset")
 
 
-
-for i in range(len(classifier.classes_)):  # Iterate over the number of classes
-    # Create a new figure manually
-    fig, ax = plt.subplots(figsize=(10, 6))
-    
-    # Call shap.summary_plot() with show=False to avoid automatic display
-    shap.summary_plot(shap_values_transposed[i], x_test, feature_names=selected_features, show=False)
-
-    # Set the title on the current axes after SHAP generates the plot
-    ax.set_title(f"SHAP Summary Plot: Class {classifier.classes_[i]}")
-
-    # Show the plot
-    plt.show()
 
