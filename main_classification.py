@@ -255,49 +255,4 @@ save_plot(importance_fig, other_fig_path,file_name='optimised tree features impo
 show_SHAP_analysis(whole_feature_db,selected_features,saving_path=other_fig_path,other_comments="optimal_feature_set")
 
 
-#%% Proving that subs 1,3,4,6 worsen the anlysis
-# selected_features=['id',
-#                    'Dominant_peak_time','Subdominant_peak','Subdominant_peak_time',
-#                    'Minor_peak','Minor_peak_time','First_peak','First_peak_time',
-#                    'Second_peak','Second_peak_time','Third_peak_time','duration',
-#                    'atrial_ventricular_time_ratio','minor_to_subdominant_ratio',
-#                    'n_active_areas_on_duration_ratio',
-#                    'cross_peak_TM1','cross_peak_time_TM1',
-#                    'Dominant_AvgPowLF','First_AvgPowHF',
-#                    'Fragmentation','App',
-#                    'class']
-
-# sub_feature_db=whole_feature_db[whole_feature_db['id'].isin([7,8,9,10,11,12])]
-
-# # max_depth=tune_tree_depth_lopocv(whole_feature_db,selected_features,np.arange(1,15,dtype=int))
-# # print(f"-> Maximum depth for the tree: {max_depth}")
-# # lopocv training
-# classifier,all_y_pred, all_y_true, all_predictions_by_subs, selected_feature_db,feature_importances=LOPOCV_decision_tree(sub_feature_db, selected_features)
-
-# # PERFORMANCE
-# cm_suptitle="Confusion Matrix: Tree classifier,optimal feature subset and DB subset"
-# cm_saving_path=os.path.join(figure_path+"/Classification_phase",fig_final_folder)
-# # Variable saving names
-# cm_saving_name="CM_opt_tree_LOPOCV_feature_and_DB_subset"+plot_last_name
-# cm_title=subtitle_plots+", LOPOCV, subs 7->12" 
-
-# #confusion matrix
-# he_report=evaluate_confusion_matrix(all_y_pred,all_y_true,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
-# plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="report_LOPOCV_tree_subset_features_and_DB")
-
-# # Features importance
-# feature_names = selected_feature_db.columns.tolist()
-
-# importance_fig,ax=plt.subplots()
-# plt.barh(feature_names, feature_importances, color="skyblue")
-# plt.xlabel("Importance")
-# plt.title("Feature Importance: subset of patients, optimal subset of features")
-# plt.show()
-# save_plot(importance_fig, other_fig_path,file_name='optimised tree features importance reduced db')
-
-# # Summary of misclassification errors
-# miss_class_summary= misclassification_summary(sub_feature_db[selected_features],all_y_pred, labels_unique)
-# plot_dataframe_as_plain_image(miss_class_summary, figsize=(8,5),scale=(1.7,1.7),title_plot=cm_title+", optimised model",path=other_fig_path,saving_name="Misclass_LOPOCV_tree_feature_and_DB_subset")
-
-
 
