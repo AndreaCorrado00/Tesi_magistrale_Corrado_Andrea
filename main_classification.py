@@ -121,15 +121,13 @@ plot_dataframe_as_plain_image(miss_class_summary, figsize=(8,5),scale=(1.7,1.7),
 
 
 
-
 #%%############################################################################
-###################     TREE CLASSIFIER WITH LOPOCV     #######################
+#################     CORRELATION ANALYSIS ON FEATURES     ####################
 ###############################################################################
 other_fig_path=figure_path+"/Classification_phase/"+fig_final_folder+"/other_figs"
 
-from LOPOCV_decision_tree import LOPOCV_decision_tree
 
-#%% CORRELATION ANALYSIS on features
+#%% Correlation analysis on features
 df_corr_analysis=whole_feature_db.drop(["id","class"],axis=1)
 
 categorical_features = [col for col in df_corr_analysis.columns if df_corr_analysis[col].nunique() <=5]
@@ -171,6 +169,11 @@ correlated_features=['Dominant_peak_env', 'Dominant_peak_env_time', 'Subdominant
 final_column_names = [col for col in whole_feature_db.columns.tolist() if col not in correlated_features]
 whole_feature_db=whole_feature_db.drop(correlated_features,axis=1)
 
+#%%############################################################################
+###################     TREE CLASSIFIER WITH LOPOCV     #######################
+###############################################################################
+
+from LOPOCV_decision_tree import LOPOCV_decision_tree
 
 # %% FIRST CLASSIFIER: whole dataset
 selected_features=whole_feature_db.columns.tolist()
@@ -257,6 +260,37 @@ show_SHAP_analysis(whole_feature_db,selected_features,saving_path=other_fig_path
 
 
 #%%############################################################################
-###################     TREE CLASSIFIER WITH LOPOCV     #######################
+###################     SVM CLASSIFIER WITH LOPOCV     #######################
 ###############################################################################
+from impute_scale_dataset import impute_scale_dataset
+from LOPOCV_SVM import LOPOCV_SVM
+
+#%% Data preparation: imputation and Min-Max scaling
+whole_feature_db_SVM=impute_scale_dataset(whole_feature_db)
+
+#%% SVM LOPOCV training
+selected_features=whole_feature_db_SVM.columns.tolist()
+kernel='rbf'
+classifier, all_y_pred, all_y_true, all_predictions_by_subs, selected_feature_db=LOPOCV_SVM(whole_feature_db_SVM,selected_features,kernel_type=kernel)
+
+#%% first results, linear kernel
+# PERFORMANCE
+cm_suptitle=f"Confusion Matrix: SVM model, {kernel} kernel"
+cm_saving_path=os.path.join(figure_path+"/Classification_phase",fig_final_folder)
+# Variable saving names
+cm_saving_name="CM_SVM_whole_LOPOCV"+plot_last_name
+cm_title=subtitle_plots+", LOPOCV" 
+
+#confusion matrix
+he_report=evaluate_confusion_matrix(all_y_pred,all_y_true,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=False, path=cm_saving_path,saving_name=cm_saving_name)
+plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="report_LOPOCV_SVM_whole")
+
+
+#%% SHAP analysis should be done to find out feature importance (for the kernel in use)
+
+
+
+
+
+
 
