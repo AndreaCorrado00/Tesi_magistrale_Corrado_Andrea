@@ -264,14 +264,16 @@ show_SHAP_analysis(whole_feature_db,selected_features,saving_path=other_fig_path
 ###############################################################################
 from impute_scale_dataset import impute_scale_dataset
 from LOPOCV_SVM import LOPOCV_SVM
+from analyse_SVM_feature_importance import analyse_SVM_feature_importance 
 
 #%% Data preparation: imputation and Min-Max scaling
 whole_feature_db_SVM=impute_scale_dataset(whole_feature_db)
 
-#%% SVM LOPOCV training
+#%% SVM LOPOCV training: variable kernel
 selected_features=whole_feature_db_SVM.columns.tolist()
 kernel='rbf'
-classifier, all_y_pred, all_y_true, all_predictions_by_subs, selected_feature_db=LOPOCV_SVM(whole_feature_db_SVM,selected_features,kernel_type=kernel)
+classifier, all_y_pred, all_y_true, all_predictions_by_subs,feature_importance=LOPOCV_SVM(whole_feature_db_SVM,selected_features,kernel_type=kernel)
+
 
 #%% first results, linear kernel
 # PERFORMANCE
@@ -282,14 +284,14 @@ cm_saving_name="CM_SVM_whole_LOPOCV"+plot_last_name
 cm_title=subtitle_plots+", LOPOCV" 
 
 #confusion matrix
-he_report=evaluate_confusion_matrix(all_y_pred,all_y_true,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=False, path=cm_saving_path,saving_name=cm_saving_name)
+he_report=evaluate_confusion_matrix(all_y_pred,all_y_true,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
 plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="report_LOPOCV_SVM_whole")
 
+#%% Feature importance analysis
 
-#%% SHAP analysis should be done to find out feature importance (for the kernel in use)
-
-
-
+#show_SHAP_analysis(whole_feature_db_SVM,selected_features,model_type='SVM',kernel_type=kernel,other_comments="optimal_feature_set")
+# too slow
+selected_features=analyse_SVM_feature_importance(feature_importance,th=0.01)
 
 
 
