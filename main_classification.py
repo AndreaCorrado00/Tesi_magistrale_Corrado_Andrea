@@ -271,28 +271,42 @@ whole_feature_db_SVM=impute_scale_dataset(whole_feature_db)
 
 #%% SVM LOPOCV training: variable kernel
 selected_features=whole_feature_db_SVM.columns.tolist()
-kernel='rbf'
-classifier, all_y_pred, all_y_true, all_predictions_by_subs,feature_importance=LOPOCV_SVM(whole_feature_db_SVM,selected_features,kernel_type=kernel)
+kernel_types=['linear','poly','rbf']
+for kernel in kernel_types:
+    classifier, all_y_pred, all_y_true, all_predictions_by_subs,feature_importance=LOPOCV_SVM(whole_feature_db_SVM,selected_features,kernel_type=kernel)
 
+    # PERFORMANCE
+    cm_suptitle="Confusion Matrix: SVM model"
+    cm_saving_path=os.path.join(figure_path+"/Classification_phase",fig_final_folder)
+    # Variable saving names
+    cm_saving_name="CM_SVM_whole_LOPOCV"+plot_last_name+"_"+kernel
+    cm_title=subtitle_plots+f", LOPOCV, {kernel} kernel" 
 
-#%% first results, linear kernel
+    #confusion matrix
+    he_report=evaluate_confusion_matrix(all_y_pred,all_y_true,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
+    plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title+f", {kernel}", use_rowLabels=True,path=cm_saving_path,saving_name="report_LOPOCV_SVM_whole_"+kernel)
+
+#%% Feature importance analysis
+# The bes model in term of perfomance is used to evaluate feature importance
+
+best_kernel="rbf"
+classifier, all_y_pred, all_y_true, all_predictions_by_subs,feature_importance=LOPOCV_SVM(whole_feature_db_SVM,selected_features,kernel_type=best_kernel)
+
+selected_features=analyse_SVM_feature_importance(feature_importance,th=0.01)
+#show_SHAP_analysis(whole_feature_db_SVM,selected_features,model_type='SVM',kernel_type=kernel,other_comments="optimal_feature_set")
+# too slow
+
+#%% final optimised model
+classifier, all_y_pred, all_y_true, all_predictions_by_subs,feature_importance=LOPOCV_SVM(whole_feature_db_SVM,selected_features,kernel_type=best_kernel)
+
 # PERFORMANCE
-cm_suptitle=f"Confusion Matrix: SVM model, {kernel} kernel"
+cm_suptitle="Confusion Matrix: SVM model,, optimal feature subset"
 cm_saving_path=os.path.join(figure_path+"/Classification_phase",fig_final_folder)
 # Variable saving names
-cm_saving_name="CM_SVM_whole_LOPOCV"+plot_last_name
-cm_title=subtitle_plots+", LOPOCV" 
+cm_saving_name="CM_SVM_opt_feature_set_LOPOCV"+plot_last_name+"_"+kernel
+cm_title=subtitle_plots+", LOPOCV,  {kernel} kernel" 
 
 #confusion matrix
 he_report=evaluate_confusion_matrix(all_y_pred,all_y_true,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
-plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="report_LOPOCV_SVM_whole")
-
-#%% Feature importance analysis
-
-#show_SHAP_analysis(whole_feature_db_SVM,selected_features,model_type='SVM',kernel_type=kernel,other_comments="optimal_feature_set")
-# too slow
-selected_features=analyse_SVM_feature_importance(feature_importance,th=0.01)
-
-
-
+plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title+f", {best_kernel}", use_rowLabels=True,path=cm_saving_path,saving_name="report_LOPOCV_SVM_opt_feature_set_"+best_kernel)
 

@@ -29,7 +29,7 @@ def LOPOCV_SVM(whole_feature_db, selected_features, kernel_type=None):
         x_test, y_test = test_data.drop(['id', 'class'], axis=1), test_data['class']
         
         # C parameter tuning
-        C_candidates = np.logspace(-3, 3, num=7)
+        C_candidates = np.logspace(-4, 4, num=9)
         if kernel_type is None:
             kernel_type = 'linear'
         
