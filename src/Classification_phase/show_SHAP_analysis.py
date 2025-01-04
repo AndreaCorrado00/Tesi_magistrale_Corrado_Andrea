@@ -39,7 +39,8 @@ def show_SHAP_analysis(whole_feature_db, selected_features, model_type='tree', k
 
     # SHAP analysis
     if model_type == 'tree':
-        explainer = shap.Explainer(classifier, x_train)
+        
+        explainer = shap.TreeExplainer(classifier, x_train)
         shap_values = explainer(x_test)
     elif model_type == 'SVM':
         def model_predict(X):
@@ -50,13 +51,13 @@ def show_SHAP_analysis(whole_feature_db, selected_features, model_type='tree', k
         
         explainer = shap.KernelExplainer(model_predict, shap.sample(x_train, 100))
         shap_values = explainer.shap_values(x_test)
-
+        
     # Generate SHAP plots
     for i, class_name in enumerate(classifier.classes_):
         fig, ax = plt.subplots(figsize=(10, 6))
         
         # Use SHAP summary plot for the i-th class
-        shap.summary_plot(shap_values[i], x_test, feature_names=selected_features_no_id_and_class, show=False)
+        shap.summary_plot(shap_values[:, :, i], x_test, feature_names=selected_features_no_id_and_class, show=False)
         ax.set_title(f"SHAP Summary Plot: {class_name}, {other_comments}")
         
         plt.show()

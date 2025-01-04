@@ -182,7 +182,7 @@ selected_features=whole_feature_db.columns.tolist()
 classifier,all_y_pred, all_y_true, all_predictions_by_subs, selected_feature_db,feature_importances=LOPOCV_decision_tree(whole_feature_db, selected_features)
 
 # PERFORMANCE
-cm_suptitle="Confusion Matrix: Tree classifier"
+cm_suptitle="Confusion Matrix: Tree classifier, whole feature set"
 cm_saving_path=os.path.join(figure_path+"/Classification_phase",fig_final_folder)
 # Variable saving names
 cm_saving_name="CM_whole_tree_LOPOCV"+plot_last_name
@@ -271,42 +271,42 @@ whole_feature_db_SVM=impute_scale_dataset(whole_feature_db)
 
 #%% SVM LOPOCV training: variable kernel
 selected_features=whole_feature_db_SVM.columns.tolist()
-kernel_types=['linear','poly','rbf']
-for kernel in kernel_types:
+kernel_types={"Linear":"linear","Polynomial":"poly","Gaussian":"rbf"}
+for kernel_full_name,kernel in kernel_types.items():
     classifier, all_y_pred, all_y_true, all_predictions_by_subs,feature_importance=LOPOCV_SVM(whole_feature_db_SVM,selected_features,kernel_type=kernel)
 
     # PERFORMANCE
-    cm_suptitle="Confusion Matrix: SVM model"
+    cm_suptitle="Confusion Matrix: SVM model, whole feature set"
     cm_saving_path=os.path.join(figure_path+"/Classification_phase",fig_final_folder)
     # Variable saving names
-    cm_saving_name="CM_SVM_whole_LOPOCV"+plot_last_name+"_"+kernel
-    cm_title=subtitle_plots+f", LOPOCV, {kernel} kernel" 
+    cm_saving_name="CM_SVM_whole_LOPOCV"+plot_last_name+"_"+kernel_full_name
+    cm_title=subtitle_plots+f", LOPOCV, {kernel_full_name} kernel" 
 
     #confusion matrix
     he_report=evaluate_confusion_matrix(all_y_pred,all_y_true,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
-    plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title+f", {kernel}", use_rowLabels=True,path=cm_saving_path,saving_name="report_LOPOCV_SVM_whole_"+kernel)
+    plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="report_LOPOCV_SVM_whole_"+kernel_full_name)
 
 #%% Feature importance analysis
-# The bes model in term of perfomance is used to evaluate feature importance
+# The best model in terms of perfomance is used to evaluate feature importance
 
-best_kernel="rbf"
-classifier, all_y_pred, all_y_true, all_predictions_by_subs,feature_importance=LOPOCV_SVM(whole_feature_db_SVM,selected_features,kernel_type=best_kernel)
+best_kernel="Gaussian"
+classifier, all_y_pred, all_y_true, all_predictions_by_subs,feature_importance=LOPOCV_SVM(whole_feature_db_SVM,selected_features,kernel_type=kernel_types[best_kernel])
 
 selected_features=analyse_SVM_feature_importance(feature_importance,th=0.01)
 #show_SHAP_analysis(whole_feature_db_SVM,selected_features,model_type='SVM',kernel_type=kernel,other_comments="optimal_feature_set")
 # too slow
 
 #%% final optimised model
-classifier, all_y_pred, all_y_true, all_predictions_by_subs,feature_importance=LOPOCV_SVM(whole_feature_db_SVM,selected_features,kernel_type=best_kernel)
+classifier, all_y_pred, all_y_true, all_predictions_by_subs,feature_importance=LOPOCV_SVM(whole_feature_db_SVM,selected_features,kernel_type=kernel_types[best_kernel])
 
 # PERFORMANCE
-cm_suptitle="Confusion Matrix: SVM model,, optimal feature subset"
+cm_suptitle="Confusion Matrix: SVM model, optimal feature subset"
 cm_saving_path=os.path.join(figure_path+"/Classification_phase",fig_final_folder)
 # Variable saving names
 cm_saving_name="CM_SVM_opt_feature_set_LOPOCV"+plot_last_name+"_"+kernel
-cm_title=subtitle_plots+", LOPOCV,  {kernel} kernel" 
+cm_title=subtitle_plots+f", LOPOCV,  {best_kernel} kernel" 
 
 #confusion matrix
 he_report=evaluate_confusion_matrix(all_y_pred,all_y_true,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
-plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title+f", {best_kernel}", use_rowLabels=True,path=cm_saving_path,saving_name="report_LOPOCV_SVM_opt_feature_set_"+best_kernel)
+plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="report_LOPOCV_SVM_opt_feature_set_"+best_kernel)
 
