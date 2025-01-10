@@ -156,11 +156,11 @@ correlated_features=['Dominant_peak_env', 'Dominant_peak_env_time', 'Subdominant
 'Subdominant_peak_env_time', 'Minor_peak_env', 'Minor_peak_env_time',
 'First_peak_env','First_peak_env_time', 'Second_peak_env', 'Second__peak_env_time',
 'Third_peak_env', 'Third_peak_env_time','Dominant_peak','silent_phase',
-'cross_energy_TM1','cross_peak_TM2', 'cross_peak_time_TM2', 'cross_energy_TM2',
+'cross_energy_TM1','cross_peak_TM2', 'cross_peak_TM2', 'cross_energy_TM2',
  'Dominant_AvgPowMF',
  'Subdominant_AvgPowLF','Subdominant_AvgPowMF',
  'Minor_AvgPowLF','Minor_AvgPowMF',
- 'First_AvgPowLF', 'First_AvgPowMF',
+ 'First_AvgPowMF',
  'Second_AvgPowLF', 'Second_AvgPowMF',
  'Third_AvgPowLF', 'Third_AvgPowMF',
 ];
