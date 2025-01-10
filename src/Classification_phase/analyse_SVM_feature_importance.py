@@ -35,7 +35,7 @@ def analyse_SVM_feature_importance(feature_importance, th=None, saving_plot=Fals
     if th is not None:
         print(f"\nSelected Features with Importance Higher than {th}:")
         print(selected_features)
-
+    
     # Extract feature names and their importance scores for plotting
     feature_names, importance_scores = zip(*sorted_feature_importance.items())
 
@@ -50,5 +50,7 @@ def analyse_SVM_feature_importance(feature_importance, th=None, saving_plot=Fals
     # Save the plot if a save function is provided
     if saving_plot and other_fig_path:
         save_plot(importance_fig, other_fig_path, file_name='SVM_features_importance')
-
+        
+    selected_features.insert(0, 'id')
+    selected_features.append('class')
     return selected_features
