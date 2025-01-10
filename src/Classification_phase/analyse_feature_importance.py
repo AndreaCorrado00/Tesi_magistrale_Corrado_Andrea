@@ -1,23 +1,14 @@
 import matplotlib.pyplot as plt
 from save_plot import save_plot
 
-def analyse_SVM_feature_importance(feature_importance, th=None, saving_plot=False, other_fig_path=None):
-    """
-    Analyzes feature importance, selects features above a threshold, and plots the importance histogram.
-
-    Parameters:
-        feature_importance (dict): A dictionary where keys are feature names and values are their importance scores.
-        th (float, optional): Threshold for selecting important features. Defaults to 0.01.
-        save_plot (callable, optional): Function to save the plot. Takes the figure, path, and filename as arguments.
-        other_fig_path (str, optional): Path to save the plot if save_plot is provided.
-    """
+def analyse_feature_importance(feature_importance, th=None, saving_plot=False, other_fig_path=None, file_name='features_importance'):
     if th is None:
         th = 0.01  # Default threshold value for feature importance
 
     # Exclude 'id' and 'class' from the feature importance analysis
     filtered_feature_importance = {
-        feature: importance for feature, importance in feature_importance.items()
-        if feature not in ['id', 'class'] and importance >0
+        feature: abs(importance) for feature, importance in feature_importance.items()
+        if feature not in ['id', 'class']
     }
 
     # Sort the filtered feature importance dictionary by importance value in descending order
@@ -49,7 +40,7 @@ def analyse_SVM_feature_importance(feature_importance, th=None, saving_plot=Fals
 
     # Save the plot if a save function is provided
     if saving_plot and other_fig_path:
-        save_plot(importance_fig, other_fig_path, file_name='SVM_features_importance')
+        save_plot(importance_fig, other_fig_path, file_name=file_name)
         
     selected_features.insert(0, 'id')
     selected_features.append('class')

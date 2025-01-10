@@ -156,7 +156,7 @@ correlated_features=['Dominant_peak_env', 'Dominant_peak_env_time', 'Subdominant
 'Subdominant_peak_env_time', 'Minor_peak_env', 'Minor_peak_env_time',
 'First_peak_env','First_peak_env_time', 'Second_peak_env', 'Second__peak_env_time',
 'Third_peak_env', 'Third_peak_env_time','Dominant_peak','silent_phase',
-'cross_energy_TM1','cross_peak_TM2', 'cross_peak_TM2', 'cross_energy_TM2',
+'cross_energy_TM1','cross_peak_TM2', 'cross_energy_TM2',
  'Dominant_AvgPowMF',
  'Subdominant_AvgPowLF','Subdominant_AvgPowMF',
  'Minor_AvgPowLF','Minor_AvgPowMF',
@@ -260,20 +260,20 @@ show_SHAP_analysis(whole_feature_db,selected_features,saving_path=other_fig_path
 
 
 #%%############################################################################
-###################     SVM CLASSIFIER WITH LOPOCV     #######################
+###################     SVM CLASSIFIER WITH LOPOCV     ########################
 ###############################################################################
 from impute_scale_dataset import impute_scale_dataset
 from LOPOCV_SVM import LOPOCV_SVM
-from analyse_SVM_feature_importance import analyse_SVM_feature_importance 
+from analyse_feature_importance import analyse_feature_importance 
 
 #%% Data preparation: imputation and Min-Max scaling
-whole_feature_db_SVM=impute_scale_dataset(whole_feature_db)
+whole_feature_db_imp_scal=impute_scale_dataset(whole_feature_db)
 
 #%% SVM LOPOCV training: variable kernel
-selected_features=whole_feature_db_SVM.columns.tolist()
+selected_features=whole_feature_db_imp_scal.columns.tolist()
 kernel_types={"Linear":"linear","Polynomial":"poly","Gaussian":"rbf"}
 for kernel_full_name,kernel in kernel_types.items():
-    classifier, all_y_pred, all_y_true, all_predictions_by_subs,feature_importance=LOPOCV_SVM(whole_feature_db_SVM,selected_features,kernel_type=kernel)
+    classifier, all_y_pred, all_y_true, all_predictions_by_subs,feature_importance=LOPOCV_SVM(whole_feature_db_imp_scal,selected_features,kernel_type=kernel)
 
     # PERFORMANCE
     cm_suptitle="Confusion Matrix: SVM model, whole feature set"
@@ -290,14 +290,14 @@ for kernel_full_name,kernel in kernel_types.items():
 # The best model in terms of perfomance is used to evaluate feature importance
 
 best_kernel="Gaussian"
-classifier, all_y_pred, all_y_true, all_predictions_by_subs,feature_importance=LOPOCV_SVM(whole_feature_db_SVM,selected_features,kernel_type=kernel_types[best_kernel])
+classifier, all_y_pred, all_y_true, all_predictions_by_subs,feature_importance=LOPOCV_SVM(whole_feature_db_imp_scal,selected_features,kernel_type=kernel_types[best_kernel])
 
-selected_features=analyse_SVM_feature_importance(feature_importance,th=0.01)
+selected_features=analyse_feature_importance(feature_importance,th=0.01,file_name='SVM_feature_importance')
 #show_SHAP_analysis(whole_feature_db_SVM,selected_features,model_type='SVM',kernel_type=kernel,other_comments="optimal_feature_set")
 # too slow
 
 #%% final optimised model
-classifier, all_y_pred, all_y_true, all_predictions_by_subs,feature_importance=LOPOCV_SVM(whole_feature_db_SVM,selected_features,kernel_type=kernel_types[best_kernel])
+classifier, all_y_pred, all_y_true, all_predictions_by_subs,feature_importance=LOPOCV_SVM(whole_feature_db_imp_scal,selected_features,kernel_type=kernel_types[best_kernel])
 
 # PERFORMANCE
 cm_suptitle="Confusion Matrix: SVM model, optimal feature subset"
@@ -309,4 +309,81 @@ cm_title=subtitle_plots+f", LOPOCV,  {best_kernel} kernel"
 #confusion matrix
 he_report=evaluate_confusion_matrix(all_y_pred,all_y_true,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
 plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="report_LOPOCV_SVM_opt_feature_set_"+best_kernel)
+
+
+
+
+
+
+#%%############################################################################
+############     MULTINOMIAL LOGISTIC REGRESSION WITH LOPOCV    ###############
+###############################################################################
+
+from impute_scale_dataset import impute_scale_dataset
+from LOPOCV_LogisticRegression import LOPOCV_LogisticRegression
+from analyse_feature_importance import analyse_feature_importance 
+
+#%% Data preparation: imputation and Min-Max scaling
+whole_feature_db_imp_scal=impute_scale_dataset(whole_feature_db)
+
+#%% MLR LOPOCV training: whole dataset
+selected_features=whole_feature_db_imp_scal.columns.tolist()
+# whole dataset analysis
+classifier, all_y_pred, all_y_true, all_predictions_by_subs, feature_importance=LOPOCV_LogisticRegression(whole_feature_db_imp_scal,selected_features)
+
+# PERFORMANCE
+cm_suptitle="Confusion Matrix: GLM model, whole feature set"
+cm_saving_path=os.path.join(figure_path+"/Classification_phase",fig_final_folder)
+# Variable saving names
+cm_saving_name="CM_GLM_MLR_whole_LOPOCV"+plot_last_name
+cm_title=subtitle_plots+", LOPOCV, multinomial logistic model" 
+
+#confusion matrix
+he_report=evaluate_confusion_matrix(all_y_pred,all_y_true,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
+plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="report_GLM_MLR_whole")
+
+#%% Feature importance
+selected_features=analyse_feature_importance(feature_importance,th=0.008,file_name='GLM_whole_feature_importance')
+
+#%% MLR LOPOCV training: optimal dataset
+# whole dataset analysis
+classifier, all_y_pred, all_y_true, all_predictions_by_subs, feature_importance=LOPOCV_LogisticRegression(whole_feature_db_imp_scal,selected_features)
+
+# PERFORMANCE
+cm_suptitle="Confusion Matrix: GLM model, optimal feature set"
+cm_saving_path=os.path.join(figure_path+"/Classification_phase",fig_final_folder)
+# Variable saving names
+cm_saving_name="CM_GLM_MLR_opt_LOPOCV"+plot_last_name
+cm_title=subtitle_plots+", LOPOCV, multinomial logistic model" 
+
+#confusion matrix
+he_report=evaluate_confusion_matrix(all_y_pred,all_y_true,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
+plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="report_GLM_MLR_opt")
+
+#%% Feature importance
+selected_features=analyse_feature_importance(feature_importance,th=0.008,file_name='GLM_opt_feature_importance')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
