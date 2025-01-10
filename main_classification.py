@@ -215,14 +215,14 @@ show_SHAP_analysis(whole_feature_db,selected_features,saving_path=other_fig_path
 #%% SECOND CLASSIFIER: otimal subset of features
 selected_features=['id',
                    'Dominant_peak_time','Subdominant_peak','Subdominant_peak_time',
-                   'Minor_peak','First_peak','First_peak_time',
+                   'Minor_peak','Minor_peak_time','First_peak','First_peak_time','Third_peak_time',
                    'Second_peak','Second_peak_time',
                    'minor_to_subdominant_ratio',
                    'n_active_areas_on_duration_ratio',
                    'atrial_ventricular_ratio',
-                   'cross_peak_TM1','cross_peak_time_TM1',
+                   'cross_peak_TM1','cross_peak_time_TM1','cross_peak_time_TM2',
                    'Dominant_AvgPowLF','First_AvgPowHF',
-                   'App',
+                   'App','Fragmentation',
                    'class']
 
 # lopocv training
