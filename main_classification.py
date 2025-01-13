@@ -82,7 +82,7 @@ if show_heuristic:
 other_fig_path=figure_path+"/Improved_KB_classifier_phase/"+fig_final_folder+"/other_figs"
 
 #%% KB classifier will still be based on peaks values, ratios and positions
-use_ratio=False
+use_ratio=True
 # whole dataset
 dims=feature_db.shape
 pred_KB_improved=np.empty(dims[0], dtype=object)

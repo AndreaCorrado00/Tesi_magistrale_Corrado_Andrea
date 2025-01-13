@@ -14,7 +14,7 @@ def improved_KB_classifier(record,use_ratio=False):
         return record["atrial_ventricular_ratio"],np.array(record["Minor_peak"]),pred_class
     
     else: 
-        if record["Minor_peak"]>0.021:
+        if record["Minor_peak"]>0.020:
             pred_class="MAP_C"
         else:
             # atrial and ventricular thresholds 
