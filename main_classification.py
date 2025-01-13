@@ -343,7 +343,7 @@ he_report=evaluate_confusion_matrix(all_y_pred,all_y_true,labels_unique,cm_supti
 plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="report_GLM_MLR_whole")
 
 #%% Feature importance
-selected_features=analyse_feature_importance(feature_importance,th=0.008,file_name='GLM_whole_feature_importance')
+selected_features=analyse_feature_importance(feature_importance,th=0.008,file_name='GLM_whole_feature_importance',other_fig_path=other_fig_path,saving_plot=True)
 
 #%% MLR LOPOCV training: optimal dataset
 # whole dataset analysis
@@ -361,7 +361,7 @@ he_report=evaluate_confusion_matrix(all_y_pred,all_y_true,labels_unique,cm_supti
 plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="report_GLM_MLR_opt")
 
 #%% Feature importance
-selected_features=analyse_feature_importance(feature_importance,th=0.008,file_name='GLM_opt_feature_importance')
+selected_features=analyse_feature_importance(feature_importance,th=0.008,file_name='GLM_opt_feature_importance',other_fig_path=other_fig_path,saving_plot=True)
 
 
 
