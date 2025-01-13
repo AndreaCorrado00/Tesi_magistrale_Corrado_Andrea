@@ -169,6 +169,10 @@ correlated_features=['Dominant_peak_env', 'Dominant_peak_env_time', 'Subdominant
 final_column_names = [col for col in whole_feature_db.columns.tolist() if col not in correlated_features]
 whole_feature_db=whole_feature_db.drop(correlated_features,axis=1)
 
+
+
+
+
 #%%############################################################################
 ###################     TREE CLASSIFIER WITH LOPOCV     #######################
 ###############################################################################
@@ -256,6 +260,8 @@ save_plot(importance_fig, other_fig_path,file_name='optimised tree features impo
 
 # SHAP analysis
 show_SHAP_analysis(whole_feature_db,selected_features,saving_path=other_fig_path,other_comments="optimal_feature_set")
+
+
 
 
 
@@ -362,6 +368,55 @@ plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plo
 
 #%% Feature importance
 selected_features=analyse_feature_importance(feature_importance,th=0.008,file_name='GLM_opt_feature_importance',other_fig_path=other_fig_path,saving_plot=True)
+
+
+
+
+
+#%%############################################################################
+################     RANDOM FOREST CLASSIFIER WITH LOPOCV    ##################
+###############################################################################
+
+from LOPOCV_RandomForest import LOPOCV_RandomForest
+from analyse_feature_importance import analyse_feature_importance 
+
+
+#%% MLR LOPOCV training: whole dataset
+selected_features=whole_feature_db.columns.tolist()
+# whole dataset analysis
+classifier, all_y_pred, all_y_true, all_predictions_by_subs, feature_importance=LOPOCV_RandomForest(whole_feature_db,selected_features,forest_size=300,max_depth=6)
+
+# PERFORMANCE
+cm_suptitle="Confusion Matrix: RF model, whole feature set"
+cm_saving_path=os.path.join(figure_path+"/Classification_phase",fig_final_folder)
+# Variable saving names
+cm_saving_name="CM_RF_whole_LOPOCV"+plot_last_name
+cm_title=subtitle_plots+", LOPOCV, random forest model" 
+
+#confusion matrix
+he_report=evaluate_confusion_matrix(all_y_pred,all_y_true,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
+plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="report_RF_whole")
+
+#%% Feature importance
+selected_features=analyse_feature_importance(feature_importance,th=0.008,file_name='RF_whole_feature_importance',other_fig_path=other_fig_path,saving_plot=True)
+
+#%% MLR LOPOCV training: optimal dataset
+# whole dataset analysis
+classifier, all_y_pred, all_y_true, all_predictions_by_subs, feature_importance=LOPOCV_RandomForest(whole_feature_db,selected_features,forest_size=300,max_depth=6)
+
+# PERFORMANCE
+cm_suptitle="Confusion Matrix: RF model, optimal feature set"
+cm_saving_path=os.path.join(figure_path+"/Classification_phase",fig_final_folder)
+# Variable saving names
+cm_saving_name="CM_RF_opt_LOPOCV"+plot_last_name
+cm_title=subtitle_plots+", LOPOCV, random forest model" 
+
+#confusion matrix
+he_report=evaluate_confusion_matrix(all_y_pred,all_y_true,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
+plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="report_RF_opt")
+
+#%% Feature importance
+selected_features=analyse_feature_importance(feature_importance,th=0.008,file_name='RF_opt_feature_importance',other_fig_path=other_fig_path,saving_plot=True)
 
 
 
