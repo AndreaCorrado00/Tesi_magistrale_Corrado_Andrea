@@ -23,22 +23,22 @@ def heuristic_classifier_C(record,Fs,his_bundle_th, use_ratio=False):
     # peaks values
     if use_ratio:
         if his_peak>his_bundle_th:
-            pred_class="MAP_C"
+            pred_class="Dangerous"
         else:
             # atrial and ventricular thresholds 
             if atr_peak/vent_peak>0.5: 
-                pred_class="MAP_A"
+                pred_class="Indifferent"
             else:
-                pred_class="MAP_B"
+                pred_class="Effective"
     else: 
         if his_peak>his_bundle_th:
-            pred_class="MAP_C"
+            pred_class="Dangerous"
         else:
             # atrial and ventricular thresholds 
-            if atr_peak>0.3: 
-                pred_class="MAP_A"
+            if atr_peak>0.5: 
+                pred_class="Indifferent"
             else:
-                pred_class="MAP_B"
+                pred_class="Effective"
             
             
     return np.array(atr_peak),np.array(his_peak),np.array(vent_peak),pred_class

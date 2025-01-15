@@ -9,8 +9,8 @@ from save_plot import save_plot
 
 def evaluate_confusion_matrix(y_pred,y_true,labels_unique,cm_suptitle=None,cm_title=None,save=False, path=None,saving_name=None):
 
-    
-    cm = confusion_matrix(y_true, y_pred)
+    print(labels_unique)
+    cm = confusion_matrix(y_true, y_pred, labels=labels_unique)
     
     cm_fig, ax = plt.subplots()  
     disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=labels_unique)

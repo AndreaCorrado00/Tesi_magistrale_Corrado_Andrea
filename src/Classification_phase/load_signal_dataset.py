@@ -27,14 +27,23 @@ def load_signal_dataset(dataset_path, dataset_name):
     
     class_mapping = {
         "MAP_A": "Indifferent",
-        "MAP_B": "Effective",
+        "MAP_B": "Effective"    ,
         "MAP_C": "Dangerous"
     }
     
     table["class"] = table["class"].map(class_mapping)
 
-    y_true_no_duplicates = table["class"]
-
+    # Maintain the original order from the dataset
+    unique_classes_in_order = table["class"].drop_duplicates().tolist()
+    # Sort y_true_no_duplicates based on the order found in the dataset
+    y_true_no_duplicates = pd.Categorical(
+        table["class"],
+        categories=unique_classes_in_order,
+        ordered=True
+    )
+    
+    # Convert to a list or keep as categorical depending on usage
+    y_true_no_duplicates = np.array(["Indifferent","Effective","Dangerous"],order="A")
 
     # Return the cleaned dataset, signals without duplicates, y_true without duplicates
-    return table, table.iloc[:, 1:-1], y_true_no_duplicates, np.unique(y_true_no_duplicates), Fs, plot_last_name, fig_final_folder, subtitle_plots  # signals extracted as a DataFrame slice
+    return table, table.iloc[:, 1:-1], np.array(table["class"],order="A"),y_true_no_duplicates, Fs, plot_last_name, fig_final_folder, subtitle_plots  # signals extracted as a DataFrame slice

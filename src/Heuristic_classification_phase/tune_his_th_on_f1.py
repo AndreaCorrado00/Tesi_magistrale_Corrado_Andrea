@@ -27,9 +27,9 @@ def tune_his_th_on_f1(signals, y_true,interval,t_atr, t_ven, plot=False,use_rati
     # plot
     if plot:
         plt.figure()
-        plt.plot(interval,f1_scores[:,0],label="MAP A")
-        plt.plot(interval,f1_scores[:,1],label="MAP B")
-        plt.plot(interval,f1_scores[:,2],label="MAP C")
+        plt.plot(interval,f1_scores[:,0],label="Indifferent")
+        plt.plot(interval,f1_scores[:,1],label="Effective")
+        plt.plot(interval,f1_scores[:,2],label="Dangerous")
         plt.xticks(interval)
         plt.xlabel("His Bundle percentile threshold")
         plt.ylabel("F1-score")
