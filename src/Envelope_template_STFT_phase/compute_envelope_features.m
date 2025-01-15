@@ -11,7 +11,7 @@ function [active_areas_number,...
 
 time_th = define_time_th(map_upper, map_lower);
 N_initial=size(time_th,1);
-time_th=clean_time_thresholds(example_rov,time_th,fc,2.5);
+time_th=clean_time_thresholds(example_rov,time_th,fc,2.75);
 N_cleaned=size(time_th,1);
 
 if N_cleaned>3

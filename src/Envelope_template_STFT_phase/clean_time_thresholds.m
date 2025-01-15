@@ -4,7 +4,7 @@ function new_time_thresholds = clean_time_thresholds(rov_signal, time_th, fc, K)
 
 %% Iterative process to assess true peak presence
 stop = false;
-
+K=2.75;
 % Initialization 
 start_time = round(fc * 0.10); % Initial time of evaluation of peaks
 end_time = round(fc * 0.7); % End time
@@ -30,8 +30,6 @@ while ~stop
     % Check for non-significant peaks
     not_significative_peaks_positions = zeros(N_start, 1);
     for i = 1:N_start
-        % disp([ max(abs(rov_signal(time_th_start(i,1):time_th_start(i,2)))),Threshold])
-        % fprintf('std area: %d = %.5f and Th= %.4f \n', i, std(rov_signal(time_th_start(i,1):time_th_start(i,2))),Threshold);
 
         if max(abs(rov_signal(time_th_start(i, 1):time_th_start(i, 2)))) < Threshold
             % Peak is not significant, label it for removal
@@ -56,7 +54,7 @@ while ~stop
         N_start = size(time_th_start, 1);
         continue;
     end 
-    % disp("  Will be removed "+num2str(sum(not_significative_peaks_positions))+" peaks out of "+num2str(N_start))
+    
 
 
     % Stop condition: no peaks were dropped in this iteration
@@ -64,8 +62,10 @@ while ~stop
         stop = true;
         
     end
+    
 end
-
+[N_end, ~] = size(time_th_start);
+% disp("  Have been removed "+num2str(N-N_end)+" peaks out of "+num2str(N))
 % Final output
 new_time_thresholds = time_th_start;
 

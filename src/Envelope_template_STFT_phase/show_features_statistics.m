@@ -4,16 +4,16 @@ feature_names=features_tab.Properties.VariableNames;
 classes=features_tab(:,feature_names(end));
 feature_names=feature_names(1:end-1);
 
-for i = 3:length(feature_names)
-    % Get the feature name
-    feature_name = feature_names{i};
-    % Call the plot_feature_boxplots function for each feature
-    plot_feature_boxplots(features_tab, classes, feature_name);
-    if save
-        save_plot(feature_name,"_boxplot",figure_path,gcf,true)
-    end
-
-end
+% for i = 3:length(feature_names)
+%     % Get the feature name
+%     feature_name = feature_names{i};
+%     % Call the plot_feature_boxplots function for each feature
+%     plot_feature_boxplots(features_tab, classes, feature_name);
+%     if save
+%         save_plot(feature_name,"_boxplot",figure_path,gcf,true)
+%     end
+% 
+% end
 
 
 % Loop through each class (MAP_A, MAP_B, MAP_C)
@@ -49,7 +49,7 @@ for i = 1:height(unique_classes) % Assuming 'classes' corresponds to the map typ
     fprintf('  - %d signals with two active areas\n', N2);
     fprintf('  - %d signals with three active areas\n', N3);
     fprintf('  - %d signals with more than three active areas\n', N_more);
-    fprintf('        total : %d \n ',N1+N2+N3)
+    fprintf('        total : %d \n ',N1+N2+N3+N_more)
     
     
 end
