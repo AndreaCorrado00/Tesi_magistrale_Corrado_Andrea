@@ -26,7 +26,7 @@ function plot_feature_boxcharts(data, class, feature_name)
     % Generate boxcharts by class with specific colors
     hold on; % Allow multiple boxcharts and scatter points on the same axes
     categories_list = categories(class_data); % Get unique categories in order
-    colors = {[0.6, 0.6, 0.8], [0.2, 0.8, 0.2], [0.8, 0.2, 0.2]}; % Blue for MAP A, Green for MAP B, Red for MAP C
+    colors = {[0.2, 0.2, 0.8], [0.2, 0.8, 0.2], [0.8, 0.2, 0.2]}; % Blue for MAP A, Green for MAP B, Red for MAP C
     jitter_amount = 0.4; % Amount of horizontal jitter for scatter points
     for i = 1:length(categories_list)
         % Get the data for the current category
@@ -40,7 +40,7 @@ function plot_feature_boxcharts(data, class, feature_name)
         
         % Add scatter points for the data
         jittered_x = i + (rand(sum(idx), 1) - 0.5) * jitter_amount; % Add jitter to x-coordinates
-        scatter(jittered_x, feature(idx), 20, 'filled', 'MarkerFaceAlpha', 0.30,'MarkerFaceColor',colors{i}); % Scatter points with transparency
+        scatter(jittered_x, feature(idx), 20, 'k', 'filled', 'MarkerFaceAlpha', 0.6); % Scatter points with transparency
     end
     hold off;
 

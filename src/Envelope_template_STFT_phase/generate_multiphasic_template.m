@@ -22,7 +22,7 @@ function template = generate_multiphasic_template(Fs, duration, smoothing_window
     % Smooth the edges
     template = smoothdata(template, 'gaussian', smoothing_window);
 
-    % Plot the template
+    % % Plot the template
     % time = (0:N-1) / Fs; % Time axis
     % figure;
     % plot(time, template, '-');
