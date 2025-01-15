@@ -1,18 +1,12 @@
-function plot_feature_boxcharts(data, class, feature_name)
+function plot_feature_boxplots(data, class, feature_name)
     % Extract the feature column from the table and convert it to double
     feature = data{:, feature_name};  % Extract the feature data from the table
     feature = double(feature);        % Convert to double if it's not already numeric
 
     % Extract class column and convert it to a categorical array
     class_data = class{:, 1};         % Extract the class data from the table
-    class_data = categorical(cellstr(class_data)); % Convert to categorical
-
-    % Mapping of original classes to new labels
-    class_map = containers.Map({'MAP_A', 'MAP_B', 'MAP_C'}, {'Indifferent', 'Effective', 'Dangerous'});
-
-    % Create new class labels by concatenating the original class with the mapped label
-    new_class_labels = cellfun(@(x) strcat(strrep(x, '_', ' '), ' - ', class_map(x)), cellstr(class_data), 'UniformOutput', false);
-    class_data = categorical(new_class_labels); % Update class_data with new concatenated labels
+    desired_order = {'Indifferent', 'Effective', 'Dangerous'}; % Specify the desired order
+    class_data = categorical(cellstr(class_data), desired_order, 'Ordinal', true); % Convert to categorical with specific order
 
     % Create a new figure with the specified feature name as title
     figure('Position', [100, 100, 800, 600]);
@@ -25,12 +19,12 @@ function plot_feature_boxcharts(data, class, feature_name)
 
     % Generate boxcharts by class with specific colors
     hold on; % Allow multiple boxcharts and scatter points on the same axes
-    categories_list = categories(class_data); % Get unique categories in order
-    colors = {[0.6, 0.6, 0.8], [0.2, 0.8, 0.2], [0.8, 0.2, 0.2]}; % Blue for MAP A, Green for MAP B, Red for MAP C
+    % categories_list = categories(class_data); % Get unique categories in specified order
+    colors = {[0.6, 0.6, 0.8], [0.2, 0.8, 0.2], [0.8, 0.2, 0.2]}; % Blue for Indifferent, Green for Effective, Red for Dangerous
     jitter_amount = 0.4; % Amount of horizontal jitter for scatter points
-    for i = 1:length(categories_list)
+    for i = 1:length(desired_order)
         % Get the data for the current category
-        current_category = categories_list{i};
+        current_category = desired_order{i};
         idx = class_data == current_category;
         
         % Plot the boxchart
@@ -40,13 +34,13 @@ function plot_feature_boxcharts(data, class, feature_name)
         
         % Add scatter points for the data
         jittered_x = i + (rand(sum(idx), 1) - 0.5) * jitter_amount; % Add jitter to x-coordinates
-        scatter(jittered_x, feature(idx), 20, 'filled', 'MarkerFaceAlpha', 0.30,'MarkerFaceColor',colors{i}); % Scatter points with transparency
+        scatter(jittered_x, feature(idx), 20, 'filled', 'MarkerFaceAlpha', 0.30, 'MarkerFaceColor', colors{i}); % Scatter points with transparency
     end
     hold off;
 
     % Adjust axes and formatting
     ylim([lower_bound, upper_bound]);   % Adjust y-limits to exclude outliers
-    set(gca, 'XTick', 1:length(categories_list), 'XTickLabel', strrep(categories_list, '_', ' ')); % Set class labels on x-axis
+    set(gca, 'XTick', 1:length(desired_order), 'XTickLabel', desired_order); % Set class labels on x-axis
     xlabel('Class');
     ylabel(formatted_feature_name);
 

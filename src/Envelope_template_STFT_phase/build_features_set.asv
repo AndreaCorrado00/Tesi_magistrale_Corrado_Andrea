@@ -2,11 +2,9 @@ function envelope_features = build_features_set(data, env_data, TM_1_data,TM_2_d
 
 % Initialize a cell array to store rows of the feature table
 features_rows = [];
-map_codes=["MAP_A","MAP_B","MAP_C"];
-map_names=["Indifferent","Effective","Dangerous"];
-class_dict=dictionary(map_codes,map_names);
+class_name=d(,"Indifferent","MP")
 % Loop through each map type: MAP_A, MAP_B, MAP_C
-for i = ["B","A", "C"]
+for i = ["A", "B", "C"]
     map = 'MAP_' + i;
     
     subjects = fieldnames(data.(map));
@@ -95,7 +93,7 @@ for i = ["B","A", "C"]
                 string(Second_ALFP), string(Second_AMFP), string(Second_AHFP), ...
                 string(Third_ALFP), string(Third_AMFP), string(Third_AHFP),...
                 string(Fragmentation),string(App),...
-                class_dict(map) % Add the "class" column with the map identifier
+                map % Add the "class" column with the map identifier
                 };
 
             % Append the current row to the dataset
