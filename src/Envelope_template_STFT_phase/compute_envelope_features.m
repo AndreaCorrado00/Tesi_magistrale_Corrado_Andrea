@@ -64,8 +64,8 @@ Lowest_peak_env_time=env_peaks_val_pos(3,2);
     
 %% Second block of features: Peaks in order of time occurence 
     % sorting peaks in descending order of time occurence 
-env_peaks_val_pos=sortrows(original_env_peaks_val_pos,2,"descend");
-rov_peaks_val_pos=sortrows(original_rov_peaks_val_pos,2,"descend");
+env_peaks_val_pos=sortrows(original_env_peaks_val_pos,2,"ascend");
+rov_peaks_val_pos=sortrows(original_rov_peaks_val_pos,2,"ascend");
     % zeros handling
 env_peaks_val_pos(env_peaks_val_pos==0)=nan;
 rov_peaks_val_pos(rov_peaks_val_pos==0)=nan;
