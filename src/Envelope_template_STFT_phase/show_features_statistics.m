@@ -4,16 +4,16 @@ feature_names=features_tab.Properties.VariableNames;
 classes=features_tab(:,feature_names(end));
 feature_names=feature_names(1:end-1);
 
-% for i = 3:length(feature_names)
-%     % Get the feature name
-%     feature_name = feature_names{i};
-%     % Call the plot_feature_boxplots function for each feature
-%     plot_feature_boxplots(features_tab, classes, feature_name);
-%     if save
-%         save_plot(feature_name,"_boxplot",figure_path,gcf,true)
-%     end
-% 
-% end
+for i = 3:length(feature_names)
+    % Get the feature name
+    feature_name = feature_names{i};
+    % Call the plot_feature_boxplots function for each feature
+    plot_feature_boxplots(features_tab, classes, feature_name);
+    if save
+        save_plot(feature_name,"_boxplot",figure_path,gcf,true)
+    end
+
+end
 
 
 % Loop through each class (MAP_A, MAP_B, MAP_C)
