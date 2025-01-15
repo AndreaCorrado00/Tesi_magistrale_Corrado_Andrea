@@ -155,7 +155,7 @@ correlation_matrix = df_corr_analysis.corr()
 correlated_features=['Dominant_peak_env', 'Dominant_peak_env_time', 'Subdominant_peak_env',
 'Subdominant_peak_env_time', 'Minor_peak_env', 'Minor_peak_env_time',
 'First_peak_env','First_peak_env_time', 'Second_peak_env', 'Second__peak_env_time',
-'Third_peak_env', 'Third_peak_env_time','Dominant_peak','silent_phase',
+'Third_peak_env', 'Third_peak_env_time','silent_phase',
 'cross_energy_TM1','cross_peak_TM2', 'cross_energy_TM2',
  'Dominant_AvgPowMF',
  'Subdominant_AvgPowLF','Subdominant_AvgPowMF',
@@ -178,12 +178,11 @@ whole_feature_db=whole_feature_db.drop(correlated_features,axis=1)
 ###############################################################################
 
 from LOPOCV_decision_tree import LOPOCV_decision_tree
-
+from analyse_feature_importance import analyse_feature_importance
 # %% FIRST CLASSIFIER: whole dataset
 selected_features=whole_feature_db.columns.tolist()
 
-
-classifier,all_y_pred, all_y_true, all_predictions_by_subs, selected_feature_db,feature_importances=LOPOCV_decision_tree(whole_feature_db, selected_features)
+classifier,all_y_pred, all_y_true, all_predictions_by_subs,feature_importance=LOPOCV_decision_tree(whole_feature_db, selected_features)
 
 # PERFORMANCE
 cm_suptitle="Confusion Matrix: Tree classifier, whole feature set"
@@ -201,36 +200,15 @@ miss_class_summary= misclassification_summary(whole_feature_db[selected_features
 plot_dataframe_as_plain_image(miss_class_summary, figsize=(8,5),scale=(1.7,1.7),title_plot=cm_title,path=other_fig_path,saving_name="Misclass_LOPOCV_whole_tree")
 
 #%% Features importance: best model tuning
-feature_names = selected_feature_db.columns.tolist()
 
-# Features importance
-importance_fig,ax=plt.subplots(figsize=(30, 20))
-plt.barh(feature_names, feature_importances, color="skyblue")
-plt.xlabel("Importance")
-plt.title("Feature Importance: whole feature set", fontsize=50)
-plt.xticks(fontsize=20)
-plt.yticks(fontsize=20)
-plt.show()
-save_plot(importance_fig, other_fig_path,file_name='whole tree features importance')
+selected_features=analyse_feature_importance(feature_importance,th=0.008,file_name='tree_whole_feature_importance',other_fig_path=other_fig_path)
 
 # SHAP analysis
 show_SHAP_analysis(whole_feature_db,selected_features,saving_path=other_fig_path,other_comments="whole_feature_set")
 
 #%% SECOND CLASSIFIER: otimal subset of features
-selected_features=['id',
-                   'Dominant_peak_time','Subdominant_peak','Subdominant_peak_time',
-                   'Minor_peak','Minor_peak_time','First_peak','First_peak_time','Third_peak_time',
-                   'Second_peak','Second_peak_time',
-                   'minor_to_subdominant_ratio',
-                   'n_active_areas_on_duration_ratio',
-                   'atrial_ventricular_ratio',
-                   'cross_peak_TM1','cross_peak_time_TM1','cross_peak_time_TM2',
-                   'Dominant_AvgPowLF','First_AvgPowHF',
-                   'App','Fragmentation',
-                   'class']
-
 # lopocv training
-classifier,all_y_pred, all_y_true, all_predictions_by_subs, selected_feature_db,feature_importances=LOPOCV_decision_tree(whole_feature_db, selected_features)
+classifier,all_y_pred, all_y_true, all_predictions_by_subs,feature_importance=LOPOCV_decision_tree(whole_feature_db, selected_features)
 
 # PERFORMANCE
 cm_suptitle="Confusion Matrix: Tree classifier, optimal feature subset"
@@ -249,15 +227,7 @@ plot_dataframe_as_plain_image(miss_class_summary, figsize=(8,5),scale=(1.7,1.7),
 
 
 #%% Features importance
-feature_names = selected_feature_db.columns.tolist()
-
-importance_fig,ax=plt.subplots()
-plt.barh(feature_names, feature_importances, color="skyblue")
-plt.xlabel("Importance")
-plt.title("Feature Importance: optimal subset of features")
-plt.show()
-save_plot(importance_fig, other_fig_path,file_name='optimised tree features importance')
-
+analyse_feature_importance(feature_importance,th=0.01,file_name='tree_optimal_feature_importance',other_fig_path=other_fig_path)
 # SHAP analysis
 show_SHAP_analysis(whole_feature_db,selected_features,saving_path=other_fig_path,other_comments="optimal_feature_set")
 
@@ -298,7 +268,7 @@ for kernel_full_name,kernel in kernel_types.items():
 best_kernel="Gaussian"
 classifier, all_y_pred, all_y_true, all_predictions_by_subs,feature_importance=LOPOCV_SVM(whole_feature_db_imp_scal,selected_features,kernel_type=kernel_types[best_kernel])
 
-selected_features=analyse_feature_importance(feature_importance,th=0.01,file_name='SVM_feature_importance')
+selected_features=analyse_feature_importance(feature_importance,th=0.008,file_name='SVM_whole_feature_importance',other_fig_path=other_fig_path)
 #show_SHAP_analysis(whole_feature_db_SVM,selected_features,model_type='SVM',kernel_type=kernel,other_comments="optimal_feature_set")
 # too slow
 
@@ -316,8 +286,8 @@ cm_title=subtitle_plots+f", LOPOCV,  {best_kernel} kernel"
 he_report=evaluate_confusion_matrix(all_y_pred,all_y_true,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
 plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="report_LOPOCV_SVM_opt_feature_set_"+best_kernel)
 
-
-
+#%% Feature importance analysis
+analyse_feature_importance(feature_importance,th=0.01,file_name='SVM_optimal_feature_importance',other_fig_path=other_fig_path)
 
 
 
@@ -367,7 +337,7 @@ he_report=evaluate_confusion_matrix(all_y_pred,all_y_true,labels_unique,cm_supti
 plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="report_GLM_MLR_opt")
 
 #%% Feature importance
-selected_features=analyse_feature_importance(feature_importance,th=0.008,file_name='GLM_opt_feature_importance',other_fig_path=other_fig_path,saving_plot=True)
+analyse_feature_importance(feature_importance,th=0.008,file_name='GLM_optimal_feature_importance',other_fig_path=other_fig_path,saving_plot=True)
 
 
 
@@ -416,7 +386,7 @@ he_report=evaluate_confusion_matrix(all_y_pred,all_y_true,labels_unique,cm_supti
 plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="report_RF_opt")
 
 #%% Feature importance
-selected_features=analyse_feature_importance(feature_importance,th=0.008,file_name='RF_opt_feature_importance',other_fig_path=other_fig_path,saving_plot=True)
+analyse_feature_importance(feature_importance,th=0.008,file_name='RF_optimal_feature_importance',other_fig_path=other_fig_path,saving_plot=True)
 
 
 

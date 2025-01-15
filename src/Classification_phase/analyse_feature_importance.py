@@ -36,7 +36,7 @@ def analyse_feature_importance(feature_importance, th=None, saving_plot=False, o
     plt.xlabel("Importance")
     plt.title("Feature Importance: whole set of features")
     plt.gca().invert_yaxis()  # Invert y-axis to have the highest importance at the top
-    plt.yticks(fontsize=8)
+    plt.yticks(fontsize=6)
     plt.show()
 
     # Save the plot if a save function is provided
