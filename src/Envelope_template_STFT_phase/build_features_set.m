@@ -6,7 +6,7 @@ map_codes=["MAP_A","MAP_B","MAP_C"];
 map_names=["Indifferent","Effective","Dangerous"];
 class_dict=dictionary(map_codes,map_names);
 % Loop through each map type: MAP_A, MAP_B, MAP_C
-for i = ["B","A", "C"]
+for i = ["A","B", "C"]
     map = 'MAP_' + i;
     
     subjects = fieldnames(data.(map));
