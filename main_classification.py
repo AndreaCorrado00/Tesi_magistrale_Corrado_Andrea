@@ -52,10 +52,10 @@ indices = np.arange(signals.shape[0])
 #%%############################################################################
 ############## KNOWLEDGE BASED CLASSIFIER: first evaluations ##################
 ###############################################################################
-show_heuristic=False
+show_heuristic=True
 if show_heuristic:
     from show_knowledgeBased_on_whole_dataset import show_knowledgeBased_on_whole_dataset
-    show_knowledgeBased_on_whole_dataset(db_number=2,use_ratio=True)
+    show_knowledgeBased_on_whole_dataset(db_number=2,use_ratio=False)
 
 # this function shows knowledge-based classifier results on dataset with sub 2 
 # dropped and using atrial/vventricular ratio

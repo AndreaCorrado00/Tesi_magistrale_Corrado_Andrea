@@ -24,8 +24,16 @@ def load_signal_dataset(dataset_path, dataset_name):
     
     full_name=os.path.join(dataset_path, dataset_name+".txt")
     table= pd.read_csv(full_name, delimiter=',')
+    
+    class_mapping = {
+        "MAP_A": "Indifferent",
+        "MAP_B": "Effective",
+        "MAP_C": "Dangerous"
+    }
+    
+    table["class"] = table["class"].map(class_mapping)
 
-    y_true_no_duplicates = table["class"]  
+    y_true_no_duplicates = table["class"]
 
 
     # Return the cleaned dataset, signals without duplicates, y_true without duplicates
