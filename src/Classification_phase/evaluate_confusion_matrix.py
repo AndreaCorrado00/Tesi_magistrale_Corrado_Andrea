@@ -7,24 +7,26 @@ sys.path.append("D:/Desktop/ANDREA/Universita/Magistrale/Anno Accademico 2023-20
 from save_plot import save_plot
 
 
-def evaluate_confusion_matrix(y_pred,y_true,labels_unique,cm_suptitle=None,cm_title=None,save=False, path=None,saving_name=None):
-
+def evaluate_confusion_matrix(y_pred, y_true, labels_unique, cm_suptitle=None, cm_title=None, save=False, path=None, saving_name=None):
     cm = confusion_matrix(y_true, y_pred, labels=labels_unique)
-    
-    cm_fig, ax = plt.subplots()  
+    print(labels_unique)
+    cm_fig, ax = plt.subplots()
     disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=labels_unique)
     disp.plot(cmap=plt.cm.Blues, ax=ax)
     plt.suptitle(cm_suptitle)
-    plt.title(cm_title,fontsize=10)
+    plt.title(cm_title, fontsize=10)
     
-    # Report of performance: baseline    
-    he_report = classification_report(y_true, y_pred, target_names=labels_unique)
+    # Report of performance: baseline
+    he_report = classification_report(y_true, y_pred, target_names=labels_unique, labels=labels_unique)
     print(he_report)
-    # saving confusion matrix
-    if save:
-        save_plot(cm_fig,path,saving_name)
-    dict_he_report=classification_report(y_true, y_pred, target_names=labels_unique, output_dict=True)
     
-    dict_he_report=pd.DataFrame(dict_he_report).transpose() 
-    dict_he_report["support"]=dict_he_report["support"].astype(int)
+    # Saving confusion matrix
+    if save:
+        save_plot(cm_fig, path, saving_name)
+    
+    dict_he_report = classification_report(
+        y_true, y_pred, target_names=labels_unique, labels=labels_unique, output_dict=True
+    )
+    dict_he_report = pd.DataFrame(dict_he_report).transpose()
+    dict_he_report["support"] = dict_he_report["support"].astype(int)
     return dict_he_report

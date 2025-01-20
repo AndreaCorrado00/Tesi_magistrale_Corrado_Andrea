@@ -81,42 +81,42 @@ if show_heuristic:
 
 other_fig_path=figure_path+"/Improved_KB_classifier_phase/"+fig_final_folder+"/other_figs"
 
-#%% KB classifier will still be based on peaks values, ratios and positions
-use_ratio=True
-# whole dataset
-dims=feature_db.shape
-pred_KB_improved=np.empty(dims[0], dtype=object)
+# #%% KB classifier will still be based on peaks values, ratios and positions
+# use_ratio=True
+# # whole dataset
+# dims=feature_db.shape
+# pred_KB_improved=np.empty(dims[0], dtype=object)
 
-signal_peaks_and_class_KB_improved=[];
-for i in range(0,dims[0]):
-    feature_1_val,peak_3_val,pred=improved_KB_classifier(feature_db.iloc[i],use_ratio)
-    pred_KB_improved[i]=pred
-    signal_peaks_and_class_KB_improved.append([feature_1_val.item(),peak_3_val.item(),pred])
+# signal_peaks_and_class_KB_improved=[];
+# for i in range(0,dims[0]):
+#     feature_1_val,peak_3_val,pred=improved_KB_classifier(feature_db.iloc[i],use_ratio)
+#     pred_KB_improved[i]=pred
+#     signal_peaks_and_class_KB_improved.append([feature_1_val.item(),peak_3_val.item(),pred])
     
-# %% Performance of the heuristic classifier on the whole dataset
-# Fixed saving names
-cm_suptitle="Confusion Matrix: improved KB classifier"
-cm_saving_path=os.path.join(figure_path+"/Improved_KB_classifier_phase",fig_final_folder)
-# Variable saving names
-cm_saving_name="CM_KB_whole"+plot_last_name
-cm_title=subtitle_plots+" whole dataset" 
-#confusion matrix
-he_report=evaluate_confusion_matrix(pred_KB_improved,y_true,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
-plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="CM_whole_KB_improved")
+# # %% Performance of the heuristic classifier on the whole dataset
+# # Fixed saving names
+# cm_suptitle="Confusion Matrix: improved KB classifier"
+# cm_saving_path=os.path.join(figure_path+"/Improved_KB_classifier_phase",fig_final_folder)
+# # Variable saving names
+# cm_saving_name="CM_KB_whole"+plot_last_name
+# cm_title=subtitle_plots+" whole dataset" 
+# #confusion matrix
+# he_report=evaluate_confusion_matrix(pred_KB_improved,y_true,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
+# plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="CM_whole_KB_improved")
 
 
-#%% LOPOCV validation 
-y_true_LOPOCV,y_pred_LOPOCV,signal_peaks_and_class_KB_improved_LOPOCV=LOPOCV_KB_improved(whole_feature_db,use_ratio)
-# %% CM 
-# Variable saving 
-cm_saving_name="CM_heuristic_LOPOCV"+plot_last_name
-cm_title=subtitle_plots+" LOPOCV KB improved" 
-he_report=evaluate_confusion_matrix(y_pred_LOPOCV,y_true_LOPOCV,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
-plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="CM_LOPOCV_KB_improved")
+# #%% LOPOCV validation 
+# y_true_LOPOCV,y_pred_LOPOCV,signal_peaks_and_class_KB_improved_LOPOCV=LOPOCV_KB_improved(whole_feature_db,use_ratio)
+# # %% CM 
+# # Variable saving 
+# cm_saving_name="CM_heuristic_LOPOCV"+plot_last_name
+# cm_title=subtitle_plots+" LOPOCV KB improved" 
+# he_report=evaluate_confusion_matrix(y_pred_LOPOCV,y_true_LOPOCV,labels_unique,cm_suptitle=cm_suptitle,cm_title=cm_title,save=True, path=cm_saving_path,saving_name=cm_saving_name)
+# plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="CM_LOPOCV_KB_improved")
 
-# misclassified per class
-miss_class_summary= misclassification_summary(whole_feature_db,y_pred_LOPOCV, labels_unique)
-plot_dataframe_as_plain_image(miss_class_summary, figsize=(8,5),scale=(1.7,1.7),title_plot=cm_title,path=other_fig_path,saving_name="Misclass_LOPOCV_KB_improved")
+# # misclassified per class
+# miss_class_summary= misclassification_summary(whole_feature_db,y_pred_LOPOCV, labels_unique)
+# plot_dataframe_as_plain_image(miss_class_summary, figsize=(8,5),scale=(1.7,1.7),title_plot=cm_title,path=other_fig_path,saving_name="Misclass_LOPOCV_KB_improved")
 
 
 
@@ -201,7 +201,7 @@ plot_dataframe_as_plain_image(miss_class_summary, figsize=(8,5),scale=(1.7,1.7),
 
 #%% Features importance: best model tuning
 
-selected_features=analyse_feature_importance(feature_importance,th=0.008,file_name='tree_whole_feature_importance',other_fig_path=other_fig_path)
+selected_features=analyse_feature_importance(feature_importance,th=0.008,file_name='tree_whole_feature_importance',other_fig_path=other_fig_path,saving_plot=True)
 
 # SHAP analysis
 show_SHAP_analysis(whole_feature_db,selected_features,saving_path=other_fig_path,other_comments="whole_feature_set")
@@ -227,7 +227,7 @@ plot_dataframe_as_plain_image(miss_class_summary, figsize=(8,5),scale=(1.7,1.7),
 
 
 #%% Features importance
-analyse_feature_importance(feature_importance,th=0.01,file_name='tree_optimal_feature_importance',other_fig_path=other_fig_path)
+analyse_feature_importance(feature_importance,th=0.01,file_name='tree_optimal_feature_importance',other_fig_path=other_fig_path,saving_plot=True)
 # SHAP analysis
 show_SHAP_analysis(whole_feature_db,selected_features,saving_path=other_fig_path,other_comments="optimal_feature_set")
 
@@ -268,7 +268,7 @@ for kernel_full_name,kernel in kernel_types.items():
 best_kernel="Gaussian"
 classifier, all_y_pred, all_y_true, all_predictions_by_subs,feature_importance=LOPOCV_SVM(whole_feature_db_imp_scal,selected_features,kernel_type=kernel_types[best_kernel])
 
-selected_features=analyse_feature_importance(feature_importance,th=0.008,file_name='SVM_whole_feature_importance',other_fig_path=other_fig_path)
+selected_features=analyse_feature_importance(feature_importance,th=0.008,file_name='SVM_whole_feature_importance',other_fig_path=other_fig_path,saving_plot=True)
 #show_SHAP_analysis(whole_feature_db_SVM,selected_features,model_type='SVM',kernel_type=kernel,other_comments="optimal_feature_set")
 # too slow
 
@@ -287,7 +287,7 @@ he_report=evaluate_confusion_matrix(all_y_pred,all_y_true,labels_unique,cm_supti
 plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="report_LOPOCV_SVM_opt_feature_set_"+best_kernel)
 
 #%% Feature importance analysis
-analyse_feature_importance(feature_importance,th=0.01,file_name='SVM_optimal_feature_importance',other_fig_path=other_fig_path)
+analyse_feature_importance(feature_importance,th=0.01,file_name='SVM_optimal_feature_importance',other_fig_path=other_fig_path,saving_plot=True)
 
 
 
