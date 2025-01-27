@@ -1,3 +1,39 @@
+"""
+Performs Leave-One-Participant-Out Cross-Validation (LOPOCV) using a heuristic classifier to evaluate signal classification performance.
+
+Parameters:
+    df (DataFrame): Dataset containing signal data and associated metadata. Must include columns:
+        - 'id': Participant identifier.
+        - 'class': True class labels for the signals.
+    use_ratio (bool, optional): If True, the heuristic classifier uses peak amplitude ratios for decision-making.
+
+Returns:
+    tuple: A tuple containing:
+        - all_y_true (list): True class labels aggregated across all test sets.
+        - all_y_pred (list): Predicted class labels aggregated across all test sets.
+        - all_signal_peaks_and_class_train (list): List of details for each test signal, including:
+            - Original index in the dataset.
+            - Participant ID.
+            - Atrial peak value.
+            - His bundle peak value.
+            - Ventricular peak value.
+            - Predicted class label.
+            - His bundle threshold used for classification.
+
+Behavior:
+    - Splits the dataset into training and testing subsets, leaving out one participant at a time for testing.
+    - Tunes the His bundle threshold on the training data using the `tune_his_th_on_f1` function.
+    - Classifies test signals using the `heuristic_classifier_C` function.
+    - Aggregates true and predicted labels, along with peak signal values and classification thresholds for further analysis.
+
+Notes:
+    - The His bundle threshold is optimized on the training data for each fold using F1-score maximization.
+    - Assumes a fixed sampling rate of 2035 Hz and signal bounds for atrial (`t_atr`) and ventricular (`t_ven`) phases.
+    - The function relies on external modules `heuristic_classifier_C` and `tune_his_th_on_f1` from a specific file path.
+    - Designed for datasets where signal classification depends on participant-specific variability.
+"""
+
+
 def LOPOCV_heuristic_C(df,use_ratio=False):
     import sys
     import numpy as np

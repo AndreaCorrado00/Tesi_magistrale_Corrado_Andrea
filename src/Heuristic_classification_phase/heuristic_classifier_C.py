@@ -1,3 +1,33 @@
+"""
+Classifies a cardiac signal based on heuristic thresholds and peak analysis of atrial, His bundle, and ventricular phases.
+
+Parameters:
+    record (list or ndarray): The signal data to be classified.
+    Fs (float): Sampling frequency of the signal in Hz.
+    his_bundle_th (float): Threshold for the His bundle peak to determine "Dangerous" classification.
+    use_ratio (bool, optional): 
+        - If True, compares the ratio of atrial to ventricular peak amplitudes to a threshold (0.5).
+        - If False, compares the atrial peak amplitude directly to the threshold (0.5).
+
+Returns:
+    atr_peak (float): Maximum absolute amplitude in the atrial phase.
+    his_peak (float): Maximum absolute amplitude in the His bundle phase.
+    vent_peak (float): Maximum absolute amplitude in the ventricular phase.
+    pred_class (str): Predicted classification:
+        - "Dangerous": If the His bundle peak exceeds `his_bundle_th`.
+        - "Indifferent": If the atrial peak exceeds the threshold (0.5 or ratio-based).
+        - "Effective": If neither the His bundle nor atrial peaks exceed their respective thresholds.
+
+Phases:
+    - Atrial phase: Signal segment from 0 to `t_atr`.
+    - His bundle phase: Signal segment between `t_atr` and `t_ven`.
+    - Ventricular phase: Signal segment between `t_ven` and `t_end`.
+
+Notes:
+    - Time intervals (`t_atr`, `t_ven`, `t_end`) are predefined in seconds and converted to indices using the sampling frequency.
+    - The function is designed for heuristic classification and assumes specific domain knowledge of the signal structure.
+"""
+
 def heuristic_classifier_C(record,Fs,his_bundle_th, use_ratio=False):
     import numpy as np
     

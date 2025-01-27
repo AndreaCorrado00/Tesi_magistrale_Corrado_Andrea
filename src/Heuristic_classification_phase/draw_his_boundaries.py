@@ -1,5 +1,23 @@
 import matplotlib.pyplot as plt
 
+"""
+Draws boundaries and optional filled areas on a plot to visualize atrial and ventricular intervals, with customizable thresholds.
+
+Parameters:
+    atr_t (float): The x-coordinate representing the atrial boundary on the plot.
+    ven_t (float): The x-coordinate representing the ventricular boundary on the plot.
+    th_his (float, optional): Threshold value for drawing horizontal dashed lines at +/-th_his. If None, no threshold lines are drawn.
+    disp_atr_vent_boxes (bool, optional): If True, displays additional shaded regions between the atrial boundary and the origin.
+
+Behavior:
+    - If `th_his` is provided:
+        - Dashed horizontal red lines are drawn at `+th_his` and `-th_his`.
+        - Vertical dashed grey lines mark the atrial (`atr_t`) and ventricular (`ven_t`) boundaries.
+    - If `disp_atr_vent_boxes` is True:
+        - Adds shaded green regions within the atrial interval for enhanced visualization.
+    - If `th_his` is None:
+        - Only vertical dashed grey lines are drawn at the atrial and ventricular boundaries.
+"""
 
 def draw_his_boundaries(atr_t,ven_t, th_his=None,disp_atr_vent_boxes=False):
     
