@@ -1,10 +1,7 @@
 #%% Loading  libraries
 import os
 import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
 import sys
-from sklearn.model_selection import train_test_split
 
 #%% Adding paths, functions and exporting paths
 
