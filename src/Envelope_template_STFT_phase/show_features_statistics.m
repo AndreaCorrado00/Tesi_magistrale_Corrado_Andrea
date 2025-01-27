@@ -12,7 +12,6 @@ for i = 3:length(feature_names)
     if save
         save_plot(feature_name,"_boxplot",figure_path,gcf,true)
     end
-
 end
 
 
