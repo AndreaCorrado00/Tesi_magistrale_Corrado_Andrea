@@ -1,13 +1,19 @@
 function show_ref_maximum_positions(data, Fc)
+    % This function analyzes the maximum peak positions in the reference traces
+    % for all subjects across three maps (MAP_A, MAP_B, MAP_C).
+    % It plots a boxplot of maximum peak positions for all signals in the reference traces.
+    %
+    % Parameters:
+    %   data (struct): The dataset containing reference traces for multiple subjects.
+    %   Fc (scalar): The sampling frequency (in Hz).
 
-    % Define MAP names (MAP_A, MAP_B, MAP_C)
+    % Define map names (MAP_A, MAP_B, MAP_C)
     mapNames = {'A', 'B', 'C'};
 
     % Number of subjects (assumed to be 12)
     numSubjects = 12;
 
-    % Initialize figures
-    % figure1 = figure('Name', 'Max positions per subject', 'WindowState', 'maximized');
+    % Initialize figure for boxplot (for all subjects combined)
     figure2 = figure('Name', 'Boxplot of max positions for all subjects');
 
     % Collect all peak positions for all subjects for the second plot
@@ -24,17 +30,17 @@ function show_ref_maximum_positions(data, Fc)
             % Extract the reference signal for the current subject (assuming it's a table)
             subject_trace = data.(mapName).(subjectName).ref_trace;
 
-            % Initialize a vector to hold maximum positions for each signal
-            max_positions = zeros(size(subject_trace, 2), 1);  % One entry for each signal (column)
+            % Initialize a vector to hold maximum positions for each signal (column)
+            max_positions = zeros(size(subject_trace, 2), 1);  
 
-            % Loop through each column in the reference trace
+            % Loop through each signal (column) in the reference trace
             for col = 1:size(subject_trace, 2)
                 % Extract the signal column
                 signal = subject_trace{:, col};
 
-                % Define the sampling indices corresponding to 0.2 to 0.8 seconds
-                start_index = round(0.2 * Fc) + 1;  % +1 because MATLAB indexing starts at 1
-                end_index = round(0.8 * Fc);  % No +1 because we want to include this index
+                % Define the sampling indices corresponding to the time interval [0.2, 0.8] seconds
+                start_index = round(0.2 * Fc) + 1;  % +1 for 1-based indexing
+                end_index = round(0.8 * Fc);        % Inclusive of the end index
 
                 % Restrict the signal to the time interval [0.2, 0.8] seconds
                 restricted_signal = signal(start_index:end_index);
@@ -42,14 +48,14 @@ function show_ref_maximum_positions(data, Fc)
                 % Find the maximum absolute value and its position in the restricted signal
                 [~, local_max_pos] = max(abs(restricted_signal));  % Index of max in restricted signal
                 
-                % Calculate the absolute position in the original signal
-                max_positions(col) = (local_max_pos + start_index - 1) / Fc;  % Normalize by Fc
+                % Calculate the absolute position in the original signal (normalized by Fc)
+                max_positions(col) = (local_max_pos + start_index - 1) / Fc;
             end
 
-            % Append the positions for all signals to the list for the second figure
+            % Append the positions for all signals of the current subject to the list
             all_peaks_pos_ref = [all_peaks_pos_ref; max_positions];
 
-            % % Plot for the current subject in figure 1
+            % Optionally, plot for the current subject in figure1 (if required)
             % figure(figure1);
             % subplot(length(mapNames), numSubjects, (i-1)*numSubjects + j);
             % boxplot(max_positions);
@@ -60,13 +66,11 @@ function show_ref_maximum_positions(data, Fc)
         end
     end
 
-    % Plot the combined boxplot for all subjects in figure 2
+    % Plot the combined boxplot for all subjects in figure2
     figure(figure2);
     boxplot(all_peaks_pos_ref);
-    title('Boxplot of maximum peak position of reference traces for all subjects and maps');
+    title('Boxplot of maximum peak positions of reference traces for all subjects and maps');
     xlabel('All Signals');
     ylabel('Time position of maximum peak');
-    ylim([0.46,0.56])
-    % ylim([0,1])
-
+    ylim([0.46, 0.56]);  % Limit the y-axis to the expected range
 end
