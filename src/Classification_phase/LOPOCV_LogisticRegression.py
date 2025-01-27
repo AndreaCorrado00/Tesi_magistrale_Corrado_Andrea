@@ -2,6 +2,52 @@ from sklearn.linear_model import LogisticRegression
 import numpy as np
 
 def LOPOCV_LogisticRegression(whole_feature_db, selected_features):
+    """
+    Perform Leave-One-Patient-Out Cross-Validation (LOPOCV) with Logistic Regression.
+
+    This function performs a Leave-One-Patient-Out Cross-Validation (LOPOCV) for classification tasks 
+    using a Logistic Regression model. The process includes:
+    - Splitting the dataset by patient IDs for LOPOCV.
+    - Training a Logistic Regression model with the selected features.
+    - Aggregating performance metrics such as predicted and true labels across all patients.
+    - Calculating and returning feature importances based on model coefficients, averaged over all folds.
+
+    Parameters:
+    -----------
+    whole_feature_db : pandas.DataFrame
+        A DataFrame containing the entire dataset with patient-specific data.
+        It must include columns: 'id', 'class', and feature columns.
+    
+    selected_features : list of str
+        A list of selected feature names to use for training the model.
+        This list should exclude 'id' and 'class' columns.
+
+    Returns:
+    --------
+    classifier : sklearn.linear_model.LogisticRegression
+        The trained Logistic Regression classifier for the last fold (patient).
+    
+    all_y_pred : list of str
+        The list of all predicted labels across all patients.
+    
+    all_y_true : list of str
+        The list of all true labels across all patients.
+    
+    all_predictions_by_subs : list of lists
+        A list of predictions for each patient, in the format [patient_id, true_label, predicted_label].
+    
+    feature_importance_dict : dict
+        A dictionary where keys are feature names and values are their average importance scores across all folds.
+        Feature importance is derived from the model's coefficients, normalized to the sum of their absolute values.
+
+    Notes:
+    ------
+    - The function uses `LogisticRegression` with a multinomial logistic model and 'lbfgs' solver, designed to handle multiclass classification.
+    - The classifier is trained with 'balanced' class weights to handle class imbalances in the data.
+    - Feature importance is derived from the model's coefficients, and the importance is normalized for each fold and averaged across all folds.
+    - The maximum number of iterations is set to 1000 to ensure convergence for complex datasets.
+    """
+
     # Initialize lists to store results
     all_y_true = []
     all_y_pred = []

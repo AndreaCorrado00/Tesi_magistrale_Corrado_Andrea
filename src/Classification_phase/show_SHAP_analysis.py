@@ -7,6 +7,50 @@ from save_plot import save_plot
 import pandas as pd
 
 def show_SHAP_analysis(whole_feature_db, selected_features, model_type='tree', kernel_type='linear', saving_path=None, other_comments=""):
+    """
+    Performs SHAP (SHapley Additive exPlanations) analysis on the provided dataset to interpret the predictions of a given model.
+    This function supports two types of models: Decision Tree ('tree') and Support Vector Machine (SVM, 'SVM').
+
+    The SHAP analysis helps to understand the feature importance and the contribution of each feature to model predictions.
+    The function generates summary plots to visualize the impact of each feature across all samples.
+
+    Parameters:
+    -----------
+    whole_feature_db : pandas.DataFrame
+        The dataset containing the features, labels, and patient IDs. It should have columns for 'id', 'class', and features.
+        
+    selected_features : list of str
+        List of feature names to be used for model training and SHAP analysis. It is assumed that the list includes the relevant features
+        along with 'id' and 'class' (to be dropped during processing).
+
+    model_type : str, optional, default='tree'
+        Specifies the model type for SHAP analysis. Available options are:
+        - 'tree' for DecisionTreeClassifier
+        - 'SVM' for Support Vector Machine with specified kernel type
+
+    kernel_type : str, optional, default='linear'
+        Specifies the kernel type for the SVM model. Only relevant if `model_type='SVM'`. Typical values include 'linear', 'rbf', etc.
+
+    saving_path : str, optional, default=None
+        If provided, the generated SHAP plots will be saved to the specified path with the given file name.
+
+    other_comments : str, optional, default=""
+        Additional comments to include in the title of the SHAP plots for better context (e.g., experiment description).
+
+    Returns:
+    --------
+    None
+        The function generates and displays SHAP summary plots for each class in the classifier. Optionally, the plots can be saved to disk.
+    
+    Notes:
+    ------
+    - The SHAP analysis is performed by fitting the model to a 70% subset of the data, leaving 30% for testing.
+    - The dataset is filtered to include specific patients for SHAP interpretation.
+    - For Decision Tree models, SHAP TreeExplainer is used. For SVM models, SHAP KernelExplainer is used.
+    - The function automatically handles feature names and creates summary plots for each class in a multi-class classification problem.
+    - The generated plots are displayed using `matplotlib` and can be saved with high resolution if `saving_path` is provided.
+    """
+
     selected_features_no_id_and_class = selected_features.copy()
 
     # Filter specific patients and prepare data

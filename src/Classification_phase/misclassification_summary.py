@@ -1,6 +1,25 @@
 import pandas as pd
 
 def misclassification_summary(whole_dataset, y_pred, classes):
+    """
+    Summarizes misclassifications for each subject in the dataset, comparing true class labels with predicted labels.
+
+    Parameters:
+    -----------
+    whole_dataset : pd.DataFrame
+        The dataset containing the true class labels and subject IDs. It must have columns 'id' and 'class'.
+
+    y_pred : np.array or pd.Series
+        The predicted class labels for the whole dataset.
+
+    classes : list
+        The list of unique class labels.
+
+    Returns:
+    --------
+    pd.DataFrame
+        A DataFrame where each row corresponds to a subject and columns show misclassification statistics.
+    """
     results = []
     whole_dataset = whole_dataset.copy()  # To avoid modifying the original dataset
     

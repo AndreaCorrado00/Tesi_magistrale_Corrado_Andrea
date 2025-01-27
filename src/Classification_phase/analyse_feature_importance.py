@@ -1,7 +1,40 @@
+
+
 import matplotlib.pyplot as plt
 from save_plot import save_plot
 
 def analyse_feature_importance(feature_importance, th=None, saving_plot=False, other_fig_path=None, file_name='features_importance'):
+    """
+    Analyzes and visualizes the feature importance of a model, allowing filtering by a threshold, and optionally saving the plot.
+    
+    Parameters:
+    -----------
+    feature_importance : dict
+        A dictionary where keys are feature names and values are the corresponding importance values.
+    th : float, optional, default=None
+        The threshold for selecting features based on their importance. Features with importance greater than `th` will be selected. 
+        If `None`, all features are considered.
+    saving_plot : bool, optional, default=False
+        A flag indicating whether to save the feature importance plot.
+    other_fig_path : str, optional, default=None
+        The path where to save the plot if `saving_plot` is `True`. Must include file extension (e.g., '.png').
+    file_name : str, optional, default='features_importance'
+        The name of the file to save the plot as.
+    
+    Returns:
+    --------
+    list : A list of feature names that have an importance greater than `th` (or all features if `th` is `None`).
+        The list includes 'id' and 'class' as the first and last elements, respectively.
+    
+    Behavior:
+    ---------
+    - Filters out the 'id' and 'class' features from the importance analysis.
+    - Sorts the features by their absolute importance in descending order.
+    - Prints the cumulative feature importance.
+    - Selects features with importance higher than the threshold `th` (if provided).
+    - Visualizes the feature importance as a horizontal bar chart.
+    - Saves the plot if `saving_plot` is `True` and `other_fig_path` is specified.
+    """
     if th is None:
         th = 0.01  # Default threshold value for feature importance
 

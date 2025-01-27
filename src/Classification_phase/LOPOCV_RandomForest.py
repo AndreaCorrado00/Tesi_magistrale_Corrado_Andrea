@@ -2,6 +2,59 @@ from sklearn.ensemble import RandomForestClassifier
 import numpy as np
 
 def LOPOCV_RandomForest(whole_feature_db, selected_features, forest_size=100, max_depth=None):
+    """
+    Perform Leave-One-Patient-Out Cross-Validation (LOPOCV) with Random Forest Classifier.
+
+    This function implements a Leave-One-Patient-Out Cross-Validation (LOPOCV) for classification tasks 
+    using a Random Forest Classifier. The process includes:
+    - Splitting the dataset by patient IDs for LOPOCV.
+    - Training a Random Forest model with the selected features.
+    - Aggregating performance metrics such as predicted and true labels across all patients.
+    - Calculating and returning feature importances based on the model's feature importances, averaged over all folds.
+
+    Parameters:
+    -----------
+    whole_feature_db : pandas.DataFrame
+        A DataFrame containing the entire dataset with patient-specific data.
+        It must include columns: 'id', 'class', and feature columns.
+    
+    selected_features : list of str
+        A list of selected feature names to use for training the model.
+        This list should exclude 'id' and 'class' columns.
+    
+    forest_size : int, optional, default=100
+        The number of trees in the Random Forest. A higher value may improve performance but also increases computation time.
+    
+    max_depth : int or None, optional, default=None
+        The maximum depth of the trees in the Random Forest. If None, nodes are expanded until all leaves are pure.
+
+    Returns:
+    --------
+    classifier : sklearn.ensemble.RandomForestClassifier
+        The trained Random Forest classifier for the last fold (patient).
+    
+    all_y_pred : list of str
+        The list of all predicted labels across all patients.
+    
+    all_y_true : list of str
+        The list of all true labels across all patients.
+    
+    all_predictions_by_subs : list of lists
+        A list of predictions for each patient, in the format [patient_id, true_label, predicted_label].
+    
+    feature_importance_dict : dict
+        A dictionary where keys are feature names and values are their average importance scores across all folds.
+        Feature importance is derived from the Random Forest's built-in feature importances, averaged over all folds.
+
+    Notes:
+    ------
+    - The function uses `RandomForestClassifier` with 'balanced' class weights to handle class imbalances in the data.
+    - Feature importance is derived directly from the `RandomForestClassifier.feature_importances_` attribute, which reflects 
+      the relative importance of each feature based on how well they contribute to reducing impurity across all trees in the forest.
+    - The function averages the feature importances across all folds (patients).
+    - The `forest_size` parameter allows for adjusting the number of trees in the Random Forest, with a default of 100.
+    """
+
     # Initialize lists to store results
     all_y_true = []
     all_y_pred = []

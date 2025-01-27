@@ -4,6 +4,59 @@ import numpy as np
 from tune_SVM_C_param_LOPOCV import tune_SVM_C_param_LOPOCV 
 
 def LOPOCV_SVM(whole_feature_db, selected_features, kernel_type=None):
+    """
+    Perform Leave-One-Patient-Out Cross-Validation (LOPOCV) with Support Vector Machine (SVM).
+
+    This function performs Leave-One-Patient-Out Cross-Validation (LOPOCV) for classification tasks 
+    using a Support Vector Machine (SVM) classifier. The process includes:
+    - Splitting the dataset by patient IDs for LOPOCV.
+    - Training an SVM model with the selected features and optimized C parameter.
+    - Aggregating performance metrics such as predicted and true labels across all patients.
+    - Calculating feature importances using permutation importance, averaged over all folds.
+
+    Parameters:
+    -----------
+    whole_feature_db : pandas.DataFrame
+        A DataFrame containing the entire dataset with patient-specific data.
+        It must include columns: 'id', 'class', and feature columns.
+    
+    selected_features : list of str
+        A list of selected feature names to use for training the model.
+        This list should exclude 'id' and 'class' columns.
+    
+    kernel_type : str, optional, default=None
+        The kernel type to be used in the SVM model. Possible values are 'linear', 'poly', 'rbf', etc.
+        If None, 'linear' is used as the default kernel.
+
+    Returns:
+    --------
+    classifier : sklearn.svm.SVC
+        The trained SVM classifier for the last fold (patient).
+    
+    all_y_pred : list of str
+        The list of all predicted labels across all patients.
+    
+    all_y_true : list of str
+        The list of all true labels across all patients.
+    
+    all_predictions_by_subs : list of lists
+        A list of predictions for each patient, in the format [patient_id, true_label, predicted_label].
+    
+    feature_importance_dict : dict
+        A dictionary where keys are feature names and values are their average importance scores across all folds.
+        Feature importance is derived from permutation importance, averaged over all folds.
+
+    Notes:
+    ------
+    - The function uses the `SVC` class from `sklearn.svm` to train an SVM model with the specified kernel and the optimized `C` parameter.
+    - The `C` parameter is optimized using a logarithmic grid search (using `tune_SVM_C_param_LOPOCV`).
+    - Class weights are balanced to handle any class imbalance in the dataset.
+    - Feature importance is calculated using permutation importance, which provides a measure of how much the feature impacts model performance.
+    - Permutation importance is calculated by randomly permuting each feature in the test data and measuring the decrease in model accuracy.
+    - The function averages the feature importances across all folds (patients).
+    - The `kernel_type` parameter allows customization of the kernel used in the SVM model, with the default being a linear kernel.
+    """
+
     # Model and metrics
     
     # Initialize lists to store results

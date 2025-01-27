@@ -3,6 +3,51 @@ import numpy as np
 from tune_tree_depth_lopocv import tune_tree_depth_lopocv  # Assumendo che tune_tree_depth_lopocv sia un modulo personalizzato
 
 def LOPOCV_decision_tree(whole_feature_db, selected_features):
+    """
+    Perform Leave-One-Patient-Out Cross-Validation (LOPOCV) with a Decision Tree Classifier.
+
+    This function performs a Leave-One-Patient-Out Cross-Validation (LOPOCV) for classification tasks, 
+    utilizing a Decision Tree Classifier. The process includes:
+    - Splitting the dataset by patient IDs for LOPOCV.
+    - Tuning the tree depth for each patient using the `tune_tree_depth_lopocv` method.
+    - Training a Decision Tree Classifier with the selected features.
+    - Aggregating performance metrics such as predicted and true labels across all patients.
+    - Calculating and returning feature importances averaged over all folds.
+
+    Parameters:
+    -----------
+    whole_feature_db : pandas.DataFrame
+        A DataFrame containing the entire dataset with patient-specific data.
+        It must include columns: 'id', 'class', and feature columns.
+    
+    selected_features : list of str
+        A list of selected feature names to use for training the model.
+        This list should exclude 'id' and 'class' columns.
+
+    Returns:
+    --------
+    classifier : sklearn.tree.DecisionTreeClassifier
+        The trained Decision Tree classifier for the last fold (patient).
+    
+    all_y_pred : list of str
+        The list of all predicted labels across all patients.
+    
+    all_y_true : list of str
+        The list of all true labels across all patients.
+    
+    all_predictions_by_subs : list of lists
+        A list of predictions for each patient, in the format [patient_id, true_label, predicted_label].
+    
+    feature_importance_dict : dict
+        A dictionary where keys are feature names and values are their average importance scores across all folds.
+    
+    Notes:
+    ------
+    - The function uses `tune_tree_depth_lopocv` to automatically determine the optimal tree depth for each fold.
+    - The Decision Tree Classifier is trained using the 'entropy' criterion and 'balanced' class weights to handle class imbalances.
+    - Feature importance is calculated and averaged across the folds, providing insights into the relative importance of each feature in the classification task.
+    """
+
     # Initialize lists to store the results
     all_y_true = []
     all_y_pred = []
