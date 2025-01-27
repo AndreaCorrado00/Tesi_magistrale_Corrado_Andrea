@@ -1,4 +1,49 @@
 function [map_upper, map_lower] = merge_runs(map_upper, map_lower)
+% merge_runs
+%
+% This function processes and merges two logical vectors, `map_upper` and `map_lower`, that represent 
+% regions of interest in a signal. The function attempts to merge consecutive runs of 1s in both vectors 
+% based on specific conditions, such as ensuring there are no gaps between regions of `map_upper` and `map_lower`.
+% It also adds positive or negative runs when necessary to smooth transitions between regions and guarantee
+% that the combined map starts and ends with the appropriate region.
+%
+% Parameters:
+%   - map_upper (logical vector): A logical vector representing regions of interest in the upper map (e.g., a positive threshold).
+%   - map_lower (logical vector): A logical vector representing regions of interest in the lower map (e.g., a negative threshold).
+%
+% Returns:
+%   - map_upper (logical vector): The modified logical vector representing the upper map after merging runs.
+%   - map_lower (logical vector): The modified logical vector representing the lower map after merging runs.
+%
+% Functionality:
+%   1. **Initial Setup:**
+%      - Defines signal start and end points based on a sample size (2035).
+%      - Ensures that `map_upper` and `map_lower` have the same length, otherwise it throws an error.
+%
+%   2. **Merge Runs in `map_upper`:**
+%      - Identifies regions of consecutive 1s in `map_upper` and `map_lower` using the `regionprops` function.
+%      - Merges consecutive runs of `map_upper` and `map_lower` if they are not separated by a gap and if the overlap is not present in `map_lower`.
+%      - If there is no overlap in `map_lower`, it inserts a transitional region in `map_lower`.
+%
+%   3. **Merge Runs in `map_lower`:**
+%      - Similar to the previous step, but this time it checks consecutive runs in `map_lower` and merges them with `map_upper` if necessary.
+%      - A transitional region is inserted in `map_upper` if a gap is detected between consecutive runs of `map_lower` without overlapping `map_upper`.
+%
+%   4. **Adjust Boundaries:**
+%      - Adds a positive run at the start of `map_upper` before the first negative run of `map_lower` if necessary.
+%      - Adds a negative run at the end of `map_lower` after the last positive run of `map_upper` if necessary.
+%
+%   5. **Ensure Combined Map Starts and Ends Correctly:**
+%      - Ensures the combined map starts with a run in `map_upper` and ends with a run in `map_lower` by adjusting the logical vectors accordingly.
+%      - If `map_lower` starts before `map_upper`, it adjusts the beginning of `map_lower`.
+%      - If `map_upper` ends after `map_lower`, it adjusts the end of `map_upper`.
+%
+% Example Usage:
+%   [map_upper, map_lower] = merge_runs(map_upper, map_lower);
+%
+% The function is useful for smoothing and combining regions in the `map_upper` and `map_lower` logical vectors 
+% based on specific conditions, and ensuring that transitions between regions are correctly handled.
+
 
 signal_start = round(0.17 * 2035); % Signal start point
 signal_end = round(0.6 * 2035);    % Signal end point

@@ -4,9 +4,13 @@ function [Dominant_ALFP, Dominant_AMFP, Dominant_AHFP, ...
             First_ALFP, First_AMFP,First_AHFP, ...
             Second_ALFP, Second_AMFP, Second_AHFP, ...
             Third_ALFP, Third_AMFP, Third_AHFP]=compute_STFT_features(example_rov,example_env,fc)
+% This function computes and returns various frequency-domain features 
+% derived from the Short-Time Fourier Transform (STFT) of the given input signals.
+% The features are categorized into dominant, subdominant, minor, and sequential peaks 
+% based on the peak magnitudes and occurrence order of the active regions.
 
 %% Time threshold evaluation
-% Same as envelope analysis
+% Evaluate the envelope slope and define time thresholds to segment the signal
 [map_upper,map_lower]=analise_envelope_slope(example_env,0.002,fc);
 time_th = define_time_th(map_upper, map_lower);
 time_th=clean_time_thresholds(example_rov,time_th,fc,2.5);
@@ -16,50 +20,47 @@ time_th=clean_time_thresholds(example_rov,time_th,fc,2.5);
 % Peaks of active areas evaluation 
 original_rov_peaks_val_pos=zeros(max([3,N]),4);
 for i=1:min([N,3])
-    % peak value, peak instant, active area start, active area end
+    % Find the peak value, peak instant, and active area boundaries
     [max_val,max_pos]=max(abs(example_rov(time_th(i,1):time_th(i,2))),[],"omitnan");
     original_rov_peaks_val_pos(i,:)=[max_val,(max_pos+time_th(i,1))/fc,time_th(i,1)/fc,time_th(i,2)/fc];
-
 end
 
 %% FIRST BLOCK: peak in order of magnitude
-    % sorting peaks in descending order of magnitude 
+% Sorting the peaks in descending order of magnitude 
 original_rov_peaks_val_pos=sortrows(original_rov_peaks_val_pos,1,"descend");
 
 %% STFT computation 
-% STFT parameters definition
+% Compute the STFT using the spectrogram function with defined parameters
 win_length = 64; % length of the window (points)
-hop_size = round(win_length / 3); % 30% superposition
+hop_size = round(win_length / 3); % 30% overlap between adjacent windows
 window = hamming(win_length, 'periodic'); % Hamming window
-nfft = 1048; % FFT evaluation points
+nfft = 1048; % Number of FFT points for frequency resolution
 
 [S, F, T, STFT] = spectrogram(example_rov, window, hop_size, nfft, fc);
 
 %% Areas of interest definition: time thresholds on STFT
-% Adding two columns to original_rov_peaks_val_pos: start and end of STFT
-% time threhsolds
+% Define the time threshold indices in the STFT based on the previously computed time thresholds
 original_rov_peaks_val_pos=[original_rov_peaks_val_pos,zeros(size(original_rov_peaks_val_pos,1),1),zeros(size(original_rov_peaks_val_pos,1),1)];
 for i = 1:size(time_th, 1)
-    [~, idx_start] = min(abs(T - original_rov_peaks_val_pos(i, 3))); % Begin of i-th active area 
-    [~, idx_end] = min(abs(T - original_rov_peaks_val_pos(i, 4)));   % End of i-th active area 
+    [~, idx_start] = min(abs(T - original_rov_peaks_val_pos(i, 3))); % Start index of the active region 
+    [~, idx_end] = min(abs(T - original_rov_peaks_val_pos(i, 4)));   % End index of the active region
     original_rov_peaks_val_pos(i, 5:6) = [idx_start, idx_end];
 end
 
 %% Frequency sub-bands
+% Define frequency bands for Low, Medium, and High frequency ranges
 Low_band=[0,75]; %Hz
 Medium_band=[75,150]; %Hz
 High_band=[150,350]; % Hz
 
+% Find the indices corresponding to each frequency band
 idx_Low_band = find(F >= Low_band(1) & F <= Low_band(2));
 idx_Medium_band = find(F > Medium_band(1) & F <= Medium_band(2));
 idx_High_band = find(F > High_band(1) & F <= High_band(2));
 
-
-%% Average STFT value  for each sub band
-
+%% Average STFT value for each sub-band
+% Calculate the average STFT values for each frequency band (Low, Medium, High)
 avg_STFT_subbands=zeros(3,3);
-
-    
 for i=1:3
     if original_rov_peaks_val_pos(i,1)~=0
         avg_STFT_subbands(1,i)=mean(STFT(idx_Low_band,original_rov_peaks_val_pos(i,5):original_rov_peaks_val_pos(i,6)),'all');
@@ -68,11 +69,11 @@ for i=1:3
     end
 end
 
-
-% Nan Mapping
+% Replace zeros with NaN to handle missing data or uncalculated regions
 avg_STFT_subbands(avg_STFT_subbands==0)=nan;
 
-%% Features names assegnation 
+%% Features assignment 
+% Assign the average STFT values from each sub-band to corresponding feature variables
 Dominant_ALFP=avg_STFT_subbands(1,1);
 Dominant_AMFP=avg_STFT_subbands(1,2);
 Dominant_AHFP=avg_STFT_subbands(1,3);
@@ -85,34 +86,33 @@ Minor_ALFP=avg_STFT_subbands(3,1);
 Minor_AMFP=avg_STFT_subbands(3,2);
 Minor_AHFP=avg_STFT_subbands(3,3);
 
-%% SECOND BLOCK: peaks in order of occurence
-    % sorting peaks in descending order of occurance 
+%% SECOND BLOCK: peaks in order of occurrence
+% Sorting the peaks based on the order of occurrence (time position)
 original_rov_peaks_val_pos=sortrows(original_rov_peaks_val_pos,2,"descend");
 
 %% Areas of interest definition: time thresholds on STFT
-% Adding two columns to original_rov_peaks_val_pos: start and end of STFT
-% time threhsolds
+% Redefine the time threshold indices in the STFT based on the occurrence order of peaks
 original_rov_peaks_val_pos=[original_rov_peaks_val_pos,zeros(size(original_rov_peaks_val_pos,1),1),zeros(size(original_rov_peaks_val_pos,1),1)];
 for i = 1:size(time_th, 1)
-    [~, idx_start] = min(abs(T - original_rov_peaks_val_pos(i, 3))); % Begin of i-th active area 
-    [~, idx_end] = min(abs(T - original_rov_peaks_val_pos(i, 4)));   % End of i-th active area 
+    [~, idx_start] = min(abs(T - original_rov_peaks_val_pos(i, 3))); % Start index of the active region 
+    [~, idx_end] = min(abs(T - original_rov_peaks_val_pos(i, 4)));   % End index of the active region 
     original_rov_peaks_val_pos(i, 5:6) = [idx_start, idx_end];
 end
 
 %% Frequency sub-bands
+% Same frequency bands (Low, Medium, High) as in the first block
 Low_band=[0,75]; %Hz
 Medium_band=[75,150]; %Hz
 High_band=[150,350]; % Hz
 
+% Recalculate the indices for each frequency band
 idx_Low_band = find(F >= Low_band(1) & F <= Low_band(2));
 idx_Medium_band = find(F > Medium_band(1) & F <= Medium_band(2));
 idx_High_band = find(F > High_band(1) & F <= High_band(2));
 
-
-%% Average STFT value  for each sub band
-
+%% Average STFT value for each sub-band (second block)
+% Calculate the average STFT values for each sub-band again based on the reordered peaks
 avg_STFT_subbands=zeros(3,3);
-  
 for i=1:3
     if original_rov_peaks_val_pos(i,1)~=0
         avg_STFT_subbands(1,i)=mean(STFT(idx_Low_band,original_rov_peaks_val_pos(i,5):original_rov_peaks_val_pos(i,6)),'all');
@@ -121,11 +121,11 @@ for i=1:3
     end
 end
 
-
-% Nan Mapping
+% Replace zeros with NaN for consistency
 avg_STFT_subbands(avg_STFT_subbands==0)=nan;
 
-%% Features names assegnation 
+%% Features assignment (second block)
+% Assign the calculated STFT values to new feature variables for the second set of peaks
 First_ALFP=avg_STFT_subbands(1,1);
 First_AMFP=avg_STFT_subbands(1,2);
 First_AHFP=avg_STFT_subbands(1,3);
@@ -138,8 +138,4 @@ Third_ALFP=avg_STFT_subbands(3,1);
 Third_AMFP=avg_STFT_subbands(3,2);
 Third_AHFP=avg_STFT_subbands(3,3);
 
-
-
 end
-
-

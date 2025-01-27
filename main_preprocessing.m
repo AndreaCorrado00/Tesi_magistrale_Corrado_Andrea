@@ -255,7 +255,7 @@ POP_DB_aligned=build_pop_dataset_after_alignment(Aligned_DB);
 
 %%                           ---------- ALIGNED DATASET ANALYSIS ---------- 
 clc;clear;close;
-% Ppopulation plots are done to summarize. They not intend to be a complete
+% Population plots are done to summarize. They not intend to be a complete
 % and deep representation, but just a quick overview on the data we have.
 
 processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed\Old_data";

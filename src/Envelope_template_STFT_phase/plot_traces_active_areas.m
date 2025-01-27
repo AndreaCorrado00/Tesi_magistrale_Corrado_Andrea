@@ -1,4 +1,35 @@
 function plot_traces_active_areas(data,env_data,fc,bound_type,sg_title,figure_path)
+% plot_traces_active_areas
+% 
+% This function generates and saves plots of signal traces and their corresponding envelope 
+% data for different subjects and map types, with the option to analyze signal boundaries 
+% using various methods. It supports three boundary analysis methods: "ActiveArea", 
+% "TimeTh" (Time Thresholds), and "Slope_Analysis".
+%
+% Parameters:
+%   - data (struct): A structure containing the raw signal data. The structure is 
+%                    organized by map types ('MAP_A', 'MAP_B', 'MAP_C'), subjects, and 
+%                    their respective signal traces (rov_trace).
+%   - env_data (struct): A structure containing the envelope data corresponding to the 
+%                         signals in 'data', structured similarly.
+%   - fc (numeric): The sampling frequency of the signals.
+%   - bound_type (string): Specifies the boundary analysis type. Options include:
+%                          'ActiveArea', 'TimeTh', and 'Slope_Analysis'.
+%   - sg_title (string): A general title for the plot, typically describing the experiment 
+%                        or dataset.
+%   - figure_path (string): The path where the generated plots will be saved.
+%
+% The function supports the following types of plots based on the specified boundary type:
+%   - "ActiveArea": Plots the signal, its envelope, and boundaries based on calculated 
+%     upper and lower envelope slopes.
+%   - "TimeTh": Highlights specific time thresholds within the signal and its envelope.
+%   - "Slope_Analysis": Displays the results of a slope analysis on the signal envelope.
+%
+% The generated plots are saved with filenames that include the map type, subject number, 
+% and record number, providing a detailed log of each generated figure.
+%
+% Example:
+%   plot_traces_active_areas(data, env_data, 1000, 'ActiveArea', 'Signal Analysis', '/path/to/save')
 
 % Define plot types
 type_plots = ["single_record"];

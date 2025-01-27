@@ -1,4 +1,40 @@
 function plot_feature_boxplots(data, class, feature_name)
+% plot_feature_boxplots
+%
+% This function generates boxplots for a specified feature in a dataset, grouped by a 
+% categorical class variable. It also overlays scatter points on the boxplots to provide 
+% additional visual representation of individual data points. The plot includes customized 
+% colors for each class and formats the figure based on the input feature name.
+%
+% Parameters:
+%   - data (table): A table containing the dataset with features. The feature to be plotted
+%                   is identified by its column name.
+%   - class (table): A table containing the class labels corresponding to each data point. 
+%                    The class variable is categorical and defines the groups for the boxplots.
+%   - feature_name (string): The name of the feature (column in the `data` table) to be plotted.
+%                             This is used to extract the feature values for plotting and 
+%                             to create the plot title.
+%
+% Functionality:
+%   1. The feature data is extracted from the provided `data` table and converted to numeric 
+%      format (double) if it's not already.
+%   2. The class data is extracted and converted into a categorical array with an explicitly 
+%      defined order ('Indifferent', 'Effective', 'Dangerous').
+%   3. A new figure is created with the specified feature name used in the plot title.
+%   4. The function calculates the y-axis limits based on the feature data, excluding outliers.
+%   5. Boxcharts are generated for each class, with specific colors assigned to each class 
+%      ('Indifferent' as blue, 'Effective' as green, 'Dangerous' as red).
+%   6. Scatter points for each data point are plotted over the boxcharts, with a small amount 
+%      of horizontal jitter applied to avoid overlap.
+%   7. The axes are adjusted for readability and the title is set based on the feature name.
+%
+% Example:
+%   plot_feature_boxplots(data, class, 'feature_name')
+%
+% This function is useful for visualizing the distribution of a feature across different classes,
+% making it easier to compare the central tendency, spread, and outliers for each group.
+
+
     % Extract the feature column from the table and convert it to double
     feature = data{:, feature_name};  % Extract the feature data from the table
     feature = double(feature);        % Convert to double if it's not already numeric
