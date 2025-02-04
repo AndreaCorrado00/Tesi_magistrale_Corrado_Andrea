@@ -27,16 +27,17 @@ time_th=clean_time_thresholds(example_rov,time_th,fc,2.75);
 [N,~]=size(time_th);
 
 % Peaks of active areas evaluation 
-original_rov_peaks_val_pos=zeros(max([3,N]),4);
+original_rov_peaks_val_pos=nan(max([3,N]),4);
 for i=1:min([N,3])
-    % Find the peak value, peak instant, and active area boundaries
+    % Find the peak value, peak instant, and active area boundaries: start
+    % and stop.
     [max_val,max_pos]=max(abs(example_rov(time_th(i,1):time_th(i,2))),[],"omitnan");
     original_rov_peaks_val_pos(i,:)=[max_val,(max_pos+time_th(i,1))/fc,time_th(i,1)/fc,time_th(i,2)/fc];
 end
 
 %% FIRST BLOCK: peak in order of magnitude
 % Sorting the peaks in descending order of magnitude 
-original_rov_peaks_val_pos=sortrows(original_rov_peaks_val_pos,1,"descend");
+original_rov_peaks_val_pos=sortrows(original_rov_peaks_val_pos,1,"descend","MissingPlacement","last");
 
 %% STFT computation 
 % Compute the STFT using the spectrogram function with defined parameters
@@ -53,7 +54,7 @@ original_rov_peaks_val_pos=[original_rov_peaks_val_pos,zeros(size(original_rov_p
 for i = 1:size(time_th, 1)
     [~, idx_start] = min(abs(T - original_rov_peaks_val_pos(i, 3))); % Start index of the active region 
     [~, idx_end] = min(abs(T - original_rov_peaks_val_pos(i, 4)));   % End index of the active region
-    original_rov_peaks_val_pos(i, 5:6) = [idx_start, idx_end];
+    original_rov_peaks_val_pos(i, 5:6) = [round(idx_start), round(idx_end)];
 end
 
 %% Frequency sub-bands
@@ -71,7 +72,7 @@ idx_High_band = F > High_band(1) & F <= High_band(2);
 % Calculate the average STFT values for each frequency band (Low, Medium, High)
 avg_STFT_subbands=zeros(3,3);
 for i=1:3
-    if original_rov_peaks_val_pos(i,1)~=0
+    if ~isnan(original_rov_peaks_val_pos(i,1))
         avg_STFT_subbands(1,i)=mean(STFT(idx_Low_band,original_rov_peaks_val_pos(i,5):original_rov_peaks_val_pos(i,6)),'all');
         avg_STFT_subbands(2,i)=mean(STFT(idx_Medium_band,original_rov_peaks_val_pos(i,5):original_rov_peaks_val_pos(i,6)),'all');
         avg_STFT_subbands(3,i)=mean(STFT(idx_High_band,original_rov_peaks_val_pos(i,5):original_rov_peaks_val_pos(i,6)),'all');
@@ -97,7 +98,7 @@ Minor_AHFP=avg_STFT_subbands(3,3);
 
 %% SECOND BLOCK: peaks in order of occurrence
 % Sorting the peaks based on the order of occurrence (time position)
-original_rov_peaks_val_pos=sortrows(original_rov_peaks_val_pos,2,"ascend");
+original_rov_peaks_val_pos=sortrows(original_rov_peaks_val_pos,2,"ascend","MissingPlacement","last");
 
 %% Areas of interest definition: time thresholds on STFT
 % Redefine the time threshold indices in the STFT based on the occurrence order of peaks
@@ -105,7 +106,7 @@ original_rov_peaks_val_pos=[original_rov_peaks_val_pos,zeros(size(original_rov_p
 for i = 1:size(time_th, 1)
     [~, idx_start] = min(abs(T - original_rov_peaks_val_pos(i, 3))); % Start index of the active region 
     [~, idx_end] = min(abs(T - original_rov_peaks_val_pos(i, 4)));   % End index of the active region 
-    original_rov_peaks_val_pos(i, 5:6) = [idx_start, idx_end];
+    original_rov_peaks_val_pos(i, 5:6) = [round(idx_start), round(idx_end)];
 end
 
 %% Frequency sub-bands
@@ -121,9 +122,9 @@ idx_High_band = F > High_band(1) & F <= High_band(2);
 
 %% Average STFT value for each sub-band (second block)
 % Calculate the average STFT values for each sub-band again based on the reordered peaks
-features_STFT_subbands=zeros(3,12);% 3 peaks, 12 features for each peak
+features_STFT_subbands=zeros(12,3);% 3 peaks, 12 features for each peak
 for i=1:3
-    if original_rov_peaks_val_pos(i,1)~=0
+    if ~isnan(original_rov_peaks_val_pos(i,1))
         features_STFT_subbands(1,i)=mean(STFT(idx_Low_band,original_rov_peaks_val_pos(i,5):original_rov_peaks_val_pos(i,6)),'all');
         features_STFT_subbands(2,i)=mean(STFT(idx_Medium_band,original_rov_peaks_val_pos(i,5):original_rov_peaks_val_pos(i,6)),'all');
         features_STFT_subbands(3,i)=mean(STFT(idx_High_band,original_rov_peaks_val_pos(i,5):original_rov_peaks_val_pos(i,6)),'all');
@@ -161,40 +162,40 @@ Third_ALFP=features_STFT_subbands(3,1);
 Third_AMFP=features_STFT_subbands(3,2);
 Third_AHFP=features_STFT_subbands(3,3);
 
-max_First_HF=features_STFT_subbands(1,4);
-max_First_MF=features_STFT_subbands(1,5);
-max_First_LF=features_STFT_subbands(1,6);
+max_First_HF=features_STFT_subbands(4,1);
+max_First_MF=features_STFT_subbands(4,2);
+max_First_LF=features_STFT_subbands(4,3);
 
-max_Second_HF=features_STFT_subbands(2,4);
-max_Second_MF=features_STFT_subbands(2,5);
-max_Second_LF=features_STFT_subbands(2,6);
+max_Second_HF=features_STFT_subbands(5,1);
+max_Second_MF=features_STFT_subbands(5,2);
+max_Second_LF=features_STFT_subbands(5,3);
 
-max_Third_HF=features_STFT_subbands(3,4);
-max_Third_MF=features_STFT_subbands(3,5);
-max_Third_LF=features_STFT_subbands(3,6);
+max_Third_HF=features_STFT_subbands(6,1);
+max_Third_MF=features_STFT_subbands(6,2);
+max_Third_LF=features_STFT_subbands(6,3);
 
-min_First_HF=features_STFT_subbands(1,7);
-min_First_MF=features_STFT_subbands(1,8);
-min_First_LF=features_STFT_subbands(1,9);
+min_First_HF=features_STFT_subbands(7,1);
+min_First_MF=features_STFT_subbands(7,2);
+min_First_LF=features_STFT_subbands(7,3);
 
-min_Second_HF=features_STFT_subbands(2,7);
-min_Second_MF=features_STFT_subbands(2,8);
-min_Second_LF=features_STFT_subbands(2,9);
+min_Second_HF=features_STFT_subbands(8,1);
+min_Second_MF=features_STFT_subbands(8,2);
+min_Second_LF=features_STFT_subbands(8,3);
 
-min_Third_HF=features_STFT_subbands(3,7);
-min_Third_MF=features_STFT_subbands(3,8);
-min_Third_LF=features_STFT_subbands(3,9);
+min_Third_HF=features_STFT_subbands(9,1);
+min_Third_MF=features_STFT_subbands(9,2);
+min_Third_LF=features_STFT_subbands(9,3);
 
-std_First_HF=features_STFT_subbands(1,10);
-std_First_MF=features_STFT_subbands(1,11);
-std_First_LF=features_STFT_subbands(1,12);
+std_First_HF=features_STFT_subbands(10,1);
+std_First_MF=features_STFT_subbands(10,2);
+std_First_LF=features_STFT_subbands(10,3);
 
-std_Second_HF=features_STFT_subbands(2,10);
-std_Second_MF=features_STFT_subbands(2,11);
-std_Second_LF=features_STFT_subbands(2,12);
+std_Second_HF=features_STFT_subbands(11,1);
+std_Second_MF=features_STFT_subbands(11,2);
+std_Second_LF=features_STFT_subbands(11,3);
 
-std_Third_HF=features_STFT_subbands(3,10);
-std_Third_MF=features_STFT_subbands(3,11);
-std_Third_LF=features_STFT_subbands(3,12);
+std_Third_HF=features_STFT_subbands(12,1);
+std_Third_MF=features_STFT_subbands(12,2);
+std_Third_LF=features_STFT_subbands(12,3);
 
 end

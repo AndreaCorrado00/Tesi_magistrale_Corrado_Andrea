@@ -81,8 +81,8 @@ function [active_areas_number,...
     [N, ~] = size(time_th);
     
     %% Peaks of active areas evaluation 
-    original_env_peaks_val_pos = zeros(max([3, N]), 2);
-    original_rov_peaks_val_pos = zeros(max([3, N]), 2);
+    original_env_peaks_val_pos = nan(max([3, N]), 2);
+    original_rov_peaks_val_pos = nan(max([3, N]), 2);
     
     for i = 1:min([N, 3])
         [max_val, max_pos] = max(example_env(time_th(i, 1):time_th(i, 2)), [], "omitnan");
@@ -94,8 +94,8 @@ function [active_areas_number,...
     
     %% First block of features: Peaks in order of magnitude 
     % Sorting peaks in descending order of magnitude 
-    env_peaks_val_pos = sortrows(original_env_peaks_val_pos, 1, "descend");
-    rov_peaks_val_pos = sortrows(original_rov_peaks_val_pos, 1, "descend");
+    env_peaks_val_pos = sortrows(original_env_peaks_val_pos, 1, "descend","MissingPlacement","last");
+    rov_peaks_val_pos = sortrows(original_rov_peaks_val_pos, 1, "descend","MissingPlacement","last");
     
     % Handling zeros in the peaks
     env_peaks_val_pos(env_peaks_val_pos == 0) = nan;
@@ -123,8 +123,8 @@ function [active_areas_number,...
     
     %% Second block of features: Peaks in order of time occurrence
     % Sorting peaks by time of occurrence 
-    env_peaks_val_pos = sortrows(original_env_peaks_val_pos, 2, "ascend");
-    rov_peaks_val_pos = sortrows(original_rov_peaks_val_pos, 2, "ascend");
+    env_peaks_val_pos = sortrows(original_env_peaks_val_pos, 2, "ascend","MissingPlacement","last");
+    rov_peaks_val_pos = sortrows(original_rov_peaks_val_pos, 2, "ascend","MissingPlacement","last");
     
     % Handling zeros in the peaks
     env_peaks_val_pos(env_peaks_val_pos == 0) = nan;

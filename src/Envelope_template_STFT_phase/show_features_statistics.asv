@@ -24,18 +24,18 @@ function show_features_statistics(features_tab, save, figure_path)
     feature_names = feature_names(1:end-1); % Exclude class labels from feature names
 
     % Generate box plots for each feature and save if required
-    for i = 3:length(feature_names) % Start from the 3rd feature (skip first two if necessary)
-        % Get the current feature name
-        feature_name = feature_names{i};
-
-        % Call a helper function to plot box plots for the feature
-        plot_feature_boxplots(features_tab, classes, feature_name);
-
-        % Save the plot if the 'save' flag is true
-        if save
-            save_plot(feature_name, "_boxplot", figure_path, gcf, true);
-        end
-    end
+    % for i = 3:length(feature_names) % Start from the 3rd feature (skip first two if necessary)
+    %     % Get the current feature name
+    %     feature_name = feature_names{i};
+    % 
+    %     % Call a helper function to plot box plots for the feature
+    %     plot_feature_boxplots(features_tab, classes, feature_name);
+    % 
+    %     % Save the plot if the 'save' flag is true
+    %     if save
+    %         save_plot(feature_name, "_boxplot", figure_path, gcf, true);
+    %     end
+    % end
 
     % Analyze the distribution of active areas (peaks) for each map type
     unique_classes = unique(classes); % Get unique map types (e.g., MAP_A, MAP_B, MAP_C)
