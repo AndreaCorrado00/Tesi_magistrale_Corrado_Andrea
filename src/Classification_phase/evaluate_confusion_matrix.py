@@ -1,3 +1,8 @@
+from save_plot import save_plot
+import matplotlib.pyplot as plt
+import pandas as pd
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, classification_report
+
 def evaluate_confusion_matrix(y_pred, y_true, labels_unique, cm_suptitle=None, cm_title=None, save=False, path=None, saving_name=None):
     """
     Evaluates the classification performance by computing and displaying the confusion matrix and a detailed classification report.

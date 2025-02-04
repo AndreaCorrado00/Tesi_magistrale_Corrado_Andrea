@@ -3,7 +3,7 @@
 import matplotlib.pyplot as plt
 from save_plot import save_plot
 
-def analyse_feature_importance(feature_importance, th=None, saving_plot=False, other_fig_path=None, file_name='features_importance'):
+def analyse_feature_importance(feature_importance, plot_title="Feature importance",th=None, saving_plot=False, other_fig_path=None, file_name='features_importance'):
     """
     Analyzes and visualizes the feature importance of a model, allowing filtering by a threshold, and optionally saving the plot.
     
@@ -64,12 +64,12 @@ def analyse_feature_importance(feature_importance, th=None, saving_plot=False, o
     feature_names, importance_scores = zip(*sorted_feature_importance.items())
 
     # Plot the feature importance histogram
-    importance_fig, ax = plt.subplots()
+    importance_fig, ax = plt.subplots(figsize=(12, 10))
     plt.barh(feature_names, importance_scores, color="skyblue")
     plt.xlabel("Importance")
-    plt.title("Feature Importance: whole set of features")
+    plt.title(plot_title,fontsize=18)
     plt.gca().invert_yaxis()  # Invert y-axis to have the highest importance at the top
-    plt.yticks(fontsize=6)
+    plt.yticks(fontsize=10)
     plt.show()
 
     # Save the plot if a save function is provided
