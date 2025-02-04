@@ -22,7 +22,7 @@ function [Dominant_ALFP, Dominant_AMFP, Dominant_AHFP, ...
 % Evaluate the envelope slope and define time thresholds to segment the signal
 [map_upper,map_lower]=analise_envelope_slope(example_env,0.002,fc);
 time_th = define_time_th(map_upper, map_lower);
-time_th=clean_time_thresholds(example_rov,time_th,fc,2.75);
+time_th=clean_time_thresholds(example_rov,time_th,fc,2.5);
 
 [N,~]=size(time_th);
 
@@ -63,9 +63,9 @@ Medium_band=[75,150]; %Hz
 High_band=[150,350]; % Hz
 
 % Find the indices corresponding to each frequency band
-idx_Low_band = F >= Low_band(1) & F <= Low_band(2);
-idx_Medium_band = F > Medium_band(1) & F <= Medium_band(2);
-idx_High_band = F > High_band(1) & F <= High_band(2);
+idx_Low_band = find(F >= Low_band(1) & F <= Low_band(2));
+idx_Medium_band = find(F > Medium_band(1) & F <= Medium_band(2));
+idx_High_band = find(F > High_band(1) & F <= High_band(2));
 
 %% Average STFT value for each sub-band
 % Calculate the average STFT values for each frequency band (Low, Medium, High)
