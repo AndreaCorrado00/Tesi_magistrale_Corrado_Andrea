@@ -135,16 +135,16 @@ df_corr_analysis=df_corr_analysis.drop(categorical_features,axis=1)
 correlation_matrix = df_corr_analysis.corr()
 
 # Plot the correlation matrix as a heatmap
-# import seaborn as sns
-# import matplotlib.pyplot as plt
-# cross_features, ax = plt.subplots(figsize=(80, 60))
-# sns.heatmap(correlation_matrix, annot=True, fmt=".2f", cmap="coolwarm", 
-#             xticklabels=df_corr_analysis.columns, 
-#             yticklabels=df_corr_analysis.columns,annot_kws={"size": 25})  
-# plt.xticks(fontsize=25)
-# plt.yticks(fontsize=25)
-# plt.title("Feature Cross-Correlation Matrix")
-# plt.show()
+import seaborn as sns
+import matplotlib.pyplot as plt
+cross_features, ax = plt.subplots(figsize=(105, 85))
+sns.heatmap(correlation_matrix, annot=True, fmt=".2f", cmap="coolwarm", 
+            xticklabels=df_corr_analysis.columns, 
+            yticklabels=df_corr_analysis.columns,annot_kws={"size": 22})  
+plt.xticks(fontsize=25)
+plt.yticks(fontsize=25)
+plt.title("Feature Cross-Correlation Matrix")
+plt.show()
 
 
 # save_plot(cross_features, other_fig_path,file_name='features_cross_corretion_matrix',dpi=500)
@@ -161,6 +161,13 @@ correlated_features=['Dominant_peak_env', 'Dominant_peak_env_time', 'Subdominant
  'First_AvgPowMF',
  'Second_AvgPowLF', 'Second_AvgPowMF',
  'Third_AvgPowLF', 'Third_AvgPowMF',
+ 'First_Active_Area_Power_std_MF',
+ 'First_Active_Area_Power_std_LF',
+ 'Second_Active_Area_Power_std_MF',
+ 'Second_Active_Area_Power_std_LF',
+ 'Third_Active_Area_Power_std_MF',
+ 'Third_Active_Area_Power_std_LF',
+ 
 ];
 
  
@@ -199,9 +206,12 @@ plot_dataframe_as_plain_image(miss_class_summary, figsize=(8,5),scale=(1.7,1.7),
 
 #%% Features importance: best model tuning
 
-selected_features=analyse_feature_importance(feature_importance,th=0.008,plot_title="Feature Importance: whole set of features",file_name='tree_whole_feature_importance',other_fig_path=other_fig_path,saving_plot=True)
+selected_features=analyse_feature_importance(feature_importance,th=0.01,plot_title="Feature Importance: whole set of features",file_name='tree_whole_feature_importance',other_fig_path=other_fig_path,saving_plot=True)
 
-# SHAP analysis
+TREE_opt_features_list=selected_features
+
+
+#%% SHAP analysis
 show_SHAP_analysis(whole_feature_db,selected_features,saving_path=other_fig_path,other_comments="whole_feature_set")
 
 #%% SECOND CLASSIFIER: otimal subset of features
@@ -225,8 +235,9 @@ plot_dataframe_as_plain_image(miss_class_summary, figsize=(8,5),scale=(1.7,1.7),
 
 
 #%% Features importance
-analyse_feature_importance(feature_importance,th=0.008,plot_title="Feature Importance: reduced set of features",file_name='tree_optimal_feature_importance',other_fig_path=other_fig_path,saving_plot=True)
-# SHAP analysis
+analyse_feature_importance(feature_importance,th=0.01,plot_title="Feature Importance: reduced set of features",file_name='tree_optimal_feature_importance',other_fig_path=other_fig_path,saving_plot=True)
+
+#%% SHAP analysis
 show_SHAP_analysis(whole_feature_db,selected_features,saving_path=other_fig_path,other_comments="optimal_feature_set")
 
 
@@ -266,8 +277,9 @@ for kernel_full_name,kernel in kernel_types.items():
 best_kernel="Gaussian"
 classifier, all_y_pred, all_y_true, all_predictions_by_subs,feature_importance=LOPOCV_SVM(whole_feature_db_imp_scal,selected_features,kernel_type=kernel_types[best_kernel])
 
-selected_features=analyse_feature_importance(feature_importance,th=0.008,plot_title="Feature Importance: whole set of features",file_name='SVM_whole_feature_importance',other_fig_path=other_fig_path,saving_plot=True)
+selected_features=analyse_feature_importance(feature_importance,th=0.002,plot_title="Feature Importance: whole set of features",file_name='SVM_whole_feature_importance',other_fig_path=other_fig_path,saving_plot=True)
 
+SVM_opt_features_list=selected_features
 
 #%% final optimised model
 classifier, all_y_pred, all_y_true, all_predictions_by_subs,feature_importance=LOPOCV_SVM(whole_feature_db_imp_scal,selected_features,kernel_type=kernel_types[best_kernel])
@@ -284,7 +296,7 @@ he_report=evaluate_confusion_matrix(all_y_pred,all_y_true,labels_unique,cm_supti
 plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="report_LOPOCV_SVM_opt_feature_set_"+best_kernel)
 
 #%% Feature importance analysis
-analyse_feature_importance(feature_importance,th=0.008,plot_title="Feature Importance: reduced set of features",file_name='SVM_optimal_feature_importance',other_fig_path=other_fig_path,saving_plot=True)
+analyse_feature_importance(feature_importance,th=0.002,plot_title="Feature Importance: reduced set of features",file_name='SVM_optimal_feature_importance',other_fig_path=other_fig_path,saving_plot=True)
 
 
 
@@ -316,7 +328,10 @@ he_report=evaluate_confusion_matrix(all_y_pred,all_y_true,labels_unique,cm_supti
 plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="report_GLM_MLR_whole")
 
 #%% Feature importance
-selected_features=analyse_feature_importance(feature_importance,th=0.008,plot_title="Feature Importance: whole set of features",file_name='GLM_whole_feature_importance',other_fig_path=other_fig_path,saving_plot=True)
+selected_features=analyse_feature_importance(feature_importance,th=0.005,plot_title="Feature Importance: whole set of features",file_name='GLM_whole_feature_importance',other_fig_path=other_fig_path,saving_plot=True)
+
+MLR_opt_features_list=selected_features
+
 
 #%% MLR LOPOCV training: optimal dataset
 # whole dataset analysis
@@ -334,8 +349,12 @@ he_report=evaluate_confusion_matrix(all_y_pred,all_y_true,labels_unique,cm_supti
 plot_dataframe_as_plain_image(he_report, figsize=(4, 4), scale=(1,1.3),title_plot=cm_title, use_rowLabels=True,path=cm_saving_path,saving_name="report_GLM_MLR_opt")
 
 #%% Feature importance
-analyse_feature_importance(feature_importance,th=0.008,plot_title="Feature Importance: reduced set of features",file_name='GLM_optimal_feature_importance',other_fig_path=other_fig_path,saving_plot=True)
+analyse_feature_importance(feature_importance,th=0.005,plot_title="Feature Importance: reduced set of features",file_name='GLM_optimal_feature_importance',other_fig_path=other_fig_path,saving_plot=True)
 
+
+
+#%% Feature redundance analysis
+# How many times a feature has been selected by feature importance?
 
 
 
