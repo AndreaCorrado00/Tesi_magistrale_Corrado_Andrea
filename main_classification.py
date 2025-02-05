@@ -273,7 +273,7 @@ for kernel_full_name,kernel in kernel_types.items():
 
 #%% Feature importance analysis
 # The best model in terms of perfomance is used to evaluate feature importance
-
+selected_features=whole_feature_db_imp_scal.columns.tolist()
 best_kernel="Gaussian"
 classifier, all_y_pred, all_y_true, all_predictions_by_subs,feature_importance=LOPOCV_SVM(whole_feature_db_imp_scal,selected_features,kernel_type=kernel_types[best_kernel])
 
@@ -353,8 +353,11 @@ analyse_feature_importance(feature_importance,th=0.005,plot_title="Feature Impor
 
 
 
-#%% Feature redundance analysis
+#%% Feature frequency analysis
 # How many times a feature has been selected by feature importance?
+from evaluate_feature_frequency import evaluate_feature_frequency
+
+evaluate_feature_frequency(TREE_opt_features_list,MLR_opt_features_list,SVM_opt_features_list)
 
 
 

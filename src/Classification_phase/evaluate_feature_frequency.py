@@ -42,7 +42,7 @@ def evaluate_feature_frequency(tree_features,mlr_features,svm_features):
     print("\nFeatures selected 2 times:")
     for feature_name in two_times:
         print(f"   - {feature_name}")
-    print("\nFeatures selected 1 time1:")
+    print("\nFeatures selected 1 time:")
     for feature_name in one_time:
         print(f"   - {feature_name}")           
 
