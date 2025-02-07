@@ -30,7 +30,7 @@ for i = ["A", "B", "C"]
     subjects = fieldnames(data.(map));
 
     % Loop through each subject
-    for j = 1:length(subjects)
+    for j =1:length(subjects)
         sub = subjects{j};
 
         % Get the number of signals for the current subject
