@@ -137,11 +137,21 @@ build_and_show_expected_spectrums()
 % Such conclusion can be reached even from the results below
 
 %% 6.2 Spectrum evaluation on didactical examples
-show_spectrum_evaluation_pipeline("Low_frequency_ecg")
+show_spectrum_evaluation_pipeline("high_frequency_ecg")
 
 % Other example of situations: 
 % "high_frequency_ecg" "Low_frequency_ecg" "PhysioNet_healthy" "PhysioNet_Pathological"
 
+%% 6.3 Spectrum estimation of AVNRT example
+processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed\data_aligned";
+load(processed_data_path+'\dataset_2.mat');
+
+%%
+subject_data=final_data_by_sub.MAP_B.MAP_B8;
+record_id=1;
+subject_name="Effective example: subject 9";
+
+show_spectrum_AVNRT_example(subject_data,subject_name,record_id)
 
 
 
