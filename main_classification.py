@@ -135,16 +135,16 @@ df_corr_analysis=df_corr_analysis.drop(categorical_features,axis=1)
 correlation_matrix = df_corr_analysis.corr()
 
 # Plot the correlation matrix as a heatmap
-import seaborn as sns
-import matplotlib.pyplot as plt
-cross_features, ax = plt.subplots(figsize=(105, 85))
-sns.heatmap(correlation_matrix, annot=True, fmt=".2f", cmap="coolwarm", 
-            xticklabels=df_corr_analysis.columns, 
-            yticklabels=df_corr_analysis.columns,annot_kws={"size": 22})  
-plt.xticks(fontsize=25)
-plt.yticks(fontsize=25)
-plt.title("Feature Cross-Correlation Matrix")
-plt.show()
+# import seaborn as sns
+# import matplotlib.pyplot as plt
+# cross_features, ax = plt.subplots(figsize=(105, 85))
+# sns.heatmap(correlation_matrix, annot=True, fmt=".2f", cmap="coolwarm", 
+#             xticklabels=df_corr_analysis.columns, 
+#             yticklabels=df_corr_analysis.columns,annot_kws={"size": 22})  
+# plt.xticks(fontsize=25)
+# plt.yticks(fontsize=25)
+# plt.title("Feature Cross-Correlation Matrix")
+# plt.show()
 
 
 # save_plot(cross_features, other_fig_path,file_name='features_cross_corretion_matrix',dpi=500)
