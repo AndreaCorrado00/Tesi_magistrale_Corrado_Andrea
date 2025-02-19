@@ -66,10 +66,10 @@ def analyse_feature_importance(feature_importance, plot_title="Feature importanc
     # Plot the feature importance histogram
     importance_fig, ax = plt.subplots(figsize=(12, 10))
     plt.barh(feature_names, importance_scores, color="skyblue")
-    plt.xlabel("Importance")
+    plt.xlabel("Importance",fontsize=14)
     plt.title(plot_title,fontsize=18)
     plt.gca().invert_yaxis()  # Invert y-axis to have the highest importance at the top
-    plt.yticks(fontsize=10)
+    plt.yticks(fontsize=14)
     plt.show()
 
     # Save the plot if a save function is provided
