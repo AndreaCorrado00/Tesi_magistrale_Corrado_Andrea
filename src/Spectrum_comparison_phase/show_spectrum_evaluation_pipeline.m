@@ -149,7 +149,7 @@ for i = step:step:N_original
 
     %% Results
     figure(1)
-    sgtitle("Power spectrum estimation on symulated data: "+noise_title)
+    sgtitle("Power spectrum estimation on synthetic data: "+noise_title)
     subplot(n_rows, n_cols, i/step)
     hold on
     plot(f_S,S,'Color',[0.4940 0.1840 0.5560],'LineWidth',0.5)

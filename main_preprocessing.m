@@ -137,7 +137,7 @@ build_and_show_expected_spectrums()
 % Such conclusion can be reached even from the results below
 
 %% 6.2 Spectrum evaluation on didactical examples
-show_spectrum_evaluation_pipeline("high_frequency_ecg")
+show_spectrum_evaluation_pipeline("Low_frequency_ecg")
 
 % Other example of situations: 
 % "high_frequency_ecg" "Low_frequency_ecg" "PhysioNet_healthy" "PhysioNet_Pathological"
