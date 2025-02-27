@@ -303,7 +303,7 @@ writetable(db_table,processed_data_path+"\AVNRT_DB_filt.csv")
 
 %%                          ---------- FINAL DATASET ANALYSIS ---------- 
 clc;clear;close;
-dataset="dataset_3";
+dataset="dataset_2";
 
 processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\Data\Processed\data_aligned";
 src_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tesi_magistrale\src\Sub_alignment_analysis_phase";
