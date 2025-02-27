@@ -26,7 +26,7 @@ load("D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 2023-2024\TESI\Tes
 % end
 % ECG parameters
 Fs = 1000;           % F sampling(Hz)
-step=1000;
+step=2000;
 duration = 1;        % Duration (s)
 t = 0:1/Fs:duration; 
 
@@ -149,22 +149,22 @@ for i = step:step:N_original
 
     %% Results
     figure(1)
-    sgtitle("Power spectrum estimation on synthetic data: "+noise_title)
+    sgtitle("Power spectrum estimation on synthetic data: "+noise_title,"FontSize",24)
     subplot(n_rows, n_cols, i/step)
     hold on
-    plot(f_S,S,'Color',[0.4940 0.1840 0.5560],'LineWidth',0.5)
-    plot(f, pxx,'Color',[0 0.4470 0.7410],'LineWidth',0.5)
+    plot(f_S, S, 'Color', [0.7 0.4 0.7], 'LineWidth', 1.2)
+    plot(f, pxx,'Color',[0 0.4470 0.7410],'LineWidth',1.2)
     % 
     % plot(f_DSP, DSP,'Color',[0.4940 0.1840 0.5560],'LineWidth',1.5)
     % plot(f_BU, DSP_BU,'Color',[0 0.4470 0.7410],'LineWidth',1.5)
     hold off
-    ylabel('PSD')
-    xlabel('f [Hz]')
+    ylabel('PSD','FontSize',14)
+    xlabel('f [Hz]',"FontSize",14) 
     % title("N: " + num2str(N) + ", p_{AR}(LS)=" + num2str(p)+", p_{AR}(BU)="+num2str(p_bu))
-    title("N points: " + num2str(N))
-    xlim([0, 120])
+    title("N points: " + num2str(N),"FontSize",16)
+    xlim([0, 50])
     % legend( 'Welch','FFT','AR LS estimation','AR Burg estimation')
-    legend('P_{S}','P_{W}')
+    legend('P_{S}','P_{W}',"FontSize",14)
 end
 
 % %% Different order comparison

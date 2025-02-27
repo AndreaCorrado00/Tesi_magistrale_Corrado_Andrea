@@ -75,7 +75,7 @@ addpath(src_path)
 % thresholding plus digital filter. These method will be evaluated using
 % didactical examples.
 close;clc;close all; % cleaning environment
-show_filter_pipeline_syntetic("white_noise_stationary_var_fix")
+show_filter_pipeline_syntetic("baseline_drift")
 
 % Other example of situations: 
 %baseline_drift white_noise_stationary_var_fix
@@ -147,9 +147,9 @@ processed_data_path="D:\Desktop\ANDREA\Universita\Magistrale\Anno Accademico 202
 load(processed_data_path+'\dataset_2.mat');
 
 %%
-subject_data=final_data_by_sub.MAP_B.MAP_B8;
-record_id=1;
-subject_name="Effective example: subject 9";
+subject_data=final_data_by_sub.MAP_A.MAP_A4;
+record_id=5;
+subject_name="Indifferent example, subject 4";
 
 show_spectrum_AVNRT_example(subject_data,subject_name,record_id)
 
