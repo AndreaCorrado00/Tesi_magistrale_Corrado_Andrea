@@ -94,7 +94,7 @@ for i = 1:length(N_points)
 
     x_w = handable_denoise_ecg_wavelet(x, Fs, 'sym4', 9, false, 2, 60);
     x_w = x_w - mean(x_w);
-    x_bp = handable_denoise_ecg_BP(x, Fs, 2, 60);
+    x_bp = handable_denoise_ecg_BP(x, Fs, 3, 60);
     x_bp = x_bp - mean(x_bp);
 
     % SNR evaluation
@@ -114,25 +114,36 @@ for i = 1:length(N_points)
     RMSE_wavelet_vector = [RMSE_wavelet_vector; RMSE_wavelet];
 
     if lim/Fs == 1 || lim == N_points(end)
-        figure(i+1)
+        fig = figure(i+1);
+        fig.WindowState = "maximized";
         hold on
-        sgtitle("Denoising pipeline, beat between " + num2str(t(1)) + " and " + num2str(t(end)) + " sec ")
+        sgtitle("Denoising pipeline, beat between " + num2str(t(1)) + " and " + num2str(round(t(end))) + " sec ","FontSize",24)
         plot(t, x, "Color", [.5, .5, .5], "LineStyle", ":", "LineWidth", 0.5)
         plot(t, ref_win, "Color", [.3, .3, .3], "LineWidth", 0.7)
         plot(t, x_bp, "Color", [0.9290 0.6940 0.1250], "LineWidth", 0.9)
         plot(t, x_w, "Color", "#0072BD", "LineWidth", 0.9)
-        xlabel('time [s]')
-        ylabel('Amplitude [mV]')
+        xlabel('time [s]',"FontSize",14)
+        ylabel('Amplitude [mV]',"FontSize",14)
         xlim([t(1), t(end)])
 
-        % Add SNR values as annotations
-        annotation('textbox', [0.85, 0.5, 0.1, 0.1], 'String', ...
-            {['SNR Original: ', num2str(SNR_original, '%.2f'), ' dB'], ...
+       
+        lgd = legend(["Noisy signal", "Ground truth", "BP digital", "Wavelet th + BP digital"], ...
+            "Location", "bestoutside", "FontSize", 16);
+
+        lgd.Units = "normalized";
+ 
+        legendPos = lgd.Position;
+
+        annotation('textbox', ...
+            [0.75, 0.6, 0.2, 0.1], ... 
+            'String', {['SNR Original: ', num2str(SNR_original, '%.2f'), ' dB'], ...
             ['RMSE Bandpass : ', num2str(RMSE_bp, '%.4f')], ...
             ['RMSE Wavelet: ', num2str(RMSE_wavelet, '%.4f')]}, ...
-            'FitBoxToText', 'on', 'BackgroundColor', 'w', 'EdgeColor', 'k', 'FontSize', 10);
+            'FitBoxToText', 'on', 'BackgroundColor', 'w', 'EdgeColor', 'k', ...
+            'FontSize', 16, 'Margin', 5);
+
         hold off
-        legend(["Noisy signal", "Ground truth", "BP digital", "Wavelet th + BP digital"], "Location", "bestoutside")
+
     end
 end
 
@@ -147,30 +158,30 @@ else
 end
 
 % Boxplots of RMSE
-figure(i+2)
+figure('Position', [100, 100, 800, 600])
 
 subplot(121)
 boxplot(RMSE_wavelet_vector)
-title("RMSE wavelet + bandpass")
+title("RMSE wavelet + bandpass","FontSize",18)
 ylim([0.03, 0.06])
 set(gca, 'Position', [0.1, 0.2, 0.35, 0.6]) % [x, y, width, height]
 
 subplot(122)
 boxplot(RMSE_bp_vector)
-title("RMSE bandpass")
+title("RMSE bandpass","FontSize",18)
 ylim([0.03, 0.06])
 set(gca, 'Position', [0.6, 0.2, 0.35, 0.6]) % [x, y, width, height]
 
-sgtitle(noise_title)
+sgtitle(noise_title,"FontSize",24)
 
 % Add textbox with t-test result
-annotation_text = sprintf('Paired T-test result: \n');
-
-if h == 1
-    annotation_text = [annotation_text, sprintf('Wavelet RMSE and BP RMSE are significantly different \n  with a p-value of: %.4e \n', p)];
-else
-    annotation_text = [annotation_text, sprintf('Wavelet RMSE and BP RMSE are not significantly different \n  with a p-value of: %.4e \n', p)];
-end
-
-annotation('textbox', [0.4, 0.02, 0.3, 0.1], 'String', annotation_text, ...
-           'FitBoxToText', 'on', 'BackgroundColor', 'y', 'EdgeColor', 'k', 'FontSize', 10);
+% annotation_text = sprintf('Paired T-test result: \n');
+% 
+% if h == 1
+%     annotation_text = [annotation_text, sprintf('Wavelet RMSE and BP RMSE are significantly different \n  with a p-value of: %.4e \n', p)];
+% else
+%     annotation_text = [annotation_text, sprintf('Wavelet RMSE and BP RMSE are not significantly different \n  with a p-value of: %.4e \n', p)];
+% end
+% 
+% annotation('textbox', [0.4, 0.02, 0.3, 0.1], 'String', annotation_text, ...
+%            'FitBoxToText', 'on', 'BackgroundColor', 'y', 'EdgeColor', 'k', 'FontSize', 10);

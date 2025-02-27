@@ -20,19 +20,19 @@ function rov_trace_plots_by_sub(data, env_data, fc, plot_type, sg_title, figure_
 type_plots = ["single_record"];
 
 % Loop through each map type: A, B, C
-for i = ["A", "B", "C"]
+for i = "C" % ["A", "B", "C"]
     map = 'MAP_' + i; % Construct map field name
     subjects = fieldnames(data.(map)); % Extract subject names for the current map
 
     % Loop through each subject in the map
-    for j = 1:length(subjects)
+    for j =6 % 1:length(subjects)
         sub = subjects{j}; % Current subject identifier
 
         % Determine the number of records for the current subject
         [~, N] = size(data.(map).(sub).rov_trace);
 
         % Loop through each record for the subject
-        for h = 1:N
+        for h = 4 % 1:N
             % Extract signal and envelope for the current record
             signal = data.(map).(sub).rov_trace{:, h};
             envelope = env_data.(map).(sub).rov_trace{:, h};
@@ -50,9 +50,9 @@ for i = ["A", "B", "C"]
             fig.WindowState = "maximized";
 
             % Define plot title
-            title_plot = 'MAP:' + i + ' (' + get_name_of_map(i) + '), sub:' + sub_num + ...
-                         ' trace, record: ' + num2str(h);
-            full_title = {string(sg_title); string(title_plot)};
+            title_plot = get_name_of_map(i) +' class example, sub:' + sub_num + ...
+                         ', record: ' + num2str(h);
+            full_title = {string(sg_title), string(title_plot)};
 
             % Generate the plot based on the specified plot type
             switch plot_type
@@ -72,7 +72,7 @@ for i = ["A", "B", "C"]
                     % Add labels and title
                     xlabel('Time [s]');
                     ylabel('Voltage [mV]');
-                    title(full_title, "FontSize", 14);
+                    title(full_title, "FontSize", 18);
 
                 case "STFT"
                     % Generate spectrogram
@@ -91,9 +91,9 @@ for i = ["A", "B", "C"]
                     imagesc(T, F, 10 * log10(P));
                     axis tight;
                     set(gca, 'YDir', 'normal'); % Flip Y-axis to normal orientation
-                    title(full_title, "FontSize", 14);
-                    xlabel('Time [s]');
-                    ylabel('Frequency [Hz]');
+                    title(full_title, "FontSize", 18);
+                    xlabel('Time [s]',"FontSize",14);
+                    ylabel('Frequency [Hz]',"FontSize",14);
                     ylim([0, 400]); % Limit frequency range to 0-400 Hz
                     hColorbar = colorbar('southoutside'); % Add colorbar below plot
                     ylabel(hColorbar, 'Power/Frequency [dB/Hz]');
@@ -101,9 +101,9 @@ for i = ["A", "B", "C"]
                     % Plot original signal in lower section
                     subplot(3, 3, 7:9);
                     plot(t_signal, signal, 'b');
-                    title('Original Signal');
-                    xlabel('Time [s]');
-                    ylabel('Amplitude [mV]');
+                    title('Original Signal',"FontSize",14);
+                    xlabel('Time [s]',"FontSize",14);
+                    ylabel('Amplitude [mV]',"FontSize",14);
                     grid on;
 
                     % Link axes for synchronized zooming/panning

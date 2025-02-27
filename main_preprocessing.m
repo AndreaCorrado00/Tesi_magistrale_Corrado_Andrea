@@ -75,7 +75,7 @@ addpath(src_path)
 % thresholding plus digital filter. These method will be evaluated using
 % didactical examples.
 close;clc;close all; % cleaning environment
-show_filter_pipeline_syntetic("baseline_drift")
+show_filter_pipeline_syntetic("white_noise_stationary_var_fix")
 
 % Other example of situations: 
 %baseline_drift white_noise_stationary_var_fix
@@ -391,7 +391,7 @@ rov_trace_plots_by_sub(final_data_by_sub,TM_1_dataset, fc,"envelope_or_cross",'R
 rov_trace_plots_by_sub(final_data_by_sub,TM_2_dataset, fc,"envelope_or_cross",'Rov signal and cross correlation signal',figure_path+"\Template_Matching\Template_2\Single_traces")
 
 %% single signal and STFT
-rov_trace_plots_by_sub(final_data_by_sub,TM_dataset, fc,"STFT",'Rov signal STFT',figure_path+"\STFT\Single_traces")
+rov_trace_plots_by_sub(final_data_by_sub,env_dataset, fc,"STFT",'Rov signal STFT',figure_path+"\STFT\Single_traces")
 
 
 %% Showing envelope slope analysis pipeline

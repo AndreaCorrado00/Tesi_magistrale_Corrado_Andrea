@@ -44,9 +44,10 @@ function template = generate_multiphasic_template(Fs, duration, smoothing_window
     template = smoothdata(template, 'gaussian', smoothing_window);
 
     % % Plotting is optional, but can be used to visualize the generated template:
-    % time = (0:N-1) / Fs; % Generate the time axis for plotting
-    % figure; 
-    % plot(time, template, '-');  % Plot the signal
-    % title("Multiphasic Template of duration: "+ num2str(duration)+ " seconds");
-    % xlabel('Time [s]'); % Label for the x-axis
+    % time = (0:N-1) / Fs;  % Time axis for plotting
+    % figure;
+    % plot(time, template, '-',"LineWidth",1.2);  % Plot the signal
+    % title("Multiphasic Template of duration: "+ num2str(duration)+ " seconds", "FontSize",16);
+    % xlabel('Time [s]',"FontSize",16);
+    % xlim([0, duration])  % Set the x-axis limit to the desired duration
 end

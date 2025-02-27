@@ -11,14 +11,14 @@ function map_name = get_name_of_map(i)
 % Check if the input character is 'A'
 if i == "A"
     % If 'A', set map_name to 'Indif'
-    map_name = "Indif";
+    map_name = "Indifferent";
 % Check if the input character is 'B'
 elseif i == "B"
     % If 'B', set map_name to 'Eff'
-    map_name = "Eff";
+    map_name = "Effective";
 % If the input character is neither 'A' nor 'B'
 else
     % Set map_name to 'Danger'
-    map_name = "Danger";
+    map_name = "Dangerous";
 end
 end

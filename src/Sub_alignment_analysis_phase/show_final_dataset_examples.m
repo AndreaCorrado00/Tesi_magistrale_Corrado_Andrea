@@ -21,7 +21,7 @@ function show_final_dataset_examples(data, fc)
         fig.WindowState = "maximized";
         
         % Set the figure's title with the map name and description
-        sgtitle("Rov trace (record 1), MAP: " + i + " (" + get_name_of_map(i) + ")")
+        sgtitle("Rov trace (record 1), " + get_name_of_map(i)+" class","FontSize",24)
         
         % Construct the map name dynamically (e.g., 'MAP_A', 'MAP_B', 'MAP_C')
         map = 'MAP_' + i;
@@ -51,16 +51,16 @@ function show_final_dataset_examples(data, fc)
             subplot(numRows, numCols, j)
             
             % Plot the ROV trace with a line width of 1
-            plot(t, rov, "LineWidth", 1)
+            plot(t, rov, "LineWidth", 1.2)
 
             % Extract the numeric part from the subject's name for the title
             num_str = regexp(sub, '\d+', 'match');
 
-            title("Subject: " + string(num_str))
+            title("Subject: " + string(num_str),"FontSize",16)
 
             % Label the x-axis and y-axis
-            xlabel('Time [s]')
-            ylabel('Amplitude [mV]')
+            xlabel('Time [s]',"FontSize",12)
+            ylabel('Amplitude [mV]',"FontSize",12)
             
             % Set the x-axis limit to display only the first second
             xlim([0, 1])

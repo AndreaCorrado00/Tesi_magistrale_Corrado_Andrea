@@ -43,8 +43,8 @@ function template = generate_biphasic_template(Fs, duration, smoothing_window)
     % % Optional Plotting:
     % time = (0:length(template)-1) / Fs;  % Time axis for plotting
     % figure;
-    % plot(time, template, '-');  % Plot the signal
-    % title("Biphasic Template of duration: " + num2str(round(duration,3)) + " seconds");
-    % xlabel('Time [s]');
+    % plot(time, template, '-',"LineWidth",1.2);  % Plot the signal
+    % title("Biphasic Template of duration: " + num2str(round(duration,3)) + " seconds", "FontSize",16);
+    % xlabel('Time [s]',"FontSize",16);
     % xlim([0, duration])  % Set the x-axis limit to the desired duration
 end
