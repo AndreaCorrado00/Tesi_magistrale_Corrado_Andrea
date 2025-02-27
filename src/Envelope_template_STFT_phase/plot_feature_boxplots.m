@@ -76,10 +76,10 @@ function plot_feature_boxplots(data, class, feature_name)
 
     % Adjust axes and formatting
     ylim([lower_bound, upper_bound]);   % Adjust y-limits to exclude outliers
-    set(gca, 'XTick', 1:length(desired_order), 'XTickLabel', desired_order); % Set class labels on x-axis
-    xlabel('Class');
-    ylabel(formatted_feature_name);
+    set(gca, 'XTick', 1:length(desired_order), 'XTickLabel', desired_order,"FontSize",14); % Set class labels on x-axis
+    xlabel('Class',"FontSize",16);
+    ylabel(formatted_feature_name,"FontSize",16);
 
     % Set the title
-    title("Boxplots for " + formatted_feature_name + " by Class", "FontSize", 14);
+    title("Boxplots for " + formatted_feature_name + " by Class", "FontSize", 20);
 end
