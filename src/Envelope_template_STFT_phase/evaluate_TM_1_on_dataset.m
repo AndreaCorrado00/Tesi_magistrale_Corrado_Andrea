@@ -58,7 +58,8 @@ function TM_dataset = evaluate_TM_1_on_dataset(data, T, fs)
                 % Apply moving average to the correlation for smoothing
                 TM_signals(:, k) = movmean(corr, 50);  % Store the result
 
-                
+                %% Plotting TM to visualise it
+                % plot_TM_step_by_step(signal_example,template,fs)
             end
 
             % Store the template-matched signals in the dataset
