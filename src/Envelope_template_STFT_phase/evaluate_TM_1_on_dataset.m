@@ -41,7 +41,7 @@ function TM_dataset = evaluate_TM_1_on_dataset(data, T, fs)
             [~, L] = size(rov_signals);  % Number of signals (columns in rov_trace)
             TM_signals = nan(size(rov_signals));  % Initialize TM signals matrix
 
-            for k = 1:L
+            for k =  1:L
                 signal_example = rov_signals{:, k};  % Extract each signal
                 norm_signal = sqrt(sum(signal_example.^2));  % Signal normalization
                 signal_example = signal_example / norm_signal;  % Normalize the signal
@@ -59,7 +59,7 @@ function TM_dataset = evaluate_TM_1_on_dataset(data, T, fs)
                 TM_signals(:, k) = movmean(corr, 50);  % Store the result
 
                 %% Plotting TM to visualise it
-                % plot_TM_step_by_step(signal_example,template,fs)
+                plot_TM_step_by_step(signal_example,template,fs)
             end
 
             % Store the template-matched signals in the dataset
